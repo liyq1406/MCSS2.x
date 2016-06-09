@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/info_activity_layout_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" >
+    
+	    <RelativeLayout
+	        android:id="@+id/layout_status_online"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/info_item_height_single"
+	        android:background="@drawable/btn_selector"
+	        android:paddingRight="@dimen/info_item_padding"
+	        android:paddingLeft="16dp" >
+	
+	        <TextView
+	            style="@style/InfoItemText_L"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentStart="true"
+	            android:layout_centerVertical="true"
+	            android:text="@string/set_status_online" />
+	
+	        <ImageView
+	            android:id="@+id/id_status_online_iv"
+	            android:layout_width="@dimen/info_item_inner_img_height"
+	            android:layout_height="@dimen/info_item_inner_img_height"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignParentEnd="true"
+	            android:layout_centerVertical="true"
+	            android:layout_marginRight="@dimen/info_item_padding_inner"
+	            android:layout_marginEnd="@dimen/info_item_padding_inner"
+	            android:background="@drawable/v5_item_selected"
+	            android:contentDescription="@string/contentDescription" />
+	        
+	    </RelativeLayout>	
+		    
+	    <View android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:layout_marginLeft="16dp"
+			android:background="@color/set_activity_item_divider" />
+	    
+	    <RelativeLayout
+	        android:id="@+id/layout_status_leave"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/info_item_height_single"
+	        android:background="@drawable/btn_selector"
+	        android:paddingRight="@dimen/info_item_padding"
+	        android:paddingLeft="16dp" >
+	
+	        <TextView
+	            style="@style/InfoItemText_L"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentStart="true"
+	            android:layout_centerVertical="true"
+	            android:text="@string/set_status_leave" />
+	
+	        <ImageView
+	            android:id="@+id/id_status_leave_iv"
+	            android:layout_width="@dimen/info_item_inner_img_height"
+	            android:layout_height="@dimen/info_item_inner_img_height"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignParentEnd="true"
+	            android:layout_centerVertical="true"
+	            android:layout_marginRight="@dimen/info_item_padding_inner"
+	            android:layout_marginEnd="@dimen/info_item_padding_inner"
+	            android:background="@drawable/v5_item_selected"
+	            android:contentDescription="@string/contentDescription" />
+	    </RelativeLayout>
+	    
+	    <View android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:layout_marginLeft="16dp"
+			android:background="@color/set_activity_item_divider" />
+	    
+	    <RelativeLayout
+	        android:id="@+id/layout_status_hide"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/info_item_height_single"
+	        android:background="@drawable/btn_selector"
+	        android:paddingRight="@dimen/info_item_padding"
+	        android:paddingLeft="16dp" >
+	
+	        <TextView
+	            style="@style/InfoItemText_L"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentStart="true"
+	            android:layout_centerVertical="true"
+	            android:text="@string/set_status_hide" />
+	
+	        <ImageView
+	            android:id="@+id/id_status_hide_iv"
+	            android:layout_width="@dimen/info_item_inner_img_height"
+	            android:layout_height="@dimen/info_item_inner_img_height"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignParentEnd="true"
+	            android:layout_centerVertical="true"
+	            android:layout_marginRight="@dimen/info_item_padding_inner"
+	            android:layout_marginEnd="@dimen/info_item_padding_inner"
+	            android:background="@drawable/v5_item_selected"
+	            android:contentDescription="@string/contentDescription" />
+	    </RelativeLayout>
+	    
+	    <View android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+			android:background="@color/info_activity_item_divider_frame" />
+	
+	</LinearLayout>
+
+</LinearLayout>

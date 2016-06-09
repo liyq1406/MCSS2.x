@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_left_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/robot_item_bg_selector"
+    android:layout_margin="4dp"
+    android:orientation="vertical" >
+        
+    <com.v5kf.mcss.ui.widget.ListLinearLayout
+        android:id="@+id/id_news_layout"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:background="@drawable/list_news_layout_bg"
+        android:orientation="vertical" >  
+    
+    </com.v5kf.mcss.ui.widget.ListLinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/id_news_layout"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal" >
+	    
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />        
+        
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+        
+        <Button
+            android:id="@+id/id_robot_add_btn"
+            android:visibility="invisible"
+            android:enabled="false"            
+            android:text="@string/robot_msg_add"
+            android:layout_marginRight="6dp"
+            android:layout_marginEnd="6dp"
+            style="@style/Robot_candidate_btn"
+            android:background="@drawable/btn_robot_add_selector" />
+        
+        <Button
+            android:id="@+id/id_robot_send_btn"
+            android:text="@string/robot_msg_send"
+            style="@style/Robot_candidate_btn"
+            android:background="@drawable/btn_robot_send_selector" />
+        
+    </LinearLayout>
+    
+</RelativeLayout>

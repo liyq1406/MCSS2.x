@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_left_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/robot_item_bg_selector"
+    android:layout_margin="4dp"
+    android:paddingBottom="4dp"
+    android:orientation="vertical" >
+        
+    <com.rockerhieu.emojicon.EmojiconTextView
+        android:id="@+id/id_robot_text"
+        emojicon:emojiconAlignment="baseline"
+        emojicon:emojiconSize="18sp"
+        android:text="@string/chat_msg_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="4dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="4dp"
+        android:singleLine="false"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+    
+    <TextView
+        android:id="@+id/id_serial_num"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/robot_serial_num_bg" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/id_robot_text"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal" >
+	    
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+        
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+        
+        <Button
+            android:id="@+id/id_robot_add_btn"
+            android:text="@string/robot_msg_add"
+            android:layout_marginRight="6dp"
+            android:layout_marginEnd="6dp"
+            style="@style/Robot_candidate_btn"
+            android:background="@drawable/btn_robot_add_selector" />
+        
+        <Button
+            android:id="@+id/id_robot_send_btn"
+            android:text="@string/robot_msg_send"
+            style="@style/Robot_candidate_btn"
+            android:background="@drawable/btn_robot_send_selector" />
+                
+    </LinearLayout>
+    
+</RelativeLayout>

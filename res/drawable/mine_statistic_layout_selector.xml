@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/transparent_9" />
+
+    <stroke android:width="@dimen/dialog_border_width" android:color="@color/dialog_option_item_boder" />
+
+    <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp" android:topLeftRadius="@dimen/option_btn_radius" android:topRightRadius="@dimen/option_btn_radius" />
+
+    <padding android:bottom="4dp" android:left="4dp" android:right="4dp" android:top="4dp" />
+</shape>

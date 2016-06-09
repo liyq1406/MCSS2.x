@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/info_activity_layout_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+    
+    <ScrollView
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+    	android:layout_height="0dp"
+    	android:background="@color/info_activity_layout_bg"
+    	android:scrollbars="none" >  
+    	  	
+        <LinearLayout
+            android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+    	
+            <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+		        android:background="@color/info_activity_item_divider_frame" />
+		    
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@color/white"
+		        android:orientation="vertical" >
+		        
+		        <RelativeLayout
+			        android:id="@+id/rl_auto_boot"
+			        android:visibility="gone"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_centerVertical="true"
+			            android:text="@string/set_auto_boot" />
+			        
+			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			            android:id="@+id/switch_auto_boot"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            android:enabled="true" />	        
+			
+			    </RelativeLayout>
+			    
+		        <RelativeLayout
+			        android:id="@+id/rl_auto_login"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+		            <View
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			        			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_centerVertical="true"
+			            android:text="@string/set_auto_login" />
+			        
+			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			            android:id="@+id/switch_auto_login"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            android:enabled="true" />
+			
+			    </RelativeLayout>
+		    
+		        <RelativeLayout
+			        android:id="@+id/rl_switch_notification"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+		            <View
+				        android:id="@+id/view_hd"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+		            			        			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_centerVertical="true"
+			            android:text="@string/set_notify" />
+			        
+			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			            android:id="@+id/switch_notification"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            android:enabled="true" />	        
+			
+			    </RelativeLayout>
+			    
+		        <!-- RelativeLayout
+			        android:id="@+id/rl_switch_notification_wait"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+		            <View
+				        android:id="@+id/view0"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+		            			        			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_centerVertical="true"
+			            android:text="@string/set_notify_wait" />
+			        
+			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			            android:id="@+id/switch_notification_wait"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            android:enabled="true" />	        
+			
+			    </RelativeLayout-->
+			
+			    <RelativeLayout
+			        android:id="@+id/rl_switch_voice"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+				        android:id="@+id/view1"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_centerVertical="true"
+			            android:text="@string/set_voice" />
+			        
+			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			            android:id="@+id/switch_voice"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            android:enabled="true" />
+			        
+			    </RelativeLayout>
+		
+			    <RelativeLayout
+			        android:id="@+id/rl_switch_vibrate"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+					
+					<View
+				        android:id="@+id/view2"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_centerVertical="true"
+			            android:text="@string/set_vibrate" />
+			
+			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			            android:id="@+id/switch_vibrate"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            android:enabled="true" />
+				
+			    </RelativeLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/base_line_width_s"
+			        android:background="@color/info_activity_item_divider_frame" />
+			    
+			</LinearLayout>
+		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+			
+		    <!-- 一组设置项 -->
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@color/white"
+		        android:orientation="vertical" >
+			    
+		        <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/base_line_width_s"
+			        android:background="@color/info_activity_item_divider_frame" />
+			    
+		        <RelativeLayout
+			        android:id="@+id/layout_feedback"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/app_feedback" />
+			
+			        <TextView
+			            android:id="@+id/id_feedback_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h"
+			            android:drawablePadding="@dimen/info_item_padding_inner"
+			            android:drawableEnd="@drawable/register_bottom_arrow"
+			            android:drawableRight="@drawable/register_bottom_arrow" />
+		
+			    </RelativeLayout>
+		    
+			    <RelativeLayout
+			        android:id="@+id/layout_about"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >			
+			        
+			        <View
+			            android:id="@+id/divider_feedback"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_width="match_parent"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+				    
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/app_about" />
+			
+			        <TextView
+			            android:id="@+id/id_about_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h"
+			            android:drawablePadding="@dimen/info_item_padding_inner"
+			            android:drawableEnd="@drawable/register_bottom_arrow"
+			            android:drawableRight="@drawable/register_bottom_arrow" />
+		
+			    </RelativeLayout>	    
+			
+			    <RelativeLayout
+			        android:id="@+id/layout_update"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_update"
+				       	android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_width="match_parent"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/app_update" />
+			
+			        <TextView
+			            android:id="@+id/id_update_tv"
+			            android:visibility="visible"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+			        
+			        <ProgressBar
+				        android:id="@+id/id_update_progress"
+				        android:visibility="gone"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h"
+				        android:maxWidth="@dimen/chat_list_item_search_width"
+				        style="@style/custom_progress_bar_small" />
+		
+			    </RelativeLayout>
+			    			    
+			    <RelativeLayout
+			        android:id="@+id/layout_clear_cache"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >			
+			        
+			        <View
+			            android:id="@+id/divider_clear_cache"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_width="match_parent"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+				    
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/app_clear_cache" />
+			
+			        <TextView
+			            android:id="@+id/id_cache_size_tv"
+			            style="@style/InfoItemText_R"
+			            android:visibility="visible"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+
+			    <RelativeLayout
+			        android:id="@+id/layout_refresh"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >			
+			        
+			        <View
+			            android:id="@+id/divider_refresh"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_width="match_parent"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+				    
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/app_refresh" />
+			
+			        <TextView
+			            android:id="@+id/id_refresh_tv"
+			            style="@style/InfoItemText_R"
+			            android:visibility="gone"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h"
+			            android:drawablePadding="@dimen/info_item_padding_inner"
+			            android:drawableEnd="@drawable/register_bottom_arrow"
+			            android:drawableRight="@drawable/register_bottom_arrow" />
+		
+			    </RelativeLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/base_line_width_s"
+			        android:background="@color/info_activity_item_divider_frame" />
+
+			</LinearLayout>
+								    
+	        <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+	        
+        </LinearLayout>
+        
+    </ScrollView>
+    
+    <LinearLayout
+        android:id="@+id/layout_more_action"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+	
+	    <Button
+	        android:id="@+id/btn_logout"
+	        android:visibility="visible"
+	        style="@style/Passive_btn"
+	        android:text="@string/logout" />   
+        
+    </LinearLayout>
+
+</LinearLayout>

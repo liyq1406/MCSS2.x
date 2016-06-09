@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_right_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/chat_list_horizontal_padding"
+    android:paddingRight="@dimen/chat_list_horizontal_padding"
+    android:paddingTop="@dimen/chat_list_vertical_padding"
+	android:paddingBottom="@dimen/chat_list_vertical_padding"
+	android:background="@color/list_chat_item_bg"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/id_to_msg_date"
+        android:visibility="gone"
+        style="@style/list_item_top_date" />
+
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        
+        <com.rockerhieu.emojicon.EmojiconTextView
+            android:id="@+id/id_to_msg_text"
+            emojicon:emojiconAlignment="baseline"
+            emojicon:emojiconSize="@dimen/chat_text_emoji_iconsize"
+			android:lineSpacingExtra="@dimen/chat_text_line_spacing"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+		    android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:background="@drawable/list_to_worker_bg"
+            android:textColor="@color/white"
+            android:textSize="@dimen/v5_chat_list_text_size" />
+        
+        <FrameLayout
+            android:id="@+id/id_msg_send_progress"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="-50dp"
+            android:layout_marginEnd="-50dp"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_toStartOf="@id/id_to_msg_text"
+			android:layout_toLeftOf="@id/id_to_msg_text" >
+            
+            <ProgressBar
+			    android:id="@+id/id_msg_out_pb"
+			    android:layout_gravity="center_vertical|right"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    style="?android:attr/progressBarStyleSmallInverse"
+			    android:visibility="gone" />
+            
+            <ImageView
+                android:id="@+id/id_msg_fail_iv"
+                android:layout_gravity="center_vertical|right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/v5_btn_redo_refresh_selector"
+                android:visibility="gone" />
+            
+        </FrameLayout>
+        
+    </RelativeLayout>
+    
+</LinearLayout>

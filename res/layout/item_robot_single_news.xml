@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_left_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/robot_item_bg_selector"
+    android:layout_margin="4dp"
+    android:orientation="vertical" >
+        
+    <LinearLayout
+        android:id="@+id/id_news_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="@drawable/list_news_layout_bg"
+        android:padding="4dp"
+        android:orientation="vertical" >
+        
+        <TextView
+            android:id="@+id/id_news_title_text"
+            android:visibility="gone"
+            android:text="@string/chat_msg_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:layout_marginBottom="4dp"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+
+	    <RelativeLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <ImageView
+	            android:id="@+id/id_news_img"
+	        	android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+	            android:src="@drawable/v5_img_src_loading"
+	            android:contentDescription="@string/contentDescription" />
+	        
+	        <TextView
+	            android:id="@+id/id_news_title_inner_text"
+	            android:text="@string/chat_msg_default"
+	            android:layout_alignBottom="@id/id_news_img"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_centerHorizontal="true"
+	            android:padding="4dp"
+	            android:background="@color/transparent_black"
+	            android:textColor="@color/white"
+	            android:textSize="12sp" />
+	        
+	    </RelativeLayout>
+	    
+	    <TextView
+            android:id="@+id/id_news_desc_text"
+            android:text="@string/chat_msg_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/base_color_text_dark_gray"
+            android:textSize="10sp" />
+	    
+	    <View
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/base_item_divider" >
+	    </View>
+	    
+	    <RelativeLayout
+	        android:id="@+id/layout_arch_workers"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="@dimen/info_item_padding_inner"
+	        android:paddingLeft="@dimen/info_item_padding_inner_v"
+	        android:paddingRight="@dimen/info_item_padding_inner_v" >
+	
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentStart="true"
+	            android:layout_centerVertical="true"
+	            android:textSize="11sp"
+	            android:text="@string/item_see_more" />
+	
+	        <ImageView
+	            android:layout_width="wrap_content"
+	            android:layout_height="10dp"
+	            android:layout_alignParentRight="true"
+	            android:layout_alignParentEnd="true"
+	            android:layout_centerVertical="true"
+	            android:drawablePadding="@dimen/info_item_padding_inner"
+	            android:src="@drawable/register_bottom_arrow"
+	            android:contentDescription="@string/contentDescription" />
+	    </RelativeLayout>
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/id_news_layout"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal" >
+	    
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />        
+        
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+        
+        <Button
+            android:id="@+id/id_robot_add_btn"
+            android:visibility="invisible"
+            android:enabled="false"            
+            style="@style/Robot_candidate_btn"
+            android:text="@string/robot_msg_add"
+            android:layout_marginRight="6dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/btn_robot_add_selector" />
+        
+        <Button
+            android:id="@+id/id_robot_send_btn"
+            android:text="@string/robot_msg_send"
+            style="@style/Robot_candidate_btn"
+            android:background="@drawable/btn_robot_send_selector" />
+        
+    </LinearLayout>
+    
+</RelativeLayout>

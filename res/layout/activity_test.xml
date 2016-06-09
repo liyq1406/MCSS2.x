@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical" >
+    
+    <include
+		android:id="@+id/common_actionbar"
+		layout="@layout/include_action_bar" />
+    
+    <LinearLayout
+        android:id="@+id/layout_cinfo_action"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    
+	    <Button
+	        android:id="@+id/btn_1"
+	        android:visibility="visible"
+	        style="@style/Positive_btn"
+	        android:text="WorkerRequest" />
+	
+	    <Button
+	        android:id="@+id/btn_2"
+	        android:visibility="visible"
+	        style="@style/Passive_btn"
+	        android:text="TicketRequest" />	    
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    
+	    <Button
+	        android:id="@+id/btn_3"
+	        android:visibility="visible"
+	        style="@style/Positive_btn"
+	        android:text="CustomerRequest" />
+	
+	    <Button
+	        android:id="@+id/btn_4"
+	        android:visibility="visible"
+	        style="@style/Passive_btn"
+	        android:text="Request" />
+        
+    </LinearLayout>
+    
+</LinearLayout>

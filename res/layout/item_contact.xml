@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/contact_list_item_height"
+    android:paddingLeft="@dimen/contact_list_item_horizontal_padding"
+    android:paddingRight="@dimen/contact_list_item_horizontal_padding"
+    android:paddingTop="@dimen/contact_list_item_vertical_padding"
+    android:paddingBottom="@dimen/contact_list_item_vertical_padding"
+    android:background="@drawable/session_item_bg_selector">
+    
+    <RelativeLayout
+        android:layout_gravity="center_vertical"
+        android:layout_width="@dimen/contact_list_item_left_layout_width"
+        android:layout_height="@dimen/contact_list_item_left_layout_height" >
+        
+        <com.v5kf.mcss.ui.widget.CircleImageView
+	        android:id="@+id/id_item_photo"
+	        android:layout_width="@dimen/contact_list_left_img_width"
+	        android:layout_height="@dimen/contact_list_left_img_width"
+	        android:layout_centerInParent="true"
+	        android:contentDescription="@string/contentDescription"
+	        android:src="@drawable/v5_photo_default" />
+        
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:paddingRight="@dimen/chat_list_item_horizontal_padding"
+        android:paddingEnd="@dimen/chat_list_item_horizontal_padding"
+        android:paddingStart="@dimen/chat_list_item_horizontal_padding"
+        android:paddingLeft="@dimen/chat_list_item_horizontal_padding" >
+        
+        <TextView
+            android:id="@+id/id_item_status_tv"
+            style="@style/Smile.TextView._Gray"
+            android:textColor="@color/base_color_text_gray"
+			android:layout_centerVertical="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
+			android:text="@string/status_offline"
+			android:textSize="@dimen/contact_list_item_status_text_size" />
+        
+        <ImageView
+            android:id="@+id/id_item_status_img"
+            android:visibility="gone"
+			android:layout_width="20dp"
+			android:layout_height="20dp"
+			android:layout_centerVertical="true"
+			android:layout_toLeftOf="@id/id_item_status_tv"
+			android:layout_toStartOf="@id/id_item_status_tv"
+			android:maxHeight="20dp"
+			android:layout_gravity="end"
+			android:src="@drawable/v5_iface_weixin"
+			android:contentDescription="@string/contentDescription" />
+        
+        <TextView
+            android:id="@+id/id_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+			android:layout_toLeftOf="@id/id_item_status_img"
+			android:layout_toStartOf="@id/id_item_status_img"
+            android:textSize="16sp"            
+            android:singleLine="true"
+            android:textColor="@color/black"
+			android:text="@string/chat_content_hint"/>
+        
+	</RelativeLayout>	
+        
+</LinearLayout>

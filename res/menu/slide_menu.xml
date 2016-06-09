@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+ 
+    <group
+        android:checkableBehavior="single">
+ 
+        <item
+            android:id="@+id/drawer_session"
+            android:checked="true"
+            android:checkable="true"
+            android:icon="@drawable/md2x_ic_drawer_chat"
+            android:title="对话"/>
+        
+        <item
+            android:id="@+id/drawer_worker"
+            android:checkable="true"
+            android:icon="@drawable/md2x_ic_drawer_worker"
+            android:title="客服"/>
+ 
+        <item
+            android:id="@+id/drawer_history"
+            android:checkable="true"
+            android:icon="@drawable/md2x_ic_drawer_history"
+            android:title="历史"/>
+
+        <item
+            android:id="@+id/drawer_explore"
+            android:checkable="true"
+            android:icon="@drawable/md2x_ic_drawer_explore"
+            android:title="发现"/>
+ 
+        <item
+            android:id="@+id/drawer_more"
+            android:checkable="true"
+            android:icon="@drawable/md2x_ic_drawer_settings"
+            android:title="更多"/>
+
+        <item
+            android:id="@+id/drawer_quit"
+            android:checkable="false"
+            android:icon="@drawable/md2x_ic_drawer_logout"
+            android:title="退出账号"/>
+ 
+ 
+    </group>
+</menu>

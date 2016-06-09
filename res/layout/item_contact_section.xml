@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/contact_list_section_height"
+    android:paddingLeft="@dimen/contact_list_section_horizontal_padding"
+    android:paddingRight="@dimen/contact_list_section_horizontal_padding"
+    android:paddingTop="@dimen/contact_list_section_verticle_padding"
+    android:paddingBottom="@dimen/contact_list_section_verticle_padding"
+    android:background="@color/arch_workers_section_bg">
+    
+    <TextView
+        android:id="@+id/id_section_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/contact_list_section_horizontal_padding"
+        android:layout_marginStart="@dimen/contact_list_section_horizontal_padding"
+        android:layout_gravity="center_vertical"
+        android:textSize="@dimen/contact_list_section_text_size"
+        android:singleLine="true"
+        android:textColor="@color/arch_workers_section_text_color"
+		android:text="@string/chat_content_hint"/>
+     
+     <ImageView
+        android:id="@+id/id_section_desc_img"
+        android:visibility="gone"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:maxHeight="25dp"
+		android:layout_gravity="center_vertical|end"
+		android:src="@drawable/v5_iface_weixin"
+		android:contentDescription="@string/contentDescription" />
+	
+     <TextView
+        android:id="@+id/id_section_desc_tv"
+        style="@style/Smile.TextView._White"
+        android:layout_marginRight="@dimen/contact_list_section_horizontal_padding"
+        android:layout_marginEnd="@dimen/contact_list_section_horizontal_padding"
+		android:layout_gravity="end"
+		android:textSize="@dimen/contact_list_item_status_text_size" />
+        
+</LinearLayout>

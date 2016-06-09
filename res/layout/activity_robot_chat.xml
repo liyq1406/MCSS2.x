@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/info_activity_layout_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/v5_key_bar_bg"
+        android:padding="8dp" >
+    
+	    <com.rockerhieu.emojicon.EmojiconEditText
+	        android:id="@+id/id_emoji_et"
+	        android:layout_width="match_parent"
+	        android:layout_height="120dp"
+	        emojicon:emojiconSize="20sp"
+	        android:textSize="16sp"
+	        android:hint="@string/req_edit_hint"
+	        android:paddingLeft="4dp"
+	        android:paddingRight="4dp"
+	        android:paddingTop="4dp"
+	        android:paddingBottom="4dp"
+	        android:gravity="top"
+	        android:singleLine="false"
+	        android:focusableInTouchMode="true"
+	        android:focusable="true"
+	        android:minLines="3"
+	        android:background="@drawable/v5_edit_input_border_bg_normal" />
+	    
+	    <Button 
+	        android:id="@+id/id_submit"
+	        android:layout_width="56dp"
+            android:layout_height="30dp"
+	        android:text="@string/submit"
+	        android:background="@drawable/v5_btn_chat_send_bg"
+            android:textColor="@color/v5_btn_send_textcolor"
+            android:textSize="12sp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/id_emoji_et"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="6dp" />
+	    
+	</RelativeLayout>
+	
+	<android.support.v7.widget.RecyclerView
+        android:id="@+id/id_candidate_list"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/v5_key_bar_bg"/>
+
+</LinearLayout>

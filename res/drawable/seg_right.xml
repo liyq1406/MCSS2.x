@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_selected="true" android:bottom="3dp">
+        <shape >
+            <solid android:color="@color/segment_select_bg"/>
+            <corners android:topLeftRadius="0dp" android:bottomLeftRadius="0dp" android:topRightRadius="@dimen/segment_corner_radius" android:bottomRightRadius="@dimen/segment_corner_radius"/>
+        </shape>
+    </item>
+    <item>
+        <shape >
+            <solid android:color="@color/segment_normal_bg"/>
+            <corners android:topLeftRadius="0dp" android:bottomLeftRadius="0dp" android:topRightRadius="@dimen/segment_corner_radius" android:bottomRightRadius="@dimen/segment_corner_radius"/>
+        </shape>
+    </item>
+</selector>
+

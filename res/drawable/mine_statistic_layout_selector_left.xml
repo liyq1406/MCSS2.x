@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_enabled="true" android:state_pressed="false">
+        <shape>
+            <solid android:color="@color/transparent_9" />
+
+            <stroke android:width="@dimen/dialog_border_width" android:color="@color/dialog_option_item_boder" />
+
+            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp" android:topLeftRadius="@dimen/option_btn_radius" android:topRightRadius="0dp" />
+
+            <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
+        </shape>
+    </item>
+    
+    <item android:state_enabled="true" android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/base_color_text_light_gray" />
+
+            <stroke android:width="@dimen/dialog_border_width" android:color="@color/dialog_option_item_boder" />
+
+            <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp" android:topLeftRadius="@dimen/option_btn_radius" android:topRightRadius="0dp" />
+
+            <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
+        </shape>
+    </item>
+
+</selector>

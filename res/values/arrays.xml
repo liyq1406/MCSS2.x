@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="week_day">
+        <item>日</item>
+        <item>一</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+    </string-array>
+    
+    <string-array name="chat_func">
+        <item>常见问题</item>
+        <item>相关问题</item>
+		<item>图片</item>
+        <item>拍照</item>
+        <item>人工客服</item>
+        <item>位置</item>
+    </string-array>
+
+    <string-array name="chat_func_icon">
+        <item>v5_icon_ques</item>
+        <item>v5_icon_relative_ques</item>
+        <item>v5_icon_photo</item>
+        <item>v5_icon_camera</item>
+        <item>v5_icon_worker</item>
+        <item>v5_icon_location</item>
+    </string-array>
+    
+    <string-array name="status_spinner_arr">
+        <item>在线</item>
+        <item>离开</item>
+        <item>隐身</item>
+       <!-- 
+        <item>忙碌</item>
+        <item>离线</item>
+        -->
+    </string-array>
+    
+</resources>

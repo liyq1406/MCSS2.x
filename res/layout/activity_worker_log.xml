@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/info_activity_layout_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+
+    <com.malinskiy.superrecyclerview.SuperRecyclerView
+        android:id="@+id/id_worker_log_list"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_empty="@layout/layout_emptyview"
+        app:layout_moreProgress="@layout/superrecyclerview_layout_more_progress"
+        app:mainLayoutId="@layout/superrecyclerview_layout_recyclerview_verticalscroll"
+        app:recyclerClipToPadding="false"
+        app:recyclerPadding="8dp"
+        app:scrollbarStyle="outsideInset"/>
+
+</LinearLayout>

@@ -1,0 +1,155 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <dimen name="set_item_height">50.0dip</dimen>
+
+    <!-- 对话框属性值 -->
+    <dimen name="dialog_border_width">0.0dp</dimen>
+    <dimen name="corner_angle">3dp</dimen>
+    
+    <dimen name="dialog_width">283dp</dimen>
+    <!-- option dialog -->
+    <dimen name="dialog_option_divider_height">1px</dimen>
+    <dimen name="option_btn_radius">10dp</dimen>
+    <dimen name="dialog_option_width">283dp</dimen>
+    <dimen name="dialog_option_item_height">48dp</dimen>
+    <dimen name="dialog_option_text_size">15sp</dimen>
+    <!-- warning dialog -->
+    <dimen name="warning_border_width">0.0dp</dimen>
+    <dimen name="warning_side_btn_radius">10dp</dimen>
+    <dimen name="warning_mid_btn_radius">10dp</dimen>
+    <dimen name="dialog_title_text_size">15sp</dimen>
+    <dimen name="dialog_content_text_size">12sp</dimen>
+    
+    <!-- 标题栏属性值 -->
+    <dimen name="base_action_bar_height">48.0dip</dimen>
+    <dimen name="base_action_bar_title_size">18.0sp</dimen>
+    <dimen name="base_action_bar_right_text_size">16.0sp</dimen>
+    <dimen name="base_action_bar_segment_width">130dip</dimen>
+    <dimen name="base_action_bar_segment_rl_width">140dip</dimen>
+    
+    <dimen name="date_text_size">12.0sp</dimen>
+    
+    <!-- empty tips margin -->
+    <dimen name="content_empty_tips_text_size">15.0sp</dimen>
+    <dimen name="tips_img_margin">8dip</dimen>
+    
+    <!-- Tab栏属性值 -->
+    <dimen name="bottom_tab_bar_height">54.0dip</dimen>
+    <dimen name="bottom_tab_bar_img_height">30.0dip</dimen>
+    <dimen name="bottom_tab_bar_padding">0.0dip</dimen>
+    <dimen name="bottom_tab_bar_margin">0.0dip</dimen>
+    <dimen name="bottom_tab_bar_text_size">11.0sp</dimen>
+    
+    <!-- Chat会话列表 -->
+    <dimen name="chat_list_item_height">66dip</dimen>
+    <dimen name="chat_list_left_img_layout_height">60dip</dimen>
+    <dimen name="chat_list_item_left_layout_height">50dip</dimen>
+    <dimen name="chat_list_item_horizontal_padding">8dip</dimen>
+    <dimen name="chat_list_left_img_horizontal_margin">2dip</dimen>
+    <dimen name="chat_list_left_img_width">56dip</dimen>
+    <dimen name="chat_list_top_layout_horizontal_padding">4dip</dimen>
+    <dimen name="chat_list_content_margin_right">40dip</dimen>
+    <dimen name="session_list_unread_num_text_size">10sp</dimen>
+    <dimen name="chat_list_iface_img_width">15dip</dimen>
+
+    <!-- Chat聊天页面 -->
+    <dimen name="chat_list_vertical_padding">7dip</dimen>
+    <dimen name="chat_list_horizontal_padding">8dip</dimen>
+    <dimen name="chat_list_item_content_h_matgin">50dip</dimen>
+    <dimen name="chat_list_item_search_width">25dip</dimen>
+    <dimen name="chat_list_item_content_hr_matgin">50dip</dimen>
+    <dimen name="chat_bottom_edit_layout_v_margin">0dip</dimen>
+    <dimen name="chat_bottom_edit_layout_h_padding">6dip</dimen>
+    <dimen name="chat_bottom_edit_layout_min_height">48dip</dimen>
+    <dimen name="chat_bottom_edit_text_min_height">40dip</dimen>
+    <dimen name="chat_bottom_sublayout_height">40dip</dimen>
+    <dimen name="chat_bottom_sublayout_v_padding">2dip</dimen>
+    <dimen name="chat_edit_text_size">16sp</dimen>
+    <dimen name="chat_send_btn_text_size">14sp</dimen>
+    <dimen name="chat_send_btn_width">42dip</dimen>
+    <dimen name="chat_send_btn_height">36dip</dimen>
+    <dimen name="chat_text_line_spacing">3dip</dimen>
+    <dimen name="chat_text_emoji_iconsize">20sp</dimen>
+    
+    <!-- Contact 联系人列表 -->
+    <dimen name="contact_list_item_height">60dip</dimen>
+    <dimen name="contact_list_left_img_width">48dip</dimen>
+    <dimen name="contact_list_item_left_layout_height">52dip</dimen>
+    <dimen name="contact_list_item_left_layout_width">52dip</dimen>
+    <dimen name="contact_list_item_horizontal_padding">12dip</dimen>
+    <dimen name="contact_list_item_vertical_padding">4dip</dimen>
+    <dimen name="contact_list_item_status_text_size">15sp</dimen>
+    <dimen name="contact_list_section_horizontal_padding">12dip</dimen>
+    <dimen name="contact_list_section_verticle_padding">6dip</dimen>
+    <dimen name="contact_list_section_height">42dip</dimen>
+    <dimen name="contact_list_section_text_size">14sp</dimen>
+    
+    <!-- Mine Fragment -->
+    <dimen name="base_line_width_s">1px</dimen>
+    <dimen name="base_line_width_m">1.0dip</dimen>
+    <dimen name="base_line_width_1">1dip</dimen>
+    
+    <!-- Segment 选择器 -->
+    <dimen name="segment_corner_radius">18dip</dimen>
+    <dimen name="segment_stroke_width">1dip</dimen>
+    <dimen name="segment_bg_padding">1dip</dimen>
+    <dimen name="segment_text_size">14sp</dimen>
+    
+    <!-- Network 提示头 -->
+    <dimen name="header_tips_layout_padding_h">16dip</dimen>
+    <dimen name="header_tips_layout_padding_v">4dip</dimen>
+    <dimen name="header_tips_img_height">20dip</dimen>
+    <dimen name="header_tips_height">40dip</dimen>
+    <dimen name="header_btn_height">32dip</dimen>
+    <dimen name="header_tips_text_size">14sp</dimen>
+    
+    <!-- Info Activity -->
+    <dimen name="info_item_user_name_text_size">16sp</dimen>
+    <dimen name="info_item_date_text_size">14sp</dimen>
+    <dimen name="info_item_name_text_size">16sp</dimen>
+    <dimen name="large_item_divider_height">20dip</dimen>
+    <dimen name="info_item_edit_divider_height">6dip</dimen>
+    <dimen name="info_item_edit_height_single">40dip</dimen>
+    <dimen name="info_item_height_single">44dip</dimen>
+    <dimen name="info_item_switchbtn_height">30dip</dimen>
+    <dimen name="info_item_inner_img_height">24dip</dimen>
+    <dimen name="info_item_padding">12dip</dimen>
+    <dimen name="info_item_padding_inner">8dip</dimen>
+    <dimen name="info_item_padding_inner_v">4dip</dimen>
+    <dimen name="info_item_margin_v">8dip</dimen>
+    <dimen name="history_info_item_margin_v">15dip</dimen>
+    <dimen name="info_item_margin_sv">4dip</dimen>
+    
+    
+    <!-- 设计修改后 -->
+    
+    <!-- 对话框 -->
+    <dimen name="dialog_corner_radius">8dp</dimen>
+    
+    <!--  -->
+    <dimen name="login_et_text_size">15sp</dimen>
+    
+    <!-- 客户信息-左边Margins -->
+    <dimen name="info_item_margin_h">16dip</dimen>
+    
+    <dimen name="history_messages_left_padding">24dp</dimen>
+    
+    <!-- 机器人推荐列表 -->
+    <dimen name="news_bg_radius">5dp</dimen>
+    
+    <dimen name="v5_chat_list_text_size">15sp</dimen>
+    <dimen name="v5_chat_list_voice_text_size">14sp</dimen>
+    <dimen name="v5_chat_list_voice_layout_minH">40dp</dimen>
+    <dimen name="v5_chat_list_voice_second_minW">36dp</dimen>
+    <dimen name="v5_chat_list_voice_wh">20dp</dimen> <!-- 语音图标宽高 -->
+    
+    <dimen name="v5_bubble_image_radius">8dp</dimen>
+    <dimen name="v5_bubble_arrow_offset">-3dp</dimen>
+    <dimen name="v5_bubble_arrow_height">6dp</dimen>
+    <dimen name="v5_bubble_arrow_width">5dp</dimen>
+    <dimen name="v5_bubble_arrow_top">15dp</dimen>
+</resources>

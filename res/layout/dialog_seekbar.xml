@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dialog_option_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_shape"
+    android:orientation="vertical" >
+        
+   	<RelativeLayout
+        android:id="@+id/layout_auto_mode"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_option_item_height"
+        android:background="@drawable/dialog_option_top_selector"
+        android:paddingRight="@dimen/info_item_padding"
+        android:paddingLeft="@dimen/info_item_padding" >
+
+        <TextView
+            style="@style/InfoItemText_L"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/dialog_option_text_size"
+            android:text="@string/set_mode_auto" />
+
+        <ImageView
+            android:id="@+id/id_auto_mode_iv"
+            android:visibility="invisible"
+            android:layout_width="@dimen/info_item_inner_img_height"
+            android:layout_height="@dimen/info_item_inner_img_height"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/info_item_padding_inner"
+            android:layout_marginEnd="@dimen/info_item_padding_inner"
+            android:background="@drawable/v5_item_selected"
+            android:contentDescription="@string/contentDescription" />
+    </RelativeLayout>
+	    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_line_width_1"
+        android:background="@color/info_activity_item_divider_inner" >
+    </View>
+    
+    <RelativeLayout
+        android:id="@+id/layout_switch_only"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_option_item_height"
+        android:background="@drawable/dialog_option_middle_selector"
+        android:paddingRight="@dimen/info_item_padding"
+        android:paddingLeft="@dimen/info_item_padding" >
+
+        <TextView
+            style="@style/InfoItemText_L"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/dialog_option_text_size"
+            android:text="@string/set_mode_switchable" />
+
+        <ImageView
+            android:id="@+id/id_switch_only_iv"
+            android:visibility="invisible"
+            android:layout_width="@dimen/info_item_inner_img_height"
+            android:layout_height="@dimen/info_item_inner_img_height"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/info_item_padding_inner"
+            android:layout_marginEnd="@dimen/info_item_padding_inner"
+            android:background="@drawable/v5_item_selected"
+            android:contentDescription="@string/contentDescription" />
+        
+    </RelativeLayout>
+	
+	
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_line_width_1"
+        android:background="@color/info_activity_item_divider_inner" >
+    </View>
+    
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/dialog_option_bottom_selector"
+	    android:padding="@dimen/info_item_padding"
+	    android:orientation="vertical" >
+	        
+	    <com.v5kf.mcss.ui.widget.ModeSeekBar
+	        android:id="@+id/id_seek_bar"  
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content"
+		    style="@style/Widget.SeekBar.Normal" />
+	    
+	    <TextView
+	        android:id="@+id/id_seek_tv"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:text="@string/seek_bar_mode_tip"
+	        android:textColor="@drawable/dialog_warning_middle_txt_selector"
+	        android:textSize="@dimen/dialog_option_text_size" />
+	
+	</LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true" >
+    
+<LinearLayout
+    android:id="@+id/layout_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:background="@color/info_activity_layout_bg"
+    android:orientation="vertical" >
+
+    <android.support.design.widget.AppBarLayout
+		android:id="@+id/id_app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:elevation="0dp" >
+		<!-- 去阴影 app:elevation="0dp" -->
+	
+	    <android.support.v7.widget.Toolbar
+			android:id="@+id/id_common_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="scroll|enterAlways"
+			app:layout_collapseMode="pin"
+			app:title="@string/worker_info"
+			style="@style/ToolBarStyle" >
+	        
+		</android.support.v7.widget.Toolbar>
+	
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/toolbar_border" />
+	</android.support.design.widget.AppBarLayout>
+    
+    <ScrollView
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+    	android:layout_height="0dp"
+    	android:background="@color/info_activity_layout_bg"
+    	android:scrollbars="none" >
+    	  	
+        <LinearLayout
+            android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+            
+            <!-- 一组设置项 -->
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@color/white"
+		        android:orientation="vertical" >
+		        
+			    <RelativeLayout
+			        android:id="@+id/layout_photo"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:background="@drawable/btn_selector"
+			        android:minHeight="78dp" >
+			        
+			        <TextView
+			            android:id="@+id/worker_photo_tv"
+			            style="@style/InfoItemText_L"
+			            android:text="@string/worker_photo"
+			            android:singleLine="true"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true" />
+			
+			        <com.v5kf.mcss.ui.widget.CircleImageView
+			            android:id="@+id/id_photo_iv"
+			            style="@style/Smile.ImageView"
+			            android:layout_width="54dp"
+			            android:layout_height="54dp"
+			            android:clickable="true"
+			            android:layout_centerVertical="true"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+				        android:layout_marginEnd="@dimen/info_item_margin_h"
+			            android:src="@drawable/v5_photo_default"
+			            android:contentDescription="@string/contentDescription" />
+			        
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_nickname"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_nickname"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			        			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_nickname" />
+			
+			        <TextView
+			            android:id="@+id/id_nickname_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_status"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_status"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/set_status" />
+			
+			        <TextView
+			            android:id="@+id/id_status_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_mode"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_mode"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/set_mode" />
+			
+			        <TextView
+			            android:id="@+id/id_mode_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+
+			    <RelativeLayout
+			        android:id="@+id/layout_site"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_site"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/worker_site" />
+			
+			        <TextView
+			            android:id="@+id/id_site_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			</LinearLayout>
+			
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+		        android:background="@color/info_activity_item_divider_frame" />
+		    		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+		    
+		    <View
+		        android:id="@+id/divider_second_layout_start"
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+		        android:background="@color/info_activity_item_divider_frame" />
+			
+		    <!-- 一组设置项 -->
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@color/white"
+		        android:orientation="vertical" >
+		        
+			    <RelativeLayout
+			        android:id="@+id/layout_realname"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_realname" />
+			
+			        <TextView
+			            android:id="@+id/id_realname_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_gender"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			
+			        <View
+			            android:id="@+id/divider_gender"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+				    
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_sex" />
+			
+			        <TextView
+			            android:id="@+id/id_gender_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>		    
+			    			    
+			    <RelativeLayout
+			        android:id="@+id/layout_phone"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_phone"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_phone" />
+			
+			        <TextView
+			            android:id="@+id/id_phone_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_email"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_email"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_email" />
+			
+			        <TextView
+			            android:id="@+id/id_email_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_weixin"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_weixin"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_weixin" />
+			
+			        <TextView
+			            android:id="@+id/id_weixin_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_qq"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_qq"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_qq" />
+			
+			        <TextView
+			            android:id="@+id/id_qq_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>		    
+
+			</LinearLayout>
+			
+		    <View
+		        android:id="@+id/divider_second_layout_end"
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+		        android:background="@color/info_activity_item_divider_frame" />
+			
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+	        
+        </LinearLayout>
+        
+    </ScrollView>
+    
+    <LinearLayout
+        android:id="@+id/layout_winfo_action"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    
+	    <Button
+	        android:id="@+id/btn_chat"
+	        android:visibility="gone"
+	        style="@style/Smile.Button.theme"
+	        android:layout_width="match_parent"
+	        android:layout_height="45dp"
+	        android:layout_marginLeft="@dimen/activity_vertical_margin"
+	        android:layout_marginRight="@dimen/activity_vertical_margin"
+	        android:text="@string/start_chat" />
+	
+	    <Button
+	        android:id="@+id/btn_back"
+	        style="@style/Smile.Button.logout"
+	        android:layout_width="match_parent"
+	        android:layout_height="45dp"
+	        android:layout_marginLeft="@dimen/activity_vertical_margin"
+	        android:layout_marginRight="@dimen/activity_vertical_margin"
+	        android:text="@string/option_end_session" />
+           
+        <View
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/large_item_divider_height" />
+        
+    </LinearLayout>
+
+</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

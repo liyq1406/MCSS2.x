@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_left_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/chat_list_horizontal_padding"
+    android:paddingRight="@dimen/chat_list_horizontal_padding"
+    android:paddingTop="@dimen/chat_list_vertical_padding"
+    android:paddingBottom="@dimen/chat_list_vertical_padding"
+    android:background="@color/list_chat_item_bg"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/id_from_msg_date"
+        android:visibility="gone"
+        style="@style/list_item_top_date" />
+    
+    <TextView
+        android:id="@+id/id_msg_tips"
+        android:visibility="visible"
+        android:background="@drawable/chat_tips_textview_bg"
+        style="@style/list_item_top_date" />
+    
+</LinearLayout>

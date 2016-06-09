@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 常见颜色 -->
+    <color name="green">#00bb00</color>
+    <color name="blue">#0000bb</color>
+    <color name="red">#bb0000</color>
+    <color name="orange">#ffe4c4</color>
+    <color name="yellow">#EEEE00</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>    
+    <color name="dark_gray">#7F8891</color>
+    <color name="light_gray">#cacaca</color><!-- #eaeaea -->
+    <color name="transparent">#00000000</color>
+    
+    <color name="color_edittext_field">#7f7f7f</color>
+    <color name="color_edittext_field_dark">#5f5f5f</color>
+    <color name="title_bar_bg_light_blue">#157cfc</color>
+    <!--color name="title_bar_bg_light_blue">#157cfc</color-->
+    <color name="title_bar_bg_light_gray">#ededed</color>
+    <color name="title_bar_bg_dark_blue">#157ccd</color>
+    
+    <color name="warning_text_color">#000000</color>
+    <color name="dialog_title_text_color">#000000</color>
+    <color name="dialog_content_text_color">#000000</color>
+    
+    <color name="bg_slide_menu">#5c5c5c</color>
+    <color name="logout_color">#cd5555</color>
+    <color name="logout_color_diff">#CD4F39</color>
+    
+    <color name="text_warning_red">#ee563d</color>
+    <color name="blue_backgroud">#106ad7</color>
+    
+    <color name="tabhost_text_normal_color">#7C7C7E</color><!-- Home tab 颜色 -->
+    <color name="tabhost_text_highlight_color">#1881D3</color>
+    
+    <color name="base_action_bar_title_color">#2f2725</color>
+    <color name="base_color_text_black">#3e3e39</color>
+    <color name="base_color_text_dark_gray">#787878</color>
+    <color name="base_color_text_light_gray">#bfc0c0</color>
+    <color name="base_color_text_white">#ffffff</color>
+    <color name="base_color_text_selected">#99d9ea</color>
+    
+    <color name="color_date_text_blue">#00a2e8</color>
+    
+    <!-- 消息发送按钮 -->
+    <color name="btn_chat_send_normal">#46d142</color>
+    <color name="btn_chat_send_pressed">#45c01a</color>
+    
+    <!-- 退出登录按钮 -->
+    <color name="btn_logout_normal">#EE2C2C</color>
+    <color name="btn_logout_pressed">#EE6363</color>
+    
+    <!-- 机器人候选答案 -->
+    <color name="bottom_candidate_bg_normal">#6FBFF0</color>
+    <color name="bottom_candidate_bg_pressed">#8FBC8F</color>
+    <color name="bottom_candidate_select_normal">#258BCB</color>
+    <color name="bottom_candidate_select_pressed">#00688B</color>
+    <color name="robot_add_bg_normal">#FFFFFF</color>
+    <color name="robot_add_bg_pressed">#D5D5D6</color>
+    <color name="robot_del_bg_normal">#FFFFFF</color>
+    <color name="robot_del_bg_pressed">#D5D5D6</color>
+    <color name="robot_send_bg_normal">#FFFFFF</color>
+    <color name="robot_send_bg_pressed">#D5D5D6</color>
+    <color name="common_red">#ff8247</color>
+    
+    
+    <!-- 主题、标题栏、状态栏背景色 -->    
+    <color name="base_theme_color">#1881D3</color>
+    <color name="base_theme_color_lighter">#1881D3</color>
+    <color name="base_theme_color_darker">#1881D3</color>
+    <color name="base_status_bar_color_welcome">#2795EA</color>
+    <color name="base_action_bar_text_color">#209DE9</color><!-- 原#ffffff -->
+    <color name="base_text_color">#ffffff</color><!-- 主题子体颜色 -->
+    
+    <!-- Mine/Info item背景 -->
+    <color name="base_item_select">#dadada</color><!-- #d9d9d9 -->
+    <color name="base_item_divider">#dadada</color><!-- #d9d9d9 -->
+    
+    <!-- RecyclerView、列表背景色 -->
+    <color name="base_list_content_bg">#ffffff</color>
+    
+    <!-- 内容为空提示字体颜色 -->    
+    <color name="content_empty_tips_text_color">#bfbfbf</color>
+    <color name="content_empty_tips_bg_color">#efefef</color>
+    
+    <!-- 对话框颜色 -->
+    <!-- Button颜色 -->
+    <color name="dialog_btn_bg_normal">#000000</color> 
+    <color name="dialog_left_btn_bg_normal">#000000</color>
+    <color name="dialog_mid_btn_bg_normal">#000000</color>
+    <color name="dialog_mid_btn_bg_pressed">#333333</color> 
+    <color name="dialog_right_btn_bg_pressed">#7F8891</color> 
+    <color name="dialog_left_btn_bg_pressed">#7F8891</color>
+    
+    <!-- Smile Theme -->
+    <color name="dialog_color_title">#f82c22</color>
+    
+    <!-- 网络header提示文字 -->
+    <color name="header_tips_text_color">#a0a0a0</color> 
+    <color name="header_tips_bg_color">#ffeeee</color> 
+    <color name="header_tips_bg_color_pressed">#ffbbbb</color> 
+    
+    <!-- 信息查看Activity -->
+    <color name="info_start_chat_btn_normal">#43CD80</color>
+    <color name="info_start_chat_btn_pressed">#3CB371</color>
+    
+    <!-- 透明度背景 -->
+    <color name="transparent_9">#33000000</color>
+    <color name="transparent_a">#e0ffffff</color><!-- 透明白 -->
+    <color name="transparent_gray">#78000000</color><!-- 透明灰 -->
+    <color name="transparent_black">#98000000</color><!-- 透明黑 -->
+    
+    
+    <!-- 下方为设计后颜色 -->
+     
+    <!-- <color name="main_color">#1881D3</color> 主体颜色、标题栏颜色 -->
+    <!-- <color name="main_color_diff">#1881D3</color> 标题栏颜色 -->
+    <!-- <color name="main_color_light">#1881D3</color> 标题栏颜色578cc1 -->
+    <!-- <color name="base_action_bar_bg">#1881D3</color> ActionBar颜色 -->
+    
+    <!-- 输入框字体 -->
+    <color name="login_et_text">#000000</color>
+    <color name="login_et_text_hint">#BABABA</color>
+    <color name="login_et_border">#EFEFF0</color>
+    
+    <!-- 对话框 -->
+    <color name="dialog_content_bg">#F8F8F8</color>
+    <color name="dialog_btn_bg">#FFFFFF</color>
+    <color name="dialog_warning_btn_bg_pressed">#f0f0f0</color>
+    <color name="dialog_text_color">#000000</color>
+    <color name="dialog_divider_v">#E0E1E2</color>
+    <color name="dialog_divider_h">#E0E1E2</color>
+    <color name="dialog_option_item_boder">#E0E1E2</color>
+    <color name="dialog_warning_btn_boder">#E0E1E2</color><!-- ?? -->
+    <color name="dialog_option_item_bg_pressed">#cacaca</color><!-- 按下 -->
+    
+    <!-- 底部button -->
+    <color name="btn_green_bg">#01BA1B</color>
+    <color name="btn_green_bg_pressed">#11CA0B</color>
+    <color name="btn_red_bg">#E25252</color>
+    <color name="btn_red_bg_pressed">#EF3232</color>
+    <!-- 底部button(登录、接入、结束) -->
+    <color name="btn_positive_bg">@color/main_color_accent</color><!-- #14B7F2 -->
+    <color name="btn_positive_bg_pressed">#14B7F2</color><!-- #21C4F8 -->
+    <color name="btn_negative_bg">#ED5C5C</color>
+    <color name="btn_negative_bg_pressed">#F25F5F</color>
+    
+    <!-- Segment边框颜色 -->
+    <color name="segment_stroke_border">#C0FFFFFF</color>
+    <color name="segment_select_bg">#C8FFFFFF</color><!-- 纯白85%透明 -->
+    <color name="segment_normal_bg">#1881D3</color>
+    
+    <!-- Set activity -->
+    <color name="info_activity_layout_bg">#F8F8F8</color>
+    <color name="set_activity_item_divider">#E9EAEA</color>
+    <!-- Info Activity -->
+    <color name="info_activity_item_divider_inner">#E5E5E6</color>
+    <color name="info_activity_item_divider_frame">#DEDFE0</color>
+    <color name="info_item_right_text_color">#787878</color>
+    
+    <!-- Session列表右侧文字 -->
+    <color name="base_color_text_gray">#9FA0A0</color>
+    
+    <!-- 启动画面 -->
+    <color name="welcome_bg">#2593e9</color>
+    
+    <!-- 底部tab栏 -->
+    <color name="tab_text_select_color">#1881D3</color>
+    <color name="tab_text_normal_color">#7C7C7E</color>
+    <color name="bottom_layout_blank_bg">#F7F7F7</color><!-- 底部输入框背景 -->
+    <color name="bottom_layout_border_color">#B6B6B6</color><!-- 底部边框颜色 -->
+    
+    <!-- 企业架构、转接坐席列表 -->
+    <color name="arch_workers_section_bg">#EBECED</color>
+    <color name="arch_workers_section_text_color">#787878</color>
+    
+    <color name="list_view_divider_color">#E2E3E4</color>
+    
+    <!-- 历史记录查看activity -->
+    <color name="list_history_messages_bg">#FFFFFF</color>
+    <color name="history_messages_bottom_bar_bg">#F7F7F7</color>
+    <color name="history_messages_bottom_bar_border">#B6B6B6</color>
+    <color name="history_messages_bottom_bar_text">#787878</color>
+    <color name="history_messages_bottom_bar_bg_selected">#dadada</color>
+    <color name="history_robot_name_text">#207CC4</color>    
+    <color name="history_date_text">#BABABA</color>
+    
+    <!-- 图片素材activity -->
+    <color name="meterail_img_bg_normal">#E8E8E8</color>
+    <color name="meterail_img_bg_pressed">#B6B6B6</color>
+    
+    <!-- 对话内容列表 -->
+    <color name="list_item_date_bg">#00000000</color><!-- 会话时间背景色 -->
+    <color name="list_item_date_text">#4B4B4B</color>
+    <color name="list_chat_blank_bg">#C6DADA</color><!-- 对话界面背景 -->
+    <color name="list_chat_item_bg">@color/list_chat_blank_bg</color><!-- 对话item背景色 -->
+    
+    <!-- 会话列表 -->
+    <color name="list_session_item_bg_normal">#ffffff</color>
+    <color name="list_session_item_bg_pressed">#eaeaea</color>
+    
+    <color name="list_item_tips_bg">#ededed</color><!-- tips信息背景色 -->
+    
+    <color name="v5_badge_color">#ffff3a20</color>
+    
+    <!-- V5 SDK -->
+    <color name="v5_ques_bg_select">#DADADA</color>
+    <color name="v5_ques_bg_normal">#EBECEE</color>
+    
+    <!-- actionsheet -->
+    <color name="trans">#00000000</color>
+    <color name="alertdialog_line">#c6c6c6</color>
+    <color name="actionsheet_blue">#037BFF</color>
+    <color name="actionsheet_red">#FD4A2E</color>
+    <color name="actionsheet_gray">#8F8F8F</color>
+    
+    <!-- main主题颜色 -->
+    <!-- main_color_primary：主体颜色、标题栏颜色 -->
+    <!-- main_color_dark：加深的主题颜色 -->
+    <!-- main_color_accent：内容控件颜色578cc1 -->
+    
+    <color name="colorPrimary">#FFFFFF</color><!-- 导航栏 -->
+    <color name="colorPrimaryDark">#EAEAEA</color><!-- 状态栏 -->
+    <color name="colorAccent">#209DE9</color>
+    <color name="colorControlNormal">#1881D3</color>
+    
+    <!-- 第一套配色方案 -->
+    <color name="main_color">@color/colorPrimary</color><!-- #1881D3  F9F9F9-->
+    <color name="main_color_dark">@color/colorPrimaryDark</color><!-- #1674BE -->
+    <color name="main_color_accent">@color/colorAccent</color><!-- #2088F2 -->
+    
+    <!-- Materia主题标题栏 -->
+    <!-- 第二套配色方案
+    <color name="main_color">#1EC2B6</color>
+    <color name="main_color_dark">#1BAFA4</color>
+    <color name="main_color_accent">#21D2C8</color>
+     -->
+    <color name="material_blue_500">#1881D3</color><!-- #009688 -->
+    <color name="material_blue_700">#1881D3</color><!-- #00796B -->
+    <color name="material_green_A200">#25A55F</color><!-- #FD87A9 -->
+    <color name="material_pink_A200">#FD87A9</color><!-- #FD87A9 -->
+    <color name="textColorPrimary">@color/white</color><!-- #33b5e5 -->
+    <color name="textColorSecondary">@color/white</color>
+    <color name="base_action_bar_bg">#F9F9F9</color>
+    <color name="base_status_bar_bg">@color/main_color_dark</color>
+    
+    <!-- Button文字颜色selector -->
+    <drawable name="mode_btn_normal">#787878</drawable>
+    <drawable name="mode_btn_pressed">#919191</drawable>
+    
+    <!-- 离线状态颜色 -->
+    <color name="offline_color">#aaaaaa</color>
+    <color name="offline_color_dark">#a0a0a0</color>
+    
+    <!-- 坐席状态对应颜色 -->
+    <color name="status_leave_color">#5aaae9</color><!-- 离开状态文字颜色 -->
+    <color name="status_online_color">#5ec456</color><!-- 在线状态文字颜色 -->
+    <color name="status_busy_color">#edb82b</color><!-- 忙碌状态文字颜色 -->
+    <color name="status_offline_color">#9FA0A0</color><!-- 离线状态文字颜色 -->
+    
+    <!-- 状态下拉项背景 -->
+    <color name="spinner_item_normal">@color/dark_gray</color>
+    <color name="spinner_item_selected">@color/light_gray</color>
+    
+    <color name="toolbar_border">#B2B2B2</color>
+    <color name="default_phpto_border_green">#79D655</color>
+    <color name="default_phpto_border_blue">#6FBFF0</color>
+    
+</resources>

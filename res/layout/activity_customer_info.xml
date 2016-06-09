@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:background="@color/info_activity_layout_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+    
+    <ScrollView
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+    	android:layout_height="0dp"
+    	android:scrollbars="none" >    	
+        <LinearLayout
+            android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+    	
+		    <RelativeLayout
+		        android:id="@+id/layout_head"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@drawable/btn_selector"
+		        android:minHeight="78dp"
+		        android:paddingLeft="@dimen/info_item_padding"
+		        android:paddingRight="@dimen/info_item_padding"
+		        android:paddingBottom="@dimen/info_item_padding_inner_v"
+		        android:paddingTop="@dimen/info_item_padding_inner_v" >
+		
+		        <com.v5kf.mcss.ui.widget.CircleImageView
+		            android:id="@+id/id_head_iv"
+		            style="@style/Smile.ImageView"
+		            android:layout_width="54dp"
+		            android:layout_height="54dp"
+		            android:layout_centerVertical="true"
+		            android:src="@drawable/v5_photo_default_cstm"
+		            android:contentDescription="@string/contentDescription" />
+		        
+		        <LinearLayout
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:padding="4dp"
+		            android:layout_centerVertical="true"
+		            android:layout_toEndOf="@id/id_head_iv"
+		            android:layout_toRightOf="@id/id_head_iv"
+		            android:layout_marginLeft="8dp"
+		            android:layout_marginStart="8dp"
+		            android:layout_gravity="center_vertical"
+		            android:orientation="vertical" >
+		
+		            <LinearLayout
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:orientation="horizontal" >
+		                
+			            <TextView
+			                android:id="@+id/id_nickname_tv"
+			                style="@style/Smile.TextView._Black"
+			                android:textColor="@color/black"
+			                android:textSize="@dimen/info_item_user_name_text_size"
+			                android:singleLine="true"
+			                android:text="@string/cstm_nickname" />
+			            
+			            <ImageView
+		                    android:id="@+id/id_sex_iv"
+		                    style="@style/IfaceImg"
+		                    android:layout_gravity="end|center_vertical"
+		                    android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+		                    android:layout_marginStart="@dimen/info_item_padding_inner_v"
+		                    android:contentDescription="@string/contentDescription" />
+			            
+			        </LinearLayout>
+		
+		            <LinearLayout
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_marginTop="4dp"
+		                android:orientation="horizontal" >
+		                
+		                <ImageView
+		                    android:id="@+id/id_iface_iv"
+		                    style="@style/IfaceImg"
+		                    android:layout_marginRight="1dp"
+		                    android:layout_gravity="end|center_vertical"
+		                    android:contentDescription="@string/contentDescription" />
+		                
+		                <TextView
+			                android:id="@+id/id_iface_tv"
+			                android:layout_gravity="end|center_vertical"
+			                android:singleLine="true"
+			                style="@style/Smile.TextView._Gray.Iface"
+			                android:text="@string/cstm_weixin" />
+		                
+		            </LinearLayout>
+		            
+		        </LinearLayout>        
+		        
+		        <ImageView
+		            android:id="@+id/cstm_edit_iv"
+		            android:layout_width="30dp"
+		            android:layout_height="30dp"
+		            android:padding="5dp"
+		            android:layout_centerVertical="true"
+		            android:layout_alignParentEnd="true"
+		            android:layout_alignParentRight="true"
+		            android:src="@drawable/v5_user_edit"
+		            android:contentDescription="@string/contentDescription" />
+		        
+		    </RelativeLayout>
+		    
+		    <View android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+				android:background="@color/info_activity_item_divider_frame" />
+		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+		    
+		    <View android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+				android:background="@color/info_activity_item_divider_frame" />
+		    
+		    <LinearLayout		        
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@color/white"
+		        android:orientation="vertical" >
+		    
+			    <RelativeLayout
+			        android:id="@+id/layout_history_msg"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/history_messages" />
+			
+			        <TextView
+			            android:id="@+id/id_history_msg_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h"
+			            android:drawablePadding="@dimen/info_item_padding_inner"
+			            android:drawableEnd="@drawable/register_bottom_arrow"
+			            android:drawableRight="@drawable/register_bottom_arrow" />
+		
+			    </RelativeLayout>
+			</LinearLayout>
+			
+		    <View android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+				android:background="@color/info_activity_item_divider_frame" />
+		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+		    
+		    <View 
+		        android:id="@+id/group_top_div"
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+				android:background="@color/info_activity_item_divider_frame" />
+			
+		    <!-- 一组设置项 -->
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@color/white"
+		        android:orientation="vertical" >
+		    
+			    <RelativeLayout
+			        android:id="@+id/layout_realname"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_realname" />
+			
+			        <TextView
+			            android:id="@+id/id_realname_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>			    
+			    			    
+			    <RelativeLayout
+			        android:id="@+id/layout_phone"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_phone"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_phone" />
+			
+			        <TextView
+			            android:id="@+id/id_phone_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_email"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_email"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_email" />
+			
+			        <TextView
+			            android:id="@+id/id_email_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_weixin"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_weixin"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_weixin" />
+			
+			        <TextView
+			            android:id="@+id/id_weixin_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_qq"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_qq"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_qq" />
+			
+			        <TextView
+			            android:id="@+id/id_qq_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+		    
+			    <RelativeLayout
+			        android:id="@+id/layout_country"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_country"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_country" />
+			
+			        <TextView
+			            android:id="@+id/id_country_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			
+			    <RelativeLayout
+			        android:id="@+id/layout_province"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_province"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_province" />
+			
+			        <TextView
+			            android:id="@+id/id_province_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			
+			    <RelativeLayout
+			        android:id="@+id/layout_city"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_city"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_city" />
+			
+			        <TextView
+			            android:id="@+id/id_city_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			
+			    <RelativeLayout
+			        android:id="@+id/layout_address"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_address"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_address" />
+			
+			        <TextView
+			            android:id="@+id/id_address_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			
+			    <RelativeLayout
+			        android:id="@+id/layout_company"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_company"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_company" />
+			
+			        <TextView
+			            android:id="@+id/id_company_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_chats"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_chats"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_chats" />
+			
+			        <TextView
+			            android:id="@+id/id_chats_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+			    
+			    <RelativeLayout
+			        android:id="@+id/layout_visits"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_height_single"
+			        android:background="@drawable/btn_selector" >
+			        
+			        <View
+			            android:id="@+id/divider_visits"
+				        android:layout_width="match_parent"
+				        android:layout_marginLeft="@dimen/info_item_margin_h"
+				        android:layout_height="@dimen/base_line_width_s"
+				        android:background="@color/info_activity_item_divider_inner" />
+			
+			        <TextView
+			            style="@style/InfoItemText_L"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
+			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_alignParentStart="true"
+			            android:layout_alignParentLeft="true"
+			            android:layout_centerVertical="true"
+			            android:text="@string/cstm_visits" />
+			
+			        <TextView
+			            android:id="@+id/id_visits_tv"
+			            style="@style/InfoItemText_R"
+			            android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </RelativeLayout>
+
+			</LinearLayout>
+			
+		    <View 
+		        android:id="@+id/group_bottom_div"
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+				android:background="@color/info_activity_item_divider_frame" />
+			
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+		    	        
+        </LinearLayout>
+        
+    </ScrollView>
+    
+    <LinearLayout
+        android:id="@+id/layout_cinfo_action"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    
+	    <Button
+	        android:id="@+id/btn_start_chat"
+	        android:visibility="gone"
+	        style="@style/Positive_btn"
+	        android:text="@string/start_chat" />
+	
+	    <Button
+	        android:id="@+id/btn_end_chat"
+	        android:visibility="gone"
+	        style="@style/Passive_btn"
+	        android:text="@string/option_end_session" />	    
+        
+    </LinearLayout>
+    
+</LinearLayout>

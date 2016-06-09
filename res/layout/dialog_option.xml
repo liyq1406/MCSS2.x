@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dialog_option_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_shape"
+    android:orientation="vertical" >
+        
+    <LinearLayout
+        android:id="@+id/layout_dialog_top_button"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_item_height"
+        android:visibility="visible"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_dialog_top_option"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_option_top_selector"
+            android:gravity="center"
+            android:text="@string/universal_error_dialog_middle_btton"
+            android:textColor="@drawable/dialog_warning_middle_txt_selector"
+            android:textSize="@dimen/dialog_option_text_size" />
+        
+    </LinearLayout>
+    
+    <View
+        android:id="@+id/v_middle_divider0"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_divider_height"
+        android:background="@color/dialog_option_item_boder" />
+    
+    <LinearLayout
+        android:id="@+id/layout_dialog_middle_button1"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_item_height"
+        android:visibility="visible"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_dialog_middle_option1"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_option_middle_selector"
+            android:gravity="center"
+            android:text="@string/universal_error_dialog_middle_btton"
+            android:textColor="@drawable/dialog_warning_middle_txt_selector"
+            android:textSize="@dimen/dialog_option_text_size" />
+    </LinearLayout>
+    
+    <View
+        android:id="@+id/v_middle_divider1"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_divider_height"
+        android:background="@color/dialog_option_item_boder" />
+    
+    <LinearLayout
+        android:id="@+id/layout_dialog_middle_button2"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_item_height"
+        android:visibility="visible"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_dialog_middle_option2"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_option_middle_selector"
+            android:gravity="center"
+            android:text="@string/universal_error_dialog_middle_btton"
+            android:textColor="@drawable/dialog_warning_middle_txt_selector"
+            android:textSize="@dimen/dialog_option_text_size" />
+    </LinearLayout>
+    
+    <View
+        android:id="@+id/v_middle_divider2"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_divider_height"
+        android:background="@color/dialog_option_item_boder" />
+    
+    <LinearLayout
+        android:id="@+id/layout_dialog_middle_button3"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_item_height"
+        android:visibility="visible"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_dialog_middle_option3"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_option_middle_selector"
+            android:gravity="center"
+            android:text="@string/universal_error_dialog_middle_btton"
+            android:textColor="@drawable/dialog_warning_middle_txt_selector"
+            android:textSize="@dimen/dialog_option_text_size" />
+    </LinearLayout>
+    
+    <View
+        android:id="@+id/v_middle_divider3"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_divider_height"
+        android:background="@color/dialog_option_item_boder" />
+
+    <LinearLayout
+        android:id="@+id/layout_dialog_bottom_button"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_item_height"
+        android:visibility="visible"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_dialog_bottom_option"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_option_bottom_selector"
+            android:gravity="center"
+            android:text="@string/universal_error_dialog_middle_btton"
+            android:textColor="@drawable/dialog_warning_middle_txt_selector"
+            android:textSize="@dimen/dialog_option_text_size" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/layout_dialog_only_button"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dialog_option_item_height"
+        android:visibility="gone"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_dialog_only_option"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_option_only_selector"
+            android:gravity="center"
+            android:text="@string/universal_error_dialog_middle_btton"
+            android:textColor="@drawable/dialog_warning_middle_txt_selector"
+            android:textSize="@dimen/dialog_option_text_size" />
+        
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:id="@android:id/text1"
+    android:paddingLeft="8dip"
+    android:paddingStart="8dip"
+    android:paddingRight="4dip"
+    android:paddingEnd="4dip"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:gravity="center_vertical"
+    android:textColor="@color/transparent"
+    android:textSize="14sp"
+    android:singleLine="true"
+    android:visibility="invisible"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" />

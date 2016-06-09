@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.v5kf.multiservicesystem.HomeActivity" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="ifRoom"/>
+    
+    <item
+        android:id="@+id/action_end_session"
+        android:orderInCategory="100"
+        android:title="@string/option_end_session"
+        app:showAsAction="ifRoom"/>
+    
+    <item
+        android:id="@+id/action_in_trust"
+        android:orderInCategory="100"
+        android:title="@string/option_set_trust"
+        app:showAsAction="ifRoom"/>
+
+</menu>

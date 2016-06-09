@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:background="@color/info_activity_layout_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+    
+    <ScrollView
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:scrollbars="none" >    	
+        <LinearLayout
+            android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+    			
+		    <RelativeLayout
+		        android:id="@+id/layout_head"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@drawable/btn_selector"
+		        android:minHeight="78dp"
+		        android:paddingLeft="@dimen/info_item_margin_h"
+		        android:paddingRight="@dimen/info_item_margin_h"
+		        android:paddingBottom="@dimen/info_item_padding_inner_v"
+		        android:paddingTop="@dimen/info_item_padding_inner_v" >
+		
+		        <com.v5kf.mcss.ui.widget.CircleImageView
+		            android:id="@+id/id_head_iv"
+		            style="@style/Smile.ImageView"
+		            android:layout_width="54dp"
+		            android:layout_height="54dp"
+		            android:layout_centerVertical="true"
+		            android:src="@drawable/v5_photo_default_cstm"
+		            android:contentDescription="@string/contentDescription" />
+		        
+		        <LinearLayout
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:padding="4dp"
+		            android:layout_centerVertical="true"
+		            android:layout_toEndOf="@id/id_head_iv"
+		            android:layout_toRightOf="@id/id_head_iv"
+		            android:layout_marginLeft="12dp"
+		            android:layout_marginStart="12dp"
+		            android:layout_gravity="center_vertical"
+		            android:orientation="vertical" >
+		
+		            <LinearLayout
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:orientation="horizontal" >
+		                
+			            <TextView
+			                android:id="@+id/id_nickname_tv"
+			                style="@style/Smile.TextView._Black"
+			                android:textColor="@color/black"
+			                android:textSize="@dimen/info_item_user_name_text_size"
+			                android:singleLine="true"
+			                android:text="@string/cstm_nickname" />
+			            
+			            <ImageView
+		                    android:id="@+id/id_sex_iv"
+		                    style="@style/IfaceImg"
+		                    android:layout_gravity="end|center_vertical"
+		                    android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+		                    android:layout_marginStart="@dimen/info_item_padding_inner_v"
+		                    android:contentDescription="@string/contentDescription" />
+			            
+			        </LinearLayout>
+		
+		            <LinearLayout
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_marginTop="4dp"
+		                android:orientation="horizontal" >
+		                
+		                <ImageView
+		                    android:id="@+id/id_iface_iv"
+		                    style="@style/IfaceImg"
+		                    android:layout_marginRight="1dp"
+		                    android:layout_gravity="end|center_vertical"
+		                    android:contentDescription="@string/contentDescription" />
+		                
+		                <TextView
+			                android:id="@+id/id_iface_tv"
+			                 android:layout_gravity="end|center_vertical"
+			                style="@style/Smile.TextView._Gray.Iface"
+			                android:text="@string/cstm_weixin" />
+		                
+		            </LinearLayout>
+		            
+		        </LinearLayout>		        
+		    </RelativeLayout>
+		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+		        android:background="@color/info_activity_item_divider_frame" />
+		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+			
+		    <!-- 一组设置项 -->
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="@color/transparent"
+		        android:orientation="vertical" >
+		    
+			    <LinearLayout
+			        android:id="@+id/layout_realname"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_realname_edit" />
+			        			
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_realname_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+			    			    
+			    <LinearLayout
+			        android:id="@+id/layout_phone"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_phone_edit" />
+				    
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_phone_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+			    
+			    <LinearLayout
+			        android:id="@+id/layout_email"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_email_edit" />
+				    
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_email_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+			    
+			    <LinearLayout
+			        android:id="@+id/layout_weixin"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_weixin_edit" />
+			        
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_weixin_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+			    
+			    <LinearLayout
+			        android:id="@+id/layout_qq"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_qq_edit" />
+				    
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_qq_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+		    
+			    <LinearLayout
+			        android:id="@+id/layout_country"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_country_edit" />
+				    
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_country_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+			
+			    <LinearLayout
+			        android:id="@+id/layout_province"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_province_edit" />
+				    
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_province_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+			    
+			    <LinearLayout
+			        android:id="@+id/layout_city"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_city_edit" />
+				    
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_city_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+			
+			    <LinearLayout
+			        android:id="@+id/layout_address"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_address_edit" />
+				    
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_address_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+			    
+			    <View
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_divider_height" />
+			
+			    <LinearLayout
+			        android:id="@+id/layout_company"
+			        android:gravity="center_vertical"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/info_item_edit_height_single"
+			        android:layout_marginLeft="@dimen/info_item_padding_inner"
+			        android:layout_marginRight="@dimen/info_item_padding_inner" >
+			
+			        <TextView
+			            style="@style/EditInfoItemText_L"
+			            android:layout_width="0dp"
+			            android:layout_weight="2"
+			            android:singleLine="true"
+			            android:gravity="right"
+			            android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			            android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			            android:text="@string/cstm_company_edit" />
+				    
+			        <com.v5kf.mcss.ui.widget.ClearEditText
+			            android:id="@+id/id_company_et"
+			            style="@style/InfoItemEdit_R"
+			            android:layout_width="0dp"
+			            android:layout_weight="5"
+			            android:background="@drawable/cstm_info_edit_bg"
+			            android:layout_marginRight="@dimen/info_item_margin_h"
+			            android:layout_marginEnd="@dimen/info_item_margin_h" />
+		
+			    </LinearLayout>
+
+			</LinearLayout>
+			
+	        <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+	        
+        </LinearLayout>
+        
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:v5kf="http://schemas.android.com/apk/res-auto"
+    android:baselineAligned="false"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/bottom_tab_bar_height"
+    android:background="@drawable/base_layout_bg_with_boder"
+    android:orientation="horizontal" >
+
+	<com.v5kf.mcss.ui.view.TabView
+        android:id="@+id/id_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/base_layout_bg_with_boder"
+        v5kf:text_size="12sp"
+        v5kf:text_normal_color="@color/tab_text_normal_color"
+        v5kf:text_select_color="@color/tab_text_select_color"
+		v5kf:item_padding="10dp">
+	</com.v5kf.mcss.ui.view.TabView>
+
+</LinearLayout>

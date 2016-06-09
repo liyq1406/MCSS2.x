@@ -1,0 +1,164 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true" >
+
+<LinearLayout
+    android:id="@+id/ic_chat_activity_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    tools:context="com.v5kf.mcss.ui.activity.md2x.HistoryMessagesActivity" >
+       
+    <android.support.design.widget.AppBarLayout
+		android:id="@+id/id_app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:elevation="0dp" >
+		<!-- 去阴影 app:elevation="0dp" -->
+	
+	    <android.support.v7.widget.Toolbar
+			android:id="@+id/id_common_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="scroll|enterAlways"
+			app:layout_collapseMode="pin"
+			app:title="@string/history_messages"
+			style="@style/ToolBarStyle" >
+	        
+		</android.support.v7.widget.Toolbar>
+	
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/toolbar_border" />
+	</android.support.design.widget.AppBarLayout>
+    	
+    <RelativeLayout
+        android:id="@+id/id_center_frame"
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:background="@color/white" >
+        
+        <android.support.v7.widget.RecyclerView
+	        android:id="@+id/id_recycle_view_msgs"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:focusable="true" 
+			android:focusableInTouchMode="true"
+	        android:divider="@null"
+	        android:dividerHeight="5dp"
+	        android:background="@color/list_history_messages_bg"/>
+
+        <LinearLayout
+	        android:id="@+id/layout_container_empty"
+	        android:visibility="gone"
+	        android:background="@color/content_empty_tips_bg_color"
+	        android:gravity="center"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_centerInParent="true"
+	        android:orientation="vertical" >
+	        
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:drawableTop="@drawable/v5kf"
+	            android:drawablePadding="@dimen/tips_img_margin"
+	            android:textSize="@dimen/content_empty_tips_text_size"
+	            android:textColor="@color/content_empty_tips_text_color"
+	            android:text="@string/messages_content_empty_tips" />
+	        
+	    </LinearLayout>
+        
+    </RelativeLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_line_width_s"
+        android:background="@color/history_messages_bottom_bar_border" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/history_messages_bottom_bar_bg" >
+        
+        <LinearLayout
+            android:id="@+id/search_last_day_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+			android:gravity="center_vertical"
+            android:background="@drawable/bottom_bar_date_selector"
+            android:padding="@dimen/info_item_padding"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:orientation="horizontal" >
+            
+            <ImageView
+                style="@style/InfoItemText_R"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/v5_btn_left"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/contentDescription" />
+            
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/search_next_day_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:background="@drawable/bottom_bar_date_selector"
+            android:padding="@dimen/info_item_padding"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal" >
+	        
+            <ImageView
+                style="@style/InfoItemText_R"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/v5_btn_right"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/contentDescription" />
+            
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/cur_date_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:background="@drawable/bottom_bar_date_selector"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:orientation="horizontal" >
+            
+            <TextView
+                android:id="@+id/id_cur_date"
+                style="@style/InfoItemText_L"
+                android:gravity="center_vertical"
+                android:textColor="@color/history_messages_bottom_bar_text"
+                android:textSize="16sp"
+                android:text="@string/text_date_hint" />
+            
+        </LinearLayout>
+        
+    </RelativeLayout>
+    
+</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

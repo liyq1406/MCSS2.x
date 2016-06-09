@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_history_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/history_messages_left_padding"
+    android:paddingRight="@dimen/info_item_padding"
+    android:paddingTop="@dimen/history_info_item_margin_v"
+    android:paddingBottom="@dimen/history_info_item_margin_v"
+    android:orientation="vertical" >
+        
+    <LinearLayout
+        android:baselineAligned="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+	    <TextView
+	        android:id="@+id/id_user_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/info_item_user_name_text_size"
+	        android:textColor="@color/history_robot_name_text"
+	        android:textStyle="normal"
+	        android:text="用户名" />
+	    
+	    <TextView
+	        android:id="@+id/id_msg_date"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="@dimen/info_item_padding_inner"
+	        android:layout_marginStart="@dimen/info_item_padding_inner"
+	        android:layout_gravity="center_vertical"
+	        android:textSize="@dimen/info_item_date_text_size"
+	        android:textColor="@color/history_date_text"
+	        android:text="日期" />
+    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/info_item_margin_sv"
+        android:orientation="horizontal" >
+	    
+        <ImageView
+	        android:id="@+id/ic_type_img_iv"
+	    	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:minWidth="140dp"
+	        android:minHeight="140dp"
+	        android:adjustViewBounds="true"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/v5_img_src_loading"
+	        android:contentDescription="@string/contentDescription" />
+        
+    </LinearLayout>
+    
+</LinearLayout>

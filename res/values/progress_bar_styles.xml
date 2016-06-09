@@ -1,0 +1,39 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <style name="custom_progress_bar">
+        <item name="android:indeterminateDrawable">@drawable/custom_progress</item>
+        <item name="android:indeterminateDuration">1000</item>
+	　　<item name="android:layout_width">wrap_content</item>
+	　　<item name="android:layout_height">wrap_content</item>
+		<item name="android:minWidth">76dip</item>
+	　　<item name="android:minHeight">76dip</item>
+    </style>
+    
+    <style name="custom_progress_bar_small">
+        <item name="android:indeterminateDrawable">@drawable/custom_progress</item>
+        <item name="android:indeterminateDuration">1000</item>
+	　　<item name="android:minWidth">24dip</item>
+	　　<item name="android:maxWidth">24dip</item>
+	　　<item name="android:minHeight">24dip</item>
+	　　<item name="android:maxHeight">24dip</item>
+    </style>
+    
+    <style name="custom_progress_bar_middle">
+        <item name="android:indeterminateDrawable">@drawable/custom_progress</item>
+        <item name="android:indeterminateDuration">1000</item>
+	　　<item name="android:minWidth">52dip</item>
+	　　<item name="android:maxWidth">52dip</item>
+	　　<item name="android:minHeight">52dip</item>
+	　　<item name="android:maxHeight">52dip</item>
+    </style>
+    
+    <style name="custom_progress_bar_large">
+        <item name="android:indeterminateDrawable">@drawable/custom_progress</item>
+        <item name="android:indeterminateDuration">1000</item>
+	　　<item name="android:minWidth">72dip</item>
+	　　<item name="android:maxWidth">72dip</item>
+	　　<item name="android:minHeight">72dip</item>
+	　　<item name="android:maxHeight">72dip</item>
+    </style>
+
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_phone"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/info_item_height_single"
+    android:background="@drawable/btn_selector" >
+    
+    <View
+        android:id="@+id/divider_cell"
+        android:visibility="gone"
+		android:layout_width="match_parent"
+		android:layout_marginLeft="@dimen/info_item_margin_h"
+		android:layout_marginStart="@dimen/info_item_margin_h"
+		android:layout_height="@dimen/base_line_width_s"
+		android:background="@color/info_activity_item_divider_inner" />
+
+    <TextView
+        android:id="@+id/id_info_name"
+        style="@style/InfoItemText_L"
+        android:layout_marginStart="@dimen/info_item_margin_h"
+        android:layout_marginLeft="@dimen/info_item_margin_h"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text="@string/cstm_phone" />
+
+    <TextView
+        android:id="@+id/id_info_value"
+        style="@style/InfoItemText_R"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/info_item_margin_h"
+        android:layout_marginEnd="@dimen/info_item_margin_h" />
+
+</RelativeLayout>

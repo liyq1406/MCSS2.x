@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="tool_bar_height">48dp</dimen>
+    <dimen name="status_bar_height">25dp</dimen>
+    <dimen name="toolbar_padding_top">@dimen/status_bar_height</dimen>
+    
+    
+    <!-- Drawer -->
+    <dimen name="drawer_mode_btn_radius">16dp</dimen>
+    <dimen name="drawer_mode_btn_padding_h">8dp</dimen>
+    <dimen name="drawer_mode_btn_padding_v">0dp</dimen>
+    
+    <!-- 底部按钮 -->
+    <dimen name="btn_bottom_radius">8dp</dimen>
+    
+</resources>

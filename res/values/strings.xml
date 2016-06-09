@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="url_test">点击注册，表示同意<a href="http://www.ouragreement.com">服务协议</a></string>
+    <string name="app_name">V5智能客服</string>
+    <string name="service_online">在线咨询</string>
+    <string name="action_settings">Setting</string>
+    <string name="xfyun_app_id">55780cd9</string>
+    <string name="app_info_name">V5智能客服</string>
+    <string name="worker_name">坐席</string>
+    <string name="robot_name">机器人小五</string>
+    <string name="group">分组：</string>
+
+	<string name="wifi_sleep_policy_default">wifi_sleep_policy_default</string>
+	<string name="contentDescription">ContentDescription Unsupport</string>
+	<string name="universal_error_dialog_middle_btton">确认</string>
+	<string name="cancel">取消</string>
+	<string name="confirm">确定</string>
+	
+	<!-- Title -->
+	<string name="conversation">对话</string>
+	<string name="back">返回</string>
+	<string name="search">搜索</string>
+	<string name="modeset">接入模式</string>
+	<string name="waiting">排队客户</string>
+	
+	<!-- Tab界面 -->
+	<string name="tabhost_text_tag1">对话</string>
+    <string name="tabhost_text_tag2">通讯录</string>
+    <string name="tabhost_text_tag3">发现</string>
+    <string name="tabhost_text_tag4">我</string>
+    <string name="tabhost_text_session">对话</string>
+    <string name="tabhost_text_worker">客服</string>
+    <string name="tabhost_text_history">历史</string>
+    <string name="tabhost_text_explore">发现</string>
+    <string name="tabhost_text_more">更多</string>
+    
+    <!-- 登录页 -->
+    <string name="login_text">登录</string>
+    <string name="sitename_hint">站点名</string>
+    <string name="username_hint">用户名</string>
+    <string name="userpwd_hint">密码</string>
+    <string name="wid_hint">坐席ID</string>
+    <string name="eid_hint">站点ID</string>
+    <string name="useremail_hint">邮箱</string>
+    <string name="userpwd_hint_len">密码(不少于6个字符)</string>
+    <string name="confirm_pwd">确认密码</string>
+    <string name="forget_pwd">忘记密码&#160;</string>
+    
+    <string name="username_or_pwd_empty_tip">输入不能为空</string>
+    <string name="login_failed">登录失败</string>
+    <string name="email_format_failed">请输入有效的邮箱地址</string>
+    <string name="email_used_failed">此邮箱已被注册</string>
+    <string name="username_used_failed">用户名已被占用，请重新输入</string>
+    <string name="register_failed">注册失败</string>
+    
+    <!-- Chat会话列表 -->
+    <string name="chat_title_hint">智客网络</string>
+    <string name="chat_content_hint">Hello! 欢迎使用。</string>
+    <string name="chat_date_hint">7月3日</string>
+    
+    <!-- Chat对话页 -->
+    <string name="chat_msg_default">欢迎光临V5KF，请问您需要什么？</string>
+    <!-- Chat底部按钮 -->
+    <string name="longclick_speak">长按说话</string>
+    <string name="picture">图片</string>
+    <string name="camera">拍照</string>
+    <string name="location">位置</string>
+    <string name="robot_candidate">回复</string>
+    
+    <!-- 对话界面 -->
+    <string name="text_send_btn">发送</string>
+    <string name="input_msg_hint">请输入</string>
+    <string name="send_empty_tip">发送消息不能为空！</string>
+    
+    
+    <!-- Toast提示、警告、Tips -->
+    <string name="on_other_dev_login_err">您的账号在其他设备上登录，请重新登录!</string><!-- 您的账号已在其他设备上登录！ -->
+    <string name="on_other_dev_login_re_token">您的登录认证过期，请重新登录!</string><!-- 您的账号已在其他设备上登录！ -->
+    <string name="on_network_failed">网络不可用，请检查网络连接</string>
+    <string name="on_websocket_failed">服务异常，请重新启动应用</string>
+    <string name="on_websocket_unconnect">连接中断，请求失败</string>
+    <string name="on_websocket_reconnect">正在重连</string>
+    <string name="on_websocket_connect">重新连接成功</string>
+    <string name="on_websocket_error">连接异常关闭，正在重连</string>
+    <string name="on_websocket_disconnect">连接异常中断</string>
+    <string name="on_account_fail">账户验证失败(网络异常)</string>
+    <string name="account_failed">用户名或密码错误</string>
+    <string name="chat_voice_title">时限</string>
+    <string name="chat_voice_up_tips">上滑取消</string>
+    <string name="chat_voice_cancel_tips">松开取消</string>
+    <string name="chat_voice_seconds_tips">还可以说%1$s秒</string>
+    <string name="chat_voice_short_tips">太短</string>
+    <string name="chat_voice_cancel">取消</string>
+        
+    <string name="on_check_update_fail">检查更新失败，请检查网络</string>
+    <string name="on_update_enable">有新版本可用，建议您下载！</string>
+    <string name="on_download_finish">新版本下载完成，现在安装？</string>
+    <string name="on_download_description">正在下载&#8230;</string>
+    
+    <string name="confirm_logout">确认退出？</string>
+    <string name="btn_confirm">确认</string>
+    <string name="btn_cancel">取消</string>
+    
+	<!-- 登录Toast -->
+    <string name="err_network_failed">网络异常，请检查您的网络</string>
+    <string name="err_account_failed">登录失败，请检查您的账号密码</string>
+    <string name="err_login_failed">登录失败</string>
+    <string name="err_login_timeout">登录超时</string>
+    <string name="err_login_limit">站点已达到坐席数量登录限制</string>
+    <string name="err_login_token">认证失效，需要重新登录</string>
+    <!-- 应答处理Toast -->
+    <string name="err_set_worker_info">设置座席信息失败</string>
+    <string name="err_set_worker_mode">改变接入模式失败</string>
+    <string name="err_set_worker_status">设置作息状态失败</string>
+    <string name="err_set_customer_info">设置客户信息失败</string>
+    <string name="err_pick_customer">选入客户失败</string>
+    <string name="err_switch_customer">客户转接失败</string>
+    <string name="err_set_in_trust">设置托管失败</string>
+    <string name="err_end_session">结束会话失败</string>
+    <string name="err_get_customer_messages">查询会话中客户消息失败</string>
+    
+    
+    <!-- 通知栏 -->
+    <string name="notification_unit">条</string>
+    <string name="notify_join_in">[客户接入]</string>
+    <string name="notify_wait_in">[客户进入排队]</string>
+    <string name="default_prefix_name">访客***</string>
+    
+    <!-- 列表弹出框 -->
+    <!-- Session列表 -->
+    <string name="option_mark_as_unread">标为未读</string>
+    <string name="option_mark_as_read">标为已读</string>
+    <string name="option_stick_session">置顶对话</string>
+    <string name="option_set_trust">机器人托管</string>
+    <string name="option_cancel_trust">取消托管</string>
+    <string name="option_in_trust">托管</string>
+    <string name="option_switch">转接</string>
+    <string name="option_pickup">接入</string>
+    <string name="option_end_session">结束会话</string>
+    <!-- Chat列表 -->
+    <string name="option_copy_content">复制</string>
+    <string name="option_robot_answer">提问机器人</string>
+    <string name="option_forward_msg">转发</string>
+    <string name="is_in_trust"><Data><![CDATA[<font color=\"#a67f00\">(托管中)</font> ]]></Data></string>
+        
+    <!-- Mine Fragment -->
+    <string name="nickname">昵称</string>
+    <string name="text_from_iface">分组:</string>
+    <string name="set_status">状态</string>
+    <string name="set_status_online">在线</string>
+    <string name="set_status_busy">忙碌</string>
+    <string name="set_status_leave">离开</string>
+    <string name="set_status_hide">隐身</string>
+    <string name="set_myinfo">个人资料</string>
+    <string name="set_arch_workers">企业架构</string>
+    <string name="set_mode">接入模式</string>
+    <string name="set_mode_num">最大接入数量</string>
+    <string name="set_mode_auto">自动接入</string>
+    <string name="set_mode_switchable">仅转接</string>
+    <string name="set_mode_close">关闭</string>
+    <string name="set_auto_boot">开机自启</string>
+    <string name="set_auto_login">自动登录</string>
+    <string name="set_notify">新消息通知</string>
+    <string name="set_notify_wait">排队客户消息通知</string>
+    <string name="set_voice">声音</string>
+    <string name="set_vibrate">震动</string>
+    <string name="set_set_more">更多</string>
+    <string name="set_consult">在线咨询</string>
+    <string name="logout">退出登录</string>
+    <string name="tips">提示</string>
+    
+    <!-- 列表为空提示 -->
+    <string name="layout_content_empty_tips">当前列表没有内容</string>
+    <string name="messages_content_empty_tips">未查找到该日消息记录</string>
+    <string name="serving_content_empty_tips">当前还没有顾客接入</string>
+    <string name="waiting_content_empty_tips">当前没有等待的顾客</string>
+    <string name="visitor_content_empty_tips">您还没有历史会话</string>
+    <string name="worker_content_empty_tips">没有获取到坐席信息</string>
+    <string name="material_img_empty_tips">未获取到图片素材</string>
+    
+    <string name="no_more_msg">没有更多消息了</string>
+    <string name="no_more">没有更多了</string>
+    <string name="item_see_more">查看详情</string>
+    <string name="loading">加载中&#8230;</string>
+    
+    <!-- 座席状态 -->
+    <string name="status_online">在线</string>
+    <string name="status_busy">忙碌</string>
+    <string name="status_leave">离开</string>
+    <string name="status_offline">离线</string>
+    <string name="status_hide">隐身</string>
+    
+    <!-- 提示header -->
+    <string name="network_unconnect">连接异常断开&#8230;</string>
+    <string name="retry">重试</string>
+    
+    <!-- interface 来源接口 -->
+    <string name="iface_weixin">微信</string>
+    <string name="iface_yixin">易信</string>
+    <string name="iface_web">网站</string>
+    <string name="iface_open">开放平台</string>
+    <string name="iface_inc">企业号</string>
+    <string name="iface_qq">QQ</string>
+    <string name="iface_sina">新浪</string>
+    <string name="iface_alipay">支付宝</string>
+    <string name="iface_app">APP</string>
+    
+    <!-- Segment分页段标题 -->
+    <string name="seg_title_worker">座席</string>
+    <string name="seg_title_customer">历史</string>
+    <string name="seg_title_serving">服务中</string>
+    <string name="seg_title_waiting">排队中</string>
+    
+    <!-- CustomerInfoActivity -->
+    <string name="kexi_plus">客服助手</string>
+    <string name="customer_info">客户信息</string>
+    <string name="start_chat">发起会话</string>
+    <string name="cstm_nickname">昵称</string>
+    <string name="cstm_realname">真实姓名</string>
+    <string name="cstm_sex">性别</string>
+    <string name="cstm_phone">电话</string>
+    <string name="cstm_email">邮箱</string>
+    <string name="cstm_weixin">微信</string>
+    <string name="cstm_qq">QQ</string>    
+    <string name="cstm_country">国家</string>
+    <string name="cstm_province">省份</string>
+    <string name="cstm_city">城市</string>
+    <string name="cstm_address">地址</string>
+    <string name="cstm_company">公司</string>
+    <string name="cstm_chats">对话次数</string>
+    <string name="cstm_visits">访问次数</string>
+    <string name="cstm_edit">编辑</string>
+    <!-- CustomerEditActivity -->
+    <string name="customer_edit">编辑客户信息</string>
+    <string name="cstm_save">保存</string>
+    <string name="cstm_realname_edit">真实姓名：</string>
+    <string name="cstm_sex_edit">性别：</string>
+    <string name="cstm_phone_edit">电话：</string>
+    <string name="cstm_email_edit">邮箱：</string>
+    <string name="cstm_weixin_edit">微信：</string>
+    <string name="cstm_qq_edit">QQ：</string>    
+    <string name="cstm_country_edit">国家：</string>
+    <string name="cstm_province_edit">省份：</string>
+    <string name="cstm_city_edit">城市：</string>
+    <string name="cstm_address_edit">地址：</string>
+    <string name="cstm_company_edit">公司：</string>
+	<string name="confirm_end_session">确认结束会话？</string>
+	<string name="confirm_start_session">确认接入客户？</string>
+	<string name="edit_nickname">修改昵称</string>
+	
+    <string name="male">男</string>
+    <string name="female">女</string>
+    
+    <!-- WorkerInfoActivity -->
+    <string name="mine_info">个人资料</string>
+    <string name="worker_info">坐席资料</string>
+    <string name="worker_photo">头像</string>
+    <string name="worker_site">站点账号</string>
+    <string name="worker_group">分组</string>
+    
+    <!-- WorkerLogActivity -->
+    <string name="worker_log">坐席日志</string>
+    
+    <!-- More set Activity -->
+    <string name="app_about">关于</string>
+    <string name="app_update">检查更新</string>
+    <string name="app_feedback">用户反馈</string>
+    <string name="app_clear_cache">清除缓存</string>
+    <string name="app_cache_size_eg">0.0MB</string>
+    <string name="app_refresh">刷新</string>
+    <string name="app_version_name">当前版本</string>
+    <string name="can_not_find_version_name">未获取到当前版本</string>
+    <string name="already_new">已是最新版本</string>
+    <string name="update_failed">更新失败，请重试</string>
+    <string name="has_new">有新版本(%s)</string>
+    <string name="confirm_clear_cache">是否清空本地图片缓存？</string>
+    <string name="confirm_refresh">是否重置当前连接以刷新数据？</string>
+    
+    <!-- HistoryMessagesActivity -->
+    <string name="history_messages">历史消息</string>
+    <string name="text_last_day">前一天</string>
+    <string name="text_next_day">后一天</string>
+    <string name="text_date_hint">2015年8月8日</string>
+    
+    <!-- Seekbar Dialog -->
+    <string name="seek_bar_mode_tip">最大接入数量</string>
+    <string name="seek_bar_mode_switch_tip">最大转接数量</string>
+    <string name="seek_bar_mode_close">关闭</string>
+    <string name="seek_bar_mode_switch_only">仅转接</string>
+    
+    <!-- 坐席列表、转接Activity、转发 -->
+    <string name="title_switch_activity">选择接收者</string>
+    <string name="title_forward_activity">选择</string>
+    <string name="switch_list_empty_tips">没有可接收的座席</string>
+    <string name="confirm_forward_message">确认转发？</string>
+    
+    <!-- 机器人候选列表 -->
+    <string name="robot_msg_add">添加</string>
+    <string name="robot_msg_del">撤销</string>
+    <string name="robot_msg_send">发送</string>
+    <string name="robot_msg_request">提问机器人</string>
+    
+    <!-- Location Map Activity -->
+    <string name="on_location_empty">未获取到您的位置信息</string>
+    
+    <!-- Toast消息 ForwardMessageActivity/WorkerTreeActivity/HistoryMessagesActivity -->
+    <string name="on_forward_cstm_empty">尚未选择转发对象</string>    
+    <string name="on_switch_cstm_empty">尚未选择转接对象</string>
+    <string name="on_history_messages_empty">当前客户尚无历史消息</string>
+    
+    <!-- ChattingListActivity -->
+    <string name="default_cstm_name">客户</string>
+    <string name="toast_in_trust">机器人已托管会话</string>    
+    <string name="toast_off_trust">已取消机器人托管</string>
+    <string name="toast_cstm_join_out">当前客户已退出会话</string>
+    <string name="toast_autoboot_nouse">暂不支持开机自启</string>
+    <string name="toast_hot_reqs_empty">未获取到当前站点的常见问答</string>
+    <string name="toast_voice_record_need_sdcard">发送语音需要sdcard支持！</string>
+    
+    <!-- RobotChatActivity -->
+    <string name="title_robot_chat">提问</string>
+    <string name="submit">提交</string>
+    <string name="req_edit_hint">请输入</string>
+    
+    <!-- ShowImageActivity 长按菜单 -->
+    <string name="option_save_image">保存到手机</string>
+    <string name="on_image_saveed">图片已保存到"%s"</string>
+    
+    <!-- 图片素材页 -->
+    <string name="title_material">素材</string>
+    <string name="empty_string"></string>
+    <string name="empty_content">内容为空</string>
+    <string name="music_play">播放</string>
+    
+    <!-- CheckboxDialog -->
+    <string name="check_media_cache">图片等媒体缓存(建议清理)</string>
+    <string name="check_memory_cache">历史消息缓存</string>
+    <string name="check_db_cache">数据库缓存</string>
+    <string name="check_login_cache">登录信息</string>
+    
+    <string name="crop">剪切</string>
+    <string name="preview">图片预览</string>
+    
+    <!-- 在线咨询 -->
+    <string name="close_consult">退出客服？</string>
+    <string name="artificial_service">正在为您转人工客服</string>
+    <string name="waiting_for_connection">等待连接建立&#8230;</string>
+    <string name="artificial_service_failed">转人工客服失败</string>
+    
+    <string name="open_by_browser">浏览器打开</string>
+    <string name="new_client_message">●</string>
+    
+    <string name="send_image_unsupport">此会话不接收图片上传</string>
+    
+    <string name="logouting">正在退出&#8230;</string>
+    <string name="warning_logout_failed">退出失败，请确保连接正常后重试</string>
+    
+    <!-- 录音 -->
+    <string name="error_no_sdcard">录音失败，请检查是否有足够存储空间!</string>
+    <string name="error_state_record">已在录音，不可重复操作</string>
+    <string name="error_unknown">未知错误</string>
+    <string name="error_record_not_permit">录音失败，请检查是否开启录音权限!</string>
+    
+</resources>

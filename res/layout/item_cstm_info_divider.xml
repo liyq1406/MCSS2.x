@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginLeft="@dimen/info_item_margin_h"
+    android:layout_marginStart="@dimen/info_item_margin_h"
+    android:layout_height="@dimen/base_line_width_s"
+    android:background="@color/info_activity_item_divider_inner" >
+</View>

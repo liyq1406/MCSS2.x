@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.v5kf.mcss"
+    android:versionCode="29"
+    android:versionName="1.2.2" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23" />
+    
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+	<uses-permission android:name="android.permission.CAMERA" /> 
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_LOGS" />
+	<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.FLASHLIGHT" />
+	<!-- 通过GPS得到精确位置 -->
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<!-- 通过网络得到粗略位置 -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<!-- 访问网络. 某些位置信息需要从网络服务器获取 -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<!-- 访问WiFi状态. 需要WiFi信息用于网络定位 -->
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<!-- 修改WiFi状态. 发起WiFi扫描, 需要WiFi信息用于网络定位 -->
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<!-- 访问网络状态, 检测网络的可用性. 需要网络运营商相关信息用于网络定位 -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<!-- 访问网络的变化, 需要某些信息用于网络定位 -->
+	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+	<!-- 访问手机当前状态, 需要某些信息用于网络定位 -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<!--获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->  
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+	<!--读取联系人权限，上传联系人需要用到此权限 -->
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
+	
+	<!-- 防止手机休眠 -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<!-- 修改设置(wifi) -->
+	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
+	<uses-permission android:name="android.permission.PERSISTENT_ACTIVITY" />
+	
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <!-- Optional for location -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    
+    <!-- 【必须】 信鸽SDK所需权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- 【可选】 信鸽SDK所需权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+	
+    <application
+        android:name="com.v5kf.mcss.CustomApplication"
+        android:persistent="true"
+        android:allowBackup="false"
+        android:hardwareAccelerated="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme.Transparent" >
+        
+        <meta-data android:name="TencentMapSDK" android:value="4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG" />
+        <meta-data android:value="55efad6e67e58e47fe001197" android:name="UMENG_APPKEY"/>
+		<meta-data android:value="open_download" android:name="UMENG_CHANNEL"/>
+		
+        <activity
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Normal"
+            android:name="com.v5kf.mcss.ui.activity.WelcomeActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Normal"
+            android:name="com.v5kf.mcss.ui.activity.V51xTabActivity" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Normal"
+            android:windowSoftInputMode="adjustPan"
+            android:name="com.v5kf.mcss.ui.activity.UserLoginActivity" >            
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.ChatMessagesActivity"           
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.md2x.HistoryMessagesActivity" >
+        </activity>
+
+        <activity
+            android:name="com.v5kf.mcss.ui.activity.ChattingListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.SettingMoreActivity" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.SettingStatusActivity" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.SettingModeActivity" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.LocationMapActivity" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.MaterialResActivity" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.PhotoPreviewActivity" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible"
+            android:name="com.v5kf.mcss.ui.activity.info.RobotChatActivity" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.ForwardMessageActivity" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.md2x.WebViewActivity" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.InterfaceTestActivity" >
+        </activity>
+
+        <activity
+            android:theme="@style/AppTheme.Fullscreen"
+            android:name="com.v5kf.mcss.ui.activity.md2x.ShowImageActivity" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.CustomerInfoActivity"          
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+        </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.md2x.CustomerInfoListActivity"          
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.CustomerEditActivity"          
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.md2x.WorkerInfoActivity" >
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.info.WorkerLogActivity" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.WorkerTreeActivity" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:name="com.v5kf.mcss.ui.activity.MainTabActivity" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:name="com.v5kf.mcss.ui.activity.md2x.CustomLoginActivity" >
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.md2x.WaitingCustomerActivity" >
+        </activity>
+            
+        <service 
+            android:exported="false"
+            android:enabled="true"
+            android:process=":push"
+            android:name="com.v5kf.mcss.service.PushService" >
+            <intent-filter android:priority="1000">
+				<action android:name="com.v5kf.mcss.service.push" />
+		    </intent-filter>
+        </service>
+
+        <service
+            android:name="com.v5kf.mcss.service.CoreService"
+            android:enabled="true"
+            android:exported="false" >
+        	<intent-filter android:priority="1000">
+				<action android:name="com.v5kf.mcss.service.core" />
+		    </intent-filter>
+        </service>
+		        
+		<receiver android:name="com.v5kf.mcss.service.NetworkManager" >
+			<intent-filter android:priority="2147483647">  
+				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />  
+			</intent-filter>  
+		</receiver>
+		
+		<service
+		    android:name="com.umeng.update.net.DownloadingService"
+		    android:process=":DownloadingService" >
+		</service>
+		<activity 
+		    android:name="com.umeng.update.UpdateDialogActivity"
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+		</activity>
+		
+		
+		<!-- v5kf client sdk 开始 -->		
+		<meta-data android:value="10000" android:name="V5_SITE" />
+        <meta-data android:value="v5kf" android:name="V5_ACCOUNT" />
+        <activity
+            android:name="com.v5kf.client.ui.ClientChatActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize" >
+            
+            <!-- intent-filter配置接收消息点击后跳转的Activity -->
+            <intent-filter >
+                <action android:name="com.v5kf.android.intent.notification10000"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            
+        </activity>
+
+        <service 
+            android:exported="false"
+            android:name="com.v5kf.client.lib.V5ClientService" >
+            
+        </service>
+		<!-- v5kf client sdk 结束 -->	
+		
+		<!-- 信鸽SDK Start -->
+	        <!-- 【必须】 信鸽receiver广播接收 -->
+	    <receiver
+	        android:name="com.tencent.android.tpush.XGPushReceiver"
+	        android:process=":xg_service_v2" >
+	        <intent-filter android:priority="0x7fffffff" >
+	            <!-- 【必须】 信鸽SDK的内部广播 -->
+	            <action android:name="com.tencent.android.tpush.action.SDK" />
+	            <action android:name="com.tencent.android.tpush.action.INTERNAL_PUSH_MESSAGE" />
+	            <!-- 【必须】 系统广播：开屏和网络切换 -->
+	            <action android:name="android.intent.action.USER_PRESENT" />
+	            <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+	             
+	            <!-- 【可选】 一些常用的系统广播，增强信鸽service的复活机会，请根据需要选择。当然，你也可以添加APP自定义的一些广播让启动service -->
+	            <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+	            <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+	            <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+	        </intent-filter>
+	    </receiver>
+	 
+	    <!-- 【必须】 (2.30及以上版新增)展示通知的activity -->
+	    <!-- 【注意】 如果被打开的activity是启动模式为SingleTop，SingleTask或SingleInstance，请根据通知的异常自查列表第8点处理-->
+	     <activity
+	         android:name="com.tencent.android.tpush.XGPushActivity"
+	         android:exported="false" >
+	    </activity>
+	 
+	    <!-- 【必须】 信鸽service -->
+	    <service
+	        android:name="com.tencent.android.tpush.service.XGPushService"
+	        android:exported="true"
+	        android:persistent="true"
+	        android:process=":xg_service_v2" />
+	  
+	    <!-- 【必须】 通知service，此选项有助于提高抵达率 -->
+	    <service
+	        android:name="com.tencent.android.tpush.rpc.XGRemoteService"
+	        android:exported="true" >
+	        <intent-filter>
+	            <action android:name="com.v5kf.mcss.PUSH_ACTION" />
+	        </intent-filter>
+	    </service>
+	    <!-- 【可选】APP实现的Receiver，用于接收消息透传和操作结果的回调，请根据需要添加 -->
+        <!-- YOUR_PACKAGE_PATH.CustomPushReceiver需要改为自己的Receiver： -->
+        <receiver android:name="com.v5kf.mcss.service.MessageReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <!-- 接收消息透传 -->
+                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE" />
+                <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
+                <action android:name="com.tencent.android.tpush.action.FEEDBACK" />
+            </intent-filter>
+        </receiver>
+        <!-- 【必须】 请修改为APP的AccessId，“21”开头的10位数字，中间没空格 -->
+        <meta-data
+            android:name="XG_V2_ACCESS_ID"
+            android:value="2100180961" />
+        <!-- 【必须】 请修改为APP的AccessKey，“A”开头的12位字符串，中间没空格 -->
+        <meta-data
+            android:name="XG_V2_ACCESS_KEY"
+            android:value="A82R6G1YMJ6P" />
+        <!-- 信鸽SDK End -->
+			
+    </application>
+
+</manifest>

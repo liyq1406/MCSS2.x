@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+        
+	    <android.support.v7.widget.RecyclerView
+	        android:id="@+id/id_recycle_view"
+	        android:visibility="visible"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:background="@color/base_list_content_bg" />
+    
+    </android.support.v4.widget.SwipeRefreshLayout>
+    
+    <LinearLayout
+        android:id="@+id/layout_container_empty"
+        android:visibility="gone"
+        android:background="@color/content_empty_tips_bg_color"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+        
+        <TextView
+            android:id="@+id/layout_container_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/v5kf"
+            android:drawablePadding="@dimen/tips_img_margin"
+            android:textSize="@dimen/content_empty_tips_text_size"
+            android:textColor="@color/content_empty_tips_text_color"
+            android:text="@string/worker_content_empty_tips" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/load_more_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:gravity="center_horizontal"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:orientation="horizontal" >
+        
+        <TextView
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loading" />
+        
+        <ProgressBar
+            android:layout_gravity="center_vertical|center_horizontal"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="8dp"
+	        android:layout_marginRight="8dp"
+	        android:maxWidth="@dimen/chat_list_item_search_width"
+	        style="@style/custom_progress_bar_small" />
+        
+    </LinearLayout>
+
+</LinearLayout>

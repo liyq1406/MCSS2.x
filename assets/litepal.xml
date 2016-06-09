@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="v5kf_worker" ></dbname>
+
+    <version value="4" ></version>
+
+    <list>
+        <mapping class="com.v5kf.mcss.entity.ArchWorkerBean"></mapping>
+        <mapping class="com.v5kf.mcss.entity.CustomerBean"></mapping>
+        <mapping class="com.v5kf.mcss.entity.CustomerRealBean"></mapping>
+        <mapping class="com.v5kf.mcss.entity.CustomerVirtualBean"></mapping>
+        <mapping class="com.v5kf.mcss.entity.SessionBean"></mapping>
+        <mapping class="com.v5kf.mcss.entity.WorkerBean"></mapping>
+        <mapping class="com.v5kf.mcss.entity.WorkerArch"></mapping>
+        <mapping class="com.v5kf.mcss.entity.MessageBean"></mapping>
+        <mapping class="com.v5kf.mcss.entity.WorkerLogBean"></mapping>
+    </list>
+</litepal>

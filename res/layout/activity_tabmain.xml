@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/id_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:windowBackground="@color/white"
+    tools:context="com.v5kf.mcss.ui.activity.MainTabActivity">
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/id_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+        
+	    <LinearLayout 
+	    	android:layout_width="match_parent"
+	    	android:layout_height="match_parent"
+	    	android:orientation="vertical" >
+	    	<!-- 
+	    	android:fitsSystemWindows="true"
+	    	android:clipToPadding="false" -->
+	    	
+	        <android.support.design.widget.AppBarLayout
+			    xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/id_app_bar_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content" >
+				<!-- 去阴影 app:elevation="0dp" -->
+			
+			    <android.support.v7.widget.Toolbar
+					android:id="@+id/id_common_toolbar"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:navigationIcon="@drawable/md2x_ic_menu_blue"
+					app:layout_scrollFlags="scroll|enterAlways"
+					app:layout_collapseMode="pin"
+					app:itemIconTint="@color/main_color"
+					style="@style/ToolBarStyle"
+					android:gravity="center" >
+					
+			        <TextView
+			            android:visibility="gone"
+			            android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center"
+						android:textColor="@color/textColorPrimary"
+						android:textSize="20sp"
+						android:text="@string/conversation" />
+			        
+				</android.support.v7.widget.Toolbar>
+			
+			</android.support.design.widget.AppBarLayout>
+		        
+		    <com.chyrain.view.viewpager.SViewPager
+		        android:id="@+id/tabmain_viewPager"
+		        android:layout_width="match_parent"
+		        android:layout_height="0dp"
+		        android:layout_weight="1"
+		        android:background="@color/white" />
+		    
+		    <com.chyrain.view.indicator.FixedIndicatorView
+		        android:id="@+id/tabmain_indicator"
+		        android:visibility="gone"
+		        android:background="@drawable/base_tabmain_bg_with_boder"
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/bottom_tab_bar_height" />
+		    
+	    </LinearLayout>
+    
+	    <android.support.design.widget.FloatingActionButton
+			android:id="@+id/id_fab"
+			android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:src="@drawable/md2x_ic_add_white"
+			android:background="@color/material_green_A200"
+			android:layout_gravity="bottom|end"
+			style="@style/FabStyle" />
+	    
+    </android.support.design.widget.CoordinatorLayout>
+		
+   	<android.support.design.widget.NavigationView
+	    android:id="@+id/id_navigation_view"
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:layout_gravity="start"
+    	android:background="@color/white"
+    	android:fitsSystemWindows="true"
+	    app:headerLayout="@layout/md2x_drawer_header"
+	    app:itemIconTint="#787878"
+	    app:itemTextColor="#000000"
+	    app:menu="@menu/slide_menu" />
+   	<!-- 
+	    app:itemBackground="@drawable/btn_nav_menuitem_selector"
+	     -->
+       
+</android.support.v4.widget.DrawerLayout>

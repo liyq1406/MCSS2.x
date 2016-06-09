@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_history_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/history_messages_left_padding"
+    android:paddingRight="@dimen/info_item_padding"
+    android:paddingTop="@dimen/history_info_item_margin_v"
+    android:paddingBottom="@dimen/history_info_item_margin_v"
+    android:orientation="vertical" >
+        
+    <LinearLayout
+        android:baselineAligned="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+	    <TextView
+	        android:id="@+id/id_user_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="@dimen/info_item_user_name_text_size"
+	        android:textColor="@color/history_robot_name_text"
+	        android:textStyle="normal"
+	        android:text="用户名" />
+	    
+	    <TextView
+	        android:id="@+id/id_msg_date"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="@dimen/info_item_padding_inner"
+	        android:layout_marginStart="@dimen/info_item_padding_inner"
+	        android:layout_gravity="center_vertical"
+	        android:textSize="@dimen/info_item_date_text_size"
+	        android:textColor="@color/history_date_text"
+	        android:text="日期" />
+    
+    </LinearLayout>
+    
+    <RelativeLayout
+	    android:id="@+id/id_right_location_layout"
+	    android:layout_width="240dp"
+	    android:layout_height="160dp"
+	    android:layout_marginTop="@dimen/info_item_margin_sv"
+	    android:orientation="vertical" >
+		
+	    <ImageView
+	        android:id="@+id/ic_map_img_iv"
+	    	android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:scaleType="fitXY"
+	        android:src="@drawable/v5_img_src_loading"
+	        android:contentDescription="@string/contentDescription" />
+	    
+	    <TextView
+	        android:id="@+id/id_map_address_text"
+	        android:text="@string/chat_msg_default"
+	        android:layout_alignBottom="@id/ic_map_img_iv"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:padding="4dp"
+	        android:background="@color/transparent_black"
+	        android:textColor="@color/white"
+	        android:textSize="12sp" />
+	    
+	</RelativeLayout>
+    
+</LinearLayout>

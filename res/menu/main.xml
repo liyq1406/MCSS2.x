@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity" >
+<!--
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="80"
+        android:title="@string/search"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="always"/>
+    app:actionViewClass="android.support.v7.widget.SearchView" -->
+    <!--<item
+        android:id="@+id/action_modeset"
+        android:orderInCategory="90"
+        android:title="@string/modeset"
+        android:icon="@drawable/v5_baritem_modeset"
+        app:showAsAction="ifRoom"/>
+    	app:actionProviderClass="android.support.v7.widget.ShareActionProvider" 
+    	 -->
+    <item
+        android:id="@+id/action_waiting"
+        android:orderInCategory="100"
+        android:icon="@drawable/v5_baritem_waiting"
+        app:actionLayout="@layout/menu_action_item_badge"
+        app:showAsAction="always"
+        android:title="@string/waiting"/>
+
+</menu>

@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+	<android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+	    <com.v5kf.mcss.ui.widget.PinnedSectionListView
+	        android:id="@+id/id_list_view"
+	        android:visibility="gone"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+			android:scrollbars="none"
+	        android:focusable="true"
+			android:focusableInTouchMode="true"
+			android:divider="@drawable/listview_divider_padding_left"
+			android:dividerHeight="1px"
+			android:headerDividersEnabled="false"
+			android:footerDividersEnabled="false"
+	        android:background="@color/base_list_content_bg"/>
+	    
+	</android.support.v4.widget.SwipeRefreshLayout>
+    
+    <LinearLayout
+        android:id="@+id/layout_container_empty"
+        android:visibility="visible"
+        android:background="@color/content_empty_tips_bg_color"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
+        
+        <TextView
+            android:id="@+id/layout_container_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/v5kf"
+            android:drawablePadding="20dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:textSize="@dimen/content_empty_tips_text_size"
+            android:textColor="@color/content_empty_tips_text_color"
+            android:text="@string/worker_content_empty_tips" />
+        
+    </LinearLayout>
+
+</RelativeLayout>

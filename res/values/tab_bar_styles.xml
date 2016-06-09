@@ -1,0 +1,29 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <style name="style_tab_sub_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="style_tab_img">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/bottom_tab_bar_img_height</item>
+        <item name="android:paddingTop">@dimen/bottom_tab_bar_padding</item>
+        <item name="android:layout_marginTop">@dimen/bottom_tab_bar_margin</item>
+    </style>
+    
+    <style name="style_tab_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:paddingBottom">@dimen/bottom_tab_bar_padding</item>
+        <item name="android:layout_marginBottom">@dimen/bottom_tab_bar_margin</item>
+        <item name="android:textColor">@color/tabhost_text_normal_color</item>
+        <item name="android:textSize">@dimen/bottom_tab_bar_text_size</item>
+    </style>
+
+</resources>

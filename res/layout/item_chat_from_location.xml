@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_left_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/chat_list_horizontal_padding"
+    android:paddingRight="@dimen/chat_list_horizontal_padding"
+    android:paddingTop="@dimen/chat_list_vertical_padding"
+    android:paddingBottom="@dimen/chat_list_vertical_padding"
+    android:background="@color/list_chat_item_bg"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/id_from_msg_date"
+        android:visibility="gone"
+        style="@style/list_item_top_date" />
+    
+    <RelativeLayout
+		android:id="@+id/id_left_location_layout"
+		android:layout_width="210dp"
+		android:layout_height="140dp"
+		android:padding="0dp"
+		android:orientation="vertical"
+		android:baselineAligned="false"
+		android:layout_marginEnd="@dimen/chat_list_item_content_hr_matgin"
+		android:layout_marginRight="@dimen/chat_list_item_content_hr_matgin" >
+		<!-- android:paddingTop="4dp"
+			android:paddingBottom="4dp"
+			android:paddingLeft="8dp"
+			android:paddingStart="8dp"
+			android:paddingRight="4dp"
+			android:paddingEnd="4dp"
+			android:background="@drawable/list_from_customer_bg" -->
+	
+		<com.v5kf.mcss.ui.widget.BubbleImageView
+	        android:id="@+id/ic_map_img_iv"
+	    	android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:adjustViewBounds="true"
+	        android:scaleType="fitXY"
+	        android:padding="0dp"
+	        android:src="@drawable/v5_img_src_loading"
+	        app:bubble_angle="@dimen/v5_bubble_image_radius"
+          	app:bubble_arrowHeight="@dimen/v5_bubble_arrow_height"
+          	app:bubble_arrowLocation="left"
+          	app:bubble_arrowOffset="@dimen/v5_bubble_arrow_offset"
+          	app:bubble_arrowTop="@dimen/v5_bubble_arrow_top"
+          	app:bubble_arrowWidth="@dimen/v5_bubble_arrow_width" />
+    
+	    <TextView
+	        android:id="@+id/id_map_address_text"
+	        android:layout_alignBottom="@id/ic_map_img_iv"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:padding="4dp"
+	        android:layout_marginLeft="@dimen/v5_bubble_arrow_width"
+	        android:layout_marginStart="@dimen/v5_bubble_arrow_width"
+	        android:background="@drawable/v5_location_title_bg"
+	        android:textColor="@color/white"
+	        android:textSize="12sp" />
+    
+	</RelativeLayout>
+    
+</LinearLayout>

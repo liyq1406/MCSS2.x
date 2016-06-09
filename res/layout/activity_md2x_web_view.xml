@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true" >
+    
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false" >
+    
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/id_app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:elevation="0dp" >
+		<!-- 去阴影 app:elevation="0dp" -->
+	
+	    <android.support.v7.widget.Toolbar
+			android:id="@+id/id_common_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="scroll|enterAlways"
+			app:layout_collapseMode="pin"
+			app:title="@string/app_name"
+			style="@style/ToolBarStyle" >
+	        
+		</android.support.v7.widget.Toolbar>
+	
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/toolbar_border" />
+	</android.support.design.widget.AppBarLayout>
+
+	<FrameLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+        android:layout_below="@id/id_app_bar_layout" >
+	
+	    <android.support.v4.widget.SwipeRefreshLayout
+	        android:id="@+id/swipe_refresh_layout"
+	        android:visibility="gone"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" >
+		    <WebView
+		        android:id="@+id/id_web_view"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent" />
+	    </android.support.v4.widget.SwipeRefreshLayout>	    
+	    
+	    <LinearLayout
+	        android:id="@+id/layout_container_empty"
+	        android:visibility="visible"
+	        android:background="@color/content_empty_tips_bg_color"
+	        android:gravity="center"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical" >
+	        
+	        <ProgressBar
+		        android:id="@+id/id_loading_progress"
+		        android:visibility="visible"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_horizontal"
+		        android:layout_marginBottom="8dp"
+		        style="@style/custom_progress_bar_large" />
+	        
+	        <TextView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textSize="@dimen/content_empty_tips_text_size"
+	            android:textColor="@color/content_empty_tips_text_color"
+	            android:text="@string/loading" />
+	        
+	    </LinearLayout>
+    
+    </FrameLayout>
+    
+</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

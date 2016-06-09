@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_material_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/material_item_bg_selector"
+    android:layout_margin="4dp"
+    android:orientation="vertical" >
+	
+    <LinearLayout
+        android:id="@+id/layout_container_empty"
+        android:visibility="visible"
+        android:background="@color/content_empty_tips_bg_color"
+        android:gravity="center"
+        android:minHeight="80dp"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >        
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/v5kf"
+            android:drawablePadding="@dimen/tips_img_margin"
+            android:textSize="@dimen/content_empty_tips_text_size"
+            android:textColor="@color/content_empty_tips_text_color"
+            android:text="@string/empty_content" />
+        
+    </LinearLayout>
+   
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@id/layout_container_empty"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:padding="4dp"
+        android:orientation="horizontal" >
+	    
+        <TextView
+            android:id="@+id/id_img_title_tv"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
+            android:singleLine="true"
+            android:text="@string/empty_string" />        
+        
+        
+        <Button
+            android:id="@+id/id_send_btn"
+            android:layout_width="56dp"
+            android:layout_height="30dp"
+	        android:text="@string/robot_msg_send"
+	        android:background="@drawable/v5_btn_chat_send_bg"
+            android:textColor="@color/v5_btn_send_textcolor"
+            android:textSize="12sp" />
+        
+    </LinearLayout>
+        
+</RelativeLayout>
