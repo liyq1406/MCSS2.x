@@ -32,7 +32,6 @@
         android:textColor="@color/white"
         android:maxWidth="50dp"
         android:background="@drawable/v5_btn_send_bg"
-        android:onClick="closeHeaderTips"
         android:layout_height="@dimen/header_btn_height"
         android:layout_width="50dp"
         android:layout_marginLeft="@dimen/header_tips_layout_padding_h"

@@ -61,6 +61,11 @@
 			        android:background="@color/toolbar_border" />
 			
 			</android.support.design.widget.AppBarLayout>
+			
+	        <include 
+		        android:id="@+id/header_tips"
+		        android:visibility="gone"
+		        layout="@layout/include_header_tips" />
 		        
 		    <com.chyrain.view.viewpager.SViewPager
 		        android:id="@+id/tabmain_viewPager"

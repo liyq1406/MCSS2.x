@@ -562,10 +562,12 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 			if (Config.LOG_LEVEL >= 1 && mApplication.isAppForeground()) {
 				showToast(R.string.on_websocket_connect);
 			}
-			// 发送重连通知
-			Logger.d(TAG, "eventbus -> postEvent ETAG_CONNECTION_CHANGE: true");
-			EventBus.getDefault().post(Boolean.valueOf(true), EventTag.ETAG_CONNECTION_CHANGE);
+			
 		}
+		// 发送连接成功通知
+		Logger.d(TAG, "eventbus -> postEvent ETAG_CONNECTION_CHANGE: true");
+		EventBus.getDefault().post(Boolean.valueOf(true), EventTag.ETAG_CONNECTION_CHANGE);
+		
 		mReconFlag = true;
 	}
 

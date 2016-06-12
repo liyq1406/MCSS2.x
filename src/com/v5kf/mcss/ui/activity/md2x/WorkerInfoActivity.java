@@ -8,8 +8,6 @@ import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -374,35 +372,27 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 			editText.setText(mNicknameTv.getText());
 			editText.setSelection(mNicknameTv.getText().length());
 			
-			new AlertDialog
-			.Builder(WorkerInfoActivity.this)
-			.setTitle(R.string.edit_nickname)
-			.setIcon(android.R.drawable.ic_dialog_info)
-			.setView(editText)
-			.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					if (!TextUtils.isEmpty(editText.getText())) {
-						myNickname = editText.getText().toString();
-						mNicknameTv.setText(myNickname);
-						mWorker.setNickname(myNickname);
-						if (mAppInfo.getCoWorker(w_id) != null) {
-							mAppInfo.getCoWorker(w_id).setName(myNickname);
+			new com.v5kf.mcss.ui.widget.AlertDialog(this)
+				.builder()
+				.setTitle(R.string.edit_nickname)
+				.setView(editText)
+				.setPositiveButton(R.string.confirm, new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						if (!TextUtils.isEmpty(editText.getText())) {
+							myNickname = editText.getText().toString();
+							mNicknameTv.setText(myNickname);
+							mWorker.setNickname(myNickname);
+							if (mAppInfo.getCoWorker(w_id) != null) {
+								mAppInfo.getCoWorker(w_id).setName(myNickname);
+							}
+							mHandler.obtainMessage(HDL_SET_NICKNAME_OK).sendToTarget();
 						}
-						// 退出时发送
-//						try {
-//							WorkerRequest wReq = (WorkerRequest)RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, getApplicationContext());
-//							wReq.setWorkerInfo(mWorker);
-//						} catch (JSONException e) {
-//							e.printStackTrace();
-//						}
-						mHandler.obtainMessage(HDL_SET_NICKNAME_OK).sendToTarget();
 					}
-				}
-			})
-			.setNegativeButton(R.string.cancel, null)
-			.show();
+				})
+				.setNegativeButton(R.string.cancel, null)
+				.show();
 		}
 			break;
 		case R.id.id_photo_iv: // 头像图片

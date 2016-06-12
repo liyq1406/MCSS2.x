@@ -8,6 +8,7 @@
  
         <item
             android:id="@+id/drawer_session"
+            app:actionLayout="@layout/md2x_action_badge"
             android:checked="true"
             android:checkable="true"
             android:icon="@drawable/md2x_ic_drawer_chat"
@@ -21,12 +22,14 @@
  
         <item
             android:id="@+id/drawer_history"
+            app:actionLayout="@layout/md2x_action_badge"
             android:checkable="true"
             android:icon="@drawable/md2x_ic_drawer_history"
             android:title="历史"/>
 
         <item
             android:id="@+id/drawer_explore"
+            app:actionLayout="@layout/md2x_action_badge"
             android:checkable="true"
             android:icon="@drawable/md2x_ic_drawer_explore"
             android:title="发现"/>

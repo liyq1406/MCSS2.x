@@ -632,6 +632,7 @@ public class CustomApplication extends LitePalApplication {
         	defaults |= (Notification.DEFAULT_SOUND);
         }
         mBuilder.setDefaults(defaults);
+        mBuilder.setSmallIcon(R.drawable.ic_launcher);
         
         Notification notification = mBuilder.build();
         

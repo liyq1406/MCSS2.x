@@ -21,9 +21,10 @@
     <item
         android:id="@+id/action_waiting"
         android:orderInCategory="100"
-        android:icon="@drawable/v5_baritem_waiting"
-        app:actionLayout="@layout/menu_action_item_badge"
+        android:icon="@drawable/v5_action_bar_waiting"
         app:showAsAction="always"
+        app:actionLayout="@layout/md2x_action_badge"
         android:title="@string/waiting"/>
+    <!-- app:actionLayout="@layout/menu_action_item_badge" -->
 
 </menu>

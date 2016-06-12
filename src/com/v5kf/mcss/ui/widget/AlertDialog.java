@@ -26,6 +26,7 @@ public class AlertDialog {
 	private Button btn_pos;
 	private ImageView img_line;
 	private Display display;
+	private LinearLayout mCustomLayout;
 	private boolean showTitle = false;
 	private boolean showMsg = false;
 	private boolean showPosBtn = false;
@@ -45,6 +46,7 @@ public class AlertDialog {
 
 		// 获取自定义Dialog布局中的控件
 		lLayout_bg = (LinearLayout) view.findViewById(R.id.lLayout_bg);
+		mCustomLayout = (LinearLayout) view.findViewById(R.id.custom_layout);
 		txt_title = (TextView) view.findViewById(R.id.txt_title);
 		txt_title.setVisibility(View.GONE);
 		txt_msg = (TextView) view.findViewById(R.id.txt_msg);
@@ -67,6 +69,11 @@ public class AlertDialog {
 		return this;
 	}
 
+	public AlertDialog setView(View v) {
+		mCustomLayout.addView(v);
+		return this;
+	}
+	
 	public AlertDialog setTitle(String title) {
 		showTitle = true;
 		if ("".equals(title)) {
@@ -181,7 +188,9 @@ public class AlertDialog {
 		btn_neg.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				listener.onClick(v);
+				if (listener != null) {
+					listener.onClick(v);
+				}
 				dialog.dismiss();
 			}
 		});

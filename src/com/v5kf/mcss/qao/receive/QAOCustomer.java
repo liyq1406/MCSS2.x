@@ -524,7 +524,6 @@ public class QAOCustomer extends QAOBase {
 					return;
 				}
 				if (session.getMessageArray() == null) {
-					Logger.e(TAG, "parseGetCustomerMessages -> getMessageArray null");
 					session.setMessageArray(new ArrayList<V5Message>());
 //					session.setUnreadMessageNum(0);// -1
 				} else {

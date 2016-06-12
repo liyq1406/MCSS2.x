@@ -657,18 +657,13 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		mAlertDialog.show();
 	}
 	
-	public void showAlertDialog(int titleId, int contentId) {
+	public void showAlertDialog(int titleId, int contentId, OnClickListener negativeListener) {
 		mAlertDialog = 
 		new AlertDialog(this).builder()
 		.setTitle(titleId)
 		.setMsg(contentId)
 		.setCancelable(false)
-		.setNegativeButton("确定", new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-			}
-		});
+		.setNegativeButton("确定", negativeListener);
 		mAlertDialog.show();
 	}
 	
@@ -696,16 +691,21 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	
 	public void showAlertDialog(int contentId) {
 		mAlertDialog = 
+				new AlertDialog(this).builder()
+				.setTitle("提示")
+				.setMsg(contentId)
+				.setCancelable(false)
+				.setNegativeButton("确定", null);
+		mAlertDialog.show();
+	}
+	
+	public void showAlertDialog(int contentId, OnClickListener negativeListener) {
+		mAlertDialog = 
 		new AlertDialog(this).builder()
 		.setTitle("提示")
 		.setMsg(contentId)
 		.setCancelable(false)
-		.setNegativeButton("确定", new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-			}
-		});
+		.setNegativeButton("确定", negativeListener);
 		mAlertDialog.show();
 	}
 	

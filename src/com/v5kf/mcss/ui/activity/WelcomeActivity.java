@@ -4,14 +4,10 @@ import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.keyboard.utils.EmoticonsUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -130,8 +126,10 @@ public class WelcomeActivity extends BaseLoginActivity {
 		/* 进行自动登录: 查询本地密码存储,进行自动登录,开启websocket服务 */
 		try {
 			Logger.i(TAG, "init-<><>doAutoLogin<><>");
-			doAutoLogin();
-		} catch (InterruptedException e) {
+			// doAutoLogin(); 
+			// [修改]改为在MaintTabActivity自动登录
+			mHandler.sendEmptyMessageDelayed(TASK_LOGIN_OK, 500);
+		} catch (Exception e) {
 			e.printStackTrace();
 			mHandler.sendEmptyMessageDelayed(TASK_UN_LOGIN, DALAY_MS);
 		}

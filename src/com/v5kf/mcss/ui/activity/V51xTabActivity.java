@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 
 import com.iflytek.cloud.Setting;
@@ -394,6 +395,13 @@ public class V51xTabActivity extends BaseActivity {
 		if (!NetworkManager.isConnected(this)) {
 			mHeaderTips.setVisibility(View.VISIBLE);
 		}
+		mHeaderTips.findViewById(R.id.id_tips_btn_right).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				closeHeaderTips(v);
+			}
+		});
 	}
     
     private void addListener() {

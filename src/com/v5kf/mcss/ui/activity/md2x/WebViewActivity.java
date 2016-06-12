@@ -139,7 +139,7 @@ public class WebViewActivity extends BaseToolbarActivity {
 		// TODO toolbar右侧按钮
 //		initTopBarForLeftImageAndRightImage(
 //				mTitleId, 
-//				R.drawable.v5_action_bar_back, 
+//				R.drawable.v5_baritem_back, 
 //				R.drawable.v5_action_bar_more, 
 //				new onLeftImageButtonClickListener() {
 //			
