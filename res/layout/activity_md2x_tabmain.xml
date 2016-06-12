@@ -21,6 +21,7 @@
 	    <LinearLayout 
 	    	android:layout_width="match_parent"
 	    	android:layout_height="match_parent"
+	    	android:background="@color/white"
 	    	android:orientation="vertical" >
 	    	<!-- 
 	    	android:fitsSystemWindows="true"
@@ -61,6 +62,26 @@
 			        android:background="@color/toolbar_border" />
 			
 			</android.support.design.widget.AppBarLayout>
+			
+	        <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+			    xmlns:android="http://schemas.android.com/apk/res/android"
+			    xmlns:app="http://schemas.android.com/apk/res-auto"
+			    android:id="@+id/top_progress_bar"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:indeterminate="true"
+			    android:background="@color/white"
+			    app:spb_sections_count="3"
+			    app:spb_color="#6FBFF0"
+			    app:spb_colors="@array/progress_colors"
+			    app:spb_speed="2.0"
+			    app:spb_stroke_width="3dp"
+			    app:spb_stroke_separator_length="0dp"
+			    app:spb_reversed="false"
+			    app:spb_mirror_mode="false"
+			    app:spb_progressiveStart_activated="true"
+			    app:spb_progressiveStart_speed="1.5"
+			    app:spb_progressiveStop_speed="3.4" />
 			
 	        <include 
 		        android:id="@+id/header_tips"

@@ -266,4 +266,12 @@
     <color name="default_phpto_border_green">#79D655</color>
     <color name="default_phpto_border_blue">#6FBFF0</color>
     
+    <color name="md2x_blue">#6FBFF0</color>
+    <color name="md2x_green">#79D655</color>
+    <!-- SmoothProgressBar -->
+    <integer-array name="progress_colors">
+        <item>@color/md2x_blue</item>
+        <item>@color/md2x_green</item>
+    </integer-array>
+    
 </resources>
