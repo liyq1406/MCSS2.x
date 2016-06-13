@@ -5,7 +5,8 @@
 	<android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@color/base_list_content_bg" >
 
 	    <com.v5kf.mcss.ui.widget.PinnedSectionListView
 	        android:id="@+id/id_list_view"
