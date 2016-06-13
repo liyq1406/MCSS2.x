@@ -33,6 +33,7 @@ public class EventTag {
 	public static final String ETAG_OFF_LINE = "off_line_tag"; // 下线
 	public static final String ETAG_RELOGIN = "re_login_tag"; // 需要重新登录
 	public static final String ETAG_CONNECTION_CHANGE = "connection_change_tag"; // 连接状态改变 mClient
+	public static final String ETAG_CONNECTION_START = "connection_start_tag"; // 开始连接
 	
 	public static final String ETAG_LOGIN_CHANGE = "login_change_tag"; // 登入事件
 	public static final String ETAG_LOGOUT_CHANGE = "logout_change_tag"; // 登出事件

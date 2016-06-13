@@ -289,6 +289,7 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 		try {
 			WorkerRequest wReq = (WorkerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, mParentActivity);
 			wReq.getArchWorkers();
+			mParentActivity.showProgress();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -357,6 +358,7 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 	private void archWorkerChange(AppInfoKeeper appinfo) {
 		Logger.d(TAG + "-eventbus", "archWorkerChange -> ETAG_ARCH_WORKER_CHANGE");
 		updateWorkersList();
+		mParentActivity.dismissProgress();
 		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
 	}
 	

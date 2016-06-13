@@ -46,7 +46,6 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.QAOManager;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.TicketRequest;
-import com.v5kf.mcss.ui.activity.BaseActivity;
 import com.v5kf.mcss.ui.adapter.HistoryMessagesAdapter;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
 import com.v5kf.mcss.ui.widget.Divider;

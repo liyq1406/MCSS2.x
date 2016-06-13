@@ -23,6 +23,7 @@ public abstract class TabBaseFragment extends LazyFragment {
 	protected FragmentHandler mHandler;
 	protected int mIndex;
 	
+	protected static final int HDL_STOP_PROGRESS = 10;
 	protected static final int HDL_STOP_REFRESH = 11;
 	protected static final int HDL_STOP_LOAD = 12;
 	protected static final int HDL_UPDATE_UI = 13;

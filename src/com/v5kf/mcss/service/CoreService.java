@@ -240,6 +240,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 				mClient = new WebSocketClient(URI.create(mUri), this, null);
 				Logger.i(TAG, "[connectWebsocket] mClient.connect()");
 			}
+			EventBus.getDefault().post(mClient, EventTag.ETAG_CONNECTION_START);
 			mClient.connect();
 		}
 	}

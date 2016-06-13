@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -20,10 +19,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
@@ -34,7 +31,6 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.TicketRequest;
 import com.v5kf.mcss.ui.activity.ActivityBase;
-import com.v5kf.mcss.ui.activity.BaseActivity;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.adapter.HistoryVisitorAdapter;
 import com.v5kf.mcss.ui.widget.Divider;
@@ -87,6 +83,7 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 			initView();
 		}
 		if (mRecycleBeans.isEmpty()) {
+			mParentActivity.showProgress();
 			initData(false);
 	    	checkListEmpty();
 		}
@@ -282,7 +279,6 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
     	return false;
     }
     
-    
     private boolean addRecyclerBean(CustomerBean cstm) {
     	if (null == cstm || hasRecyclerBeans(cstm.getVisitor_id())) {
     		Logger.d(TAG, "Already hasRecyclerBeans ====");
@@ -428,6 +424,10 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 			Logger.d(TAG, "initcstmdata [UPDATE_UI]");
 			updateUI();
 			break;
+			
+		case HDL_STOP_PROGRESS: // 停止progress
+			mParentActivity.dismissProgress();
+			break;
 		}
 	}
 	
@@ -455,7 +455,8 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 	@Override
 	public void onRefresh() { // 下拉加载内存中数据，上拉加载则继续请求
 		Logger.i(TAG, "onRefresh ...");
-    	
+    	mParentActivity.showProgress();
+		
 		/* 请求等待列表数据 */
 		if (!mAppInfo.getVisitorMap().isEmpty()) { // 已获取数据则只刷新今天数据
 			getHistoricalCustomerOfDay(DateUtil.getYear(), DateUtil.getMonth(), DateUtil.getDay());
@@ -544,17 +545,23 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 				getLastDayCustomer();
 			}
 			if (mAppInfo.getVisitorMap().size() > mRecycleBeans.size()) {
+				mHandler.sendEmptyMessageDelayed(HDL_STOP_PROGRESS, 2000);
 				updateUI();
 			}
 		} else {
 			mDayCount = 0;
 			Logger.d(TAG, "initcstmdata [Receive HISTORICAL_CUSTOMER]");
+			mHandler.sendEmptyMessageDelayed(HDL_STOP_PROGRESS, 2000);
 			updateUI();
 		}
 //		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
 //		mHandler.sendEmptyMessage(HDL_STOP_LOAD);
     }
 	
+	/**
+	 * 单个客户的accessable状态改变
+	 * @param customerBean
+	 */
 	@Subscriber(tag = EventTag.ETAG_VISITORS_CHANGE, mode = ThreadMode.MAIN)
 	private void visitorsChange(CustomerBean customerBean) {
 		Logger.d(TAG + "-eventbus", "visitorsChange -> ETAG_VISITORS_CHANGE");
@@ -566,7 +573,7 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)
 	private void connectionChange(Boolean isConnect) {
 		if (isConnect) {
-			
+			//
 		} else {
 			mCurYear = DateUtil.getYear();
 	    	mCurMonth = DateUtil.getMonth();

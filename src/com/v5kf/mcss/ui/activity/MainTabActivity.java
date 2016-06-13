@@ -39,6 +39,7 @@ import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.mikepenz.actionitembadge.library.utils.NumberUtils;
 import com.mikepenz.actionitembadge.library.utils.UIUtil;
 import com.umeng.analytics.MobclickAgent;
+import com.v5kf.client.lib.websocket.WebSocketClient;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.LoginStatus;
@@ -68,6 +69,8 @@ import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 public class MainTabActivity extends BaseToolbarActivity {
 	private static final String TAG = "TabMainActivity";
 	private static final int TASK_UN_LOGIN = 2;
@@ -80,6 +83,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 //	private View mContent;
 	
 	private View mHeaderTips;
+	private SmoothProgressBar mTopProgressBar;
 	
 	private int mCurrentPageIndex;
 	
@@ -115,7 +119,8 @@ public class MainTabActivity extends BaseToolbarActivity {
 		setContentView(R.layout.activity_md2x_tabmain);
 		// 不可滑动返回 
 		setSwipeBackEnable(false);
-		
+
+		findView();
 		/* 启动WS服务 */
 		if (!IntentUtil.isServiceWork(this, Config.SERVICE_NAME_CS)) {
 			Intent localIntent = new Intent();
@@ -124,10 +129,12 @@ public class MainTabActivity extends BaseToolbarActivity {
 			localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	        startService(localIntent);
 	        
+	        showProgress();
 	        mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, 15000);
-		} 
+		} else {
+			dismissProgress();
+		}
 		
-		findView();
 		initToolbar();
 		initSlideMenu();
 		initTabViewPager();
@@ -158,6 +165,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		mNavigationView = (NavigationView) findViewById(R.id.id_navigation_view);
 		mFab = (FloatingActionButton) findViewById(R.id.id_fab);
 		
+		mTopProgressBar = (SmoothProgressBar)findViewById(R.id.top_progress_bar);
 		mHeaderTips = findViewById(R.id.header_tips);
 		mHeaderTips.findViewById(R.id.id_tips_btn_right).setOnClickListener(new OnClickListener() {
 			
@@ -181,6 +189,18 @@ public class MainTabActivity extends BaseToolbarActivity {
 			// 启用home as up
 		    actionBar.setHomeAsUpIndicator(R.drawable.md2x_ic_menu_blue);
 		    actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+	}
+	
+	public void showProgress() {
+		if (mTopProgressBar != null) {
+			mTopProgressBar.setVisibility(View.VISIBLE);
+		}
+	}
+
+	public void dismissProgress() {
+		if (mTopProgressBar != null) {
+			mTopProgressBar.setVisibility(View.GONE);
 		}
 	}
 	
@@ -561,14 +581,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Logger.d(TAG, "onCreateOptionsMenu");
-		getMenuInflater().inflate(R.menu.main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		Logger.d(TAG, "onPrepareOptionsMenu");
-		menu.clear();
+		
 		if (mCurrentPageIndex == 0) { // 对话列表页面
 			getMenuInflater().inflate(R.menu.main, menu);
 			
@@ -585,8 +598,32 @@ public class MainTabActivity extends BaseToolbarActivity {
 		} else { // 其他页面
 			
 		}
-		return super.onPrepareOptionsMenu(menu);
+		
+		return super.onCreateOptionsMenu(menu);
 	}
+	
+//	@Override
+//	public boolean onPrepareOptionsMenu(Menu menu) {
+//		Logger.d(TAG, "onPrepareOptionsMenu");
+//		menu.clear();
+//		if (mCurrentPageIndex == 0) { // 对话列表页面
+//			getMenuInflater().inflate(R.menu.main, menu);
+//			
+//			int badgeCount = mAppInfo.getWaitingCustomerCount();
+//			// badge红点提示
+//			ActionItemBadge.update(this, 
+//        			menu.findItem(R.id.action_waiting), 
+//        			UIUtil.getCompatDrawable(this, R.drawable.v5_action_bar_waiting), 
+//        			ActionItemBadge.BadgeStyles.RED.getStyle(), 
+//        			NumberUtils.formatNumber(badgeCount));
+//			if (badgeCount == 0) {
+////	        	ActionItemBadge.hide(menu.findItem(R.id.action_waiting));
+//	        }
+//		} else { // 其他页面
+//			
+//		}
+//		return super.onPrepareOptionsMenu(menu);
+//	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -816,6 +853,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 			updateSessionBadge();
 			mHeaderTips.setVisibility(View.GONE);
 		} else {
+			dismissProgress();
 			updateSlideMenu();
 			updateSessionBadge();
 			mHeaderTips.setVisibility(View.VISIBLE);
@@ -826,6 +864,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private void servingCustomerChange(AppInfoKeeper appinfo) {
 		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
 		updateSessionBadge();
+		dismissProgress();
 		//getSupportActionBar().invalidateOptionsMenu();
 	}
 	
@@ -839,6 +878,12 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private void updateUserInfo(WorkerBean user) {
 		Logger.d(TAG + "-eventbus", "updateUserInfo -> ETAG_UPDATE_USER_INFO");
 		updateSlideMenu();
+	}
+
+	@Subscriber(tag = EventTag.ETAG_CONNECTION_START, mode = ThreadMode.MAIN)
+	private void onConnectionStart(WebSocketClient client) {
+		Logger.d(TAG + "-eventbus", "onConnectionStart -> ETAG_CONNECTION_START");
+		showProgress();
 	}
 
 }

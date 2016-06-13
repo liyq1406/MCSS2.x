@@ -14,7 +14,7 @@
         <item name="colorAccent">@color/main_color_accent</item>
 		
         <!-- Window color  @color/main_color_dark -->
-        <item name="android:windowBackground">@null</item>
+        <item name="android:windowBackground">@color/main_color_dark</item>
     </style>
 
     <!-- Application theme. -->
@@ -40,7 +40,9 @@
 	</style>
 	<style name="AppTheme.Fullscreen">
 	    <item name="android:windowIsTranslucent">true</item>
+        <!-- 
         <item name="android:windowFullscreen">true</item>
+        -->
         <item name="android:windowBackground">@color/transparent_gray</item>
         <item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>
 	</style>

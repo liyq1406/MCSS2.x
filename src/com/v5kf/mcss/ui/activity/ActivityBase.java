@@ -121,9 +121,9 @@ public abstract class ActivityBase extends SwipeBackActivity {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			setTranslucentStatus(true);
 			
-			SystemBarTintManager tintManager = new SystemBarTintManager(this);  
-			tintManager.setStatusBarTintEnabled(true);  
-			tintManager.setStatusBarTintResource(R.color.base_status_bar_bg);
+			//SystemBarTintManager tintManager = new SystemBarTintManager(this);  
+			//tintManager.setStatusBarTintEnabled(true);  
+			//tintManager.setStatusBarTintResource(R.color.main_color);
 		}
 		
 		// TODO 取消滑动返回

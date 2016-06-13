@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -87,6 +89,20 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 //		mWsp.clearAuthorization();
 		
 		// 设置状态栏颜色 -> [修改]不设置，让view顶到头
+		/* 在API19以上改变状态栏颜色 */
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        	Window window = getWindow();
+			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+					| WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//							| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //window.setStatusBarColor(UITools.getColor(this, R.color.base_status_bar_bg));
+//            window.setStatusBarColor(Color.TRANSPARENT);
+//            window.setNavigationBarColor(Color.TRANSPARENT);
+        }
+		
 		Logger.w(TAG, "android.os.Build.MODEL = " + android.os.Build.MODEL);
 		setNavigationBarColor(UITools.getColor(R.color.main_color_accent));
 		//setStatusbarColor(UITools.getColor(R.color.transparent, this));

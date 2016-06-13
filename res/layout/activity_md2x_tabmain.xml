@@ -18,7 +18,7 @@
         android:fitsSystemWindows="true"
         android:orientation="vertical">
         
-	    <LinearLayout 
+	    <RelativeLayout
 	    	android:layout_width="match_parent"
 	    	android:layout_height="match_parent"
 	    	android:background="@color/white"
@@ -32,6 +32,7 @@
 				android:id="@+id/id_app_bar_layout"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:layout_alignParentTop="true"
 				app:elevation="0dp" >
 				<!-- 去阴影 app:elevation="0dp" -->
 			
@@ -63,46 +64,52 @@
 			
 			</android.support.design.widget.AppBarLayout>
 			
-	        <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+		    <com.chyrain.view.viewpager.SViewPager
+		        android:id="@+id/tabmain_viewPager"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:layout_below="@+id/id_app_bar_layout"
+		        android:layout_above="@+id/tabmain_indicator"
+		        android:background="@color/white" />
+		    
+		    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
 			    xmlns:android="http://schemas.android.com/apk/res/android"
 			    xmlns:app="http://schemas.android.com/apk/res-auto"
 			    android:id="@+id/top_progress_bar"
 			    android:layout_width="match_parent"
 			    android:layout_height="3dp"
+			    android:layout_below="@+id/id_app_bar_layout"
 			    android:indeterminate="true"
-			    android:background="@color/white"
+			    android:background="@color/md2x_green"
 			    app:spb_sections_count="3"
 			    app:spb_color="#6FBFF0"
 			    app:spb_colors="@array/progress_colors"
 			    app:spb_speed="2.0"
 			    app:spb_stroke_width="3dp"
-			    app:spb_stroke_separator_length="0dp"
+			    app:spb_stroke_separator_length="2dp"
 			    app:spb_reversed="false"
 			    app:spb_mirror_mode="false"
 			    app:spb_progressiveStart_activated="true"
-			    app:spb_progressiveStart_speed="1.5"
-			    app:spb_progressiveStop_speed="3.4" />
+			    app:spb_progressiveStart_speed="3.6"
+			    app:spb_progressiveStop_speed="2.0" />
 			
 	        <include 
 		        android:id="@+id/header_tips"
 		        android:visibility="gone"
-		        layout="@layout/include_header_tips" />
-		        
-		    <com.chyrain.view.viewpager.SViewPager
-		        android:id="@+id/tabmain_viewPager"
 		        android:layout_width="match_parent"
-		        android:layout_height="0dp"
-		        android:layout_weight="1"
-		        android:background="@color/white" />
+		        android:layout_height="@dimen/header_tips_height"
+		        android:layout_below="@+id/id_app_bar_layout"
+		        layout="@layout/include_header_tips" />
 		    
 		    <com.chyrain.view.indicator.FixedIndicatorView
 		        android:id="@+id/tabmain_indicator"
 		        android:visibility="gone"
 		        android:background="@drawable/base_tabmain_bg_with_boder"
 		        android:layout_width="match_parent"
-		        android:layout_height="@dimen/bottom_tab_bar_height" />
+		        android:layout_height="@dimen/bottom_tab_bar_height"
+		        android:layout_alignParentBottom="true" />
 		    
-	    </LinearLayout>
+	    </RelativeLayout>
     
 	    <android.support.design.widget.FloatingActionButton
 			android:id="@+id/id_fab"

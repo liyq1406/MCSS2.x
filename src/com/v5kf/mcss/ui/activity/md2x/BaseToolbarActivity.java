@@ -38,6 +38,7 @@ public abstract class BaseToolbarActivity extends ActivityBase {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		setStatusbarColor(UITools.getColor(R.color.main_color_dark));
 		setNavigationBarColor(UITools.getColor(R.color.main_color_accent));
 	}
 	

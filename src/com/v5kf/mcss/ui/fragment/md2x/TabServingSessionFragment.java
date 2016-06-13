@@ -28,6 +28,7 @@ import com.v5kf.mcss.entity.CustomerBean.CustomerType;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
+import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.ui.activity.ActivityBase;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.adapter.ServingSessionAdapter;
@@ -308,10 +309,15 @@ public class TabServingSessionFragment extends TabBaseFragment implements OnRefr
 	
 	@Override
 	public void onRefresh() {
+		if (!CoreService.isConnected()) {
+			CoreService.reConnect(mParentActivity);
+		}
+		
 		/* 请求等待列表数据 */
 		try {
 			CustomerRequest cReq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, mParentActivity);
 			cReq.getCustomerList();
+			mParentActivity.showProgress();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
