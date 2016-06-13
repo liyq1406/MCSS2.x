@@ -32,6 +32,8 @@ import com.v5kf.mcss.ui.adapter.WaitingSessionAdapter;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRefreshListener {
 	private static final String TAG = "WaitingCustomerActivity";
 	protected static final int HDL_STOP_REFRESH = 11;
@@ -43,6 +45,8 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 	private RecyclerView mRecycleView;
 	private WaitingSessionAdapter mRecycleAdapter;
 	private SwipeRefreshLayout mSwipeRefresh;
+	
+	private SmoothProgressBar mTopProgressBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 	private void initView() {
 		initToolbar();
 		
+		mTopProgressBar = (SmoothProgressBar)findViewById(R.id.top_progress_bar);
 		if (null == mRecycleAdapter) {
     		mRecycleAdapter = new WaitingSessionAdapter(mRecycleBeans, this);
     	}
@@ -166,6 +171,14 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		checkListEmpty();
 	}
 	
+	private void showProgress() {
+		mTopProgressBar.setVisibility(View.VISIBLE);
+	}
+	
+	private void dismissProgress() {
+		mTopProgressBar.setVisibility(View.GONE);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -203,6 +216,7 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		try {
 			CustomerRequest cReq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, this);
 			cReq.getWaitingCustomer();
+			showProgress();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -228,6 +242,7 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		Logger.d(TAG + "-eventbus", "waitingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
 		// 更新整个列表
 		resetRecyclerList();
+		dismissProgress();
 		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
     }
 	

@@ -79,6 +79,28 @@
 	            android:text="@string/waiting_content_empty_tips" />
 	        
 	    </LinearLayout>
+	    
+	    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    xmlns:app="http://schemas.android.com/apk/res-auto"
+		    android:id="@+id/top_progress_bar"
+		    android:layout_width="match_parent"
+		    android:layout_height="3dp"
+		    android:layout_alignParentTop="true"
+		    android:visibility="gone"
+		    android:indeterminate="true"
+		    android:background="@color/md2x_green"
+		    app:spb_sections_count="3"
+		    app:spb_color="#6FBFF0"
+		    app:spb_colors="@array/progress_colors"
+		    app:spb_speed="2.0"
+		    app:spb_stroke_width="3dp"
+		    app:spb_stroke_separator_length="2dp"
+		    app:spb_reversed="false"
+		    app:spb_mirror_mode="false"
+		    app:spb_progressiveStart_activated="true"
+		    app:spb_progressiveStart_speed="3.6"
+		    app:spb_progressiveStop_speed="2.0" />
 	</RelativeLayout>
     
 </LinearLayout>
