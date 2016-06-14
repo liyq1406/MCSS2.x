@@ -27,8 +27,8 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.MessageRequest;
-import com.v5kf.mcss.ui.activity.BaseActivity;
-import com.v5kf.mcss.ui.activity.BaseChatActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
+import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
 import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
@@ -52,10 +52,10 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 	protected static final String TAG = "RobotRecyclerAdapter";
 	private LayoutInflater mInflater;
 	private List<ChatRecyclerBean> mRecyclerBeans;
-	private BaseActivity mActivity;
+	private ActivityBase mActivity;
 	private boolean isQuestion;
 	
-    public RobotRecyclerAdapter(BaseActivity activity, List<ChatRecyclerBean> recyclerBeans) {
+    public RobotRecyclerAdapter(ActivityBase activity, List<ChatRecyclerBean> recyclerBeans) {
         super();
         this.mRecyclerBeans = recyclerBeans;
         this.mActivity = activity;

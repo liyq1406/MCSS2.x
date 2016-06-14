@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import java.lang.ref.WeakReference;
 
@@ -36,7 +36,6 @@ import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.AppInfoKeeper;
-import com.v5kf.mcss.ui.activity.md2x.ShowImageActivity;
 import com.v5kf.mcss.ui.view.SystemBarTintManager;
 import com.v5kf.mcss.ui.widget.AlertDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;

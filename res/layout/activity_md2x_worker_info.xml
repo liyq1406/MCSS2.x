@@ -51,6 +51,15 @@
             android:layout_width="match_parent"
     		android:layout_height="wrap_content"
     		android:orientation="vertical" >
+    		
+            <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+		    
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+		        android:background="@color/info_activity_item_divider_frame" />
             
             <!-- 一组设置项 -->
 		    <LinearLayout

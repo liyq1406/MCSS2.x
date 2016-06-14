@@ -30,8 +30,8 @@ import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.TicketRequest;
-import com.v5kf.mcss.ui.activity.ActivityBase;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.HistoryVisitorAdapter;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.DateUtil;
@@ -100,8 +100,7 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 		super.onFragmentStartLazy();
 		Log.d(TAG, TAG + " 显示 " + this);
 //		this.mParentActivity.showToolbar();
-		this.mParentActivity.hideFab();
-		this.mParentActivity.updateToolbar(mIndex);
+//		this.mParentActivity.hideFab();
 //		this.mParentActivity.setBarColor(UITools.getColor(R.color.main_color));
 //		//
 //		this.mParentActivity.setStatusbarColor(UITools.getColor(R.color.main_color));

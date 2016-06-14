@@ -50,6 +50,7 @@ import com.v5kf.mcss.entity.ArchWorkerBean;
 import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
+import com.v5kf.mcss.qao.request.LoginRequest;
 import com.v5kf.mcss.qao.request.WorkerRequest;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.NetworkManager;
@@ -57,10 +58,11 @@ import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.activity.md2x.CustomLoginActivity;
 import com.v5kf.mcss.ui.activity.md2x.WaitingCustomerActivity;
 import com.v5kf.mcss.ui.activity.md2x.WorkerInfoActivity;
+import com.v5kf.mcss.ui.activity.md2x.WorkerLogActivity;
 import com.v5kf.mcss.ui.fragment.md2x.TabHistoryVisitorFragment;
+import com.v5kf.mcss.ui.fragment.md2x.TabMoreFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabSecondFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabServingSessionFragment;
-import com.v5kf.mcss.ui.fragment.md2x.TabThirdFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabWorkerListFragment;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.ModeSeekbarDialog;
@@ -75,6 +77,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private static final String TAG = "TabMainActivity";
 	private static final int TASK_UN_LOGIN = 2;
 	private static final int TASK_TIME_OUT = 3;
+	private static final int HDL_LOGOUT_TIMEOUT = 11;
 	
 	private IndicatorViewPager indicatorViewPager;
 	private DrawerLayout mDrawerLayout;
@@ -155,7 +158,6 @@ public class MainTabActivity extends BaseToolbarActivity {
 	
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 	}
 
@@ -212,19 +214,6 @@ public class MainTabActivity extends BaseToolbarActivity {
 		mFab.setVisibility(View.VISIBLE);
 	}
 	
-	/**
-	 * 切换Fragment时更新Toolbar的标题和menu
-	 * @deprecated 不需要，改在pagelistener执行
-	 */
-	public void updateToolbar(int index) {
-//		if (index == 0) {
-//			initTopBarForOnlyTitle(R.string.conversation);
-//		} else {
-//			initTopBarForOnlyTitle("");
-//		}
-//		getSupportActionBar().invalidateOptionsMenu();
-	}
-
 	private void initFromGroup() {
     	String from = null;
     	from = mAppInfo.getUser().getJob();
@@ -254,6 +243,14 @@ public class MainTabActivity extends BaseToolbarActivity {
 			mStatusSpinner = (Spinner) headerView.findViewById(R.id.drawer_status_spinner);
 			mStatusText = (TextView) headerView.findViewById(R.id.drawer_status_text);
 			mStatusLayout = headerView.findViewById(R.id.drawer_status_layout);
+			
+			headerView.findViewById(R.id.drawer_log).setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					gotoActivity(WorkerLogActivity.class);
+				}
+			});
 			
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.md2x_simple_spinner_item);
 			String level[] = getResources().getStringArray(R.array.status_spinner_arr); //资源文件
@@ -355,11 +352,15 @@ public class MainTabActivity extends BaseToolbarActivity {
 						
 						@Override
 						public void onClick(View v) {
-							mApplication.getWorkerSp().clearAutoLogin();
-							dismissWarningDialog();
-							mApplication.logout();
-							gotoActivity(CustomLoginActivity.class);
-							MobclickAgent.onEvent(MainTabActivity.this, "APP_LOGOUT");
+							try {
+								LoginRequest lr = (LoginRequest) RequestManager.getRequest(QAODefine.O_TYPE_WLOGIN, MainTabActivity.this);
+								lr.logout(mAppInfo.getUser().getE_id(), mAppInfo.getUser().getW_id());
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+							MobclickAgent.onEvent(MainTabActivity.this,"APP_LOGOUT");
+							showProgressDialogWithTitle(R.string.logouting);
+							mHandler.sendEmptyMessageDelayed(HDL_LOGOUT_TIMEOUT, 5000); // 5秒超时时间 
 						}
 					}, null);
 					break;
@@ -386,10 +387,34 @@ public class MainTabActivity extends BaseToolbarActivity {
 		overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
 	}
 
+	protected void onFragmentPageSelected(int position) {
+		// 更新ToolBar标题和导航
+		getToolbar().setTitle(tabNames[position]);
+		getSupportActionBar().invalidateOptionsMenu();
+		
+		updateHomeBadge();
+		
+		switch (position) {
+		case 0:
+			hideFab();
+			break;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			hideFab();
+			break;
+		default:
+			break;
+		}
+	}
+	
 	/**
 	 * 刷新Toolbar红点
 	 */
 	private void updateSessionBadge() {
+		updateHomeBadge();
+		
 		int waitingCount = mAppInfo.getWaitingCustomerCount();
 		int servingCount = mAppInfo.getServingCustomerCount();
 		Logger.i(TAG, "[updateBadge] servingCount=" + servingCount + " waitingCount=" + waitingCount);
@@ -397,9 +422,9 @@ public class MainTabActivity extends BaseToolbarActivity {
 		
 		// 更新对话badge
 		TextView session = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_session).getActionView().findViewById(R.id.badge_msg);
-		if (servingCount > 0) {
+		if (servingCount + waitingCount > 0) {
 			session.setVisibility(View.VISIBLE);
-			session.setText("" + servingCount);
+			session.setText("" + (servingCount + waitingCount));
 		} else {
 			session.setVisibility(View.GONE);
 		}
@@ -413,6 +438,23 @@ public class MainTabActivity extends BaseToolbarActivity {
 		TextView explore = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_explore).getActionView().findViewById(R.id.badge_msg);
 		explore.setVisibility(View.GONE);
 		//explore.setText("" + servingCount);
+	}
+	
+	public void updateHomeBadge() {
+		boolean showBadge = false;
+		
+		if (mAppInfo.getCustomerMap().size() > 0) {
+			if (mCurrentPageIndex != 0) {
+				showBadge = true;
+			}
+		}
+		// 是否有监控到客户，新通知等
+		
+		if (showBadge) {
+			getToolbar().setNavigationIcon(R.drawable.md2x_ic_menu_blue_badge);
+		} else {
+			getToolbar().setNavigationIcon(R.drawable.md2x_ic_menu_blue);
+		}
 	}
 
 	/**
@@ -554,9 +596,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 				mCurrentPageIndex = position;
 				Logger.d(TAG, "onPageSelected: " + position);
 				
-				// 更新ToolBar标题和导航
-				getToolbar().setTitle(tabNames[position]);
-				getSupportActionBar().invalidateOptionsMenu();
+				onFragmentPageSelected(position);
 			}
 			
 			@Override
@@ -592,12 +632,22 @@ public class MainTabActivity extends BaseToolbarActivity {
         			UIUtil.getCompatDrawable(this, R.drawable.v5_action_bar_waiting), 
         			ActionItemBadge.BadgeStyles.RED.getStyle(), 
         			NumberUtils.formatNumber(badgeCount));
-			if (badgeCount == 0) {
-//	        	ActionItemBadge.hide(menu.findItem(R.id.action_waiting));
-	        }
 		} else { // 其他页面
-			
+			// 
 		}
+		int menuBadgeCount = 0;
+		if (mAppInfo.getCustomerMap().size() > 0) {
+			menuBadgeCount++;
+		}
+//		if () { // 监控到用户
+//			menuBadgeCount++;
+//		}
+		// home红点
+		ActionItemBadge.update(this, 
+    			menu.findItem(R.id.home), 
+    			UIUtil.getCompatDrawable(this, R.drawable.md2x_ic_menu_blue), 
+    			ActionItemBadge.BadgeStyles.RED.getStyle(), 
+    			NumberUtils.formatNumber(menuBadgeCount));
 		
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -704,7 +754,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 				fragment = new TabSecondFragment(MainTabActivity.this, position);
 				break;
 			case 4:
-				fragment = new TabThirdFragment(MainTabActivity.this, position);
+				fragment = new TabMoreFragment(MainTabActivity.this, position);
 				break;
 			default:
 				fragment = new TabServingSessionFragment(MainTabActivity.this, position);
@@ -717,7 +767,6 @@ public class MainTabActivity extends BaseToolbarActivity {
 
 	@Override
 	protected void handleMessage(Message msg) {
-		// TODO Auto-generated method stub
 		switch (msg.what) {
 		case TASK_UN_LOGIN: {
 			final int resId;
@@ -779,6 +828,10 @@ public class MainTabActivity extends BaseToolbarActivity {
 					});
 			break;
 		}
+		case HDL_LOGOUT_TIMEOUT:
+				dismissAlertDialog();
+				showAlertDialog(R.string.warning_logout_failed);
+			break;
 		default:
 			
 			break;
@@ -884,6 +937,19 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private void onConnectionStart(WebSocketClient client) {
 		Logger.d(TAG + "-eventbus", "onConnectionStart -> ETAG_CONNECTION_START");
 		showProgress();
+	}
+	
+	@Subscriber(tag = EventTag.ETAG_LOGOUT_CHANGE, mode = ThreadMode.MAIN)
+	private void logoutChange(Integer error) {
+		mHandler.removeMessages(HDL_LOGOUT_TIMEOUT);
+		dismissProgressDialog();
+		if (error == 0) {
+			mApplication.getWorkerSp().clearAutoLogin();
+			gotoActivityAndFinishThis(CustomLoginActivity.class);
+			mApplication.terminate(); // 退出登录
+		} else {
+			showAlertDialog(R.string.warning_logout_failed);
+		}
 	}
 
 }

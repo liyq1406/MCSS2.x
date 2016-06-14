@@ -266,7 +266,8 @@ public class AppInfoKeeper {
 			V5Message msgContent = message.getCandidate().get(0);
 			if (msgContent != null && (msgContent.getDirection() == QAODefine.MSG_DIR_FROM_ROBOT
 					|| msgContent.getDirection() == QAODefine.MSG_DIR_FROM_WAITING
-					|| msgContent.getDirection() == QAODefine.MSG_DIR_R2CW)) {
+			// || msgContent.getDirection() == QAODefine.MSG_DIR_R2CW
+					)) {
 				if (msgContent.getDefaultContent(mContext) == null || msgContent.getDefaultContent(mContext).isEmpty()) {
 					// 排除机器人回答不上的空内容
 					return message;

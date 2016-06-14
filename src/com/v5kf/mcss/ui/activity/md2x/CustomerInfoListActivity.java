@@ -28,7 +28,6 @@ import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
-import com.v5kf.mcss.ui.activity.info.CustomerEditActivity;
 import com.v5kf.mcss.ui.adapter.CustomerInfoListAdapter;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
@@ -154,7 +153,11 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 	}
 
 	private void initView() {
-		initTopBarForLeftBack(R.string.customer_info); // 标题栏
+		if (mCustomer != null) {
+			initTopBarForLeftBack(mCustomer.getDefaultName()); // 标题栏
+		} else {
+			initTopBarForLeftBack(R.string.customer_info); // 标题栏
+		}
     	initFirstLayout(); // header信息
     	// 是否显示客服助手
     	if (mAppInfo.getSiteInfo() != null && mAppInfo.getSiteInfo().getKexi_plus_url() != null) {
@@ -163,7 +166,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
     		mKexiPlusLayout.setVisibility(View.GONE);
     	}
 		initListLayout(); // info列表
-		addListener();		
+		addListener();
 		initBottomBtn(); // 底部按钮
 	}
 

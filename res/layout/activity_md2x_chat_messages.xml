@@ -1,0 +1,117 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ic_chat_activity_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    tools:context = "com.v5kf.mcss.ui.activity.ChatContentActivity" >
+       
+    <android.support.design.widget.AppBarLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/id_app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:elevation="0dp" >
+		<!-- 去阴影 app:elevation="0dp" -->
+	
+	    <android.support.v7.widget.Toolbar
+			android:id="@+id/id_common_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="scroll|enterAlways"
+			app:layout_collapseMode="pin"
+			app:title="@string/customer_info"
+			style="@style/ToolBarStyle" >
+			
+	        <LinearLayout
+		        android:id="@+id/header_layout_rightview_container"
+		        android:layout_width="wrap_content"
+		        android:layout_height="fill_parent"
+		        android:padding="2dp"
+		        android:layout_gravity="end"
+		        android:layout_marginRight="2dp"
+		        android:layout_marginEnd="2dp"
+		        android:gravity="center_vertical|end"
+		        android:orientation="horizontal" >
+		                
+		        <com.v5kf.mcss.ui.widget.CircleImageView
+		            android:id="@+id/cstm_photo_iv"
+		            android:layout_width="32dp"
+			        android:layout_height="32dp"
+			        android:layout_marginRight="8dp"
+			        android:src="@drawable/v5_photo_default_cstm"
+			        android:background="@color/transparent" />
+		        
+		        <ImageView
+		            android:id="@+id/more_iv"
+		            android:layout_width="30dp"
+		            android:layout_height="30dp"
+		            android:layout_marginRight="6dp"
+		            android:layout_gravity="center_vertical"
+		            android:scaleType="fitXY"
+		            android:src="@drawable/v5_action_bar_more"
+		            android:contentDescription="@string/contentDescription" />
+		        
+		    </LinearLayout>
+	        
+		</android.support.v7.widget.Toolbar>
+	
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/toolbar_border" />
+	</android.support.design.widget.AppBarLayout>
+    	
+    <RelativeLayout
+        android:id="@+id/id_center_frame"
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:background="@color/list_chat_blank_bg" >
+
+        <!-- com.v5kf.mcss.ui.view.PullRefreshRecyclerView
+	        android:id="@+id/id_recycle_view_msgs"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:focusable="true" 
+			android:focusableInTouchMode="true"
+	        android:divider="@null"
+	        android:dividerHeight="5dp"
+	        android:background="@color/list_chat_blank_bg"/-->	        
+	    <android.support.v7.widget.RecyclerView
+	        android:id="@+id/id_recycle_view_msgs"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:focusable="true" 
+			android:focusableInTouchMode="true"
+	        android:divider="@null"
+	        android:dividerHeight="5dp"
+	        android:background="@color/list_chat_blank_bg"/>
+
+    </RelativeLayout>
+    
+    
+    <View
+		android:layout_width="fill_parent"
+		android:layout_height="@dimen/dialog_option_divider_height"
+		android:background="@color/dialog_option_item_boder" />
+    
+    <LinearLayout
+        android:id="@+id/layout_cinfo_action"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    
+	    <Button
+	        android:id="@+id/btn_waiting_pick_up"
+	        android:visibility="visible"
+	        style="@style/Positive_btn"
+	        android:text="@string/option_pickup" />
+        
+    </LinearLayout>
+    
+</LinearLayout>

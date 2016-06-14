@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.os.Message;
 
 import com.v5kf.mcss.R;
-import com.v5kf.mcss.ui.activity.ActivityBase;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.utils.Logger;
 
 public class TabSecondFragment extends TabBaseFragment {
@@ -36,8 +36,7 @@ public class TabSecondFragment extends TabBaseFragment {
 		super.onFragmentStartLazy();
 		Logger.d(TAG, "Fragment 显示 " + this);
 		//this.mParentActivity.hideToolbar();
-		this.mParentActivity.hideFab();
-		this.mParentActivity.updateToolbar(mIndex);
+//		this.mParentActivity.hideFab();
 //		int color = UITools.getColor(android.R.color.holo_orange_light);
 //		this.mParentActivity.setBarColor(color);
 //		//

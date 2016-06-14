@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +34,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -71,6 +70,7 @@ import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.MessageSendHelper;
+import com.v5kf.mcss.ui.activity.WorkerTreeActivity;
 import com.v5kf.mcss.ui.activity.info.LocationMapActivity;
 import com.v5kf.mcss.ui.activity.info.MaterialResActivity;
 import com.v5kf.mcss.ui.activity.info.RobotChatActivity;
@@ -116,8 +116,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 //    private boolean hasSetIntrust = false;
     
     /* Chat Action Bar */
-	private LinearLayout mLeftLayout;
-	private TextView mTitleTv;
+//	private LinearLayout mLeftLayout;
+//	private TextView mTitleTv;
 	private ImageView mMoreIv;
 	private CircleImageView mCustomerPhotoIv;
 	// 标题栏弹窗
@@ -176,7 +176,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chatting_list);
+        setContentView(R.layout.activity_md2x_chatting_list);
 
         mMessageHelper = new MessageSendHelper(mCustomer, this, mHandler);
         mDatas = new ArrayList<>();
@@ -244,14 +244,14 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			isInTrust = false;
 		}
 //		mTrustIv.setImageResource(R.drawable.v5_action_bar_more);
-		mLeftLayout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				setFinishType(FIN_TYPE_NONE);
-				finishActivity();
-			}
-		});
+//		mLeftLayout.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				setFinishType(FIN_TYPE_NONE);
+//				finishActivity();
+//			}
+//		});
 		mMoreIv.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -301,9 +301,9 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		}
 		// [新增]离开状态
 		if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-			mTitleTv.setText("[离开]" + mCustomer.getDefaultName());
+			getToolbar().setTitle("[离开]" + mCustomer.getDefaultName());
 		} else {
-			mTitleTv.setText(mCustomer.getDefaultName());
+			getToolbar().setTitle(mCustomer.getDefaultName());
 		}
 		ImageLoader imageLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm, new ImageLoader.ImageLoaderListener() {
 			
@@ -441,8 +441,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	
 	public void findView() {
 		/* Chat Title Action Bar */
-		mLeftLayout = (LinearLayout) findViewById(R.id.header_layout_leftview_container);
-		mTitleTv = (TextView) findViewById(R.id.header_htv_subtitle);
+//		mLeftLayout = (LinearLayout) findViewById(R.id.header_layout_leftview_container);
+//		mTitleTv = (TextView) findViewById(R.id.header_htv_subtitle);
 		mMoreIv = (ImageView) findViewById(R.id.more_iv);
 		mCustomerPhotoIv = (CircleImageView) findViewById(R.id.cstm_photo_iv);
 		

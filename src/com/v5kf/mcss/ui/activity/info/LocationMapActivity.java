@@ -39,7 +39,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.LocationBean;
 import com.v5kf.mcss.eventbus.EventTag;
-import com.v5kf.mcss.ui.activity.ActivityBase;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.MD5;
 import com.v5kf.mcss.utils.MapUtil;

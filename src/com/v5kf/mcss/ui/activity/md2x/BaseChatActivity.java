@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.entity.CustomerBean.CustomerType;
+import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.CustomerInfoListActivity;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.IntentUtil;
@@ -22,7 +23,7 @@ import com.v5kf.mcss.utils.Logger;
  * @description
  *
  */
-public abstract class BaseChatActivity extends BaseActivity {
+public abstract class BaseChatActivity extends BaseToolbarActivity {
 		
 	private static final String TAG = "BaseChatActivity";
 	protected String c_id;

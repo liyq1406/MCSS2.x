@@ -261,6 +261,7 @@
     
     <!-- WorkerLogActivity -->
     <string name="worker_log">坐席日志</string>
+    <string name="log">日志</string>
     
     <!-- More set Activity -->
     <string name="app_about">关于</string>

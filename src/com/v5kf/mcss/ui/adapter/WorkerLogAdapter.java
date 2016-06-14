@@ -14,7 +14,7 @@ import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.WorkerLogBean;
-import com.v5kf.mcss.ui.activity.BaseActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.utils.Logger;
 
 /**
@@ -24,10 +24,10 @@ public class WorkerLogAdapter extends RecyclerView.Adapter<WorkerLogAdapter.View
 
 	private static final String TAG = "WorkerLogAdapter";
     private List<WorkerLogBean> mDatas ;
-    private BaseActivity mActivity;
+    private ActivityBase mActivity;
     private AppInfoKeeper mAppInfo;
 
-    public WorkerLogAdapter(List<WorkerLogBean> datas, BaseActivity activity) {
+    public WorkerLogAdapter(List<WorkerLogBean> datas, ActivityBase activity) {
     	super();
     	Logger.v(TAG, "ServingSessionAdapter construct");
         this.mDatas = datas;

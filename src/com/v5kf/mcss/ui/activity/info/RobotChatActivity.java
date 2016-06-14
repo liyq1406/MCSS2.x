@@ -29,7 +29,7 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.MessageRequest;
 import com.v5kf.mcss.ui.activity.BaseActivity;
-import com.v5kf.mcss.ui.activity.BaseChatActivity;
+import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
 import com.v5kf.mcss.ui.adapter.RobotRecyclerAdapter;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
 import com.v5kf.mcss.utils.Logger;

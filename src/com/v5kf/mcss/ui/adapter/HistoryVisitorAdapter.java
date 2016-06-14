@@ -16,7 +16,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerBean;
-import com.v5kf.mcss.ui.activity.ActivityBase;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.CustomerInfoListActivity;
 import com.v5kf.mcss.ui.widget.BadgeView;
 import com.v5kf.mcss.ui.widget.CircleImageView;

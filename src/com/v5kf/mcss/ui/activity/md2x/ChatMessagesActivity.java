@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.mcss.R;
@@ -32,8 +30,8 @@ import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.ui.adapter.OnChatRecyclerAdapter;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
 import com.v5kf.mcss.ui.widget.CircleImageView;
-import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.Logger;
+import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
 /**
@@ -49,8 +47,8 @@ public class ChatMessagesActivity extends BaseChatActivity {
 	private static final String TAG = "ChatMessagesActivity";
 	
 	/* Chat Action Bar */
-	private LinearLayout mLeftLayout;
-	private TextView mTitleTv;
+//	private LinearLayout mLeftLayout;
+//	private TextView mTitleTv;
 	private ImageView mTrustIv;
 	private CircleImageView mCustomerPhotoIv;
 	
@@ -78,7 +76,7 @@ public class ChatMessagesActivity extends BaseChatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_chat_messages);
+		setContentView(R.layout.activity_md2x_chat_messages);
 		Logger.v(TAG, "onCreate");
 		
 		initData();
@@ -118,8 +116,8 @@ public class ChatMessagesActivity extends BaseChatActivity {
 	
 	private void findView() {
 		/* Chat Title Action Bar */
-		mLeftLayout = (LinearLayout) findViewById(R.id.header_layout_leftview_container);
-		mTitleTv = (TextView) findViewById(R.id.header_htv_subtitle);
+//		mLeftLayout = (LinearLayout) findViewById(R.id.header_layout_leftview_container);
+//		mTitleTv = (TextView) findViewById(R.id.header_htv_subtitle);
 		mTrustIv = (ImageView) findViewById(R.id.more_iv);
 		mCustomerPhotoIv = (CircleImageView) findViewById(R.id.cstm_photo_iv);
 		
@@ -158,14 +156,14 @@ public class ChatMessagesActivity extends BaseChatActivity {
 		}
 		updateCustomerTitle();
 		mTrustIv.setVisibility(View.GONE);
-		mLeftLayout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				setFinishType(FIN_TYPE_NONE);
-				finishActivity();
-			}
-		});
+//		mLeftLayout.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				setFinishType(FIN_TYPE_NONE);
+//				finishActivity();
+//			}
+//		});
 		mCustomerPhotoIv.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
@@ -205,9 +203,9 @@ public class ChatMessagesActivity extends BaseChatActivity {
 		}
 		// [新增]离开状态
 		if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-			mTitleTv.setText("[离开]" + mCustomer.getDefaultName());
+			getToolbar().setTitle("[离开]" + mCustomer.getDefaultName());
 		} else {
-			mTitleTv.setText(mCustomer.getDefaultName());
+			getToolbar().setTitle(mCustomer.getDefaultName());
 		}
 		ImageLoader imageLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm, new ImageLoader.ImageLoaderListener() {
 			

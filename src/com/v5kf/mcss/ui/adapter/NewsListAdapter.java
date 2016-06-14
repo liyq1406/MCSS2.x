@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.mcss.R;
-import com.v5kf.mcss.ui.activity.ActivityBase;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
 /**

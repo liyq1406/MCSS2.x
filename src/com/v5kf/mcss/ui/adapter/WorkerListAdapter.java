@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.ArchWorkerBean;
-import com.v5kf.mcss.ui.activity.ActivityBase;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.WorkerInfoActivity;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.utils.Logger;

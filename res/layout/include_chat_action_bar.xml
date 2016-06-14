@@ -10,15 +10,21 @@
         android:layout_height="fill_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:padding="2dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center_vertical|start"
         android:orientation="horizontal" >
         
         <ImageButton
 	        android:id="@+id/header_ib_imagebutton"
 	        android:layout_gravity="center"
-	        android:layout_width="30dp"
-	        android:layout_height="30dp"
-	        android:src="@drawable/base_action_bar_back_bg_selector"
+	        android:layout_width="32dp"
+	        android:layout_height="32dp"
+	        android:padding="4dp"
+	        android:layout_marginLeft="8dp"
+	        android:layout_marginStart="8dp"
+	        android:src="@drawable/v5_action_bar_back_md2x"
 	        android:background="@color/transparent"
 	        android:clickable="false"
 	        android:focusable="false"
@@ -33,6 +39,7 @@
         android:layout_height="fill_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:padding="2dp"
         android:gravity="center_vertical|end"
         android:orientation="horizontal" >
                 
@@ -60,7 +67,11 @@
         android:id="@+id/header_layout_middleview_container"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_centerInParent="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/header_layout_leftview_container"
+        android:layout_toEndOf="@id/header_layout_leftview_container"
         android:gravity="center"
         android:orientation="horizontal" >
 
@@ -72,5 +83,11 @@
             style="@style/ActionBarTitle" />
         
     </FrameLayout>
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="@dimen/base_line_width_s"
+        android:background="@color/toolbar_border" />
 
 </RelativeLayout>

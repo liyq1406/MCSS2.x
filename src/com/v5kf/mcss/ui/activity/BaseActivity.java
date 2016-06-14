@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.v5kf.mcss.R;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.view.HeaderLayout;
 import com.v5kf.mcss.ui.view.HeaderLayout.HeaderStyle;
 import com.v5kf.mcss.ui.view.HeaderLayout.TittleStyle;

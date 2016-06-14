@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity.info;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,6 +8,8 @@ import org.simple.eventbus.ThreadMode;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -22,15 +24,12 @@ import com.v5kf.mcss.entity.CustomerRealBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
-import com.v5kf.mcss.ui.activity.BaseActivity;
-import com.v5kf.mcss.ui.view.HeaderLayout.onLeftImageButtonClickListener;
-import com.v5kf.mcss.ui.view.HeaderLayout.onRightImageButtonClickListener;
 import com.v5kf.mcss.ui.widget.ClearEditText;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
-public class CustomerEditActivity extends BaseActivity implements OnClickListener {
+public class CustomerEditActivity extends BaseToolbarActivity implements OnClickListener {
 	private static final String TAG = "CustomerInfoActivity";
 	protected String c_id;
 	public CustomerBean mCustomer;
@@ -67,11 +66,38 @@ public class CustomerEditActivity extends BaseActivity implements OnClickListene
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_customer_edit);
+		setContentView(R.layout.activity_md2x_customer_edit);
 		
 		handleIntent();
 		findView();
 		initView();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuItem itemAdd=menu.add(0, Menu.FIRST, Menu.NONE, R.string.submit);
+		itemAdd.setIcon(R.drawable.v5_action_bar_ok);
+		itemAdd.setShortcut('0', 's');
+		itemAdd.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST:
+			try {
+				doSetCustomerInfo();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			finishActivity();
+			break;
+		default:
+			break;
+		}
+		
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
@@ -100,28 +126,29 @@ public class CustomerEditActivity extends BaseActivity implements OnClickListene
 	}
 
 	private void initView() {
-		initTopBarForLeftImageAndRightImage(
-				R.string.customer_edit, 
-				R.drawable.v5_action_bar_cancel, 
-				R.drawable.v5_action_bar_ok, 
-				new onLeftImageButtonClickListener() {			
-					@Override
-					public void onClick(View v) {
-						finishActivity();
-					}
-				}, 
-				new onRightImageButtonClickListener() {
-				
-					@Override
-					public void onClick(View arg0) {
-						try {
-							doSetCustomerInfo();
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-						finishActivity();
-					}
-				});
+		initTopBarForLeftBack(R.string.customer_edit); // 标题栏
+//		initTopBarForLeftImageAndRightImage(
+//				R.string.customer_edit, 
+//				R.drawable.v5_action_bar_cancel, 
+//				R.drawable.v5_action_bar_ok, 
+//				new onLeftImageButtonClickListener() {			
+//					@Override
+//					public void onClick(View v) {
+//						finishActivity();
+//					}
+//				}, 
+//				new onRightImageButtonClickListener() {
+//				
+//					@Override
+//					public void onClick(View arg0) {
+//						try {
+//							doSetCustomerInfo();
+//						} catch (JSONException e) {
+//							e.printStackTrace();
+//						}
+//						finishActivity();
+//					}
+//				});
     	
     	initFirstLayout();
 		initLayoutWithTextview();

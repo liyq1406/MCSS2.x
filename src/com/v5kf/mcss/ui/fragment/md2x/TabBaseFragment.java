@@ -12,8 +12,8 @@ import android.os.Message;
 import com.chyrain.fragment.LazyFragment;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.entity.AppInfoKeeper;
-import com.v5kf.mcss.ui.activity.ActivityBase;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 
 public abstract class TabBaseFragment extends LazyFragment {
 

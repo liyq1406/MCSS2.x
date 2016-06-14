@@ -25,8 +25,8 @@
     <dimen name="dialog_content_text_size">12sp</dimen>
     
     <!-- 标题栏属性值 -->
-    <dimen name="base_action_bar_height">48.0dip</dimen>
-    <dimen name="base_action_bar_title_size">18.0sp</dimen>
+    <dimen name="base_action_bar_height">56.5dip</dimen>
+    <dimen name="base_action_bar_title_size">20.0sp</dimen>
     <dimen name="base_action_bar_right_text_size">16.0sp</dimen>
     <dimen name="base_action_bar_segment_width">130dip</dimen>
     <dimen name="base_action_bar_segment_rl_width">140dip</dimen>
@@ -111,7 +111,7 @@
     <dimen name="info_item_user_name_text_size">16sp</dimen>
     <dimen name="info_item_date_text_size">14sp</dimen>
     <dimen name="info_item_name_text_size">16sp</dimen>
-    <dimen name="large_item_divider_height">20dip</dimen>
+    <dimen name="large_item_divider_height">24dip</dimen>
     <dimen name="info_item_edit_divider_height">6dip</dimen>
     <dimen name="info_item_edit_height_single">40dip</dimen>
     <dimen name="info_item_height_single">44dip</dimen>

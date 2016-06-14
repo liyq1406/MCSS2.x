@@ -29,8 +29,8 @@ import com.v5kf.mcss.entity.ArchWorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.WorkerRequest;
-import com.v5kf.mcss.ui.activity.ActivityBase;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.WorkerListAdapter;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
@@ -81,8 +81,8 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 		super.onFragmentStartLazy();
 		Log.d(TAG, TAG + " 显示 " + this);
 //		this.mParentActivity.showToolbar();
-		this.mParentActivity.hideFab();
-		this.mParentActivity.updateToolbar(mIndex);
+//		this.mParentActivity.hideFab();
+//		this.mParentActivity.updateToolbar(mIndex);
 //		this.mParentActivity.setBarColor(UITools.getColor(R.color.main_color));
 //		//
 //		this.mParentActivity.setStatusbarColor(UITools.getColor(R.color.main_color));

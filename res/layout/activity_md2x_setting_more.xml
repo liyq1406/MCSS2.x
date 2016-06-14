@@ -7,9 +7,31 @@
     android:background="@color/info_activity_layout_bg"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/common_actionbar"
-        layout="@layout/include_action_bar" />
+    <android.support.design.widget.AppBarLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/id_app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:elevation="0dp" >
+		<!-- 去阴影 app:elevation="0dp" -->
+	
+	    <android.support.v7.widget.Toolbar
+			android:id="@+id/id_common_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="scroll|enterAlways"
+			app:layout_collapseMode="pin"
+			app:title="@string/tabhost_text_more"
+			style="@style/ToolBarStyle" >
+	        
+		</android.support.v7.widget.Toolbar>
+	
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/toolbar_border" />
+	</android.support.design.widget.AppBarLayout>
     
     <ScrollView
         android:layout_weight="1"
@@ -451,20 +473,5 @@
         </LinearLayout>
         
     </ScrollView>
-    
-    <LinearLayout
-        android:id="@+id/layout_more_action"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-	
-	    <Button
-	        android:id="@+id/btn_logout"
-	        android:visibility="visible"
-	        style="@style/Passive_btn"
-	        android:text="@string/logout" />   
-        
-    </LinearLayout>
 
 </LinearLayout>

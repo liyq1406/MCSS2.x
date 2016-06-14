@@ -31,7 +31,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.ui.activity.BaseActivity;
-import com.v5kf.mcss.ui.activity.BaseChatActivity;
+import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
 import com.v5kf.mcss.ui.adapter.MaterialRecyclerAdapter;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.DevUtils;

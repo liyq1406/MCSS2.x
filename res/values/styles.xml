@@ -285,7 +285,7 @@
     
     <!-- MD2x -->
     
-    <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/main_color</item>
         <item name="colorPrimaryDark">@color/main_color_dark</item>
@@ -293,13 +293,16 @@
 		<item name="android:textColorPrimary">@color/textColorPrimary</item>
 		<item name="android:textColorSecondary">@color/textColorSecondary</item>
 		<item name="android:textColor">@color/textColorSecondary</item>
+		<item name="actionMenuTextColor">#209DE9</item>
     </style>
     
     <style name="ToolBarStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/base_action_bar_height</item>
+        <!-- 
         <item name="android:minHeight">?attr/actionBarSize</item>
-        <item name="theme">@style/AppThemeDark</item>
+        -->
+        <item name="theme">@style/AppThemeLight</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="android:background">@color/base_action_bar_bg</item>
         <item name="android:focusable">true</item>

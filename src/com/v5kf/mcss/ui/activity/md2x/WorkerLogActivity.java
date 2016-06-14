@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity.info;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import java.util.ArrayList;
 
@@ -10,13 +10,12 @@ import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.entity.WorkerLogBean;
-import com.v5kf.mcss.ui.activity.BaseActivity;
 import com.v5kf.mcss.ui.adapter.WorkerLogAdapter;
 import com.v5kf.mcss.ui.widget.RecyclerViewDivider;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.WorkerLogUtil;
 
-public class WorkerLogActivity extends BaseActivity {
+public class WorkerLogActivity extends BaseToolbarActivity {
 	private static final String TAG = "WorkerLogActivity";
 	private SuperRecyclerView mLogList;
 	private ArrayList<WorkerLogBean> mLogDatas;
@@ -29,7 +28,7 @@ public class WorkerLogActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_worker_log);
+		setContentView(R.layout.activity_md2x_worker_log);
 		
 		if (mLogDatas == null) {
 			mLogDatas = new ArrayList<>();

@@ -40,9 +40,9 @@ import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.MessageRequest;
-import com.v5kf.mcss.ui.activity.BaseChatActivity;
-import com.v5kf.mcss.ui.activity.ChatMessagesActivity;
 import com.v5kf.mcss.ui.activity.info.LocationMapActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
+import com.v5kf.mcss.ui.activity.md2x.ChatMessagesActivity;
 import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.adapter.OnChatRecyclerAdapter.ChatItemViewHolder;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
@@ -80,7 +80,7 @@ public class ChattingListAdapter extends BaseAdapter {
 	
 	private LayoutInflater mInflater;
 	private List<ChatRecyclerBean> mRecycleBeans;
-	private BaseChatActivity mActivity;
+	private ActivityBase mActivity;
 	private ChatMessagesListener mChatMessageListener;
 	
 	// 语音
@@ -90,7 +90,7 @@ public class ChattingListAdapter extends BaseAdapter {
 		public void resendFailureMessage(V5Message message, int position);
 	}
 	
-	public ChattingListAdapter(BaseChatActivity activity, List<ChatRecyclerBean> mRecycleBeans, ChatMessagesListener listener) {
+	public ChattingListAdapter(ActivityBase activity, List<ChatRecyclerBean> mRecycleBeans, ChatMessagesListener listener) {
         super();
         this.mRecycleBeans = mRecycleBeans;
         this.mActivity = activity;

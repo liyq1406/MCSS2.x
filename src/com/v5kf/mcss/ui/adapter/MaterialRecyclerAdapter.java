@@ -20,8 +20,8 @@ import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5MusicMessage;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.QAODefine;
-import com.v5kf.mcss.ui.activity.BaseActivity;
-import com.v5kf.mcss.ui.activity.BaseChatActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
+import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.ImageLoader;
@@ -43,9 +43,9 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 	protected static final String TAG = "MaterialRecyclerAdapter";
 	private LayoutInflater mInflater;
 	private List<V5Message> mRecyclerBeans;
-	private BaseActivity mActivity;
+	private ActivityBase mActivity;
 	
-    public MaterialRecyclerAdapter(BaseActivity activity, List<V5Message> recyclerBeans) {
+    public MaterialRecyclerAdapter(ActivityBase activity, List<V5Message> recyclerBeans) {
         super();
         this.mRecyclerBeans = recyclerBeans;
         this.mActivity = activity;

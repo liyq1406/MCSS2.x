@@ -52,6 +52,15 @@
     		android:layout_height="wrap_content"
     		android:background="@color/info_activity_layout_bg"
     		android:orientation="vertical" >
+    		
+            <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/large_item_divider_height" />
+			
+		    <View
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/base_line_width_s"
+		        android:background="@color/info_activity_item_divider_frame" />
     	
 		    <RelativeLayout
 		        android:id="@+id/layout_head"

@@ -1,16 +1,15 @@
-package com.v5kf.mcss.ui.activity.info;
+package com.v5kf.mcss.ui.fragment.md2x;
 
 import java.io.File;
 
 import org.simple.eventbus.EventBus;
-import org.simple.eventbus.Subscriber;
-import org.simple.eventbus.ThreadMode;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
@@ -27,8 +26,8 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.AppStatus;
 import com.v5kf.mcss.eventbus.EventTag;
-import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
-import com.v5kf.mcss.ui.activity.md2x.CustomLoginActivity;
+import com.v5kf.mcss.ui.activity.MainTabActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.widget.CheckboxDialog;
 import com.v5kf.mcss.ui.widget.CheckboxDialog.CheckboxDialogListener;
@@ -46,12 +45,22 @@ import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.v5kf.mcss.utils.cache.MediaLoader;
 import com.v5kf.mcss.utils.cache.URLCache;
 
-public class SettingMoreActivity extends BaseToolbarActivity implements OnClickListener, OnSwitchChangedListener {
-	private static final String TAG = "SettingMoreActivity";
-	private static final int HDL_LOGOUT_TIMEOUT = 1;
+/**
+ * @author chenhy
+ * @email chenhy@v5kf.com
+ * @version v1.0 2015-7-2 下午11:24:47
+ * @package com.v5kf.mcss.ui.fragment.HistoryVisitorFragment.java
+ * @description
+ *
+ */
+public class TabMoreFragment extends TabBaseFragment implements OnClickListener, OnSwitchChangedListener {
+	
+	private static final String TAG = "TabMoreFragment";
 	private static final int HDL_UPDATE_CACHE = 2;
 	
 	private View view1, view2; // view0, Switch开关所在Layout的两个分割线
+	
+	@SuppressWarnings("unused")
 	private RelativeLayout rl_autoboot, rl_switch_voice, rl_switch_vibrate, 
 		rl_feedback, rl_about, rl_update, rl_clearcache, rl_refresh; //rl_switch_notification_wait
 	private SlideSwitchView  mSwitchAutoBoot, mSwitchAutoLogin, mSwitchNotification,
@@ -63,20 +72,65 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 	
 	private SharePreferenceUtil mSharedUtil;
 	private WorkerSP mWsp;
-	private boolean isForeground;
 	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_md2x_setting_more);
-		
-		isForeground = true;
+    public TabMoreFragment(MainTabActivity activity, int index) {
+		super(activity, index);
+	}
+
+    @Override
+	protected void onCreateViewLazy(Bundle savedInstanceState) {
+		super.onCreateViewLazy(savedInstanceState);
+		setContentView(R.layout.fragment_more);
+
+		Logger.d(TAG, TAG + " 将要创建View " + this);
 		initData();
 		findView();
 		initView();
 		initUmengUpdate();
 	}
 
+	@Override
+	protected void onResumeLazy() {
+		super.onResumeLazy();
+		Logger.d(TAG, TAG + "所在的Activity onResume, onResumeLazy " + this);
+	}
+
+	@Override
+	protected void onFragmentStartLazy() {
+		super.onFragmentStartLazy();
+		Log.d(TAG, TAG + " 显示 " + this);
+//		this.mParentActivity.showToolbar();
+//		this.mParentActivity.hideFab();
+//		this.mParentActivity.setBarColor(UITools.getColor(R.color.main_color));
+//		//
+//		this.mParentActivity.setStatusbarColor(UITools.getColor(R.color.main_color));
+	}
+
+	@Override
+	protected void onFragmentStopLazy() {
+		super.onFragmentStopLazy();
+		Log.d(TAG, TAG + " 掩藏 " + this);
+	}
+
+	@Override
+	protected void onPauseLazy() {
+		super.onPauseLazy();
+		Log.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
+	}
+
+	@Override
+	protected void onDestroyViewLazy() {
+		super.onDestroyViewLazy();
+		Log.d(TAG, TAG + " View将被销毁 " + this);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG, TAG + " 所在的Activity onDestroy " + this);
+	}
+    
+	
 	private void initUmengUpdate() {
 //		UmengUpdateAgent.setUpdateAutoPopup(false);
 		UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
@@ -104,13 +158,6 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 				mUpdateProgress.setVisibility(View.GONE);
 			}
 		});
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		isForeground = false;
-		mHandler.removeMessages(HDL_LOGOUT_TIMEOUT);
 	}
 	
 	private void initData() {
@@ -162,8 +209,8 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 	 */
 	public String getVersion() {
 	    try {
-	        PackageManager manager = this.getPackageManager();
-	        PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+	        PackageManager manager = mParentActivity.getPackageManager();
+	        PackageInfo info = manager.getPackageInfo(mParentActivity.getPackageName(), 0);
 	        String version = info.versionName;
 	        return this.getString(R.string.app_version_name) + version;
 	    } catch (Exception e) {
@@ -173,7 +220,6 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 	}
 
 	private void initView() {
-		initTopBarForLeftBack(R.string.set_set_more);		
 		mVersionTv.setText(getVersion());
 		updateCacheSize();
 		
@@ -232,27 +278,27 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.layout_feedback: // 用户反馈
-			Intent iFb = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, 
+			Intent iFb = IntentUtil.getStartWebViewIntent(mParentActivity, WebViewActivity.class, 
 					Config.URL_FEED_BACK, R.string.app_feedback);
-			gotoActivity(iFb);
+			mParentActivity.gotoActivity(iFb);
 			break;
 			
 		case R.id.layout_about: // 关于
-			Intent iAb = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, 
+			Intent iAb = IntentUtil.getStartWebViewIntent(mParentActivity, WebViewActivity.class, 
 					Config.URL_ABOUT, R.string.app_about);
-			gotoActivity(iAb);
+			mParentActivity.gotoActivity(iAb);
 			break;
 			
 		case R.id.layout_update: // 检查更新
 			mVersionTv.setVisibility(View.GONE);
 			mUpdateProgress.setVisibility(View.VISIBLE);
-			UmengUpdateAgent.forceUpdate(this);
-			MobclickAgent.onEvent(this,"CHECK_UPDATE");
+			UmengUpdateAgent.forceUpdate(mParentActivity);
+			MobclickAgent.onEvent(mParentActivity, "CHECK_UPDATE");
 			
 			break;
 			
 		case R.id.layout_clear_cache: // 清空缓存
-			CheckboxDialog checkDlg = new CheckboxDialog(this);
+			CheckboxDialog checkDlg = new CheckboxDialog(mParentActivity);
 			checkDlg.setCheckMode(CheckboxDialog.MODE_FOUR_BUTTON);
 			checkDlg.setDefaultChecked(new boolean[]{true, true, false, false});
 			int[] titles = new int[]{R.string.check_media_cache, R.string.check_memory_cache, R.string.check_db_cache, R.string.check_login_cache};
@@ -260,7 +306,7 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 			checkDlg.setOnClickListener(new CheckboxDialogListener() {
 				@Override
 				public void onClick(View view, final boolean[] checks) {
-					MobclickAgent.onEvent(SettingMoreActivity.this, "APP_CLEAR_CACHE");
+					MobclickAgent.onEvent(mParentActivity, "APP_CLEAR_CACHE");
 					new Thread(new Runnable() {
 						
 						@Override
@@ -326,7 +372,7 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 			break;
 			
 		case R.id.layout_refresh:
-			showConfirmDialog(
+			mParentActivity.showConfirmDialog(
 				R.string.confirm_refresh, 
 				WarningDialog.MODE_TWO_BUTTON, 
 				new WarningDialogListener() {
@@ -340,9 +386,9 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 							// [eventbus][强制重连]
 							mAppInfo.clearRunTimeInfo();
 							mApplication.setAppStatus(AppStatus.AppStatus_Init);
-							dismissWarningDialog();
+							mParentActivity.dismissWarningDialog();
 							EventBus.getDefault().post(Boolean.valueOf(true), EventTag.ETAG_ON_LINE);
-							MobclickAgent.onEvent(SettingMoreActivity.this, "APP_REFRESH");
+							MobclickAgent.onEvent(mParentActivity, "APP_REFRESH");
 							break;
 						}
 					}
@@ -393,42 +439,10 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 		}
 	}
 
-	/***** event *****/
-	
-	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)
-	private void connectionChange(Boolean isConnect) {
-		if (isConnect) {
-			
-		} else {
-//			finishActivity();
-		}
-	}
-	
-	@Subscriber(tag = EventTag.ETAG_LOGOUT_CHANGE, mode = ThreadMode.MAIN)
-	private void logoutChange(Integer error) {
-		dismissProgressDialog();
-		if (error == 0) {
-			mApplication.getWorkerSp().clearAutoLogin();
-			mApplication.terminate(); // 退出登录
-			gotoActivity(CustomLoginActivity.class);
-		} else {
-//			showWarningDialog(R.string.warning_logout_failed, null);
-			showAlertDialog(R.string.warning_logout_failed);
-		}
-	}
 
 	@Override
-	protected void handleMessage(Message msg) {
+	protected void handleMessage(Message msg, ActivityBase baseActivity) {
 		switch (msg.what) {
-		case HDL_LOGOUT_TIMEOUT:
-			if (isForeground) {
-//				dismissProgressDialog();
-//				showWarningDialog(R.string.warning_logout_failed, null);
-				dismissAlertDialog();
-				showAlertDialog(R.string.warning_logout_failed);
-			}
-			break;
-			
 		case HDL_UPDATE_CACHE:
 			mCacheSizeTv.setText(String.format("%.1fMB", mCacheSize));
 			break;
@@ -437,4 +451,16 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 			break;
 		}
 	}
+	
+/***** event *****/
+	
+//	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)
+//	private void connectionChange(Boolean isConnect) {
+//		if (isConnect) {
+//			
+//		} else {
+////			finishActivity();
+//		}
+//	}
+	
 }
