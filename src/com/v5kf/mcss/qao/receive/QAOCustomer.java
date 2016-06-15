@@ -380,7 +380,7 @@ public class QAOCustomer extends QAOBase {
 		customerRequest.getCustomerMessages(c_id);
 
 		/* [修改]震动&铃声 非通知栏提示 */
-		mApplication.noticeMessage();
+		mApplication.noticeMessage("有客户接入服务");
 	}
 
 	private void parseCstmJoinOut() throws NumberFormatException, JSONException {
@@ -431,7 +431,7 @@ public class QAOCustomer extends QAOBase {
 		customerRequest.getCustomerMessages(c_id);
 		
 		/* [修改]震动&铃声 非通知栏提示 */
-		mApplication.noticeMessage();
+		mApplication.noticeMessage("有客户等待服务");
 //		showNitification(
 //				cstm, 
 //				session.getS_id(), 

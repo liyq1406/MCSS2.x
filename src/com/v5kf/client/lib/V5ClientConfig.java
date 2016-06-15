@@ -40,7 +40,7 @@ public class V5ClientConfig {
 	private static final String DEBUG = Config.DEBUG ? "debug" : "public"; // 是否debug模式：debug/public
 	
 	
-	public static int SOCKET_TIMEOUT = 10000; // 超时时间10s
+	public static int SOCKET_TIMEOUT = 20000; // 超时时间10s
 	/**
 	 * 客户端连接地址格式
 	 */

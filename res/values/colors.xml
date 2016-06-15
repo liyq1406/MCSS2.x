@@ -274,4 +274,8 @@
         <item>@color/md2x_green</item>
     </integer-array>
     
+    <!-- session接入分隔线 -->
+    <color name="pickup_divider_color">#E8E8E8</color>
+    <color name="session_morefunc_divider_color">#CCCCCC</color>
+    
 </resources>

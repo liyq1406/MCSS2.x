@@ -87,10 +87,10 @@ public class QAOMessage extends QAOBase {
 					if (customer.getCstmType() == CustomerType.CustomerType_WaitingAlive) {
 						if (mApplication.getSpUtil().isAllowPushWaitNotify()) {
 							/* [修改]震动&铃声 非通知栏提示 */
-							mApplication.noticeMessage();
+							mApplication.noticeMessage(message.getDefaultContent(mContext));
 						}
 					} else {
-						mApplication.noticeMessage();
+						mApplication.noticeMessage(message.getDefaultContent(mContext));
 					}
 				}
 				break;

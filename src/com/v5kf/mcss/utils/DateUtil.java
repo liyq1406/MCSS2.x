@@ -5,11 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
-
-import com.v5kf.mcss.config.Config;
 
 import android.annotation.SuppressLint;
+
+import com.v5kf.mcss.config.Config;
 
 public class DateUtil {
 	
@@ -17,7 +16,6 @@ public class DateUtil {
 	private static Locale LOCALE_CN = Locale.CHINESE; // 北京时区
 
 	public DateUtil() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**
@@ -77,7 +75,6 @@ public class DateUtil {
 	 * @return
 	 */
 	public static long getCurrentLongTime() {
-		// TODO Auto-generated method stub
 		return (new Date()).getTime();
 	}
 	
@@ -138,9 +135,9 @@ public class DateUtil {
 		boolean isToday = false;
 		String formatTime = "";
 		if (yearT < yearN) { // 往年，显示年，月，日即可
-			formatTime = "yyyy年MM月dd日";
+			formatTime = "yyyy-MM-dd ";
 		} else if (dayOfYear + 1 < todayOfYear) { // 昨天之前
-			formatTime = "MM月dd日";
+			formatTime = "MM-dd ";
 		} else if (dayOfYear + 1 == todayOfYear) { // 昨天
 			formatTime = "昨天";
 		} else { // 今天
@@ -152,20 +149,21 @@ public class DateUtil {
 			return (new SimpleDateFormat(formatTime, LOCALE)).format(target.getTime());
 		}
 		
-		/* 具体时间(凌晨、早上、中午、下午、晚上) */
-		String period = " ";
-		if (hourT < 6) { // 凌晨
-			period += "凌晨";
-		} else if (hourT < 12) { // 早上
-			period += "早上";
-		} else if (hourT < 14) { // 中午
-			period += "中午";
-		} else if (hourT < 18) { // 下午
-			period += "下午";
-		} else { // 晚上
-			period += "晚上";
-		}
-		formatTime += (period + "HH:mm");	
+//		/* 具体时间(凌晨、早上、中午、下午、晚上) */
+//		String period = " ";
+//		if (hourT < 6) { // 凌晨
+//			period += "凌晨";
+//		} else if (hourT < 12) { // 早上
+//			period += "早上";
+//		} else if (hourT < 14) { // 中午
+//			period += "中午";
+//		} else if (hourT < 18) { // 下午
+//			period += "下午";
+//		} else { // 晚上
+//			period += "晚上";
+//		}
+//		formatTime += (period + "HH:mm");	
+		formatTime += ("HH:mm");
 		
 		return (new SimpleDateFormat(formatTime, LOCALE)).format(target.getTime());
 	}
@@ -230,7 +228,6 @@ public class DateUtil {
 		try {
 			date = sdf.parse(dateStr);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return date.getTime();
@@ -262,7 +259,6 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String getDayString(long mCurrentSearchDay) {
-		// TODO Auto-generated method stub
 		long date = mCurrentSearchDay * 1000;
 		String day = getYear(date) + "年" + getMonth(date) + "月" + getDay(date) + "日";		
 		return day;
@@ -276,7 +272,6 @@ public class DateUtil {
 	 * @return
 	 */
 	public static boolean isOnSameMonth(long day1, long day2) {
-		// TODO Auto-generated method stub
 		return getMonth(day1 * 1000) == getMonth(day2 * 1000);
 	}
 
@@ -288,7 +283,6 @@ public class DateUtil {
 	 * @return
 	 */
 	public static boolean isValidMonth(long mCurrentSearchDay) {
-		// TODO Auto-generated method stub
 		if ((mCurrentSearchDay * 1000) > getCurrentLongTime()) {
 			return false;
 		}
@@ -356,7 +350,6 @@ public class DateUtil {
 			}
 			date = format.parse(time);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Calendar cal = Calendar.getInstance();
@@ -394,7 +387,6 @@ public class DateUtil {
 	 * @return
 	 */
 	public static long getYearAndMonth(long date) {
-		// TODO Auto-generated method stub
 		Calendar cal = Calendar.getInstance();
 		cal.clear();
 		cal.setTimeInMillis(date);
@@ -409,7 +401,6 @@ public class DateUtil {
 	 * @return
 	 */
 	public static long getSystemInitTime() {
-		// TODO Auto-generated method stub
 		return getDate(2015, 8, 31);
 	}
 }

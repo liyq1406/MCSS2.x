@@ -74,8 +74,8 @@ import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.LocationBean;
-import com.v5kf.mcss.ui.activity.BaseActivity;
 import com.v5kf.mcss.ui.activity.info.LocationMapActivity;
+import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
@@ -87,7 +87,7 @@ import com.v5kf.mcss.utils.V5VoiceRecord.VoiceRecordListener;
 import com.v5kf.mcss.utils.VoiceErrorCode;
 
 
-public class ClientChatActivity extends BaseActivity implements V5MessageListener, 
+public class ClientChatActivity extends BaseToolbarActivity implements V5MessageListener, 
 		OnRecyclerClickListener, OnQuesClickListener, OnRefreshListener, VoiceRecordListener {
 
     private static final String TAG = "ClientChatActivity";
@@ -155,7 +155,7 @@ public class ClientChatActivity extends BaseActivity implements V5MessageListene
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_v5_client_chat);
+        setContentView(R.layout.activity_md2x_v5client_chat);
         
         mHandler = new BaseHandler(this);
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -207,25 +207,6 @@ public class ClientChatActivity extends BaseActivity implements V5MessageListene
 	}
 
 	private void initView() {
-//		initTopBarForLeftBackAndRightImage(
-//				R.string.service_online, 
-//				R.drawable.v5_action_bar_quit, 
-//				new HeaderLayout.onRightImageButtonClickListener() {
-//					
-//					@Override
-//					public void onClick(View arg0) {
-//						showConfirmDialog(R.string.close_consult, WarningDialog.MODE_TWO_BUTTON, new WarningDialogListener() {					
-//							@Override
-//							public void onClick(View view) {
-//								if (view.getId() == R.id.btn_dialog_warning_right) {
-//									//V5ClientAgent.getInstance(). stop(getApplicationContext()); // 关闭消息服务
-//									dismissWarningDialog();
-//									finishActivity();
-//								}
-//							}
-//						});
-//					}
-//				});
 		initTopBarForLeftBack(R.string.v5_on_connection);
 		
 		initRecyclerView();
@@ -652,7 +633,7 @@ public class ClientChatActivity extends BaseActivity implements V5MessageListene
     @Override
 	public void onConnect() {
     	Logger.i(TAG, "[onConnect]");
-    	mHeaderLayout.setDefaultTitle(R.string.service_online);
+    	getToolbar().setTitle(R.string.service_online);
     	if (!isConnected) { // 仅首次连接成功执行下列操作
         	mOffset = 0;
     		loadMessages(); // 获取会话消息
@@ -687,7 +668,7 @@ public class ClientChatActivity extends BaseActivity implements V5MessageListene
 			case 2: // 普通消息-来自机器人
 				if (!message.getDefaultContent(this).isEmpty()) {
 					addMessage(message);
-					CustomApplication.getInstance().noticeMessage();
+					CustomApplication.getInstance().noticeMessage(message.getDefaultContent(mApplication));
 				}
 			break;
 			
@@ -723,7 +704,7 @@ public class ClientChatActivity extends BaseActivity implements V5MessageListene
 		if (!V5ClientAgent.isConnected()) {
 			switch (error.getStatus()) {
 			case ExceptionNoNetwork: // 无网络连接，需要检查网络
-				mHeaderLayout.setDefaultTitle(R.string.v5_connect_closed);
+				getToolbar().setTitle(R.string.v5_connect_closed);
 				if (isForeground > 0) {
 					showToast(R.string.v5_connect_no_network);
 				}
@@ -731,7 +712,7 @@ public class ClientChatActivity extends BaseActivity implements V5MessageListene
 			case ExceptionConnectionError: // 连接异常出错，会自动重连
 				break;
 			case ExceptionNotConnected: // 未连接（发送消息时的反馈）
-				mHeaderLayout.setDefaultTitle(R.string.v5_connect_closed);
+				getToolbar().setTitle(R.string.v5_connect_closed);
 				if (isForeground > 0) {
 					showToast(R.string.v5_connect_timeout);
 				}
@@ -742,7 +723,7 @@ public class ClientChatActivity extends BaseActivity implements V5MessageListene
 				}
 				break;
 			case ExceptionWSAuthFailed: {
-				mHeaderLayout.setDefaultTitle(R.string.v5_connect_closed);
+				getToolbar().setTitle(R.string.v5_connect_closed);
 				if (isForeground > 0) {
 					final WarningDialog dialog = new WarningDialog(ClientChatActivity.this);
 					dialog.setDialogMode(WarningDialog.MODE_TWO_BUTTON);
@@ -1141,7 +1122,6 @@ public class ClientChatActivity extends BaseActivity implements V5MessageListene
 	}
 	
 	// TODO 语音
-	
 	
 	/**
 	 * 长按说话

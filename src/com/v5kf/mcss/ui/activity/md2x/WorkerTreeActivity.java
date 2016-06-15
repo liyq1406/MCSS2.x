@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,8 @@ import org.simple.eventbus.ThreadMode;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.v5kf.mcss.R;
@@ -24,12 +26,10 @@ import com.v5kf.mcss.ui.adapter.tree.Node;
 import com.v5kf.mcss.ui.adapter.tree.SimpleTreeAdapter;
 import com.v5kf.mcss.ui.adapter.tree.TreeListViewAdapter;
 import com.v5kf.mcss.ui.adapter.tree.TreeListViewAdapter.OnTreeNodeClickListener;
-import com.v5kf.mcss.ui.view.HeaderLayout.onLeftImageButtonClickListener;
-import com.v5kf.mcss.ui.view.HeaderLayout.onRightImageButtonClickListener;
 import com.v5kf.mcss.ui.widget.PinnedSectionListView;
 import com.v5kf.mcss.utils.Logger;
 
-public class WorkerTreeActivity extends BaseActivity {
+public class WorkerTreeActivity extends BaseToolbarActivity {
 	
 	private List<WorkerArch> mDatas;
 	private PinnedSectionListView mListView;
@@ -46,7 +46,7 @@ public class WorkerTreeActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_workertree);
+		setContentView(R.layout.activity_md2x_workertree);
 		
 		handleIntent();
 		initData();
@@ -58,7 +58,37 @@ public class WorkerTreeActivity extends BaseActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 	}
-
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (Config.LIST_MODE_SWITCH == list_mode) {
+			MenuItem itemAdd = menu.add(0, Menu.FIRST, Menu.NONE, R.string.submit);
+			itemAdd.setIcon(R.drawable.v5_action_bar_ok);
+			itemAdd.setShortcut('0', 's');
+			itemAdd.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		}
+		
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST:
+			if (list_mode == Config.LIST_MODE_SWITCH &&
+					w_id == null && g_id == 0) {
+				ShowToast(R.string.on_switch_cstm_empty);
+			} else {
+				doSwitchWorker();
+			}
+			break;
+		default:
+			break;
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
+	
 	private void handleIntent() {
 		Intent intentNotify = getIntent();
 		int type = intentNotify.getIntExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_NULL);
@@ -111,27 +141,28 @@ public class WorkerTreeActivity extends BaseActivity {
 		if (Config.LIST_MODE_NORMAL == list_mode) {
 			initTopBarForLeftBack(R.string.set_arch_workers);
 		} else {
-			initTopBarForLeftImageAndRightImage(
-					R.string.title_switch_activity, 
-					R.drawable.v5_action_bar_cancel, 
-					R.drawable.v5_action_bar_ok, 
-					new onLeftImageButtonClickListener() {			
-						@Override
-						public void onClick(View v) {
-							finishActivity();
-						}
-					}, 
-					new onRightImageButtonClickListener() {						
-						@Override
-						public void onClick(View arg0) {
-							if (list_mode == Config.LIST_MODE_SWITCH &&
-									w_id == null && g_id == 0) {
-								ShowToast(R.string.on_switch_cstm_empty);
-							} else {
-								doSwitchWorker();
-							}
-						}
-					});
+			initTopBarForLeftBack(R.string.title_switch_activity);
+//			initTopBarForLeftImageAndRightImage(
+//					R.string.title_switch_activity, 
+//					R.drawable.v5_action_bar_cancel, 
+//					R.drawable.v5_action_bar_ok, 
+//					new onLeftImageButtonClickListener() {			
+//						@Override
+//						public void onClick(View v) {
+//							finishActivity();
+//						}
+//					}, 
+//					new onRightImageButtonClickListener() {						
+//						@Override
+//						public void onClick(View arg0) {
+//							if (list_mode == Config.LIST_MODE_SWITCH &&
+//									w_id == null && g_id == 0) {
+//								ShowToast(R.string.on_switch_cstm_empty);
+//							} else {
+//								doSwitchWorker();
+//							}
+//						}
+//					});
 		}
 		
 		checkListEmpty();

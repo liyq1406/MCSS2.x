@@ -36,7 +36,6 @@ import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.AppInfoKeeper;
-import com.v5kf.mcss.ui.view.SystemBarTintManager;
 import com.v5kf.mcss.ui.widget.AlertDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
@@ -125,7 +124,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 			//tintManager.setStatusBarTintResource(R.color.main_color);
 		}
 		
-		// TODO 取消滑动返回
+		// 取消滑动返回
         getSwipeBackLayout().addSwipeListener(new SwipeListener() {
 			@Override
 			public void onScrollStateChange(int state, float scrollPercent) {

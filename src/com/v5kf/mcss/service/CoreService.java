@@ -650,6 +650,10 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 
 	@Override
 	public void onError(Exception error) {
+		if (mClient == null) {
+			Logger.e(TAG, ">>>onError<<< mClient == null ");
+			return;
+		}
 		Logger.e(TAG, ">>>onError<<<[" + mClient.getStatusCode() + "]: " + error.getMessage());
 		connecting = false;
 		offline();

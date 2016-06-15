@@ -6,7 +6,6 @@ import org.json.JSONException;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.Gravity;
@@ -28,9 +27,9 @@ import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.entity.SessionBean;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
-import com.v5kf.mcss.ui.activity.WorkerTreeActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.ChattingListActivity;
+import com.v5kf.mcss.ui.activity.md2x.WorkerTreeActivity;
 import com.v5kf.mcss.ui.widget.BadgeView;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
@@ -60,7 +59,7 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_session, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_md2x_serving_session, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
@@ -82,15 +81,17 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
     	}
     	Logger.w(TAG, "托管状态：" + session.isInTrust());
     	if (session.isInTrust()) {
-    		Drawable drawable = UITools.getDrawable(mActivity, R.drawable.v5_popmenu_in_trust);
-    		drawable.setBounds(0, 0, holder.mTitle.getHeight(), holder.mTitle.getHeight());
-    		holder.mTitle.setCompoundDrawables(			
-    				drawable, 
-    				null, 
-    				null, 
-    				null);
+    		holder.mTrustIv.setVisibility(View.VISIBLE);
+//    		Drawable drawable = UITools.getDrawable(mActivity, R.drawable.v5_popmenu_in_trust);
+//    		drawable.setBounds(0, 0, holder.mTitle.getHeight(), holder.mTitle.getHeight());
+//    		holder.mTitle.setCompoundDrawables(			
+//    				drawable, 
+//    				null, 
+//    				null, 
+//    				null);
     	} else {
-    		holder.mTitle.setCompoundDrawables(null, null, null, null);
+    		holder.mTrustIv.setVisibility(View.GONE);
+//    		holder.mTitle.setCompoundDrawables(null, null, null, null);
     	}
     	
     	// 最新消息未获取到
@@ -145,6 +146,8 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
     	} else {
     		holder.mBadgeView.setVisibility(View.INVISIBLE);
     	}
+    	
+    	
     }
 
     @Override
@@ -165,6 +168,10 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
         
         public View mImgLayout;
         public BadgeView mBadgeView;
+        
+        public ImageView mTrustIv;
+        public View mBottomFuncLayout;
+        public boolean isBottomShow;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -175,9 +182,16 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
             mIfaceTv = (TextView) itemView.findViewById(R.id.id_item_iface_tv);
             mDate = (TextView) itemView.findViewById(R.id.id_item_date);
             mImgLayout = itemView.findViewById(R.id.id_img_layout);
+            mBottomFuncLayout = itemView.findViewById(R.id.layout_bottom_func);
+            mTrustIv = (ImageView)itemView.findViewById(R.id.id_trust_robot);
             mBadgeView = new BadgeView(mActivity);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+            
+            itemView.findViewById(R.id.layout_more).setOnClickListener(this);
+            itemView.findViewById(R.id.id_trust_btn).setOnClickListener(this);
+            itemView.findViewById(R.id.id_switch_btn).setOnClickListener(this);
+            itemView.findViewById(R.id.id_close_btn).setOnClickListener(this);
         }
 
 		@Override
@@ -276,16 +290,38 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
 				Logger.e(TAG, "ViewHolder has null SessionBean");
 				return;
 			}
-			mRecyclerBean.getSession().clearUnreadMessageNum();
-			
-			/* 进入对话界面 */
-			Intent intent = IntentUtil.getStartActivityIntent(
-					mActivity, 
-					ChattingListActivity.class,
-					mRecyclerBean.getC_id(),
-					mRecyclerBean.getSession().getS_id());
-			mActivity.startActivityForResult(intent, Config.REQUEST_CODE_SERVING_SESSION_FRAGMENT);
-			mActivity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+			switch (v.getId()) {
+			case R.id.layout_more: // 展开
+				if (mBottomFuncLayout.getVisibility() == View.GONE) {
+					mBottomFuncLayout.setVisibility(View.VISIBLE);
+				} else if (mBottomFuncLayout.getVisibility() == View.VISIBLE) {
+					mBottomFuncLayout.setVisibility(View.GONE);
+				}
+				break;
+			case R.id.layout_chat_serving_session: // 点击整项
+				mRecyclerBean.getSession().clearUnreadMessageNum();
+				
+				/* 进入对话界面 */
+				Intent intent = IntentUtil.getStartActivityIntent(
+						mActivity, 
+						ChattingListActivity.class,
+						mRecyclerBean.getC_id(),
+						mRecyclerBean.getSession().getS_id());
+				mActivity.startActivityForResult(intent, Config.REQUEST_CODE_SERVING_SESSION_FRAGMENT);
+				mActivity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				break;
+			case R.id.id_trust_btn: // 托管
+				
+				break;
+			case R.id.id_switch_btn: // 转接
+				
+				break;
+			case R.id.id_close_btn: // 关闭
+				
+				break;
+			default:
+				break;
+			}
 		}
 
 		public void setRecyclerBean(CustomerBean bean) {

@@ -137,7 +137,7 @@ public class Config {
 	public static String SITE_ID = "";
 	
 	/* 连接超时时间 */
-	public static final int WS_TIME_OUT = 10000; /* 10s */
+	public static final int WS_TIME_OUT = 20000; /* 10s */
 	public static final long SESSION_TIME_DETA = 300; // 显示日期的时间间隔(单位:秒)
 	
 	/* Websocket 连接参数 */

@@ -204,7 +204,7 @@
     <string name="iface_qq">QQ</string>
     <string name="iface_sina">新浪</string>
     <string name="iface_alipay">支付宝</string>
-    <string name="iface_app">APP</string>
+    <string name="iface_app">开放平台</string>
     
     <!-- Segment分页段标题 -->
     <string name="seg_title_worker">座席</string>

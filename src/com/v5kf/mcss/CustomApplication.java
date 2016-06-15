@@ -16,8 +16,11 @@ import org.simple.eventbus.EventBus;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Process;
 import android.support.v4.app.NotificationCompat;
 
@@ -131,13 +134,11 @@ public class CustomApplication extends LitePalApplication {
 //			
 //			@Override
 //			public void onSuccess(Object arg0, int arg1) {
-//				// TODO Auto-generated method stub
 //				Logger.d(TAG, "[XGPush] 信鸽注销成功");
 //			}
 //			
 //			@Override
 //			public void onFail(Object arg0, int arg1, String arg2) {
-//				// TODO Auto-generated method stub
 //				Logger.d(TAG, "[XGPush] 信鸽注销失败");
 //			}
 //		});
@@ -617,27 +618,102 @@ public class CustomApplication extends LitePalApplication {
 	 * @param noticeMessage CustomApplication 
 	 * @return void
 	 */
-	public void noticeMessage() {
-		Logger.d("noticeMessage", "--- noticeMessage ---");
+//	public void noticeMessage() {
+//		// TODO
+//		Logger.d("noticeMessage", "--- noticeMessage ---");
+//		// 此Builder为android.support.v4.app.NotificationCompat.Builder中的，下同。
+//		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+//        
+//		// 设置铃声、震动、LED灯提醒-默认 
+//		int defaults = Notification.DEFAULT_LIGHTS;
+//		     
+//        if (getSpUtil().isAllowVibrate()) {
+//        	defaults |= (Notification.DEFAULT_VIBRATE);
+//        }
+//        if (getSpUtil().isAllowVoice()) {
+//        	defaults |= (Notification.DEFAULT_SOUND);
+//        }
+//        mBuilder.setDefaults(defaults);
+//        mBuilder.setSmallIcon(R.drawable.ic_launcher);
+////        mBuilder.setLargeIcon();
+//        
+//        Notification notification = mBuilder.build();
+//        
+//        Logger.d("notifyMessage", "notifyMessage send <<<");
+//        try {
+//	        // 显示通知，id必须不重复，否则新的通知会覆盖旧的通知（利用这一特性，可以对通知进行更新）
+//	        getNotificationManager().notify(0, notification);
+//        } catch (Exception e) {
+//        	e.printStackTrace();
+//        }
+//        //clearNotification(0);
+//	}
+	
+	public void noticeMessage(String text) {
+		try {
+	        // 显示通知，id必须不重复，否则新的通知会覆盖旧的通知（利用这一特性，可以对通知进行更新）
+	        getNotificationManager().notify(0, getNotification(text));
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+	}
+	
+	protected Notification getNotification(String text) {
 		// 此Builder为android.support.v4.app.NotificationCompat.Builder中的，下同。
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         
-		 // 设置铃声、震动、LED灯提醒-默认 
-		int defaults = Notification.DEFAULT_LIGHTS;
-		     
-        if (getSpUtil().isAllowVibrate()) {
-        	defaults |= (Notification.DEFAULT_VIBRATE);
-        }
-        if (getSpUtil().isAllowVoice()) {
-        	defaults |= (Notification.DEFAULT_SOUND);
-        }
-        mBuilder.setDefaults(defaults);
-        mBuilder.setSmallIcon(R.drawable.ic_launcher);
+		// 系统收到通知时，通知栏上面滚动显示的文字。
+		mBuilder.setTicker(text);
+		
+		Intent appIntent = new Intent(Intent.ACTION_MAIN);
+		appIntent.setAction(Intent.ACTION_MAIN);
+		appIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		appIntent.setComponent(new ComponentName(this.getPackageName(), 
+				"com.v5kf.mcss.ui.activity.MainTabActivity"));
+		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| 
+		Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);//关键的一步，设置启动模式
+		// 点击通知之后需要跳转的页面
+        PendingIntent pIntent = PendingIntent.getActivity(
+        		this, 
+        		0, 
+        		appIntent, 
+        		PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pIntent);
+        
+        // 通知标题
+        String notifTitle = getContext().getString(R.string.app_name);
+        mBuilder.setContentTitle(notifTitle);
+        // 通知内容
+        mBuilder.setContentText(text);
+ 
+        // 显示在通知栏上的小图标
+        mBuilder.setSmallIcon(getApplicationInfo().icon);
+        
+        // 设置大图标，即通知条上左侧的图片（如果只设置了小图标，则此处会显示小图标）
+        mBuilder.setLargeIcon(
+    			BitmapFactory.decodeResource(getResources(),
+    					getApplicationInfo().icon));
+ 
+        // 设置为可清除模式
+        mBuilder.setOngoing(false);
+        
+        // 点击自动消失 
+        mBuilder.setAutoCancel(true);
+                
+//        // 设置铃声、震动、LED灯提醒-默认 
+//        mBuilder.setDefaults(Notification.DEFAULT_ALL);
+        // 设置铃声、震动、LED灯提醒-默认
+ 		int defaults = Notification.DEFAULT_LIGHTS;
+ 		     
+         if (getSpUtil().isAllowVibrate()) {
+         	defaults |= (Notification.DEFAULT_VIBRATE);
+         }
+         if (getSpUtil().isAllowVoice()) {
+         	defaults |= (Notification.DEFAULT_SOUND);
+         }
+         mBuilder.setDefaults(defaults);
         
         Notification notification = mBuilder.build();
-        
-        Logger.d("notifyMessage", "notifyMessage send <<<");
-        // 显示通知，id必须不重复，否则新的通知会覆盖旧的通知（利用这一特性，可以对通知进行更新）
-        getNotificationManager().notify(0, notification);
+        return notification;
 	}
 }

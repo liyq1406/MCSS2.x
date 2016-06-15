@@ -160,6 +160,18 @@ public class MainTabActivity extends BaseToolbarActivity {
 	protected void onStop() {
 		super.onStop();
 	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		Logger.i(TAG, "[onNewIntent] intent:" + intent);
+		if (intent != null && mNavigationView != null && indicatorViewPager != null) {
+			Logger.i(TAG, "[onNewIntent] goto sessionPage");
+			mNavigationView.setCheckedItem(R.id.drawer_session);
+			indicatorViewPager.setCurrentItem(0, false);
+		}
+	}
 
 	private void findView() {
 //		mContent = findViewById(R.id.id_content);
@@ -260,6 +272,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 			adapter.setDropDownViewResource(R.layout.md2x_simple_spinner_dropdown_item);
 //			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			mStatusSpinner.setAdapter(adapter);
+			updateStatusSpinner(QAODefine.STATUS_OFFLINE);
 			
 			mAvatar.setOnClickListener(new OnClickListener() {
 				
@@ -419,6 +432,12 @@ public class MainTabActivity extends BaseToolbarActivity {
 		int servingCount = mAppInfo.getServingCustomerCount();
 		Logger.i(TAG, "[updateBadge] servingCount=" + servingCount + " waitingCount=" + waitingCount);
 		getSupportActionBar().invalidateOptionsMenu();
+		
+		if (servingCount > 0) {
+			getToolbar().setTitle(getString(R.string.conversation) + "(" + servingCount + ")");
+		} else {
+			getToolbar().setTitle(R.string.conversation);
+		}
 		
 		// 更新对话badge
 		TextView session = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_session).getActionView().findViewById(R.id.badge_msg);
@@ -842,6 +861,15 @@ public class MainTabActivity extends BaseToolbarActivity {
 	protected void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (Config.REQUEST_CODE_SERVING_SESSION_FRAGMENT == requestCode) {
+			((V5TabAdapter)indicatorViewPager.getAdapter()).getFragmentForPage(0).onActivityResult(requestCode, resultCode, data);
+		}
 	}
 	
 	/**

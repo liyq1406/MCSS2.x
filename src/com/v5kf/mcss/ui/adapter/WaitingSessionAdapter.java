@@ -58,7 +58,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_session, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_md2x_waiting_session, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
@@ -161,6 +161,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
             mBadgeView = new BadgeView(mContext);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+            itemView.findViewById(R.id.layout_pickup).setOnClickListener(this);
         }
 
 		@Override
@@ -225,21 +226,37 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
 		@Override
 		public void onClick(View v) {
 			Logger.d(TAG, "item onCLick View.id=" + v.getId());
-			CustomerBean recyclerBean = mRecycleBeans.get(mPosition);
+			CustomerBean recyclerBean = mRecycleBeans.get(mPosition);			
 			if (null == recyclerBean) {
-				Logger.e(TAG, "ViewHolder has null SessionBean");
+				Logger.e(TAG, "ViewHolder has null SessionRecyclerBean");
 				return;
 			}
-			recyclerBean.getSession().clearUnreadMessageNum();
-			
-			((ActivityBase)mContext).startActivityForResult(
-					IntentUtil.getStartActivityIntent(
-							mContext, 
-							ChatMessagesActivity.class,
-							recyclerBean.getC_id(), 
-							recyclerBean.getSession().getS_id()), 
-					Config.REQUEST_CODE_WAITING_SESSION_FRAGMENT);
-			((ActivityBase)mContext).overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+			switch (v.getId()) {
+			case R.id.layout_pickup:
+				CustomerRequest creq = null;
+				try {
+					creq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, mContext);
+					creq.pickCustomer(recyclerBean.getC_id());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				break;
+			case R.id.layout_chat_waiting_session:
+				recyclerBean.getSession().clearUnreadMessageNum();
+				
+				((ActivityBase)mContext).startActivityForResult(
+						IntentUtil.getStartActivityIntent(
+								mContext, 
+								ChatMessagesActivity.class,
+								recyclerBean.getC_id(), 
+								recyclerBean.getSession().getS_id()), 
+						Config.REQUEST_CODE_WAITING_SESSION_FRAGMENT);
+				((ActivityBase)mContext).overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				break;
+			default:
+				
+				break;
+			}
 		}
 
 		public void setPosition(int mPosition) {

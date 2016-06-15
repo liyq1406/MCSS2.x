@@ -36,7 +36,7 @@
 	    <item name="android:windowIsTranslucent">true</item>
 	</style>
     <style name="AppTheme.Normal">
-	    <item name="android:windowIsTranslucent">false</item>
+	    <item name="android:windowIsTranslucent">true</item>
 	</style>
 	<style name="AppTheme.Fullscreen">
 	    <item name="android:windowIsTranslucent">true</item>
@@ -207,6 +207,7 @@
     
     <style name="Smile.TextView._Gray.Iface">
         <item name="android:textSize">12sp</item>
+        <item name="android:singleLine">true</item>
     </style>
     
     <style name="Smile.TextView._White.Iface">

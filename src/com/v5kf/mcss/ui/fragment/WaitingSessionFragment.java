@@ -93,7 +93,7 @@ public class WaitingSessionFragment extends BaseFragment implements OnRefreshLis
             return mView;
         }
     	Logger.d(TAG, "onCreateView");    	
-    	mView = inflater.inflate(R.layout.fragment_waiting_session, container, false);
+    	mView = inflater.inflate(R.layout.fragment_md2x_waiting_session, container, false);
     	
     	return mView;
     }

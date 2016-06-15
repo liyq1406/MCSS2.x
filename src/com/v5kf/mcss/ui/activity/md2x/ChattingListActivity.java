@@ -70,7 +70,6 @@ import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.MessageSendHelper;
-import com.v5kf.mcss.ui.activity.WorkerTreeActivity;
 import com.v5kf.mcss.ui.activity.info.LocationMapActivity;
 import com.v5kf.mcss.ui.activity.info.MaterialResActivity;
 import com.v5kf.mcss.ui.activity.info.RobotChatActivity;
@@ -202,6 +201,9 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
     protected void onStop() {
     	super.onStop();
     	mKeyBar.setEditableState(false);
+    	
+    	// 清空未读
+    	mCustomer.getSession().clearUnreadMessageNum();
     }
     
     @Override

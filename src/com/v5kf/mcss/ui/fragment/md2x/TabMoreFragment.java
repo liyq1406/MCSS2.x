@@ -22,6 +22,7 @@ import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
 import com.umeng.update.UpdateStatus;
 import com.v5kf.client.lib.DBHelper;
+import com.v5kf.client.ui.ClientChatActivity;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.AppStatus;
@@ -29,6 +30,7 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
+import com.v5kf.mcss.ui.activity.md2x.WorkerTreeActivity;
 import com.v5kf.mcss.ui.widget.CheckboxDialog;
 import com.v5kf.mcss.ui.widget.CheckboxDialog.CheckboxDialogListener;
 import com.v5kf.mcss.ui.widget.SlideSwitchView;
@@ -62,7 +64,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	
 	@SuppressWarnings("unused")
 	private RelativeLayout rl_autoboot, rl_switch_voice, rl_switch_vibrate, 
-		rl_feedback, rl_about, rl_update, rl_clearcache, rl_refresh; //rl_switch_notification_wait
+		rl_feedback, rl_about, rl_update, rl_clearcache, rl_refresh, rl_service, rl_archworker; //rl_switch_notification_wait
 	private SlideSwitchView  mSwitchAutoBoot, mSwitchAutoLogin, mSwitchNotification,
 		mSwitchVoice, mSwitchVibrate; // mSwitchWaitNotification
 	private TextView mVersionTv;
@@ -80,7 +82,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
     @Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
-		setContentView(R.layout.fragment_more);
+		setContentView(R.layout.fragment_md2x_more);
 
 		Logger.d(TAG, TAG + " 将要创建View " + this);
 		initData();
@@ -174,6 +176,8 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		rl_update = (RelativeLayout) findViewById(R.id.layout_update);
 		rl_clearcache = (RelativeLayout) findViewById(R.id.layout_clear_cache);
 		rl_refresh = (RelativeLayout) findViewById(R.id.layout_refresh);
+		rl_service = (RelativeLayout) findViewById(R.id.layout_service);
+		rl_archworker = (RelativeLayout) findViewById(R.id.layout_archworker);
 		mVersionTv = (TextView) findViewById(R.id.id_update_tv);
 		mCacheSizeTv = (TextView) findViewById(R.id.id_cache_size_tv);
 		mUpdateProgress = (ProgressBar) findViewById(R.id.id_update_progress);
@@ -197,6 +201,8 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		rl_update.setOnClickListener(this);
 		rl_clearcache.setOnClickListener(this);
 		rl_refresh.setOnClickListener(this);
+		rl_service.setOnClickListener(this);
+		rl_archworker.setOnClickListener(this);
 		
 //		view0 = (View) findViewById(R.id.view0);
 		view1 = (View) findViewById(R.id.view1);
@@ -277,6 +283,12 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.layout_service: // 在线咨询
+			mParentActivity.gotoActivity(ClientChatActivity.class);
+			break;
+		case R.id.layout_archworker: // 坐席架构
+			mParentActivity.gotoActivity(WorkerTreeActivity.class);
+			break;
 		case R.id.layout_feedback: // 用户反馈
 			Intent iFb = IntentUtil.getStartWebViewIntent(mParentActivity, WebViewActivity.class, 
 					Config.URL_FEED_BACK, R.string.app_feedback);

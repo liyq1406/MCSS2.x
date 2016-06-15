@@ -45,7 +45,7 @@
     <dimen name="bottom_tab_bar_text_size">11.0sp</dimen>
     
     <!-- Chat会话列表 -->
-    <dimen name="chat_list_item_height">66dip</dimen>
+    <dimen name="chat_list_item_height">70dip</dimen>
     <dimen name="chat_list_left_img_layout_height">60dip</dimen>
     <dimen name="chat_list_item_left_layout_height">50dip</dimen>
     <dimen name="chat_list_item_horizontal_padding">8dip</dimen>
@@ -54,7 +54,7 @@
     <dimen name="chat_list_top_layout_horizontal_padding">4dip</dimen>
     <dimen name="chat_list_content_margin_right">40dip</dimen>
     <dimen name="session_list_unread_num_text_size">10sp</dimen>
-    <dimen name="chat_list_iface_img_width">15dip</dimen>
+    <dimen name="chat_list_iface_img_width">18dip</dimen>
 
     <!-- Chat聊天页面 -->
     <dimen name="chat_list_vertical_padding">7dip</dimen>

@@ -46,7 +46,7 @@ import com.v5kf.mcss.utils.UITools;
  */
 public class TabServingSessionFragment extends TabBaseFragment implements OnRefreshListener {
 	
-	private static final String TAG = "ServingSessionFragment";
+	private static final String TAG = "TabServingSessionFragment";
 	private List<CustomerBean> mRecycleBeans;
 	
 	private RecyclerView mRecycleView;
@@ -62,7 +62,7 @@ public class TabServingSessionFragment extends TabBaseFragment implements OnRefr
     @Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
-		setContentView(R.layout.fragment_serving_session);
+		setContentView(R.layout.fragment_md2x_serving_session);
 
 		Logger.d(TAG, TAG + " 将要创建View " + this);
 		initView();
@@ -73,6 +73,7 @@ public class TabServingSessionFragment extends TabBaseFragment implements OnRefr
 	@Override
 	protected void onResumeLazy() {
 		super.onResumeLazy();
+		resetRecyclerList();
 		Logger.d(TAG, TAG + "所在的Activity onResume, onResumeLazy " + this);
 	}
 
@@ -257,9 +258,7 @@ public class TabServingSessionFragment extends TabBaseFragment implements OnRefr
 			Logger.w(TAG, "Activity result with no Intent data");
 			return;
 		}
-		if (requestCode == Config.REQUEST_CODE_SERVING_SESSION_FRAGMENT || 
-				requestCode == Config.REQUEST_CODE_WAITING_SESSION_FRAGMENT) {
-//			String s_id = data.getStringExtra(Config.EXTRA_KEY_S_ID);
+		if (requestCode == Config.REQUEST_CODE_SERVING_SESSION_FRAGMENT) {
 			String c_id = data.getStringExtra(Config.EXTRA_KEY_C_ID);
 			if (mRecycleAdapter == null) {
 				Logger.e(TAG, "[onActivityResult] mRecycleAdapter is null, activity not create");

@@ -94,7 +94,7 @@ public class ServingSessionFragment extends BaseFragment implements OnRefreshLis
             return mView;
         }
     	Logger.d(TAG, "onCreateView");    	
-    	mView = inflater.inflate(R.layout.fragment_serving_session, container, false);
+    	mView = inflater.inflate(R.layout.fragment_md2x_serving_session, container, false);
     	
     	return mView;
     }

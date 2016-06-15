@@ -20,7 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.v5kf.client.lib.websocket.WebSocketClient;
 import com.v5kf.mcss.R;
+import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.CustomerBean;
@@ -208,6 +210,15 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == Config.REQUEST_CODE_WAITING_SESSION_FRAGMENT
+				&& resultCode == Config.RESULT_CODE_PICKUP_CSTM) {
+			finishActivity();
+		}
+	}
 
 	@Override
 	public void onRefresh() {
@@ -236,7 +247,7 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 //			}
 //		}
 //    }
-
+	
 	@Subscriber(tag = EventTag.ETAG_WAITING_CSTM_CHANGE, mode = ThreadMode.MAIN)
 	private void waitingCustomerChange(AppInfoKeeper appinfo) {
 		Logger.d(TAG + "-eventbus", "waitingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
@@ -249,5 +260,16 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)
 	private void connectionChange(Boolean isConnect) {
 		resetRecyclerList();
+		if (isConnect) {
+			
+		} else {
+			finishActivity();
+		}
+	}
+	
+	@Subscriber(tag = EventTag.ETAG_CONNECTION_START, mode = ThreadMode.MAIN)
+	private void onConnectionStart(WebSocketClient client) {
+		Logger.d(TAG + "-eventbus", "onConnectionStart -> ETAG_CONNECTION_START");
+		showProgress();
 	}
 }

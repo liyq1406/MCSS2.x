@@ -44,7 +44,6 @@ import com.v5kf.mcss.ui.activity.info.LocationMapActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.ChatMessagesActivity;
 import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
-import com.v5kf.mcss.ui.adapter.OnChatRecyclerAdapter.ChatItemViewHolder;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
@@ -377,7 +376,7 @@ public class ChattingListAdapter extends BaseAdapter {
 					((V5VoiceMessage)msg).setFilePath(media.getLocalPath());
 					((V5VoiceMessage)msg).setDuration(media.getDuration());
 					Logger.d(TAG, "list load Voice onSuccess ----- duration:" + voiceMessage.getDuration());
-					((ChatItemViewHolder)obj).mVoiceSecondTv.setText(String.format("%.1f″", voiceMessage.getDuration()/1000.0f));
+					((ViewHolder)obj).mVoiceSecondTv.setText(String.format("%.1f″", voiceMessage.getDuration()/1000.0f));
 				}
 				
 				@Override
@@ -464,7 +463,7 @@ public class ChattingListAdapter extends BaseAdapter {
 	
 	class ViewHolder implements OnClickListener, OnLongClickListener{
 
-    	private static final String TAG = "OnChatRecyclerAdapter.ChatItemViewHolder";
+    	private static final String TAG = "OnChatRecyclerAdapter.ViewHolder";
     	private ChatRecyclerBean mChatBean;
     	private int mPosition;
     	private int mViewType;
@@ -765,7 +764,7 @@ public class ChattingListAdapter extends BaseAdapter {
 		
 		/**
 		 * 长按弹出选项窗口，不同类型消息选项有区别
-		 * @param onToMsgLongClick ChatItemViewHolder 
+		 * @param onToMsgLongClick ViewHolder 
 		 * @return void
 		 */
 		private void onMsgLongClick() {
@@ -875,7 +874,7 @@ public class ChattingListAdapter extends BaseAdapter {
 		
 		/**
 		 * 发送给机器人
-		 * @param sendMessageToRobot ChatItemViewHolder 
+		 * @param sendMessageToRobot ViewHolder 
 		 * @return void
 		 */
 		protected void sendMessageToRobot(ChatRecyclerBean chatBean) {

@@ -247,11 +247,83 @@
 		        android:layout_height="@dimen/base_line_width_s"
 		        android:background="@color/info_activity_item_divider_frame" />
 		    
-	        <RelativeLayout
+			<RelativeLayout
+		        android:id="@+id/layout_service"
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/info_item_height_single"
+		        android:background="@drawable/btn_selector" >			
+		        
+		        <TextView
+		            style="@style/InfoItemText_L"
+		            android:layout_marginStart="@dimen/info_item_margin_h"
+		            android:layout_marginLeft="@dimen/info_item_margin_h"
+		            android:layout_alignParentStart="true"
+		            android:layout_alignParentLeft="true"
+		            android:layout_centerVertical="true"
+		            android:text="@string/set_consult" />
+		
+		        <TextView
+		            android:id="@+id/id_service_tv"
+		            style="@style/InfoItemText_R"
+		            android:layout_alignParentRight="true"
+		            android:layout_alignParentEnd="true"
+		            android:layout_centerVertical="true"
+		            android:layout_marginRight="@dimen/info_item_margin_h"
+		            android:layout_marginEnd="@dimen/info_item_margin_h"
+		            android:drawablePadding="@dimen/info_item_padding_inner"
+		            android:drawableEnd="@drawable/register_bottom_arrow"
+		            android:drawableRight="@drawable/register_bottom_arrow" />
+	
+		    </RelativeLayout>
+		    
+			<RelativeLayout
+		        android:id="@+id/layout_archworker"
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/info_item_height_single"
+		        android:background="@drawable/btn_selector" >			
+		        
+		        <View
+		            android:id="@+id/divider_service"
+		            android:layout_marginLeft="@dimen/info_item_margin_h"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/base_line_width_s"
+			        android:background="@color/info_activity_item_divider_inner" />
+			    
+		        <TextView
+		            style="@style/InfoItemText_L"
+		            android:layout_marginStart="@dimen/info_item_margin_h"
+		            android:layout_marginLeft="@dimen/info_item_margin_h"
+		            android:layout_alignParentStart="true"
+		            android:layout_alignParentLeft="true"
+		            android:layout_centerVertical="true"
+		            android:text="@string/set_arch_workers" />
+		
+		        <TextView
+		            android:id="@+id/id_archworker_tv"
+		            style="@style/InfoItemText_R"
+		            android:layout_alignParentRight="true"
+		            android:layout_alignParentEnd="true"
+		            android:layout_centerVertical="true"
+		            android:layout_marginRight="@dimen/info_item_margin_h"
+		            android:layout_marginEnd="@dimen/info_item_margin_h"
+		            android:drawablePadding="@dimen/info_item_padding_inner"
+		            android:drawableEnd="@drawable/register_bottom_arrow"
+		            android:drawableRight="@drawable/register_bottom_arrow" />
+	
+		    </RelativeLayout>
+			
+			<RelativeLayout
 		        android:id="@+id/layout_feedback"
 		        android:layout_width="match_parent"
 		        android:layout_height="@dimen/info_item_height_single"
 		        android:background="@drawable/btn_selector" >
+		        
+			    <View
+		            android:id="@+id/divider_archworker"
+		            android:layout_marginLeft="@dimen/info_item_margin_h"
+			        android:layout_width="match_parent"
+			        android:layout_height="@dimen/base_line_width_s"
+			        android:background="@color/info_activity_item_divider_inner" />
 		        			
 		        <TextView
 		            style="@style/InfoItemText_L"
@@ -310,7 +382,7 @@
 		            android:drawableEnd="@drawable/register_bottom_arrow"
 		            android:drawableRight="@drawable/register_bottom_arrow" />
 	
-		    </RelativeLayout>	    
+		    </RelativeLayout>
 		
 		    <RelativeLayout
 		        android:id="@+id/layout_update"
