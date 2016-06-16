@@ -60,8 +60,8 @@ import com.v5kf.mcss.ui.activity.md2x.WaitingCustomerActivity;
 import com.v5kf.mcss.ui.activity.md2x.WorkerInfoActivity;
 import com.v5kf.mcss.ui.activity.md2x.WorkerLogActivity;
 import com.v5kf.mcss.ui.fragment.md2x.TabHistoryVisitorFragment;
+import com.v5kf.mcss.ui.fragment.md2x.TabMonitorFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabMoreFragment;
-import com.v5kf.mcss.ui.fragment.md2x.TabSecondFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabServingSessionFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabWorkerListFragment;
 import com.v5kf.mcss.ui.widget.CircleImageView;
@@ -163,7 +163,6 @@ public class MainTabActivity extends BaseToolbarActivity {
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
 		super.onNewIntent(intent);
 		Logger.i(TAG, "[onNewIntent] intent:" + intent);
 		if (intent != null && mNavigationView != null && indicatorViewPager != null) {
@@ -171,6 +170,13 @@ public class MainTabActivity extends BaseToolbarActivity {
 			mNavigationView.setCheckedItem(R.id.drawer_session);
 			indicatorViewPager.setCurrentItem(0, false);
 		}
+	}
+	
+	@Override
+	public void onLowMemory() {
+		super.onLowMemory();
+		Logger.i(TAG, "[onLowMemory] -> clear");
+		mApplication.getAppInfo().clearMemory();
 	}
 
 	private void findView() {
@@ -770,7 +776,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 				fragment = new TabHistoryVisitorFragment(MainTabActivity.this, position);
 				break;
 			case 3:
-				fragment = new TabSecondFragment(MainTabActivity.this, position);
+				fragment = new TabMonitorFragment(MainTabActivity.this, position);
 				break;
 			case 4:
 				fragment = new TabMoreFragment(MainTabActivity.this, position);

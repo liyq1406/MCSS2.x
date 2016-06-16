@@ -68,6 +68,27 @@ public class DateUtil {
 		return mCalendar.get(Calendar.DAY_OF_MONTH);
 	}
 	
+	public static long getLastMonth(long milliseconds) {
+		Calendar ca = Calendar.getInstance();//得到一个Calendar的实例 
+		ca.setTime(new Date(milliseconds)); //设置时间为当前时间 
+		ca.add(Calendar.MONTH, -1); //月份减1 
+		return ca.getTimeInMillis();
+	}
+	
+	public static long getLastDay(long milliseconds) {
+		Calendar ca = Calendar.getInstance();//得到一个Calendar的实例 
+		ca.setTime(new Date(milliseconds)); //设置时间为当前时间 
+		ca.add(Calendar.DATE, -1); //日期减1 
+		return ca.getTimeInMillis();
+	}
+
+	public static long getLastYear(long milliseconds) {
+		Calendar ca = Calendar.getInstance();//得到一个Calendar的实例 
+		ca.setTime(new Date(milliseconds)); //设置时间为当前时间 
+		ca.add(Calendar.YEAR, -1); //年减1 
+		return ca.getTimeInMillis();
+	}
+	
 	/**
 	 * 当前时间long millisecond
 	 * @param getCurrentLongTime DateUtil 
@@ -259,7 +280,10 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String getDayString(long mCurrentSearchDay) {
-		long date = mCurrentSearchDay * 1000;
+		long date = mCurrentSearchDay;
+		if (mCurrentSearchDay < 9999999999L) { // s
+			date = mCurrentSearchDay * 1000;
+		}
 		String day = getYear(date) + "年" + getMonth(date) + "月" + getDay(date) + "日";		
 		return day;
 	}
@@ -283,12 +307,16 @@ public class DateUtil {
 	 * @return
 	 */
 	public static boolean isValidMonth(long mCurrentSearchDay) {
-		if ((mCurrentSearchDay * 1000) > getCurrentLongTime()) {
+		long date = mCurrentSearchDay;
+		if (mCurrentSearchDay < 9999999999L) { // s
+			date = mCurrentSearchDay * 1000;
+		}
+		if (date > getCurrentLongTime()) {
 			return false;
 		}
 		
 		long start = getDate(Config.SYS_YEAR, Config.SYS_MONTH, Config.SYS_DAY);
-		if (mCurrentSearchDay * 1000 < start) {
+		if (date < start) {
 			return false;
 		}
 		

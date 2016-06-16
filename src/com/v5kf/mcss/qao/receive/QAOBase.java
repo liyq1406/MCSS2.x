@@ -1,10 +1,7 @@
 package com.v5kf.mcss.qao.receive;
 
-import java.util.List;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.litepal.crud.DataSupport;
 import org.simple.eventbus.EventBus;
 
 import android.content.Context;
@@ -17,7 +14,6 @@ import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.AppStatus;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.AppInfoKeeper;
-import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.qao.request.WorkerRequest;

@@ -61,7 +61,7 @@ public class WorkerLogUtil {
 		String o_type = QAODefine.O_TYPE_WCSTM;
 		String o_method = QAODefine.O_METHOD_CSTM_JOIN_IN;
 		long time = DateUtil.getCurrentLongTime() / 1000;
-		String ifaceStr = UITools.stringOfInterface(customer.getIface());
+		String ifaceStr = customer.getIfaceString();
 		String desc = DateUtil.longDateToString(time) + " [" + ifaceStr + "] 客户\"" + customer.getDefaultName() + "\" 接入";
 		WorkerLogBean wlog = new WorkerLogBean(time, e_id, w_id, c_id, s_id, o_type, o_method, 0, desc);
 		wlog.save();
@@ -80,7 +80,7 @@ public class WorkerLogUtil {
 		String o_type = QAODefine.O_TYPE_WCSTM;
 		String o_method = QAODefine.O_METHOD_CSTM_JOIN_OUT;
 		long time = DateUtil.getCurrentLongTime() / 1000;
-		String ifaceStr = UITools.stringOfInterface(customer.getIface());
+		String ifaceStr = customer.getIfaceString();
 		String desc = DateUtil.longDateToString(time) + " [" + ifaceStr + "] 客户\"" + customer.getDefaultName() + "\" 会话结束：" + UITools.stringOfEndReason(reason);
 		WorkerLogBean wlog = new WorkerLogBean(time, e_id, w_id, c_id, s_id, o_type, o_method, reason, desc);
 		wlog.save();

@@ -123,12 +123,14 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
     				msgDir == QAODefine.MSG_DIR_FROM_ROBOT) {
     			return TYPE_LOCATION_R;
     		} else if (msgDir == QAODefine.MSG_DIR_TO_WORKER || 
-    				msgDir == QAODefine.MSG_DIR_FROM_WAITING) {
+    				msgDir == QAODefine.MSG_DIR_FROM_WAITING ||
+    				msgDir == QAODefine.MSG_DIR_R2WM) {
     			return TYPE_LOCATION_L;
     		}
     	} else if (msgType == QAODefine.MSG_TYPE_IMAGE) {
     		if (msgDir == QAODefine.MSG_DIR_TO_WORKER || 
-    				msgDir == QAODefine.MSG_DIR_FROM_WAITING) {
+    				msgDir == QAODefine.MSG_DIR_FROM_WAITING ||
+    				msgDir == QAODefine.MSG_DIR_R2WM) {
     			return TYPE_IMG_L;
     		} else if (msgDir == QAODefine.MSG_DIR_TO_CUSTOMER ||
     				msgDir == QAODefine.MSG_DIR_FROM_ROBOT) {
@@ -136,7 +138,8 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
     		}
     	} else if (msgType == QAODefine.MSG_TYPE_VOICE) {
     		if (msgDir == QAODefine.MSG_DIR_TO_WORKER || 
-    				msgDir == QAODefine.MSG_DIR_FROM_WAITING) {
+    				msgDir == QAODefine.MSG_DIR_FROM_WAITING ||
+    				msgDir == QAODefine.MSG_DIR_R2WM) {
     			return TYPE_VOICE_L;
     		} else if (msgDir == QAODefine.MSG_DIR_TO_CUSTOMER ||
     				msgDir == QAODefine.MSG_DIR_FROM_ROBOT) {
@@ -148,7 +151,8 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
     	}
     	
 		if (msgDir == QAODefine.MSG_DIR_TO_WORKER || 
-				msgDir == QAODefine.MSG_DIR_FROM_WAITING) {
+				msgDir == QAODefine.MSG_DIR_FROM_WAITING ||
+				msgDir == QAODefine.MSG_DIR_R2WM) {
 			return TYPE_LEFT_TEXT;
 		} else { // QAODefine.MSG_DIR_TO_CUSTOMER 或 QAODefine.MSG_DIR_FROM_ROBOT
 			return TYPE_RIGHT_TEXT;
@@ -333,7 +337,8 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 	        	
 	        	// 背景
 				if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_WORKER || 
-						chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING) {
+						chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING ||
+						chatMessage.getDir() == QAODefine.MSG_DIR_R2WM) {
 					holder.mVoiceLayout.setBackgroundResource(R.drawable.list_from_customer_bg);
 				} else if (chatMessage.getDir() == QAODefine.MSG_DIR_FROM_ROBOT) {
 					holder.mVoiceLayout.setBackgroundResource(R.drawable.list_to_robot_bg);
@@ -416,7 +421,8 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 				holder.mMsg.setMovementMethod(LinkMovementMethod.getInstance());
 				
 				if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_WORKER ||
-						chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING) {
+						chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING ||
+						chatMessage.getDir() == QAODefine.MSG_DIR_R2WM) {
 					holder.mMsg.setBackgroundResource(R.drawable.list_from_customer_bg);
 //					ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_photo_default_cstm);
 //		        	imgLoader.DisplayImage(mActivity.getCustomerPhoto(), holder.mPic);

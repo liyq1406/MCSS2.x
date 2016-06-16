@@ -362,6 +362,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 	
 	public void onLowMemory() {
 		Logger.w(TAG, "[onLowMemory]");
+		mApplication.getAppInfo().clearMemory();
 		mApplication.stopOtherActivities(null);
 	}
 	

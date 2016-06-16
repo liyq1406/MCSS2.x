@@ -39,14 +39,14 @@ import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
 public class CustomerInfoListActivity extends BaseToolbarActivity implements OnClickListener {
-	private static final String TAG = "CustomerInfoActivity";
+	private static final String TAG = "CustomerInfoListActivity";
 	protected String c_id;
 	protected String v_id;
 	public CustomerBean mCustomer;
 	
 	private View mHeadView;
 	
-	private TextView mNickNameTv, mIfaceTv;
+	private TextView mNickNameTv, mIfaceTv, mVidTv, mOidTv;
 	private CircleImageView mHeadCiv;
 	private ImageView mIfaceIv, mSexIv;	
 	private ViewGroup mHistoryMsgRl;
@@ -76,6 +76,9 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 		
 		if (null != c_id) { // CSTM_ACTIVE
 			mCustomer = mAppInfo.getCustomerBean(c_id);
+			if (null == mCustomer) {
+				mCustomer = mAppInfo.getMonitorCustomer(c_id);
+			}
 			if (null == mCustomer) {
 	        	Logger.e(TAG, "Customer(null) not found c_id=" + c_id);
 	        	finishActivity();
@@ -134,6 +137,8 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 
 	private void findView() {
 		mHeadView = findViewById(R.id.layout_head);
+		mVidTv = (TextView) findViewById(R.id.visitor_id_tv);
+		mOidTv = (TextView) findViewById(R.id.open_id_tv);
 		mNickNameTv = (TextView) findViewById(R.id.id_nickname_tv);
 		mIfaceTv = (TextView) findViewById(R.id.id_iface_tv);
 		mHeadCiv = (CircleImageView) findViewById(R.id.id_head_iv);
@@ -202,6 +207,22 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 	 */
 	private void initFirstLayout() {
 		mNickNameTv.setText(mCustomer.getDefaultName());
+		if (Config.SHOW_VID_OID) {
+			String v_id = mCustomer.getVisitor_id();
+			String o_id = mCustomer.getVirtual() != null ? mCustomer.getVirtual().getOpen_id() : null;
+			if (!TextUtils.isEmpty(v_id)) {
+				mVidTv.setText(getString(R.string.v_id_pre) + v_id);
+				mVidTv.setVisibility(View.VISIBLE);
+			} else {
+				mVidTv.setVisibility(View.GONE);
+			}
+			if (!TextUtils.isEmpty(o_id)) {
+				mOidTv.setText(getString(R.string.o_id_pre) + o_id);
+				mOidTv.setVisibility(View.VISIBLE);
+			} else {
+				mOidTv.setVisibility(View.GONE);
+			}
+		}
 		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm, null);
     	imgLoader.DisplayImage(mCustomer.getDefaultPhoto(), mHeadCiv);
     	
@@ -345,6 +366,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 
 	private void addListener() {
 		mHeadView.setOnClickListener(this);
+		findViewById(R.id.cstm_edit_iv).setOnClickListener(this);
 		mKexiPlusRl.setOnClickListener(this);
 		mHistoryMsgRl.setOnClickListener(this);
 		
@@ -374,7 +396,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 			gotoKexiPlusWebActivity();
 			break;
 			
-		case R.id.layout_head:
+		case R.id.cstm_edit_iv:
 			if (c_id != null && v_id == null) {
 				gotoCustomrtEditActivity();
 			}
@@ -450,8 +472,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 	}
 
 	private void gotoKexiPlusWebActivity() {
-		String type = "wechat"; // ?
-		type = UITools.stringOfInterface(mCustomer.getIface());
+		String type = mCustomer.getIfaceString();
 		String open_id = mCustomer.getVirtual().getOpen_id();
 		String url = mAppInfo.getSiteInfo().getKexi_plus_url() + "&type=" + type + "&open_id=" + open_id;
 		Intent iKexi = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, 
@@ -467,6 +488,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 		Bundle bundle = new Bundle();
 		bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_ACTIVITY_START);
 		bundle.putString(Config.EXTRA_KEY_V_ID, mCustomer.getVisitor_id());
+		bundle.putString(Config.EXTRA_KEY_C_ID, mCustomer.getC_id());
 		
 		Intent intent = new Intent(this, HistoryMessagesActivity.class);
 		intent.putExtras(bundle);

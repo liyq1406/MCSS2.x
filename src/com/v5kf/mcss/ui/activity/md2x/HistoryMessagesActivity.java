@@ -25,6 +25,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,6 +57,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 	
 	private static final String TAG = "HistoryMessagesActivity";
 	private static final int HDL_INIT_DONE = 1;
+	private static final int HDL_NONE_MESSAGE = 11;
 	private static final int SEARCH_TYPE_RANGE_LAST = 1; // 前一天
 	private static final int SEARCH_TYPE_RANGE_NEXT = 2; // 后一天
 	private static final int SEARCH_TYPE_NO_RANGE = 3; // 仅查当天
@@ -68,13 +70,14 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 	private static final int MON_VAL_GETTED = 4; // 已获取
 	
 	protected String v_id;
+	protected String c_id;
 	protected CustomerBean mCustomer;
 //	protected int mOldSessionShownNum; // 已显示的历史会话数量(当天)
 	protected int mCountTemp;
 	
-	private long mCurrentSearchDay; // 秒级/年月日
+	private long mCurrentSearchDay; // 毫秒级/年月日
 	private long mCurrentSearchMonth; // 毫秒级/年月
-	private long mCurrentShowDay; // 秒级/年月日
+	private long mCurrentShowDay; // 毫秒级/年月日
 	
 	/* 对话列表 */
 	private RecyclerView mRecycleView;
@@ -102,25 +105,24 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		int type = intent.getIntExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_NULL);
 		if (Config.EXTRA_TYPE_ACTIVITY_START == type) {
 			v_id = intent.getStringExtra(Config.EXTRA_KEY_V_ID);
+			c_id = intent.getStringExtra(Config.EXTRA_KEY_C_ID);
 			Logger.d(TAG, "MainTabActivity -> Intent -> HistoryMessagesActivity\n v_id:" + v_id);
 		}
 		
-		if (null != v_id) { // CSTM_VISITOR
+		if (!TextUtils.isEmpty(v_id) || !TextUtils.isEmpty(c_id)) { // CSTM_VISITOR
 			mCustomer = mAppInfo.getVisitor(v_id);
 			if (null == mCustomer) {
-				for (CustomerBean cstm : mAppInfo.getCustomerMap().values()) {
-					if (cstm.getVisitor_id() != null && cstm.getVisitor_id().equals(v_id)) {
-						mCustomer = cstm;
-						return;
+				/* 查找对话中客户 */
+				if (!TextUtils.isEmpty(c_id)) {
+					mCustomer = mAppInfo.getCustomerBean(c_id);
+					if (mCustomer == null) {
+						mCustomer = mAppInfo.getMonitorCustomer(c_id);
 					}
 				}
-				
-	        	Logger.e(TAG, "Visitor(null) not found");
-	        	ShowToast(R.string.on_history_messages_empty);
-	        	finishActivity();
 	        }
-		} else {
-			Logger.e(TAG, "Customer(null) v_id not found");
+		}
+		if (mCustomer == null) {
+			Logger.e(TAG, "Customer(null) not found");
 			ShowToast(R.string.on_history_messages_empty);
         	finishActivity();
 		}
@@ -135,7 +137,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		int year = DateUtil.getYear();
 		int month = DateUtil.getMonth();
 		int day = DateUtil.getDay();
-		mCurrentSearchDay = DateUtil.getDate(year, month, day) / 1000;
+		mCurrentSearchDay = DateUtil.getDate(year, month, day);
 		mCurrentSearchMonth = DateUtil.getYearAndMonth(DateUtil.getCurrentLongTime());
 		mCurrentShowDay = mCurrentSearchDay;
 		
@@ -268,27 +270,37 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 	private void getMessagesOfDay(long currentSearchDay, int searchType) {
 		mCurrentSearchDay = currentSearchDay;
 		List<SessionBean> s_list = mAppInfo.getSessionsOnDayOfVisitor(currentSearchDay, mCustomer);
-		Logger.i(TAG, "getMessagesOfDay:" + currentSearchDay + " s_list:" + s_list);
+		Logger.d(TAG, "getMessagesOfDay:" + currentSearchDay + " s_list:" + s_list + " " + DateUtil.getDayString(currentSearchDay));
 		if (null == s_list || s_list.isEmpty()) { // 自动往前跳过没有消息的日期，跳过数量为本月份日期
 			if (searchType == SEARCH_TYPE_RANGE_NEXT) { // 查后一天
-				mCurrentSearchDay += 24 * 3600;
+				mCurrentSearchDay += 24 * 3600 * 1000;
 			} else if (searchType == SEARCH_TYPE_RANGE_LAST) { // 查前一天
-				mCurrentSearchDay -= 24 * 3600;
+				mCurrentSearchDay -= 24 * 3600 * 1000;
 			} else { // 仅查当天
 				Logger.i(TAG, "getMessagesOfDay SEARCH_TYPE_NONE return");
 				return;
 			}
 			// 系统有效时间内，且大于客服创建时间
-			if (mAppInfo.getUser().getCreate_time() < mCurrentSearchDay &&
+			if (mAppInfo.getUser().getCreate_time() < mCurrentSearchDay/1000 &&
 					DateUtil.isValidMonth(mCurrentSearchDay)) { // && DateUtil.isOnSameMonth(mCurrentSearchDay, currentSearchDay)
-				getMessagesOfDay(mCurrentSearchDay, searchType);
-			} else {
-				if (mCurrentShowDay != 0) {
-					mCurrentSearchDay = mCurrentShowDay;
+				Logger.v(TAG, "mCurrentSearchDay:" + mCurrentSearchDay + " mCurrentSearchMonth:" + mCurrentSearchMonth);
+				if (mCurrentSearchDay < mCurrentSearchMonth) { // 前一个月
+					mCurrentSearchMonth = DateUtil.getLastMonth(mCurrentSearchMonth);
+					requestMessagesOfDay(mCurrentSearchDay, searchType);
+				} else {
+					getMessagesOfDay(mCurrentSearchDay, searchType);
 				}
+			} else { // 未找到客户消息
+				Logger.w(TAG, "未找到客户消息");
+				mHandler.obtainMessage(HDL_NONE_MESSAGE).sendToTarget();
+				Logger.d(TAG, "客服创建日期：" + DateUtil.getDayString(mAppInfo.getUser().getCreate_time()) + " mCurrentSearchDay:" + DateUtil.getDayString(mCurrentSearchDay) + " valid:" + DateUtil.isValidMonth(mCurrentSearchDay));
+//				if (mCurrentShowDay != 0) {
+//					mCurrentSearchDay = mCurrentShowDay;
+//				}
 			}
-			Logger.i(TAG, "getMessagesOfDay s_list is null return");
+			Logger.i(TAG, "getMessagesOfDay s_list is null return " + DateUtil.getDayString(currentSearchDay));
 			dismissProgressDialog();
+			// TODO
 			return;
 		}
 
@@ -336,14 +348,13 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		Logger.i(TAG, "getMessagesOfDay updateUI return");
 	}
 
-
 	private void updateUI() {
 		// 排序按照最新活动时间排序
 		MessageTimeCompartor mtc = new MessageTimeCompartor();
 		Collections.sort(mDatas, mtc);
 		mRecyclerAdapter.notifyDataSetChanged();
 		checkListEmpty();
-		mCurDayTv.setText(DateUtil.getDayString(mCurrentSearchDay));
+		mCurDayTv.setText(DateUtil.getDayString(mCurrentShowDay));
 		dismissProgressDialog();
 	}
 
@@ -431,7 +442,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 	protected void onDestroy() {
 		super.onDestroy();
 		/* 清空历史会话内存 */
-		mAppInfo.clearCustomerSession(mCustomer);
+//		mAppInfo.clearCustomerSession(mCustomer);
 		
 		// TODO 退出页面时关闭语音播放
     	mRecyclerAdapter.stopVoicePlaying();
@@ -462,6 +473,13 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		switch (msg.what) {
 		case HDL_INIT_DONE:
 			loadData();
+			break;
+		case HDL_NONE_MESSAGE:
+			if (mDatas.isEmpty()) {
+				ShowToast(R.string.on_history_messages_empty);
+			} else {
+				ShowToast(R.string.no_more_msg);
+			}
 			break;
 		}
 	}
@@ -502,7 +520,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		int year = DateUtil.getYear(currentLongTime);
 		int month = DateUtil.getMonth(currentLongTime);
 		int day = DateUtil.getDay(currentLongTime);
-		mCurrentSearchDay = DateUtil.getDate(year, month, day) / 1000; // 该日的0点时间
+		mCurrentSearchDay = DateUtil.getDate(year, month, day); // 该日的0点时间
 		
 //		// 清空界面，等待新的数据加载
 //		updateUI();
@@ -511,7 +529,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		try {
 			TicketRequest tReq = (TicketRequest) RequestManager.getRequest(QAODefine.O_TYPE_WTICKET, this);
 			// 查找这个月的第一天到最后一天session（一次请求一个月数据）
-			Logger.i(TAG, "[requestMessagesOfDay] mCurrentSearchDay=" + mCurrentSearchDay + " isExistCustomerSessionOfMonth:" + month);
+			Logger.i(TAG, "[requestMessagesOfDay] mCurrentSearchDay=" + DateUtil.getDayString(mCurrentSearchDay) + " mCurrentSearchMonth=" + DateUtil.getDayString(mCurrentSearchMonth) + " isExistCustomerSessionOfMonth:" + month);
 			if (isExistVisitorSessionOfMonth(year, month) == MON_VAL_UNGET) {
 				tReq.getCustomerSession(year, month, 0, mCustomer.getVisitor_id(), mCustomer.getF_id());
 				long monthKey = DateUtil.getDate(year, month, 1);
@@ -544,18 +562,18 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		case R.id.search_last_day_ll:
 			showProgressDialog();
 			mIsRefreshing = true;
-			mCurrentSearchDay -= 24 * 3600;
+			mCurrentSearchDay -= 24 * 3600 * 1000;
 			Logger.d(TAG, "[click_last_day]->[refreshData]");
-			requestMessagesOfDay(mCurrentSearchDay*1000, SEARCH_TYPE_RANGE_LAST);
+			requestMessagesOfDay(mCurrentSearchDay, SEARCH_TYPE_RANGE_LAST);
 			//refreshData(SEARCH_TYPE_RANGE_LAST);
 			break;
 			
 		case R.id.search_next_day_ll:
 			showProgressDialog();
 			mIsRefreshing = true;
-			mCurrentSearchDay += 24 * 3600;
+			mCurrentSearchDay += 24 * 3600 * 1000;
 			Logger.d(TAG, "[click_next_day]->[refreshData]");
-			requestMessagesOfDay(mCurrentSearchDay*1000, SEARCH_TYPE_RANGE_NEXT);
+			requestMessagesOfDay(mCurrentSearchDay, SEARCH_TYPE_RANGE_NEXT);
 			//refreshData(SEARCH_TYPE_RANGE_NEXT);
 			break;
 					
@@ -597,7 +615,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 				try {
 					TicketRequest tReq = (TicketRequest) RequestManager.getRequest(QAODefine.O_TYPE_WTICKET, HistoryMessagesActivity.this);
 					// 查找这个月的第一天到最后一天（一次请求一个月数据）
-					Logger.i(TAG, "[onChangeMonth（1）] mCurrentSearchDay=" + mCurrentSearchDay + " isExistCustomerSessionOfMonth:" + month);
+					Logger.i(TAG, "[onChangeMonth（1）] mCurrentSearchDay=" + DateUtil.getDayString(mCurrentSearchDay) + " isExistCustomerSessionOfMonth:" + month);
 					if (isExistVisitorSessionOfMonth(year, month) == MON_VAL_UNGET) {
 						tReq.getCustomerSession(year, month, 0, mCustomer.getVisitor_id(), mCustomer.getF_id());
 						long monthKey = DateUtil.getDate(year, month, 1);
@@ -788,10 +806,10 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 			return false;
 		}
 		if (mDateHasSessionMap.containsKey(date)) {
-			Logger.i(TAG, "有会话日期date:" + DateUtil.getDayString(date));
+			Logger.i(TAG, "有会话日期date:" + DateUtil.getDayString(date/1000));
 			return true;
 		}
-		Logger.w(TAG, "没有会话日期date:" + DateUtil.getDayString(date));
+		Logger.w(TAG, "没有会话日期date:" + DateUtil.getDayString(date/1000));
 		return false;
 	}
 

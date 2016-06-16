@@ -18,6 +18,7 @@ import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.WorkerRequest;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.ImageLoader;
+import com.v5kf.mcss.utils.cache.MediaLoader;
 
 /**
  * @author chenhy
@@ -39,7 +40,7 @@ public class AppInfoKeeper {
 	
 	// 下面连个部分常驻内存，历史访客消息用完需清理	
 	/* 两个共用Map key: session_id */
-	private Map<String, SessionBean> mSessionMap;					
+	private Map<String, SessionBean> mSessionMap;
 	/* key: customer_id 当前服务中顾客 */
 	private Map<String, CustomerBean> mCustomerMap;	
 	/* key: visitor_id 历史访客，离线状态 */
@@ -47,6 +48,10 @@ public class AppInfoKeeper {
 	/* key: w_id 企业架构，坐席列表 */
 	private Map<String, ArchWorkerBean> mWorkerMap;
 	private List<WorkerArch> mWorkerArchs;
+	
+	/* 消息监控 */
+	/* key: customer_id 监控到的顾客 */
+	private Map<String, CustomerBean> mMonitorMap;
 	
 	/**
 	 * 构造函数内进行成员初始化
@@ -265,7 +270,8 @@ public class AppInfoKeeper {
 		if (null != message && message.getCandidate() != null && !message.getCandidate().isEmpty()) {
 			V5Message msgContent = message.getCandidate().get(0);
 			if (msgContent != null && (msgContent.getDirection() == QAODefine.MSG_DIR_FROM_ROBOT
-					|| msgContent.getDirection() == QAODefine.MSG_DIR_FROM_WAITING
+					|| msgContent.getDirection() == QAODefine.MSG_DIR_FROM_WAITING 
+//					|| msgContent.getDirection() == QAODefine.MSG_DIR_R2WM
 			// || msgContent.getDirection() == QAODefine.MSG_DIR_R2CW
 					)) {
 				if (msgContent.getDefaultContent(mContext) == null || msgContent.getDefaultContent(mContext).isEmpty()) {
@@ -277,7 +283,6 @@ public class AppInfoKeeper {
 		}
 		return message;
 	}
-	
 
 //	public String getCreateTimeOfSession(SessionBean session) {
 //		if (null == session) {
@@ -432,7 +437,8 @@ public class AppInfoKeeper {
 			return;
 		}
 		if (cstm.getSession() != null && cstm.getCstmType() != CustomerType.CustomerType_ServingAlive
-				&& cstm.getCstmType() != CustomerType.CustomerType_WaitingAlive) { // 不清空正在会话的消息
+				&& cstm.getCstmType() != CustomerType.CustomerType_WaitingAlive &&
+				cstm.getCstmType() != CustomerType.CustomerType_Monitor) { // 不清空正在会话的消息
 			if (cstm.getSession().getMessageArray() != null) {
 				cstm.getSession().getMessageArray().clear();
 			}
@@ -468,8 +474,9 @@ public class AppInfoKeeper {
 	 * @return void
 	 */
 	public void clearMemory() {
-		clearHistoryVisitorSession();		
+		clearHistoryVisitorSession();
 		ImageLoader.clearMemoryCache();
+		MediaLoader.clearMemoryCache();
 		Logger.i(TAG, "释放部分不常用内存");
 	}
 
@@ -564,4 +571,48 @@ public class AppInfoKeeper {
 	// TODO
 	// TODO
 
+	public Map<String, CustomerBean> getMonitorMap() {
+		if (mMonitorMap == null) {
+			mMonitorMap = new ConcurrentHashMap<String, CustomerBean>();
+		}
+		return mMonitorMap;
+	}
+
+//	public void setMonitorMap(Map<String, CustomerBean> mMonitorMap) {
+//		this.mMonitorMap = mMonitorMap;
+//	}
+
+	public void addMonitorCustomer(CustomerBean bean) {
+		if (null == bean) {
+			Logger.e(TAG, "Monitor CustomerBean null");
+			return;
+		}
+		
+		String c_id = bean.getC_id();
+		getMonitorMap().put(c_id, bean);
+	}
+
+	public CustomerBean getMonitorCustomer(String c_id) {
+		if (null == c_id) {
+			Logger.w(TAG, "[getMonitorCustomer] null key");
+			return null;
+		}
+		return getMonitorMap().get(c_id);
+	}
+
+	public void removeMonitorCustomer(CustomerBean cstm) {
+		if (null == cstm) {
+			Logger.w(TAG, "[removeMonitorCustomer] null cstm");
+			return;
+		}
+		clearCustomerSession(cstm);
+		getMonitorMap().remove(cstm.getC_id());
+	}
+	
+	public void clearMonitorMap() {
+		for (CustomerBean cstm : getMonitorMap().values()) {
+			clearCustomerSession(cstm);
+		}
+		getMonitorMap().clear();
+	}
 }

@@ -16,6 +16,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerRealBean;
 import com.v5kf.mcss.utils.Logger;
+import com.v5kf.mcss.utils.UITools;
 
 public class CustomerBean extends BaseBean implements Serializable {
 	private long id; /*db*/
@@ -23,7 +24,8 @@ public class CustomerBean extends BaseBean implements Serializable {
 		CustomerType_None,
 		CustomerType_ServingAlive,
 		CustomerType_WaitingAlive,
-		CustomerType_Visitor
+		CustomerType_Visitor,
+		CustomerType_Monitor
 	}
 	
 	/**
@@ -236,6 +238,12 @@ public class CustomerBean extends BaseBean implements Serializable {
 			this.virtual = new CustomerVirtualBean();
 		}
 		this.virtual.updateVirtualInfo(json);
+		if (iface == 0 && this.virtual.getCustomer_type() != null) {
+			iface = UITools.intOfInterfaceType(this.virtual.getCustomer_type());
+		}
+		if (TextUtils.isEmpty(visitor_id) && this.virtual != null) {
+			visitor_id = this.virtual.getVisitor_id();
+		}
 	}
 	
 	private void getCustomerInfoFromDb() {
@@ -282,6 +290,18 @@ public class CustomerBean extends BaseBean implements Serializable {
 
 	public void setIface(int iface) {
 		this.iface = iface;
+	}
+	
+	/**
+	 * 获取 interface接口 的字符串名称
+	 * @return
+	 */
+	public String getIfaceString() {
+		if (getVirtual() != null && !TextUtils.isEmpty(getVirtual().getCustomer_type())) {
+			return getVirtual().getCustomer_type();
+		} else {
+			return UITools.stringOfInterface(getIface());
+		}
 	}
 
 	public int getService() {
@@ -353,14 +373,22 @@ public class CustomerBean extends BaseBean implements Serializable {
 			return virtual.getNickname();
 		}
 		
-		if (c_id != null && !c_id.isEmpty()) {
-			Logger.d("CustomerName", "c_id=" + c_id);
-			String s = c_id;
-			return getResString(R.string.default_prefix_name) + s.substring(s.length() - 5, s.length());			
-		} else if (visitor_id != null && !visitor_id.isEmpty()) {
+		if (visitor_id != null && !visitor_id.isEmpty()) {
 			Logger.d("CustomerName", "visitor_id=" + visitor_id);
 			String s = "" + visitor_id;
-			return getResString(R.string.default_prefix_name) + s.substring(s.length() - 5, s.length());
+			if (s.length() >= 8) {
+				return s.substring(0, 3) + getResString(R.string.default_prefix_name) + s.substring(s.length() - 5, s.length());
+			} else {
+				return s;
+			}
+		} else if (c_id != null && !c_id.isEmpty()) {
+			Logger.d("CustomerName", "c_id=" + c_id);
+			String s = c_id;
+			if (s.length() >= 8) {
+				return s.substring(0, 3) + getResString(R.string.default_prefix_name) + s.substring(s.length() - 5, s.length());
+			} else {
+				return s;
+			}
 		}
 		
 		return "Null";

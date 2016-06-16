@@ -14,7 +14,10 @@ import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.entity.CustomerBean.CustomerType;
+import com.v5kf.mcss.entity.SessionBean;
 import com.v5kf.mcss.eventbus.EventTag;
+import com.v5kf.mcss.manage.RequestManager;
+import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.utils.Logger;
 
 public class QAOMessage extends QAOBase {
@@ -39,9 +42,29 @@ public class QAOMessage extends QAOBase {
 		MobclickAgent.onEvent(mContext,"NEW_MESSAGE");
 		Logger.d(TAG, "mApplication.isAppForeground()=" + mApplication.isAppForeground());
 		V5Message message = V5MessageManager.receiveMessage(qao_data);
-		CustomerBean customer = mAppInfo.getCustomerBean(message.getC_id());
+		CustomerBean customer = null;
+		
+		if (message.getDirection() == QAODefine.MSG_DIR_R2WM) { // 监控消息
+			customer = mAppInfo.getMonitorCustomer(message.getC_id());
+			if (customer == null) {
+				customer = new CustomerBean();
+				customer.setC_id(message.getC_id());
+				customer.setCstmType(CustomerType.CustomerType_Monitor);
+				mAppInfo.addMonitorCustomer(customer);
+				SessionBean mSession = new SessionBean(message.getS_id(), message.getC_id());
+				customer.setSession(mSession);
+				mAppInfo.addSession(mSession);
+				
+				// 获取客户信息
+				CustomerRequest cReq = (CustomerRequest)RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, mContext);
+				cReq.getCustomerInfo(message.getC_id());
+			}
+		} else { // 排队和服务中客户消息
+			customer = mAppInfo.getCustomerBean(message.getC_id());
+		}
+		
 		if (customer != null && customer.getSession() != null) {
-			// [新增]获取message中的custom_content
+			// [新增]magic获取message中的custom_content
 			if (message.getCustom_content() != null) {
 				Iterator<String> it = message.getCustom_content().keys();  
 	            while (it.hasNext()) {
@@ -102,6 +125,8 @@ public class QAOMessage extends QAOBase {
 				postEvent(message, EventTag.ETAG_ROBOT_ANSWER);
 				break;
 			case QAODefine.MSG_DIR_R2WM: // 监控消息
+				customer.getSession().addMessage(message, true);
+				postEvent(message, EventTag.ETAG_MONITOR_MESSAGE);
 				break;
 			}
 		}

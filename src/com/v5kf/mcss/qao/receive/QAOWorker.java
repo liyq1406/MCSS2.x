@@ -15,7 +15,6 @@ import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.ArchWorkerBean;
 import com.v5kf.mcss.entity.WorkerArch;
-import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.WorkerRequest;
@@ -102,6 +101,14 @@ public class QAOWorker extends QAOBase {
 		case QAODefine.O_METHOD_WORKER_STATUS_PUSH:
 			parseWorkerStatusPush();
 			break;
+		case QAODefine.O_METHOD_SET_WORKER_MONITOR:
+			
+			break;
+//		case QAODefine.O_METHOD_GET_WORKER_MONITOR:
+//			mAppInfo.getUser().setMonitor(qao_data.getBoolean("monitor"));
+//			postEvent(mAppInfo, EventTag.ETAG_MONITOR_STATE_CHANGE);
+//			break;
+		
 		default:
 			throw new JSONException("Unknow o_method:" + o_method + " of o_type:" + o_type);
 		}
@@ -238,17 +245,24 @@ public class QAOWorker extends QAOBase {
 	@Override
 	protected void errorHandle() throws JSONException {
 		switch (o_method) {
-		case QAODefine.O_METHOD_SET_WORKER_INFO:
+		case QAODefine.O_METHOD_SET_WORKER_INFO: {
 			// 提示设置信息失败，重新获得座席信息
 			showToast(mContext.getString(R.string.err_set_worker_info) + ": " + o_errmsg);
 			WorkerRequest wReq = (WorkerRequest) RequestManager.getRequest(o_type, mContext);
 			wReq.getWorkerInfo();
+		}
 			break;
 		case QAODefine.O_METHOD_SET_WORKER_MODE:
 			showToast(mContext.getString(R.string.err_set_worker_mode) + ": " + o_errmsg);
 			break;
 		case QAODefine.O_METHOD_SET_WORKER_STATUS:
 			showToast(mContext.getString(R.string.err_set_worker_status) + ": " + o_errmsg);
+			break;
+		case QAODefine.O_METHOD_SET_WORKER_MONITOR: {
+//			WorkerRequest wReq = (WorkerRequest) RequestManager.getRequest(o_type, mContext);
+//			wReq.getWorkerMonitor();
+			showToast(o_type + "." + o_method + ": " + o_errmsg);
+		}
 			break;
 		default:
 			showToast(o_type + "." + o_method + ": " + o_errmsg);

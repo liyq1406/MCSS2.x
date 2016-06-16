@@ -3,6 +3,7 @@
     android:id="@+id/layout_phone"
     android:layout_width="match_parent"
     android:layout_height="@dimen/info_item_height_single"
+    android:clickable="false"
     android:background="@drawable/btn_selector" >
     
     <View
@@ -30,6 +31,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:textIsSelectable="true"
         android:layout_marginRight="@dimen/info_item_margin_h"
         android:layout_marginEnd="@dimen/info_item_margin_h" />
 

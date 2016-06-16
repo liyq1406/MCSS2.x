@@ -28,6 +28,10 @@ public class EventTag {
 	public static final String ETAG_NEW_MESSAGE = "new_message_tag"; // 新消息
 	public static final String ETAG_IN_TRUST_CHANGE = "intrust_change_tag"; // 新消息
 	public static final String ETAG_ACCESSABLE_CHANGE = "cstm_accessable_change"; // 新消息
+	public static final String ETAG_MONITOR_STATE_CHANGE = "worker_monitor_state_change"; // 监控状态
+	public static final String ETAG_MONITOR_IN = "worker_monitor_in"; // 监控到新客户
+	public static final String ETAG_MONITOR_OUT = "worker_monitor_out"; // 客户离开监控
+	public static final String ETAG_MONITOR_MESSAGE = "new_monitor_message"; // 监控消息
 	
 	public static final String ETAG_ON_LINE = "on_line_tag"; // 上线
 	public static final String ETAG_OFF_LINE = "off_line_tag"; // 下线

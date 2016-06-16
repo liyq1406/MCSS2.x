@@ -115,6 +115,13 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
     	// 设置interface信息
     	UITools.setInterfaceInfo(customer.getIface(), holder.mIfaceTv, holder.mIfaceImg);
     	    	
+//    	// 接入可否
+//    	if (customer.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
+//    		holder.mPickupLayout.setVisibility(View.VISIBLE);
+//    	} else {
+//    		holder.mPickupLayout.setVisibility(View.GONE);
+//    	}
+    	
     	if (session.getUnreadMessageNum() > 0) {
     		if (session.getUnreadMessageNum() > 99) {
     			session.setUnreadMessageNum(99);
@@ -148,6 +155,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
         public TextView mDate;        
         public BadgeView mBadgeView;
         public View mImgLayout;
+        public View mPickupLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -158,6 +166,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
             mIfaceTv = (TextView) itemView.findViewById(R.id.id_item_iface_tv);
             mDate = (TextView) itemView.findViewById(R.id.id_item_date);
             mImgLayout = itemView.findViewById(R.id.id_img_layout);
+            mPickupLayout = itemView.findViewById(R.id.layout_pickup);
             mBadgeView = new BadgeView(mContext);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

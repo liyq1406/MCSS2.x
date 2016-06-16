@@ -496,6 +496,14 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 
 		@Override
 		public int compare(CustomerBean lhs, CustomerBean rhs) {
+			// 可接入客户优先显示
+			if (lhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE) && rhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
+				return 0;
+			} else if (lhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
+				return -1;
+			} else if (rhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
+				return 1;
+			}
 			long l = lhs.getVirtual() == null ? 0 : lhs.getVirtual().getActive_time();
 			long r = rhs.getVirtual() == null ? 0 : rhs.getVirtual().getActive_time();
 			if (l == 0 || r == 0) {

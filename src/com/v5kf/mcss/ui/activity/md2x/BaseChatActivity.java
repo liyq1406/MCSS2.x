@@ -69,12 +69,15 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 		
 		if (null != c_id) { // CSTM_ALIVE_WAIT
 			mCustomer = mAppInfo.getCustomerBean(c_id);
+			if (mCustomer == null) {
+				mCustomer = mAppInfo.getMonitorCustomer(c_id);
+			}
 	        if (null == mCustomer) {
 	        	Logger.e(TAG, "Customer(null) not found");
 	        	finish();
 	        	return;
 	        }
-		}  else {
+		} else {
 			Logger.e(TAG, "Customer(null) c_id not found");
 			finish();
 			return;
@@ -125,7 +128,7 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 	
 
 	protected void setActivityResult(int resultCode) {
-		// TODO 改为md2x TabMainActivity
+		// 改为md2x TabMainActivity
 //		Intent resultIntent = new Intent(BaseChatActivity.this, MainTabActivity.class);
 		Intent resultIntent = new Intent(BaseChatActivity.this, MainTabActivity.class);
 		resultIntent.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_ACTIVITY_START);

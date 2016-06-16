@@ -67,7 +67,7 @@
 		        android:id="@+id/tabmain_viewPager"
 		        android:layout_width="match_parent"
 		        android:layout_height="match_parent"
-		        android:layout_below="@+id/id_app_bar_layout"
+		        android:layout_below="@+id/header_tips"
 		        android:layout_above="@+id/tabmain_indicator"
 		        android:background="@color/white" />
 		    
@@ -112,6 +112,7 @@
     
 	    <android.support.design.widget.FloatingActionButton
 			android:id="@+id/id_fab"
+			android:visibility="gone"
 			android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:src="@drawable/md2x_ic_add_white"

@@ -52,6 +52,38 @@ public class UITools {
 				Toast.LENGTH_LONG).show();
 	}
 	
+	public static int intOfInterfaceType(String type) {
+		int iface = 0;
+		switch (type) {
+		case "web":
+			iface = QAODefine.CSTM_IF_WEB;
+			break;
+		case "weixin":
+		case "wechat":
+			iface = QAODefine.CSTM_IF_WEIXIN;
+			break;
+		case "app":
+			iface = QAODefine.CSTM_IF_APP;
+			break;
+		case "wxqy":
+			iface = QAODefine.CSTM_IF_WXQY;
+			break;
+		case "yixin":
+			iface = QAODefine.CSTM_IF_YIXIN;
+			break;
+		case "qq":
+			iface = QAODefine.CSTM_IF_QQ;
+			break;
+		case "sina":
+			iface = QAODefine.CSTM_IF_SINA;
+			break;
+		case "alipay":
+			iface = QAODefine.CSTM_IF_ALIPAY;
+			break;
+		}
+		return iface;
+	}
+	
 	public static String stringOfInterface(int iface) {
 		String type = "wechat";
 		if ((iface & 0x00ff) == 0) {

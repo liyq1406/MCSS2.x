@@ -6,6 +6,7 @@
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
     android:orientation="vertical"
+    android:background="@color/list_chat_blank_bg"
     tools:context = "com.v5kf.mcss.ui.activity.ChatContentActivity" >
        
     <android.support.design.widget.AppBarLayout
@@ -84,34 +85,31 @@
 	    <android.support.v7.widget.RecyclerView
 	        android:id="@+id/id_recycle_view_msgs"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="match_parent"
+	        android:paddingBottom="70dip"
 	        android:focusable="true" 
 			android:focusableInTouchMode="true"
 	        android:divider="@null"
 	        android:dividerHeight="5dp"
 	        android:background="@color/list_chat_blank_bg"/>
+	    
+	    <LinearLayout
+	        android:id="@+id/layout_cinfo_action"
+	        android:visibility="visible"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:padding="16dp"
+	        android:layout_alignParentBottom="true"
+	        android:orientation="vertical" >
+	    
+		    <Button
+		        android:id="@+id/btn_waiting_pick_up"
+		        android:visibility="visible"
+		        style="@style/Positive_btn"
+		        android:text="@string/option_pickup" />
+	        
+	    </LinearLayout>
 
     </RelativeLayout>
-    
-    
-    <View
-		android:layout_width="fill_parent"
-		android:layout_height="@dimen/dialog_option_divider_height"
-		android:background="@color/dialog_option_item_boder" />
-    
-    <LinearLayout
-        android:id="@+id/layout_cinfo_action"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    
-	    <Button
-	        android:id="@+id/btn_waiting_pick_up"
-	        android:visibility="visible"
-	        style="@style/Positive_btn"
-	        android:text="@string/option_pickup" />
-        
-    </LinearLayout>
     
 </LinearLayout>

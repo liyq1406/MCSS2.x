@@ -259,7 +259,8 @@ public class ChatMessagesActivity extends BaseChatActivity {
 		if (addAtTop && msg.getCandidate() != null && msg.getCandidate().size() > 0) {
 			V5Message robotMsg = msg.cloneDefaultRobotMessage();			
 			if (robotMsg != null && (robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_ROBOT || 
-					robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_WAITING)) { // 机器人回复
+					robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_WAITING ||
+					robotMsg.getDirection() == QAODefine.MSG_DIR_R2WM)) { // 机器人回复
 				if (robotMsg.getDefaultContent(this) == null || robotMsg.getDefaultContent(this).isEmpty()
 						|| robotMsg.getMessage_type() == QAODefine.MSG_TYPE_WXCS) {
 					// 排除空白消息内容和转客服消息
@@ -285,7 +286,8 @@ public class ChatMessagesActivity extends BaseChatActivity {
 		if (!addAtTop && msg.getCandidate() != null && msg.getCandidate().size() > 0) {
 			V5Message robotMsg = msg.cloneDefaultRobotMessage(); 
 			if (robotMsg != null && (robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_ROBOT || 
-					robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_WAITING)) { // 机器人回复
+					robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_WAITING
+					|| robotMsg.getDirection() == QAODefine.MSG_DIR_R2WM)) { // 机器人回复
 				if (robotMsg.getDefaultContent(this) == null || robotMsg.getDefaultContent(this).isEmpty()
 						|| robotMsg.getMessage_type() == QAODefine.MSG_TYPE_WXCS) {
 					// 排除空白消息内容和转客服消息
@@ -340,6 +342,23 @@ public class ChatMessagesActivity extends BaseChatActivity {
 	@Subscriber(tag = EventTag.ETAG_NEW_MESSAGE, mode = ThreadMode.MAIN)
 	private void newMessage(V5Message message) {
 		Logger.d(TAG + "-eventbus", "newMessage -> ETAG_NEW_MESSAGE");
+		if (!this.s_id.equals(message.getS_id())) {
+			return;
+		}
+		List<V5Message> msg_list = mCustomer.getSession().getMessageArray();
+		if (msg_list == null) {
+			Logger.e(TAG, "NEW_MESSAGE: null MessageBean list");
+			return;
+		}
+		addRecycleBean(msg_list.get(0), false);
+		mRecycleAdapter.notifyItemInserted(mDatas.size() - 1);
+		listScrollToBottom(false);
+		isMessageAdded = true;
+	}
+
+	@Subscriber(tag = EventTag.ETAG_MONITOR_MESSAGE, mode = ThreadMode.MAIN)
+	private void newMonitorMessage(V5Message message) {
+		Logger.d(TAG + "-eventbus", "newMonitorMessage -> ETAG_MONITOR_MESSAGE");
 		if (!this.s_id.equals(message.getS_id())) {
 			return;
 		}

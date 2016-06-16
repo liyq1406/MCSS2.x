@@ -138,6 +138,8 @@ public class QAODefine {
 	public static final String O_METHOD_GET_WORKER_STATUS = "get_worker_status";
 	public static final String O_METHOD_SET_WORKER_STATUS = "set_worker_status";
 	public static final String O_METHOD_WORKER_STATUS_PUSH = "worker_status_push";
+	public static final String O_METHOD_SET_WORKER_MONITOR = "set_worker_monitor";
+	public static final String O_METHOD_GET_WORKER_MONITOR = "get_worker_monitor";
 
 	/* QAO wservice_customer o_method */
 	public static final String CUSTOMER = "customer";
@@ -163,6 +165,8 @@ public class QAODefine {
 	public static final String O_METHOD_SET_FAVOR_CUSTOMER = "set_favor_customer";
 	public static final String O_METHOD_UPDATE_CSTM_INFO = "update_customer_info";
 	public static final String O_METHOD_CSTM_ACCESSABLE_CHANGE = "customer_accessable_change";
+	public static final String O_METHOD_CSTM_MONITOR_OUT = "customer_monitor_out";
+//	public static final String O_METHOD_CSTM_MONITOR_IN = "customer_monitor_IN";
 	
 	/* QAO wservice_ticket o_method */
 	public static final String O_METHOD_GET_CUSTOMER_SESSION = "get_customer_session";

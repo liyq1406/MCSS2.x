@@ -447,7 +447,9 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			mActivity.get().handleMessage(msg);
+			if (mActivity.get() != null) {
+				mActivity.get().handleMessage(msg);
+			}
 		}
 	}
 	

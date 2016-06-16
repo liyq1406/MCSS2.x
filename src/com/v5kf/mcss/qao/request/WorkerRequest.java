@@ -5,6 +5,7 @@ import org.json.JSONException;
 import android.content.Context;
 
 import com.umeng.analytics.MobclickAgent;
+import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.WorkerBean;
 
@@ -82,10 +83,27 @@ public class WorkerRequest extends BaseRequest {
 		MobclickAgent.onEvent(mContext,"REQ_SET_WORKER_STATUS");
 	}
 	
+	public void setWorkerMonitor(int monitor) throws JSONException {
+		clear();
+		CustomApplication.getAppInfoInstance().getUser().setMonitor(monitor != 0);
+		if (monitor == 0) {
+			CustomApplication.getAppInfoInstance().clearMonitorMap();
+		}
+		mRequestJson.put(QAODefine.O_METHOD, QAODefine.O_METHOD_SET_WORKER_MONITOR);
+		mRequestJson.put("monitor", monitor);
+		sendRequest(mRequestJson.toString());
+		MobclickAgent.onEvent(mContext,"REQ_SET_WORKER_MONITOR");
+	}
+	
+//	public void getWorkerMonitor() throws JSONException {
+//		clear();
+//		mRequestJson.put(QAODefine.O_METHOD, QAODefine.O_METHOD_GET_WORKER_MONITOR);
+//		sendRequest(mRequestJson.toString());
+//		MobclickAgent.onEvent(mContext,"REQ_GET_WORKER_MONITOR");
+//	}
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return mRequestJson.toString();
 	}
 
@@ -95,5 +113,7 @@ public class WorkerRequest extends BaseRequest {
 		mRequestJson.remove("connects");
 		mRequestJson.remove("accepts");
 		mRequestJson.remove("connects");
+		mRequestJson.remove("monitor");
 	}
+
 }

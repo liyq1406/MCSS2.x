@@ -867,7 +867,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		if (addAtTop && msg.getCandidate() != null && msg.getCandidate().size() > 0) {
 			V5Message robotMsg = msg.cloneDefaultRobotMessage();
 			if (robotMsg != null && (robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_ROBOT || 
-					robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_WAITING)) { // 机器人回复
+					robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_WAITING
+					|| robotMsg.getDirection() == QAODefine.MSG_DIR_R2WM)) { // 机器人回复
 				if (robotMsg.getDefaultContent(this) == null || robotMsg.getDefaultContent(this).isEmpty()
 						|| robotMsg.getMessage_type() == QAODefine.MSG_TYPE_WXCS) {
 					// 排除空白消息内容和转客服消息
@@ -892,7 +893,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		if (!addAtTop && msg.getCandidate() != null && msg.getCandidate().size() > 0) {
 			V5Message robotMsg = msg.cloneDefaultRobotMessage();
 			if (robotMsg != null && (robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_ROBOT || 
-					robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_WAITING)) { // 机器人回复
+					robotMsg.getDirection() == QAODefine.MSG_DIR_FROM_WAITING
+					|| robotMsg.getDirection() == QAODefine.MSG_DIR_R2WM)) { // 机器人回复
 				if (robotMsg.getDefaultContent(this) == null || robotMsg.getDefaultContent(this).isEmpty() 
 						|| robotMsg.getMessage_type() == QAODefine.MSG_TYPE_WXCS) {
 					// 排除空白消息内容和转客服消息

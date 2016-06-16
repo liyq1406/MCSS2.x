@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true" >
-    
-<LinearLayout
     android:id="@+id/layout_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -61,99 +54,127 @@
 		        android:layout_width="match_parent"
 		        android:layout_height="@dimen/base_line_width_s"
 		        android:background="@color/info_activity_item_divider_frame" />
-    	
-		    <RelativeLayout
-		        android:id="@+id/layout_head"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:background="@drawable/btn_selector"
-		        android:minHeight="78dp"
-		        android:paddingLeft="@dimen/info_item_padding"
+    		
+    		<LinearLayout
+			    android:id="@+id/layout_head"
+    		    android:layout_width="match_parent"
+    		    android:layout_height="wrap_content"
+    		    android:orientation="vertical"
+    		    android:background="@drawable/btn_selector"
+    		    android:paddingLeft="@dimen/info_item_padding"
 		        android:paddingRight="@dimen/info_item_padding"
 		        android:paddingBottom="@dimen/info_item_padding_inner_v"
 		        android:paddingTop="@dimen/info_item_padding_inner_v" >
-		
-		        <com.v5kf.mcss.ui.widget.CircleImageView
-		            android:id="@+id/id_head_iv"
-		            style="@style/Smile.ImageView"
-		            android:layout_width="54dp"
-		            android:layout_height="54dp"
-		            android:layout_centerVertical="true"
-		            android:src="@drawable/v5_photo_default_cstm"
-		            android:contentDescription="@string/contentDescription" />
-		        
-		        <LinearLayout
+    		    
+	    		<RelativeLayout
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:minHeight="70dp" >
+			
+			        <com.v5kf.mcss.ui.widget.CircleImageView
+			            android:id="@+id/id_head_iv"
+			            style="@style/Smile.ImageView"
+			            android:layout_width="54dp"
+			            android:layout_height="54dp"
+			            android:layout_centerVertical="true"
+			            android:src="@drawable/v5_photo_default_cstm"
+			            android:contentDescription="@string/contentDescription" />
+			        
+			        <LinearLayout
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:padding="4dp"
+			            android:layout_centerVertical="true"
+			            android:layout_toEndOf="@id/id_head_iv"
+			            android:layout_toRightOf="@id/id_head_iv"
+			            android:layout_marginLeft="8dp"
+			            android:layout_marginStart="8dp"
+			            android:layout_gravity="center_vertical"
+			            android:orientation="vertical" >
+			
+			            <LinearLayout
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:orientation="horizontal" >
+			                
+				            <TextView
+				                android:id="@+id/id_nickname_tv"
+				                style="@style/Smile.TextView._Black"
+				                android:textColor="@color/black"
+				                android:textSize="@dimen/info_item_user_name_text_size"
+				                android:singleLine="true"
+				                android:text="@string/cstm_nickname" />
+				            
+				            <ImageView
+			                    android:id="@+id/id_sex_iv"
+			                    style="@style/IfaceImg"
+			                    android:background="@drawable/btn_selector"
+			                    android:layout_gravity="end|center_vertical"
+			                    android:layout_marginLeft="@dimen/info_item_padding_inner_v"
+			                    android:layout_marginStart="@dimen/info_item_padding_inner_v"
+			                    android:contentDescription="@string/contentDescription" />
+				            
+				        </LinearLayout>
+			
+			            <LinearLayout
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:layout_marginTop="4dp"
+			                android:orientation="horizontal" >
+			                
+			                <ImageView
+			                    android:id="@+id/id_iface_iv"
+			                    style="@style/IfaceImg"
+			                    android:layout_marginEnd="1dp"
+			                    android:layout_marginRight="1dp"
+			                    android:layout_gravity="end|center_vertical"
+			                    android:contentDescription="@string/contentDescription" />
+			                
+			                <TextView
+				                android:id="@+id/id_iface_tv"
+				                android:layout_gravity="end|center_vertical"
+				                android:singleLine="true"
+				                style="@style/Smile.TextView._Gray.Iface"
+				                android:text="@string/cstm_weixin" />
+			                
+			            </LinearLayout>
+			            
+			        </LinearLayout>        
+			        
+			        <ImageView
+			            android:id="@+id/cstm_edit_iv"
+			            android:layout_width="30dp"
+			            android:layout_height="30dp"
+			            android:padding="5dp"
+			            android:layout_centerVertical="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_alignParentRight="true"
+			            android:src="@drawable/v5_user_edit"
+			            android:contentDescription="@string/contentDescription" />
+			    </RelativeLayout>
+			    
+		    	<TextView
+		            android:id="@+id/visitor_id_tv"
+		            android:visibility="gone"
+		            android:textIsSelectable="true"
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
-		            android:padding="4dp"
-		            android:layout_centerVertical="true"
-		            android:layout_toEndOf="@id/id_head_iv"
-		            android:layout_toRightOf="@id/id_head_iv"
-		            android:layout_marginLeft="8dp"
-		            android:layout_marginStart="8dp"
-		            android:layout_gravity="center_vertical"
-		            android:orientation="vertical" >
-		
-		            <LinearLayout
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:orientation="horizontal" >
-		                
-			            <TextView
-			                android:id="@+id/id_nickname_tv"
-			                style="@style/Smile.TextView._Black"
-			                android:textColor="@color/black"
-			                android:textSize="@dimen/info_item_user_name_text_size"
-			                android:singleLine="true"
-			                android:text="@string/cstm_nickname" />
-			            
-			            <ImageView
-		                    android:id="@+id/id_sex_iv"
-		                    style="@style/IfaceImg"
-		                    android:layout_gravity="end|center_vertical"
-		                    android:layout_marginLeft="@dimen/info_item_padding_inner_v"
-		                    android:layout_marginStart="@dimen/info_item_padding_inner_v"
-		                    android:contentDescription="@string/contentDescription" />
-			            
-			        </LinearLayout>
-		
-		            <LinearLayout
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:layout_marginTop="4dp"
-		                android:orientation="horizontal" >
-		                
-		                <ImageView
-		                    android:id="@+id/id_iface_iv"
-		                    style="@style/IfaceImg"
-		                    android:layout_marginEnd="1dp"
-		                    android:layout_marginRight="1dp"
-		                    android:layout_gravity="end|center_vertical"
-		                    android:contentDescription="@string/contentDescription" />
-		                
-		                <TextView
-			                android:id="@+id/id_iface_tv"
-			                android:layout_gravity="end|center_vertical"
-			                android:singleLine="true"
-			                style="@style/Smile.TextView._Gray.Iface"
-			                android:text="@string/cstm_weixin" />
-		                
-		            </LinearLayout>
-		            
-		        </LinearLayout>        
+		            android:layout_marginBottom="2dp"
+		            android:singleLine="false"
+		            style="@style/Smile.TextView._Gray.Iface"
+		            android:text="@string/v_id_pre" />
 		        
-		        <ImageView
-		            android:id="@+id/cstm_edit_iv"
-		            android:layout_width="30dp"
-		            android:layout_height="30dp"
-		            android:padding="5dp"
-		            android:layout_centerVertical="true"
-		            android:layout_alignParentEnd="true"
-		            android:layout_alignParentRight="true"
-		            android:src="@drawable/v5_user_edit"
-		            android:contentDescription="@string/contentDescription" />
-		        
-		    </RelativeLayout>
+		        <TextView
+		            android:id="@+id/open_id_tv"
+		            android:visibility="gone"
+		            android:textIsSelectable="true"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginBottom="2dp"
+		            android:singleLine="false"
+		            style="@style/Smile.TextView._Gray.Iface"
+		            android:text="@string/o_id_pre" />
+		    </LinearLayout>
 		    
 		    <View android:layout_width="match_parent"
 		        android:layout_height="@dimen/base_line_width_s"
@@ -314,6 +335,7 @@
 		        android:visibility="visible"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
+		        android:padding="16dp"
 		        android:orientation="vertical" >
 		    
 			    <Button
@@ -335,4 +357,3 @@
     </ScrollView>
     
 </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>

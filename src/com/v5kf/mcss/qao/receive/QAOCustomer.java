@@ -127,11 +127,27 @@ public class QAOCustomer extends QAOBase {
 		case QAODefine.O_METHOD_CSTM_ACCESSABLE_CHANGE:
 			parseCustomerAccessableChange();
 			break;
+			
+		case QAODefine.O_METHOD_CSTM_MONITOR_OUT:
+			parseCustomerMonitorOut();
+			break;
 		
 		default:
 			throw new JSONException("Unknow o_method:" + o_method + " of o_type:" + o_type);
 		}
 		
+	}
+
+	private void parseCustomerMonitorOut() throws JSONException {
+		String c_id = qao_data.getString(QAODefine.C_ID);
+//		String s_id = qao_data.getString(QAODefine.S_ID);
+		CustomerBean cstm = mAppInfo.getMonitorCustomer(c_id);
+		if (cstm != null) {
+			if (cstm.getCstmType() == CustomerType.CustomerType_Monitor) {
+				mAppInfo.removeMonitorCustomer(cstm);
+				postEvent(cstm, EventTag.ETAG_MONITOR_OUT);
+			}
+		}
 	}
 
 	private void parseCustomerAccessableChange() throws JSONException {
@@ -156,6 +172,12 @@ public class QAOCustomer extends QAOBase {
 				postEvent(mAppInfo, EventTag.ETAG_SERVING_CSTM_CHANGE);
 				postEvent(customer, EventTag.ETAG_ACCESSABLE_CHANGE);
 				//return;
+			} else {
+				customer = this.mAppInfo.getMonitorCustomer(c_id);
+				if (customer != null) {
+					customer.setAccessable(accessable);
+					postEvent(customer, EventTag.ETAG_ACCESSABLE_CHANGE);
+				}
 			}
 		}
 		if (visitor_id != null) {
@@ -188,6 +210,9 @@ public class QAOCustomer extends QAOBase {
 		if (qao_data.has(QAODefine.C_ID)) {
 			c_id = qao_data.getString(QAODefine.C_ID);
 			customer = mAppInfo.getCustomerBean(c_id); // 找CustomerMap
+			if (customer == null) { // 找MonitorMap
+				customer = mAppInfo.getMonitorCustomer(c_id);
+			}
 		} else if (qao_data.has(QAODefine.U_ID)) {
 			u_id = qao_data.getString(QAODefine.U_ID);
 			customer = mAppInfo.getVisitor(u_id); // 找VisitorMap
@@ -200,6 +225,9 @@ public class QAOCustomer extends QAOBase {
 
 		// [修改]获得客户消息[通知界面]更新逻辑[eventbus]
 		postEvent(customer, EventTag.ETAG_UPDATE_CSTM_INFO);
+		if (customer.getCstmType() == CustomerType.CustomerType_Monitor) {
+			postEvent(customer, EventTag.ETAG_MONITOR_IN);
+		}
 	}
 
 	private void parseGetCustomerList() throws JSONException {

@@ -242,6 +242,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
+        <item name="android:textIsSelectable">true</item>
         <item name="android:textColor">@color/info_item_right_text_color</item>
     </style>
 

@@ -32,8 +32,9 @@
     <string name="tabhost_text_session">对话</string>
     <string name="tabhost_text_worker">客服</string>
     <string name="tabhost_text_history">历史</string>
-    <string name="tabhost_text_explore">发现</string>
+    <string name="tabhost_text_explore">消息监控</string>
     <string name="tabhost_text_more">更多</string>
+    <string name="tabhost_text_quit">退出账号</string>
     
     <!-- 登录页 -->
     <string name="login_text">登录</string>
@@ -125,7 +126,7 @@
     <string name="notification_unit">条</string>
     <string name="notify_join_in">[客户接入]</string>
     <string name="notify_wait_in">[客户进入排队]</string>
-    <string name="default_prefix_name">访客***</string>
+    <string name="default_prefix_name">***</string>
     
     <!-- 列表弹出框 -->
     <!-- Session列表 -->
@@ -178,6 +179,7 @@
     <string name="visitor_content_empty_tips">您还没有历史会话</string>
     <string name="worker_content_empty_tips">没有获取到坐席信息</string>
     <string name="material_img_empty_tips">未获取到图片素材</string>
+    <string name="monitor_empty_tips">监控列表没有内容</string>
     
     <string name="no_more_msg">没有更多消息了</string>
     <string name="no_more">没有更多了</string>
@@ -204,7 +206,7 @@
     <string name="iface_qq">QQ</string>
     <string name="iface_sina">新浪</string>
     <string name="iface_alipay">支付宝</string>
-    <string name="iface_app">开放平台</string>
+    <string name="iface_app">APP</string>
     
     <!-- Segment分页段标题 -->
     <string name="seg_title_worker">座席</string>
@@ -362,5 +364,13 @@
     <string name="error_state_record">已在录音，不可重复操作</string>
     <string name="error_unknown">未知错误</string>
     <string name="error_record_not_permit">录音失败，请检查是否开启录音权限!</string>
+    
+    <string name="start_monitor">开启监控</string>
+    <string name="stop_monitor">关闭监控</string>
+    <string name="start_monitor_tips">点击开启监控</string>
+    <string name="in_monitor_tips">正在监控中&#8230;</string>
+    
+    <string name="v_id_pre">visitorid&#160;:&#160;</string>
+    <string name="o_id_pre">openid&#160;&#160;&#160;:&#160;</string>
     
 </resources>

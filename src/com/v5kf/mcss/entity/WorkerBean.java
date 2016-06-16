@@ -2,11 +2,13 @@ package com.v5kf.mcss.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 
 import android.text.TextUtils;
 
 import com.v5kf.client.lib.V5Util;
 import com.v5kf.mcss.config.QAODefine;
+import com.v5kf.mcss.eventbus.EventTag;
 
 /**
  * 登录APP的坐席对象
@@ -23,6 +25,7 @@ public class WorkerBean extends BaseBean {
 	private short mode; // 0- 仅转接  1-自动接入
 	private int accepts; // 自动接入数量
 	private int connects; // 仅转接数量
+	private boolean monitor; // 是否在监控
 	
 	private String org_id;
 	private String nickname;
@@ -58,6 +61,10 @@ public class WorkerBean extends BaseBean {
 		status = (short) config.optInt(QAODefine.WORKER_STATUS);
 		connects = config.optInt(QAODefine.WORKER_CONNECTS);
 		accepts = config.optInt(QAODefine.WORKER_ACCEPTS);
+		if (config.has("monitor")) {
+			monitor = config.optBoolean("monitor");
+			EventBus.getDefault().post(this, EventTag.ETAG_MONITOR_STATE_CHANGE);
+		}
 	}
 	
 	private void parseId(JSONObject id) {
@@ -280,5 +287,13 @@ public class WorkerBean extends BaseBean {
 			id.put("photo", photo);
 		}
 		json.put("id", id);
+	}
+
+	public boolean isMonitor() {
+		return monitor;
+	}
+
+	public void setMonitor(boolean monitor) {
+		this.monitor = monitor;
 	}
 }

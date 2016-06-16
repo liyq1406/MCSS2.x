@@ -12,39 +12,39 @@
             android:checked="true"
             android:checkable="true"
             android:icon="@drawable/md2x_ic_drawer_chat"
-            android:title="对话"/>
+            android:title="@string/tabhost_text_session"/>
         
         <item
             android:id="@+id/drawer_worker"
             android:checkable="true"
             android:icon="@drawable/md2x_ic_drawer_worker"
-            android:title="客服"/>
+            android:title="@string/tabhost_text_worker"/>
  
         <item
             android:id="@+id/drawer_history"
             app:actionLayout="@layout/md2x_action_badge"
             android:checkable="true"
             android:icon="@drawable/md2x_ic_drawer_history"
-            android:title="历史"/>
+            android:title="@string/tabhost_text_history"/>
 
         <item
             android:id="@+id/drawer_explore"
             app:actionLayout="@layout/md2x_action_badge"
             android:checkable="true"
             android:icon="@drawable/md2x_ic_drawer_explore"
-            android:title="发现"/>
+            android:title="@string/tabhost_text_explore"/>
  
         <item
             android:id="@+id/drawer_more"
             android:checkable="true"
             android:icon="@drawable/md2x_ic_drawer_settings"
-            android:title="更多"/>
+            android:title="@string/tabhost_text_more"/>
 
         <item
             android:id="@+id/drawer_quit"
             android:checkable="false"
             android:icon="@drawable/md2x_ic_drawer_logout"
-            android:title="退出账号"/>
+            android:title="@string/tabhost_text_quit"/>
  
  
     </group>

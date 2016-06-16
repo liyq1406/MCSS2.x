@@ -101,6 +101,13 @@ public class QAOTicket extends QAOBase {
 					customer = cstm;
 				}
 			}
+			if (customer == null) {
+				for (CustomerBean cstm : mAppInfo.getMonitorMap().values()) { // [修改]历史列表和客户列表不统一问题
+					if (cstm.getVisitor_id() != null && cstm.getVisitor_id().equals(visitor_id)) {
+						customer = cstm;
+					}
+				}
+			}
 		}
 		if (customer == null) {
 			Logger.e(TAG, "[parseGetCustomerSession] null customer");
