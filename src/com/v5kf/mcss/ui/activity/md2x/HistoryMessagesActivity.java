@@ -278,6 +278,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 				mCurrentSearchDay -= 24 * 3600 * 1000;
 			} else { // 仅查当天
 				Logger.i(TAG, "getMessagesOfDay SEARCH_TYPE_NONE return");
+				dismissProgressDialog();
 				return;
 			}
 			// 系统有效时间内，且大于客服创建时间
@@ -300,7 +301,6 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 			}
 			Logger.i(TAG, "getMessagesOfDay s_list is null return " + DateUtil.getDayString(currentSearchDay));
 			dismissProgressDialog();
-			// TODO
 			return;
 		}
 

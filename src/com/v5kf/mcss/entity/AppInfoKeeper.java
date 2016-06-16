@@ -380,7 +380,7 @@ public class AppInfoKeeper {
 	}
 	
 	public List<SessionBean> getSessionsOnDayOfVisitor(long day, CustomerBean visitor) {
-		long dayEnd = day + 24 * 3600;
+		long dayEnd = day + 24 * 3600 * 1000;
 		Logger.i(TAG, "[getSessionsOnDayOfVisitor] dateStart=" + day + " dateEnd=" + dayEnd);
 		
 		List<SessionBean> s_list = visitor.getSessionArray();
@@ -392,7 +392,7 @@ public class AppInfoKeeper {
 		List<SessionBean> sids = new ArrayList<SessionBean>();
 		for (SessionBean session : s_list) {
 			long s_id = (Long.parseLong(session.getS_id()) >> 32) * 60;
-			if (s_id > day && s_id < dayEnd) {
+			if (s_id > day/1000 && s_id < dayEnd/1000) {
 				sids.add(session);
 			}
 		}
