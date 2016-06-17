@@ -294,10 +294,10 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 			} else { // 未找到客户消息
 				Logger.w(TAG, "未找到客户消息");
 				mHandler.obtainMessage(HDL_NONE_MESSAGE).sendToTarget();
-				Logger.d(TAG, "客服创建日期：" + DateUtil.getDayString(mAppInfo.getUser().getCreate_time()) + " mCurrentSearchDay:" + DateUtil.getDayString(mCurrentSearchDay) + " valid:" + DateUtil.isValidMonth(mCurrentSearchDay));
-//				if (mCurrentShowDay != 0) {
-//					mCurrentSearchDay = mCurrentShowDay;
-//				}
+//				Logger.d(TAG, "客服创建日期：" + DateUtil.getDayString(mAppInfo.getUser().getCreate_time()) + " mCurrentSearchDay:" + DateUtil.getDayString(mCurrentSearchDay) + " valid:" + DateUtil.isValidMonth(mCurrentSearchDay));
+				if (!mDatas.isEmpty()) { // 
+					mCurrentSearchDay = mCurrentShowDay;
+				}
 			}
 			Logger.i(TAG, "getMessagesOfDay s_list is null return " + DateUtil.getDayString(currentSearchDay));
 			dismissProgressDialog();

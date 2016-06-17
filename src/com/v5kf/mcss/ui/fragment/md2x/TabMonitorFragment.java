@@ -4,38 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
+import pl.tajchert.sample.DotsTextView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
-import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.eventbus.EventTag;
-import com.v5kf.mcss.manage.RequestManager;
-import com.v5kf.mcss.qao.request.WorkerRequest;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.WaitingSessionAdapter;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
+import com.zcw.togglebutton.ToggleButton;
 
 /**
  * @author chenhy
@@ -52,11 +48,11 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	
 	private RecyclerView mRecycleView;
 	private WaitingSessionAdapter mRecycleAdapter;
-	private SwipeRefreshLayout mSwipeRefresh;
 	
 	// 监控开关
-	private Button mMonitorBtn;
+	private ToggleButton mMonitorBtn;
 	private TextView mMonitorTv;
+	private DotsTextView mDotsTv;
 
     public TabMonitorFragment(MainTabActivity activity, int index) {
 		super(activity, index);
@@ -104,7 +100,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	protected void onFragmentStopLazy() {
 		super.onFragmentStopLazy();
 		Log.d(TAG, TAG + " 掩藏 " + this);
-		stopMonitor();
+//		mAppInfo.stopMonitor();
 	}
 
 	@Override
@@ -159,14 +155,6 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
         mRecycleView.setScrollbarFadingEnabled(true);
         mRecycleView.setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
         
-        /* 刷新控件 */
-        if (null == mSwipeRefresh) {
-        	mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        }
-        mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeColors(R.color.green, R.color.red,  
-        	    R.color.blue, R.color.yellow);
-        
         /* 空白按钮 */
         findViewById(R.id.layout_container_tv).setOnClickListener(new OnClickListener() {
 			
@@ -176,50 +164,35 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 			}
 		});
         
-        mMonitorBtn = (Button) findViewById(R.id.id_monitor_btn);
+        mMonitorBtn = (ToggleButton) findViewById(R.id.id_monitor_toogle);
         mMonitorTv = (TextView) findViewById(R.id.id_monitor_tips);
+        mDotsTv = (DotsTextView) findViewById(R.id.id_dots);
         updateMonitorStatus(mAppInfo.getUser().isMonitor());
         
-        mMonitorBtn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if (mAppInfo.getUser().isMonitor()) { // 停止监控
-					stopMonitor();
-				} else { // 开启监控
-					startMonitor();
-				}
-				updateMonitorStatus(mAppInfo.getUser().isMonitor());
-				resetRecyclerList();
-			}
-		});
+        mMonitorBtn.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
+            @Override
+            public void onToggle(boolean on) {
+            	if (mAppInfo.getUser().isMonitor()) { // 停止监控
+            		mAppInfo.stopMonitor();
+    			} else { // 开启监控
+    				mAppInfo.startMonitor();
+    			}
+//            	mHandler.obtainMessage(HDL_UPDATE_UI).sendToTarget();
+            	mHandler.sendEmptyMessageDelayed(HDL_UPDATE_UI, 700);
+            }
+	    });
     }
-    
-    private void startMonitor() {
-    	try {
-    		WorkerRequest wReq = (WorkerRequest)RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, mParentActivity);
-    		wReq.setWorkerMonitor(1);
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-    }
-    
-    private void stopMonitor() {
-    	try {
-    		WorkerRequest wReq = (WorkerRequest)RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, mParentActivity);
-    		wReq.setWorkerMonitor(0);
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-	}
     
     private void updateMonitorStatus(boolean monitor) {
+    	Logger.d(TAG, "[updateMonitorStatus]" + monitor);
     	if (monitor) {
-        	mMonitorBtn.setText(R.string.stop_monitor);
+        	mMonitorBtn.setToggleOn(false);
 			mMonitorTv.setText(R.string.in_monitor_tips);
+			mDotsTv.showAndPlay();
 		} else {
-			mMonitorBtn.setText(R.string.start_monitor);
+			mMonitorBtn.setToggleOff(false);
 			mMonitorTv.setText(R.string.start_monitor_tips);
+			mDotsTv.hideAndStop();
 		}
 	}
 
@@ -228,20 +201,20 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
     		mRecycleView = (RecyclerView) findViewById(R.id.id_recycle_view);
     	}
     	if (mRecycleBeans.size() == 0) {
-    		mSwipeRefresh.setVisibility(View.GONE);
+    		mRecycleView.setVisibility(View.GONE);
 			findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
 		} else {
-			mSwipeRefresh.setVisibility(View.VISIBLE);
+			mRecycleView.setVisibility(View.VISIBLE);
 			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
 		}
     }
-    
 
 	private void resetRecyclerList() {
 		mRecycleBeans.clear();
 		initData();
 		mRecycleAdapter.notifyDataSetChanged();
 		checkListEmpty();
+		mParentActivity.updateMonitorBadge();
 	}
     
     private boolean hasRecycleBeans(String c_id) {
@@ -265,7 +238,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
     		return false;
     	}
 		mRecycleBeans.add(0, cstm);
-		mRecycleAdapter.notifyDataSetChanged();/*Null?*/
+		mRecycleAdapter.notifyDataSetChanged(); /*Null?*/
 //		mRecycleAdapter.notifyItemInserted(0);
 		checkListEmpty();
 		Logger.i(TAG, "[[[mRecycleBeans.add]]] c_id = " + cstm.getC_id());
@@ -357,10 +330,16 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	@Override
 	protected void handleMessage(Message msg, ActivityBase activityBase) {
 		switch (msg.what) {
+		case HDL_UPDATE_UI:
+        	if (mAppInfo.getUser().isMonitor()) {
+    			mMonitorTv.setText(R.string.in_monitor_tips);
+    			mDotsTv.showAndPlay();
+    		} else {
+    			mMonitorTv.setText(R.string.start_monitor_tips);
+    			mDotsTv.hideAndStop();
+    		}
+			break;
 		case HDL_STOP_REFRESH:
-			if (mSwipeRefresh.isRefreshing()) {
-				mSwipeRefresh.setRefreshing(false);
-			}
 			break;
 		}
 	}

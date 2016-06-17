@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -81,9 +80,10 @@ public abstract class BaseToolbarActivity extends ActivityBase {
 			final ActionBar actionBar = getSupportActionBar();
 			if (actionBar != null) {
 				// 启用home as up, 改变返回按钮颜色为main_color_accent
-			    final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-			    upArrow.setColorFilter(getResources().getColor(R.color.main_color_accent), android.graphics.PorterDuff.Mode.SRC_ATOP);
-			    actionBar.setHomeAsUpIndicator(upArrow);
+//			    final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+//			    upArrow.setColorFilter(getResources().getColor(R.color.main_color_accent), android.graphics.PorterDuff.Mode.SRC_ATOP);
+//			    actionBar.setHomeAsUpIndicator(upArrow);
+			    actionBar.setHomeAsUpIndicator(R.drawable.v5_action_bar_back);
 			    
 			    actionBar.setDisplayHomeAsUpEnabled(true);
 			    actionBar.setHomeButtonEnabled(true);

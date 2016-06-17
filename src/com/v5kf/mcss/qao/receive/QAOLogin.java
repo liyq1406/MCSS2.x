@@ -4,18 +4,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.v5kf.mcss.CustomApplication;
-import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.AppStatus;
 import com.v5kf.mcss.config.Config.ExitFlag;
 import com.v5kf.mcss.config.Config.LoginStatus;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.eventbus.EventTag;
-import com.v5kf.mcss.utils.Logger;
 
 public class QAOLogin extends QAOBase {
 	public static final String TAG = "QAOLogin";

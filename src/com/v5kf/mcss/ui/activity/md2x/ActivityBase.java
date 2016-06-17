@@ -148,10 +148,15 @@ public abstract class ActivityBase extends SwipeBackActivity {
 			}
 		});
         
-     // 注册event对象
+        // 注册event对象
         EventBus.getDefault().register(this);
 	}
 	
+//	protected void setSwipeBackEnable(boolean bl) {
+//		// 取消滑动返回
+////		super.setSwipeBackEnable(bl);
+//		// TODO
+//	}
 	
 	@Override
 	protected void onStart() {
@@ -252,6 +257,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 			}
 		});
 	}
+	
 	public void ShowShortToast(final int resId) {
 		runOnUiThread(new Runnable() {
 			

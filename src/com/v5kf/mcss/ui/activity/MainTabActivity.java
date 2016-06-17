@@ -142,7 +142,6 @@ public class MainTabActivity extends BaseToolbarActivity {
 		initSlideMenu();
 		initTabViewPager();
 		
-		updateSessionBadge();
 		if (!NetworkManager.isConnected(this)) {
 			mHeaderTips.setVisibility(View.VISIBLE);
 		}
@@ -207,7 +206,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		final ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			// 启用home as up
-		    actionBar.setHomeAsUpIndicator(R.drawable.md2x_ic_menu_blue);
+		    actionBar.setHomeAsUpIndicator(R.drawable.v5_action_bar_menu);
 		    actionBar.setDisplayHomeAsUpEnabled(true);
 		}
 	}
@@ -439,12 +438,6 @@ public class MainTabActivity extends BaseToolbarActivity {
 		Logger.i(TAG, "[updateBadge] servingCount=" + servingCount + " waitingCount=" + waitingCount);
 		getSupportActionBar().invalidateOptionsMenu();
 		
-		if (servingCount > 0) {
-			getToolbar().setTitle(getString(R.string.conversation) + "(" + servingCount + ")");
-		} else {
-			getToolbar().setTitle(R.string.conversation);
-		}
-		
 		// 更新对话badge
 		TextView session = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_session).getActionView().findViewById(R.id.badge_msg);
 		if (servingCount + waitingCount > 0) {
@@ -454,15 +447,27 @@ public class MainTabActivity extends BaseToolbarActivity {
 			session.setVisibility(View.GONE);
 		}
 
-		// 更新历史badge
-		TextView history = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_history).getActionView().findViewById(R.id.badge_msg);
-		history.setVisibility(View.GONE);
-		//history.setText("" + servingCount);
-
-		// 更新发现badge
+//		// 更新历史badge
+//		TextView history = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_history).getActionView().findViewById(R.id.badge_msg);
+//		history.setVisibility(View.GONE);
+//		//history.setText("" + servingCount);
+//
+//		// 更新发现badge
+//		TextView explore = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_explore).getActionView().findViewById(R.id.badge_msg);
+//		explore.setVisibility(View.GONE);
+//		//explore.setText("" + servingCount);
+	}
+	
+	public void updateMonitorBadge() {
+		updateHomeBadge();
+		// 更新对话badge
 		TextView explore = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_explore).getActionView().findViewById(R.id.badge_msg);
-		explore.setVisibility(View.GONE);
-		//explore.setText("" + servingCount);
+		if (mAppInfo.getMonitorMap().size() > 0) {
+			explore.setVisibility(View.VISIBLE);
+			explore.setText("" + mAppInfo.getCustomerMap().size());
+		} else {
+			explore.setVisibility(View.GONE);
+		}
 	}
 	
 	public void updateHomeBadge() {
@@ -474,11 +479,16 @@ public class MainTabActivity extends BaseToolbarActivity {
 			}
 		}
 		// 是否有监控到客户，新通知等
+		if (mAppInfo.getMonitorMap().size() > 0) {
+			if (mCurrentPageIndex != 3) {
+				showBadge = true;
+			}
+		}
 		
 		if (showBadge) {
 			getToolbar().setNavigationIcon(R.drawable.md2x_ic_menu_blue_badge);
 		} else {
-			getToolbar().setNavigationIcon(R.drawable.md2x_ic_menu_blue);
+			getToolbar().setNavigationIcon(R.drawable.v5_action_bar_menu);
 		}
 	}
 
@@ -670,7 +680,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		// home红点
 		ActionItemBadge.update(this, 
     			menu.findItem(R.id.home), 
-    			UIUtil.getCompatDrawable(this, R.drawable.md2x_ic_menu_blue), 
+    			UIUtil.getCompatDrawable(this, R.drawable.v5_action_bar_menu), 
     			ActionItemBadge.BadgeStyles.RED.getStyle(), 
     			NumberUtils.formatNumber(menuBadgeCount));
 		
@@ -936,15 +946,14 @@ public class MainTabActivity extends BaseToolbarActivity {
 		Logger.d(TAG + "-eventbus", "connectionChange -> ETAG_CONNECTION_CHANGE");
 		if (isConnect) {
 			dismissAlertDialog();
-			updateSlideMenu();
-			updateSessionBadge();
 			mHeaderTips.setVisibility(View.GONE);
 		} else {
 			dismissProgress();
-			updateSlideMenu();
-			updateSessionBadge();
 			mHeaderTips.setVisibility(View.VISIBLE);
 		}
+		updateSlideMenu();
+		updateSessionBadge();
+		updateMonitorBadge();
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_SERVING_CSTM_CHANGE, mode = ThreadMode.MAIN)

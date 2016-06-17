@@ -615,4 +615,22 @@ public class AppInfoKeeper {
 		}
 		getMonitorMap().clear();
 	}
+	
+	public void startMonitor() {
+    	try {
+    		WorkerRequest wReq = (WorkerRequest)RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, mContext);
+    		wReq.setWorkerMonitor(1);
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+    }
+    
+	public void stopMonitor() {
+    	try {
+    		WorkerRequest wReq = (WorkerRequest)RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, mContext);
+    		wReq.setWorkerMonitor(0);
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+	}
 }

@@ -334,4 +334,12 @@
         <item name="android:windowBackground">@color/main_color</item>
     </style>
 
+    <style name="CustomToggleButton">
+        <item name="toggleOnColor">#00BB1A</item>
+        <item name="toggleOffColor">#DFDFDF</item>
+        <item name="toggleSpotColor">#FFFFFF</item>
+        <item name="toggleOffBorderColor">#DFDFDF</item>
+        <item name="toggleBorderWidth">1dp</item>
+    </style>
+    
 </resources>

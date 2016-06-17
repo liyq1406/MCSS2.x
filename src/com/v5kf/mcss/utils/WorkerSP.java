@@ -23,6 +23,7 @@ import com.v5kf.mcss.config.Config;
  *
  */
 public class WorkerSP {
+	public static final String SP_MONITOR_STATUS = "v5_monitor_status";
 	
 	private static final String SP_EXIT_FLAG = "exit_flag_pref";
 	private static final String SP_AUTO_LOGIN = "auto_login_pref";
@@ -46,6 +47,26 @@ public class WorkerSP {
 	
 	public WorkerSP(Context context) {
 		this.mSharedPreferences = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS);
+	}
+	
+	/** 通用接口 **/
+	public void saveBoolean(String key, boolean val) {
+		mEdit = mSharedPreferences.edit();
+		mEdit.putBoolean(key, val);
+		mEdit.commit();
+	}
+	public boolean readBoolean(String key) {
+		boolean val = mSharedPreferences.getBoolean(key, false);
+		return val;
+	}
+	public void saveString(String key, String val) {
+		mEdit = mSharedPreferences.edit();
+		mEdit.putString(key, val);
+		mEdit.commit();
+	}
+	public String readString(String key) {
+		String val = mSharedPreferences.getString(key, null);
+		return val;
 	}
 	
 	/**

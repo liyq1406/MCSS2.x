@@ -24,7 +24,7 @@
 	        android:padding="4dp"
 	        android:layout_marginLeft="8dp"
 	        android:layout_marginStart="8dp"
-	        android:src="@drawable/v5_action_bar_back_md2x"
+	        android:src="@drawable/v5_action_bar_back"
 	        android:background="@color/transparent"
 	        android:clickable="false"
 	        android:focusable="false"

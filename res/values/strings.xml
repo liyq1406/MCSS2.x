@@ -367,8 +367,8 @@
     
     <string name="start_monitor">开启监控</string>
     <string name="stop_monitor">关闭监控</string>
-    <string name="start_monitor_tips">点击开启监控</string>
-    <string name="in_monitor_tips">正在监控中&#8230;</string>
+    <string name="start_monitor_tips">开启监控</string>
+    <string name="in_monitor_tips">正在监控</string>
     
     <string name="v_id_pre">visitorid&#160;:&#160;</string>
     <string name="o_id_pre">openid&#160;&#160;&#160;:&#160;</string>

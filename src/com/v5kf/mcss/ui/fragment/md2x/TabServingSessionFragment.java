@@ -111,7 +111,6 @@ public class TabServingSessionFragment extends TabBaseFragment implements OnRefr
 		super.onDestroy();
 		Log.d(TAG, TAG + " 所在的Activity onDestroy " + this);
 	}
-    
 	
 	private void initData() {
 		Map<String, CustomerBean> cstmMap = mAppInfo.getCustomerMap();

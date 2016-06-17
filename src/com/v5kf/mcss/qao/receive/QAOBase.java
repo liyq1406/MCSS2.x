@@ -19,6 +19,7 @@ import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.qao.request.WorkerRequest;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.utils.Logger;
+import com.v5kf.mcss.utils.WorkerSP;
 
 /**
  * 接收数据模型处理-基类
@@ -117,6 +118,9 @@ public abstract class QAOBase {
 			wReq.getWorkerInfo();
 			mApplication.setAppStatus(AppStatus.AppStatus_Loaded);
 			
+			if (mApplication.getWorkerSp().readBoolean(WorkerSP.SP_MONITOR_STATUS)) {
+				mAppInfo.startMonitor();
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -484,7 +484,7 @@ public class V51xTabActivity extends BaseActivity {
     	initTopBarForRightImage(
     			R.string.app_name, 
 //    			R.drawable.aic_search,
-    			R.drawable.v5_mode_set, 
+    			R.drawable.v5_action_bar_modeset, 
 //    			null,
     			new onRightImageButtonClickListener() {
 					

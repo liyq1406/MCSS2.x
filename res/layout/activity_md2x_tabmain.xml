@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:windowBackground="@color/white"
-    tools:context="com.v5kf.mcss.ui.activity.MainTabActivity">
+    tools:context="com.v5kf.mcss.ui.activity.MainTabActivity" xmlns:app1="http://schemas.android.com/apk/res/com.v5kf.mcss">
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -40,7 +40,7 @@
 					android:id="@+id/id_common_toolbar"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					app:navigationIcon="@drawable/md2x_ic_menu_blue"
+					app:navigationIcon="@drawable/v5_action_bar_menu"
 					app:layout_scrollFlags="scroll|enterAlways"
 					app:layout_collapseMode="pin"
 					style="@style/ToolBarStyle"
@@ -133,6 +133,7 @@
 	    app:itemIconTint="#787878"
 	    app:itemTextColor="#000000"
 	    app:menu="@menu/slide_menu"
+	    app:itemBackground="@drawable/navigation_menu_bg_selector"
 	    style="@style/NavigationStyle" />
    	<!-- 
 	    app:itemBackground="@drawable/btn_nav_menuitem_selector"

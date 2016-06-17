@@ -348,6 +348,12 @@ public class CustomApplication extends LitePalApplication {
 			mWorkerSp.saveReadedListInfo(readMap);
 		}
 		
+		boolean monitor = mAppInfo.getUser().isMonitor();
+		if (monitor) {
+			mAppInfo.stopMonitor();
+		}
+		getWorkerSp().saveBoolean(WorkerSP.SP_MONITOR_STATUS, monitor);
+		
 		// [日志]记录
 		WorkerLogUtil.insertAppBackgroundLog();
 		

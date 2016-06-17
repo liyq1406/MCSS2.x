@@ -215,5 +215,9 @@ public class QAODefine {
 	public static final String ACCESSABLE_JOIN = "join"; // 已经接入
 	public static final String ACCESSABLE_AWAY = "away"; // 不可以接入
 	
-		
+	
+	/* ControlMessage code */
+	public static final int CTR_CODE_1 = 1; // 转人工客服 可加参数argc=2,argv="组id 坐席id"
+	public static final int CTR_CODE_2 = 2; // 转机器人
+	
 }

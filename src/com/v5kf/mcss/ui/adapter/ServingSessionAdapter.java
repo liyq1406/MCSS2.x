@@ -297,6 +297,10 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
 				} else if (mBottomFuncLayout.getVisibility() == View.VISIBLE) {
 					mBottomFuncLayout.setVisibility(View.GONE);
 				}
+//				itemView.invalidate();
+				if (itemView.getParent() != null) {
+					itemView.getParent().requestLayout();
+				}
 				break;
 			case R.id.layout_chat_serving_session: // 点击整项
 				mRecyclerBean.getSession().clearUnreadMessageNum();

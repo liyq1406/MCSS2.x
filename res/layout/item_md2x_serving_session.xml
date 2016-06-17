@@ -158,6 +158,8 @@
 	        android:id="@+id/layout_more"
 	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
+	        android:clickable="true"
+	        android:focusableInTouchMode="true"
 	        android:background="@drawable/md2x_session_pickup_selector"
 	        android:orientation="horizontal" >
 	        
