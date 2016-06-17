@@ -120,6 +120,7 @@ public abstract class QAOBase {
 			
 			if (mApplication.getWorkerSp().readBoolean(WorkerSP.SP_MONITOR_STATUS)) {
 				mAppInfo.startMonitor();
+				mApplication.getWorkerSp().remove(WorkerSP.SP_MONITOR_STATUS);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

@@ -172,11 +172,12 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
         mMonitorBtn.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
             @Override
             public void onToggle(boolean on) {
-            	if (mAppInfo.getUser().isMonitor()) { // 停止监控
+            	if (!on) { // 停止监控
             		mAppInfo.stopMonitor();
     			} else { // 开启监控
     				mAppInfo.startMonitor();
     			}
+            	resetRecyclerList();
 //            	mHandler.obtainMessage(HDL_UPDATE_UI).sendToTarget();
             	mHandler.sendEmptyMessageDelayed(HDL_UPDATE_UI, 700);
             }
@@ -186,11 +187,11 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
     private void updateMonitorStatus(boolean monitor) {
     	Logger.d(TAG, "[updateMonitorStatus]" + monitor);
     	if (monitor) {
-        	mMonitorBtn.setToggleOn(false);
+        	mMonitorBtn.setToggleOn();
 			mMonitorTv.setText(R.string.in_monitor_tips);
 			mDotsTv.showAndPlay();
 		} else {
-			mMonitorBtn.setToggleOff(false);
+			mMonitorBtn.setToggleOff();
 			mMonitorTv.setText(R.string.start_monitor_tips);
 			mDotsTv.hideAndStop();
 		}

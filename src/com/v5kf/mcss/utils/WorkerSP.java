@@ -50,6 +50,11 @@ public class WorkerSP {
 	}
 	
 	/** 通用接口 **/
+	public void remove(String key) {
+		mEdit = mSharedPreferences.edit();
+		mEdit.remove(key);
+		mEdit.commit();
+	}
 	public void saveBoolean(String key, boolean val) {
 		mEdit = mSharedPreferences.edit();
 		mEdit.putBoolean(key, val);

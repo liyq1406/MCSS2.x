@@ -115,6 +115,7 @@ public class CustomApplication extends LitePalApplication {
 //		stopActivities();
 		
 		getWorkerSp().saveExitFlag(ExitFlag.ExitFlag_NeedLogin); // 主动退出
+		getWorkerSp().remove(WorkerSP.SP_MONITOR_STATUS);
 		mAppStatus = AppStatus.AppStatus_Exit;
 		mLoginStatus = LoginStatus.LoginStatus_Unlogin;
 		
@@ -351,8 +352,8 @@ public class CustomApplication extends LitePalApplication {
 		boolean monitor = mAppInfo.getUser().isMonitor();
 		if (monitor) {
 			mAppInfo.stopMonitor();
+			getWorkerSp().saveBoolean(WorkerSP.SP_MONITOR_STATUS, monitor);
 		}
-		getWorkerSp().saveBoolean(WorkerSP.SP_MONITOR_STATUS, monitor);
 		
 		// [日志]记录
 		WorkerLogUtil.insertAppBackgroundLog();
