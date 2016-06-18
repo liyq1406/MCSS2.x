@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:toggle="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -68,6 +69,7 @@
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 			            android:layout_centerVertical="true"
 			            android:text="@string/set_auto_boot" />
 			        
@@ -93,6 +95,7 @@
 		            <View
 				        android:layout_width="match_parent"
 				        android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 				        android:layout_height="@dimen/base_line_width_s"
 				        android:background="@color/info_activity_item_divider_inner" />
 			        			
@@ -101,10 +104,11 @@
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 			            android:layout_centerVertical="true"
 			            android:text="@string/set_auto_login" />
 			        
-			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			        <!-- <com.v5kf.mcss.ui.widget.SlideSwitchView
 			            android:id="@+id/switch_auto_login"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
@@ -113,7 +117,17 @@
 			            android:layout_centerVertical="true"
 			            android:layout_marginRight="@dimen/info_item_padding_inner"
 			            android:layout_marginEnd="@dimen/info_item_padding_inner"
-			            android:enabled="true" />
+			            android:enabled="true" /> -->
+			        <com.zcw.togglebutton.ToggleButton
+			            android:id="@+id/toggle_auto_login"
+				        android:layout_width="@dimen/info_item_toggle_w"
+				        android:layout_height="@dimen/info_item_toggle_h"
+				        android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            style="@style/CustomToggleButton" />
 			
 			    </RelativeLayout>
 		    
@@ -127,6 +141,7 @@
 				        android:id="@+id/view_hd"
 				        android:layout_width="match_parent"
 				        android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 				        android:layout_height="@dimen/base_line_width_s"
 				        android:background="@color/info_activity_item_divider_inner" />
 		            			        			
@@ -135,10 +150,11 @@
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 			            android:layout_centerVertical="true"
 			            android:text="@string/set_notify" />
 			        
-			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			        <!-- <com.v5kf.mcss.ui.widget.SlideSwitchView
 			            android:id="@+id/switch_notification"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
@@ -147,7 +163,17 @@
 			            android:layout_centerVertical="true"
 			            android:layout_marginRight="@dimen/info_item_padding_inner"
 			            android:layout_marginEnd="@dimen/info_item_padding_inner"
-			            android:enabled="true" />	        
+			            android:enabled="true" /> -->
+			        <com.zcw.togglebutton.ToggleButton
+			            android:id="@+id/toggle_notification"
+				        android:layout_width="@dimen/info_item_toggle_w"
+				        android:layout_height="@dimen/info_item_toggle_h"
+				        android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            style="@style/CustomToggleButton" />
 			
 			    </RelativeLayout>
 			    
@@ -195,6 +221,7 @@
 				        android:id="@+id/view1"
 				        android:layout_width="match_parent"
 				        android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 				        android:layout_height="@dimen/base_line_width_s"
 				        android:background="@color/info_activity_item_divider_inner" />
 			
@@ -203,10 +230,11 @@
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 			            android:layout_centerVertical="true"
 			            android:text="@string/set_voice" />
 			        
-			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			        <!-- <com.v5kf.mcss.ui.widget.SlideSwitchView
 			            android:id="@+id/switch_voice"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
@@ -215,7 +243,17 @@
 			            android:layout_centerVertical="true"
 			            android:layout_marginRight="@dimen/info_item_padding_inner"
 			            android:layout_marginEnd="@dimen/info_item_padding_inner"
-			            android:enabled="true" />
+			            android:enabled="true" /> -->
+			        <com.zcw.togglebutton.ToggleButton
+			            android:id="@+id/toggle_voice"
+				        android:layout_width="@dimen/info_item_toggle_w"
+				        android:layout_height="@dimen/info_item_toggle_h"
+				        android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            style="@style/CustomToggleButton" />
 			        
 			    </RelativeLayout>
 		
@@ -229,6 +267,7 @@
 				        android:id="@+id/view2"
 				        android:layout_width="match_parent"
 				        android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 				        android:layout_height="@dimen/base_line_width_s"
 				        android:background="@color/info_activity_item_divider_inner" />
 			
@@ -237,10 +276,11 @@
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
 			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 			            android:layout_centerVertical="true"
 			            android:text="@string/set_vibrate" />
 			
-			        <com.v5kf.mcss.ui.widget.SlideSwitchView
+			        <!-- <com.v5kf.mcss.ui.widget.SlideSwitchView
 			            android:id="@+id/switch_vibrate"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"
@@ -249,7 +289,17 @@
 			            android:layout_centerVertical="true"
 			            android:layout_marginRight="@dimen/info_item_padding_inner"
 			            android:layout_marginEnd="@dimen/info_item_padding_inner"
-			            android:enabled="true" />
+			            android:enabled="true" /> -->
+			        <com.zcw.togglebutton.ToggleButton
+			            android:id="@+id/toggle_vibrate"
+				        android:layout_width="@dimen/info_item_toggle_w"
+				        android:layout_height="@dimen/info_item_toggle_h"
+				        android:layout_alignParentRight="true"
+			            android:layout_alignParentEnd="true"
+			            android:layout_centerVertical="true"
+			            android:layout_marginRight="@dimen/info_item_padding_inner"
+			            android:layout_marginEnd="@dimen/info_item_padding_inner"
+			            style="@style/CustomToggleButton" />
 				
 			    </RelativeLayout>
 			    
@@ -314,6 +364,7 @@
 			        <View
 			            android:id="@+id/divider_feedback"
 			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 				        android:layout_width="match_parent"
 				        android:layout_height="@dimen/base_line_width_s"
 				        android:background="@color/info_activity_item_divider_inner" />
@@ -350,6 +401,7 @@
 			        <View
 			            android:id="@+id/divider_update"
 				       	android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 				        android:layout_width="match_parent"
 				        android:layout_height="@dimen/base_line_width_s"
 				        android:background="@color/info_activity_item_divider_inner" />
@@ -397,6 +449,7 @@
 			        <View
 			            android:id="@+id/divider_clear_cache"
 			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 				        android:layout_width="match_parent"
 				        android:layout_height="@dimen/base_line_width_s"
 				        android:background="@color/info_activity_item_divider_inner" />
@@ -431,6 +484,7 @@
 			        <View
 			            android:id="@+id/divider_refresh"
 			            android:layout_marginLeft="@dimen/info_item_margin_h"
+			            android:layout_marginStart="@dimen/info_item_margin_h"
 				        android:layout_width="match_parent"
 				        android:layout_height="@dimen/base_line_width_s"
 				        android:background="@color/info_activity_item_divider_inner" />

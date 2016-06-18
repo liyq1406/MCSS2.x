@@ -123,7 +123,9 @@
     <dimen name="info_item_margin_v">8dip</dimen>
     <dimen name="history_info_item_margin_v">15dip</dimen>
     <dimen name="info_item_margin_sv">4dip</dimen>
-    
+    <!-- ToggleButton -->
+    <dimen name="info_item_toggle_w">54dp</dimen>
+    <dimen name="info_item_toggle_h">30dp</dimen>
     
     <!-- 设计修改后 -->
     

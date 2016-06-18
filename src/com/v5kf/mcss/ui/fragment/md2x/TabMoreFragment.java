@@ -33,8 +33,6 @@ import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.activity.md2x.WorkerTreeActivity;
 import com.v5kf.mcss.ui.widget.CheckboxDialog;
 import com.v5kf.mcss.ui.widget.CheckboxDialog.CheckboxDialogListener;
-import com.v5kf.mcss.ui.widget.SlideSwitchView;
-import com.v5kf.mcss.ui.widget.SlideSwitchView.OnSwitchChangedListener;
 import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
 import com.v5kf.mcss.utils.DbUtil;
@@ -46,6 +44,8 @@ import com.v5kf.mcss.utils.WorkerSP;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.v5kf.mcss.utils.cache.MediaLoader;
 import com.v5kf.mcss.utils.cache.URLCache;
+import com.zcw.togglebutton.ToggleButton;
+import com.zcw.togglebutton.ToggleButton.OnToggleChanged;
 
 /**
  * @author chenhy
@@ -55,7 +55,7 @@ import com.v5kf.mcss.utils.cache.URLCache;
  * @description
  *
  */
-public class TabMoreFragment extends TabBaseFragment implements OnClickListener, OnSwitchChangedListener {
+public class TabMoreFragment extends TabBaseFragment implements OnClickListener, OnToggleChanged {
 	
 	private static final String TAG = "TabMoreFragment";
 	private static final int HDL_UPDATE_CACHE = 2;
@@ -65,7 +65,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	@SuppressWarnings("unused")
 	private RelativeLayout rl_autoboot, rl_switch_voice, rl_switch_vibrate, 
 		rl_feedback, rl_about, rl_update, rl_clearcache, rl_refresh, rl_service, rl_archworker; //rl_switch_notification_wait
-	private SlideSwitchView  mSwitchAutoBoot, mSwitchAutoLogin, mSwitchNotification,
+	private ToggleButton  mSwitchAutoBoot, mSwitchAutoLogin, mSwitchNotification,
 		mSwitchVoice, mSwitchVibrate; // mSwitchWaitNotification
 	private TextView mVersionTv;
 	private TextView mCacheSizeTv;
@@ -182,19 +182,25 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		mCacheSizeTv = (TextView) findViewById(R.id.id_cache_size_tv);
 		mUpdateProgress = (ProgressBar) findViewById(R.id.id_update_progress);
 
-		mSwitchAutoBoot = (SlideSwitchView) findViewById(R.id.switch_auto_boot);
-		mSwitchAutoLogin = (SlideSwitchView) findViewById(R.id.switch_auto_login);
+		mSwitchAutoBoot = (ToggleButton) findViewById(R.id.switch_auto_boot);
+		mSwitchAutoLogin = (ToggleButton) findViewById(R.id.switch_auto_login);
 //		mSwitchWaitNotification = (SlideSwitchView) findViewById(R.id.switch_notification_wait);
-		mSwitchNotification = (SlideSwitchView) findViewById(R.id.switch_notification);
-		mSwitchVoice = (SlideSwitchView) findViewById(R.id.switch_voice);
-		mSwitchVibrate = (SlideSwitchView) findViewById(R.id.switch_vibrate);
+		mSwitchNotification = (ToggleButton) findViewById(R.id.switch_notification);
+		mSwitchVoice = (ToggleButton) findViewById(R.id.switch_voice);
+		mSwitchVibrate = (ToggleButton) findViewById(R.id.switch_vibrate);
 		
-		mSwitchAutoBoot.setOnChangeListener(this);
-		mSwitchAutoLogin.setOnChangeListener(this);
-		mSwitchNotification.setOnChangeListener(this);
-//		mSwitchWaitNotification.setOnChangeListener(this);
-		mSwitchVoice.setOnChangeListener(this);
-		mSwitchVibrate.setOnChangeListener(this);
+//		mSwitchAutoBoot.setOnChangeListener(this);
+//		mSwitchAutoLogin.setOnChangeListener(this);
+//		mSwitchNotification.setOnChangeListener(this);
+////		mSwitchWaitNotification.setOnChangeListener(this);
+//		mSwitchVoice.setOnChangeListener(this);
+//		mSwitchVibrate.setOnChangeListener(this);
+		mSwitchAutoBoot.setOnToggleChanged(this);
+		mSwitchAutoLogin.setOnToggleChanged(this);
+		mSwitchNotification.setOnToggleChanged(this);
+//		mSwitchWaitNotification.setOnToggleChanged(this);
+		mSwitchVoice.setOnToggleChanged(this);
+		mSwitchVibrate.setOnToggleChanged(this);
 		
 		rl_feedback.setOnClickListener(this);
 		rl_about.setOnClickListener(this);
@@ -408,13 +414,13 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 			break;
 		}
 	}
-
+	
 	@Override
-	public void onSwitchChange(SlideSwitchView switchView, boolean isChecked) {
-		switch (switchView.getId()) {
+	public void onToggle(ToggleButton toggleButton, boolean on) {
+		switch (toggleButton.getId()) {
 		case R.id.switch_notification:
-			mSharedUtil.setPushNotifyEnable(isChecked);
-			if (isChecked) {
+			mSharedUtil.setPushNotifyEnable(on);
+			if (on) {
 //				rl_switch_notification_wait.setVisibility(View.VISIBLE);
 				rl_switch_vibrate.setVisibility(View.VISIBLE);
 				rl_switch_voice.setVisibility(View.VISIBLE);
@@ -434,19 +440,19 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 //			break;
 			
 		case R.id.switch_voice:
-			mSharedUtil.setAllowVoiceEnable(isChecked);
+			mSharedUtil.setAllowVoiceEnable(on);
 			break;
 			
 		case R.id.switch_vibrate:
-			mSharedUtil.setAllowVibrateEnable(isChecked);
+			mSharedUtil.setAllowVibrateEnable(on);
 			break;
 			
 		case R.id.switch_auto_boot:
-			mSharedUtil.setAllowAutoboot(isChecked);
+			mSharedUtil.setAllowAutoboot(on);
 			break;
 
 		case R.id.switch_auto_login:
-			mWsp.saveAutoLogin(isChecked);
+			mWsp.saveAutoLogin(on);
 			break;
 		}
 	}
@@ -463,7 +469,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 			break;
 		}
 	}
-	
+
 /***** event *****/
 	
 //	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)

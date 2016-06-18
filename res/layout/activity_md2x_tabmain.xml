@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:windowBackground="@color/white"
-    tools:context="com.v5kf.mcss.ui.activity.MainTabActivity" xmlns:app1="http://schemas.android.com/apk/res/com.v5kf.mcss">
+    tools:context="com.v5kf.mcss.ui.activity.MainTabActivity" >
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"

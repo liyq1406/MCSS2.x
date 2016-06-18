@@ -171,7 +171,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
         
         mMonitorBtn.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
             @Override
-            public void onToggle(boolean on) {
+            public void onToggle(ToggleButton btn, boolean on) {
             	if (!on) { // 停止监控
             		mAppInfo.stopMonitor();
     			} else { // 开启监控
