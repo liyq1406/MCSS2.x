@@ -62,6 +62,7 @@ import com.v5kf.mcss.ui.activity.md2x.WorkerLogActivity;
 import com.v5kf.mcss.ui.fragment.md2x.TabHistoryVisitorFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabMonitorFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabMoreFragment;
+import com.v5kf.mcss.ui.fragment.md2x.TabServingFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabServingSessionFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabWorkerListFragment;
 import com.v5kf.mcss.ui.widget.CircleImageView;
@@ -486,7 +487,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		}
 		
 		if (showBadge) {
-			getToolbar().setNavigationIcon(R.drawable.md2x_ic_menu_blue_badge);
+			getToolbar().setNavigationIcon(R.drawable.v5_action_bar_menu_badge);
 		} else {
 			getToolbar().setNavigationIcon(R.drawable.v5_action_bar_menu);
 		}
@@ -777,7 +778,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 			Fragment fragment = null;
 			switch (position) {
 			case 0:
-				fragment = new TabServingSessionFragment(MainTabActivity.this, position);
+				fragment = new TabServingFragment(MainTabActivity.this, position);
 				break;
 			case 1:
 				fragment = new TabWorkerListFragment(MainTabActivity.this, position);

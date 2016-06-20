@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bupt.freeshare.swipelayoutlibrary.SwipeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_chat_serving_session"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/session_item_bg_selector" >
+    
+    <LinearLayout
+        android:id="@+id/layout_func"
+        android:layout_width="210dp"
+        android:layout_height="@dimen/chat_list_item_height"
+        android:background="#F5F6F8"
+        android:visibility="visible"
+        android:weightSum="6"
+        android:layout_gravity="end"
+        android:gravity="end"
+        android:orientation="horizontal" >
+	    
+        <Button
+            android:id="@+id/id_trust_btn"
+            android:layout_width="@dimen/chat_list_item_height"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:textColor="#59C22F"
+            android:text="@string/option_in_trust" />
+        
+        <View
+	        android:layout_width="@dimen/base_line_width_s"
+	        android:layout_height="match_parent"
+	        android:layout_marginTop="4dp"
+	        android:layout_marginBottom="4dp"
+	        android:background="@color/session_morefunc_divider_color" />
+        
+        <Button
+            android:id="@+id/id_switch_btn"
+            android:layout_width="@dimen/chat_list_item_height"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:textColor="#40ABEB"
+            android:text="@string/option_switch" />
+        
+        <View
+	        android:layout_width="@dimen/base_line_width_s"
+	        android:layout_height="match_parent"
+	        android:layout_marginTop="4dp"
+	        android:layout_marginBottom="4dp"
+	        android:background="@color/session_morefunc_divider_color" />
+        
+        <Button
+            android:id="@+id/id_close_btn"
+            android:layout_width="@dimen/chat_list_item_height"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:textColor="#EF5656"
+            android:text="@string/option_end_session" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/layout_item"
+        android:baselineAligned="false"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+    	android:layout_height="@dimen/chat_list_item_height"
+    	android:background="@drawable/session_item_bg_selector"
+    	android:orientation="horizontal" >
+    
+	    <LinearLayout
+	        android:id="@+id/layout_content"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:baselineAligned="false"
+	        android:orientation="horizontal"
+	        android:gravity="center_vertical"
+	        android:paddingTop="6dp"
+		    android:paddingBottom="6dp"
+		    android:paddingLeft="4dp"
+		    android:paddingRight="4dp"
+		    android:paddingStart="4dp"
+		    android:paddingEnd="4dp" >
+	        
+	        <RelativeLayout
+		        android:id="@+id/id_img_layout"
+		        android:layout_width="@dimen/chat_list_left_img_layout_height"
+		        android:layout_height="match_parent" >
+		        
+		        <com.v5kf.mcss.ui.widget.CircleImageView
+			        android:id="@+id/id_item_photo"
+			        android:layout_width="@dimen/chat_list_left_img_width"
+			        android:layout_height="@dimen/chat_list_left_img_width"
+			        android:layout_centerInParent="true"
+			        android:contentDescription="@string/contentDescription"
+			        android:src="@drawable/v5_photo_default" />
+		        
+		    </RelativeLayout>
+		
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="@dimen/chat_list_top_layout_horizontal_padding"
+		        android:layout_marginBottom="@dimen/chat_list_top_layout_horizontal_padding"
+		        android:paddingRight="@dimen/chat_list_top_layout_horizontal_padding"
+		        android:paddingEnd="@dimen/chat_list_top_layout_horizontal_padding"
+		        android:paddingStart="@dimen/chat_list_top_layout_horizontal_padding"
+		        android:paddingLeft="@dimen/chat_list_top_layout_horizontal_padding"
+		        android:orientation="vertical" >
+		        
+		        <LinearLayout
+		            android:layout_width="fill_parent"
+		            android:layout_height="25dp"
+		            android:gravity="start"
+		        	android:orientation="horizontal"
+		            android:paddingBottom="@dimen/chat_list_top_layout_horizontal_padding" >
+		            
+		            <RelativeLayout
+		                android:id="@+id/layout_name_iface"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+			            android:layout_weight="1"
+			            android:gravity="start|center_vertical"
+		                android:orientation="horizontal" >
+		                
+		                <TextView
+			                android:id="@+id/id_item_title"
+				            android:layout_width="wrap_content"
+				            android:layout_height="wrap_content"
+				            android:layout_gravity="center_vertical"
+				            android:paddingRight="65dp"
+				            android:paddingEnd="65dp"
+				            android:paddingLeft="0dp"
+				            android:paddingStart="0dp"
+				            android:textSize="16sp"
+				            android:singleLine="true"
+				            android:textColor="#000000"
+				            android:text="@string/chat_title_hint" />
+		                
+		                <LinearLayout
+		                    android:layout_width="65dp"
+		                    android:layout_height="wrap_content"
+		                    android:orientation="horizontal"
+		                    android:layout_alignRight="@+id/id_item_title"
+		                    android:layout_alignEnd="@+id/id_item_title"
+		                    android:layout_centerVertical="true"
+		                    android:gravity="start" >
+		                    
+		                    <ImageView
+					            android:id="@+id/id_item_iface_img"
+								style="@style/IfaceImg"
+								android:layout_gravity="center_vertical"
+								android:src="@drawable/v5_iface_weixin"
+								android:contentDescription="@string/contentDescription" />
+					        
+					        <TextView
+					            android:id="@+id/id_item_iface_tv"
+								android:layout_gravity="center_vertical"
+								android:textSize="12sp"
+					            style="@style/Smile.TextView._Gray.Iface"
+					            android:text="@string/iface_open" />
+		                </LinearLayout>
+		                
+		            </RelativeLayout>
+		            
+		            <TextView
+		                android:id="@+id/id_item_date"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:textSize="12sp"
+			            android:singleLine="true"
+			            android:layout_gravity="end|center_vertical"
+			            android:textColor="@color/base_color_text_gray"
+			            android:text="@string/chat_date_hint" />
+		            
+		        </LinearLayout>
+		        
+		        <LinearLayout
+		           android:layout_width="match_parent"
+		           android:layout_height="25dp"
+		           android:gravity="center_vertical"
+			       android:orientation="horizontal" >
+		        
+			        <com.rockerhieu.emojicon.EmojiconTextView
+			            android:id="@+id/id_item_content"
+			            emojicon:emojiconSize="17sp"
+			            android:layout_width="0dp"
+			            android:layout_height="wrap_content"
+			            android:layout_weight="1"
+			            android:layout_marginRight="@dimen/chat_list_top_layout_horizontal_padding"
+			            android:layout_marginEnd="@dimen/chat_list_top_layout_horizontal_padding"
+			            android:textSize="14sp"            
+			            android:singleLine="true"
+			            android:textColor="#787878"
+						android:text="@string/chat_content_hint"/>
+			        
+			        <ImageView
+			            android:id="@+id/id_trust_robot"
+			            android:layout_width="25dp"
+			            android:layout_height="25dp"
+			            android:src="@drawable/v5_in_trust_robot"
+			            android:contentDescription="@string/contentDescription" />
+			        
+		        </LinearLayout>
+		        
+			</LinearLayout>
+	        
+	    </LinearLayout>
+		
+	    <LinearLayout
+	        android:id="@+id/layout_more"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:clickable="true"
+	        android:focusableInTouchMode="true"
+	        android:background="@drawable/md2x_session_pickup_selector"
+	        android:orientation="horizontal" >
+	        
+	        <View
+		        android:layout_width="@dimen/base_line_width_s"
+		        android:layout_height="match_parent"
+		        android:layout_marginTop="6dp"
+		        android:layout_marginBottom="6dp"
+		        android:background="@color/pickup_divider_color" />
+	        
+	        <ImageView
+	            android:id="@+id/more_btn"
+	            android:layout_width="32dp"
+	            android:layout_height="match_parent"
+	            android:gravity="center"
+	            android:background="@null"
+	            android:padding="0dp"
+	            android:src="@drawable/v5_ic_session_more"
+	            android:layout_margin="0dp" />
+	        
+	    </LinearLayout>
+    </LinearLayout>
+    
+</bupt.freeshare.swipelayoutlibrary.SwipeLayout>

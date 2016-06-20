@@ -331,6 +331,19 @@ public class UITools {
 	    return result;
 	}
 	
+	/**
+	 * 得到设备屏幕的宽度
+	 */
+	public static int getScreenWidth(Context context) {
+		return context.getResources().getDisplayMetrics().widthPixels;
+	}
+
+	/**
+	 * 得到设备屏幕的高度
+	 */
+	public static int getScreenHeight(Context context) {
+		return context.getResources().getDisplayMetrics().heightPixels;
+	}
 	
 	/**
 	 * 将px值转换为dip或dp值，保证尺寸大小不变
