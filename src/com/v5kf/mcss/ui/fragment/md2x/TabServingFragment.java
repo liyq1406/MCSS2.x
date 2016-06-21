@@ -16,12 +16,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import com.chyrain.irecyclerview.IRecyclerView;
+import com.chyrain.irecyclerview.JingDongHeaderLayout;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
-import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.entity.CustomerBean.CustomerType;
 import com.v5kf.mcss.eventbus.EventTag;
@@ -72,7 +75,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	@Override
 	protected void onResumeLazy() {
 		super.onResumeLazy();
-		resetRecyclerList();
+		//resetRecyclerList();
 		Logger.d(TAG, TAG + "所在的Activity onResume, onResumeLazy " + this);
 	}
 
@@ -121,7 +124,6 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
         	addRecycleBean(cstm);
 		}
 	}
-	
 
 	/**
      * 初始化界面Adapter和RecycleView
@@ -140,6 +142,23 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		mIRecycleView.getRefreshableView().setScrollbarFadingEnabled(true);
 		mIRecycleView.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
         
+		mIRecycleView.setHeaderLayout(new JingDongHeaderLayout(mParentActivity));
+		// Set a listener to be invoked when the list should be refreshed.
+		mIRecycleView.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
+
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				Toast.makeText(mParentActivity, "Pull Down!", Toast.LENGTH_SHORT).show();
+				onRefresh();
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				Toast.makeText(mParentActivity, "Pull Up!", Toast.LENGTH_SHORT).show();
+				
+			}
+		});
+		
         /* 空白按钮 */
         findViewById(R.id.layout_container_tv).setOnClickListener(new OnClickListener() {
 			
@@ -192,8 +211,9 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
     		Logger.w(TAG, "Already hasRecycleBeans ====");
     		return false;
     	}
-		mRecycleBeans.add(0, new IServingBean(cstm));
-		mRecycleAdapter.notifyDataSetChanged();/*Null?*/
+//		mRecycleBeans.add(0, new IServingBean(cstm));
+		mRecycleAdapter.addOnTop(new IServingBean(cstm));
+//		mRecycleAdapter.notifyDataSetChanged();/*Null?*/
 //		mRecycleAdapter.notifyItemInserted(0);
 		checkListEmpty();
 		Logger.i(TAG, "[[[mRecycleBeans.add]]] c_id = " + cstm.getC_id());
@@ -287,7 +307,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		switch (msg.what) {
 		case HDL_STOP_REFRESH:
 			if (mIRecycleView.isRefreshing()) {
-				mIRecycleView.setRefreshing(false);
+				mIRecycleView.onRefreshComplete();
 			}
 			break;
 		}
@@ -314,11 +334,32 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	/***** event *****/
 
 	@Subscriber(tag = EventTag.ETAG_SERVING_CSTM_CHANGE, mode = ThreadMode.MAIN)
-	private void servingCustomerChange(AppInfoKeeper appinfo) {
+	private void servingCustomerChange(String type) {
 		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
 		// 更新整个列表
 		resetRecyclerList();
 		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
+		
+		switch (type) {
+		case QAODefine.O_METHOD_GET_CUSTOMER_LIST:
+			resetRecyclerList();
+			break;
+			
+		case QAODefine.O_METHOD_CSTM_ACCESSABLE_CHANGE:
+		case QAODefine.O_METHOD_GET_IN_TRUST:
+		case QAODefine.O_TYPE_MESSAGE:
+			mRecycleAdapter.notifyDataSetChanged();
+			break;
+		
+		case QAODefine.O_METHOD_GET_CUSTOMER_MESSAGES: // customer_join_in
+			// 单独控制
+			break;
+			
+		case QAODefine.O_METHOD_CSTM_JOIN_OUT: // customer_jonin_out
+			// 单独控制
+			resetRecyclerList();
+			break;
+		}
     }
 	
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)

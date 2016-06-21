@@ -2,6 +2,8 @@ package com.v5kf.mcss.ui.adapter;
 
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,8 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerBean;
+import com.v5kf.mcss.manage.RequestManager;
+import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.CustomerInfoListActivity;
 import com.v5kf.mcss.ui.widget.BadgeView;
@@ -64,8 +68,10 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
     	if (customer.getAccessable() != null && 
     			customer.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
     		holder.mTitle.setTextColor(0xFF01BA1B);
+    		holder.mPickupLayout.setVisibility(View.VISIBLE);
     	} else {
     		holder.mTitle.setTextColor(0xFF000000);
+    		holder.mPickupLayout.setVisibility(View.GONE);
     	}
     }
 
@@ -84,6 +90,8 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
         public TextView mIfaceTv;
         public BadgeView mBadgeView;
         public TextView mDate;
+        
+        public View mPickupLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -91,9 +99,10 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
             mTitle = (TextView) itemView.findViewById(R.id.id_item_title);
             mIfaceImg = (ImageView) itemView.findViewById(R.id.id_item_iface_img);
             mIfaceTv = (TextView) itemView.findViewById(R.id.id_item_iface_tv);
-            mDate = (TextView) itemView.findViewById(R.id.id_item_date);
+            mPickupLayout = itemView.findViewById(R.id.layout_pickup);
             mBadgeView = new BadgeView(mActivity);
-            itemView.setOnClickListener(this);
+            itemView.findViewById(R.id.item_historical_customer).setOnClickListener(this); 
+            mPickupLayout.setOnClickListener(this); 
 //			itemView.setOnLongClickListener(this);
         }
 
@@ -174,14 +183,27 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
 				Logger.e(TAG, "ViewHolder has null SessionBean");
 				return;
 			}
-			Bundle bundle = new Bundle();
-			bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_ACTIVITY_START);
-			bundle.putString(Config.EXTRA_KEY_V_ID, cstm.getVisitor_id());
-			
-			Intent intent = new Intent(mActivity, CustomerInfoListActivity.class);
-			intent.putExtras(bundle);
-			mActivity.startActivityForResult(intent, Config.REQUEST_CODE_HISTORY_VISITOR);
-			mActivity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+			switch (v.getId()) {
+			case R.id.item_historical_customer:
+				Bundle bundle = new Bundle();
+				bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_ACTIVITY_START);
+				bundle.putString(Config.EXTRA_KEY_V_ID, cstm.getVisitor_id());
+				
+				Intent intent = new Intent(mActivity, CustomerInfoListActivity.class);
+				intent.putExtras(bundle);
+				mActivity.startActivityForResult(intent, Config.REQUEST_CODE_HISTORY_VISITOR);
+				mActivity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				break;
+			case R.id.layout_pickup:
+				CustomerRequest creq = null;
+				try {
+					creq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, mActivity);
+					creq.pickCustomer(cstm.getVisitor_id(), cstm.getF_id());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
 		}
 
 		public void setPosition(int mPosition) {

@@ -20,7 +20,7 @@ import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.ui.activity.BaseActivity;
-import com.v5kf.mcss.ui.activity.V51xTabActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.utils.Logger;
 
 public abstract class BaseFragment extends Fragment {
@@ -29,7 +29,7 @@ public abstract class BaseFragment extends Fragment {
 	protected AppInfoKeeper mAppInfo;
 	protected BroadcastReadReceiver mReceiver;
 	protected FragmentHandler mHandler;
-	protected BaseActivity mActivity;
+	protected ActivityBase mActivity;
 	
 	protected static final int HDL_STOP_REFRESH = 11;
 	protected static final int HDL_STOP_LOAD = 12;
@@ -45,8 +45,8 @@ public abstract class BaseFragment extends Fragment {
 	@Override
     public void onAttach(Activity activity) {
     	super.onAttach(activity);
-    	if (activity instanceof V51xTabActivity) {
-    		mActivity = (V51xTabActivity) activity;
+    	if (activity instanceof ActivityBase) {
+    		mActivity = (ActivityBase) activity;
     	} else {
     		mActivity = (BaseActivity) activity;
     		Logger.w("**BaseFragment**", "onAttach activity is not instanceof MainTabActivity and HomeTabActivity");

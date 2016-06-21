@@ -37,6 +37,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerBean;
+import com.v5kf.mcss.ui.widget.CircleImageView;
 
 /**
  * dp、sp 转换为 px 的工具类
@@ -525,6 +526,9 @@ public class UITools {
      * @param iv
      */
     public static void grayImageView(ImageView iv) {
+    	if (iv instanceof CircleImageView) {
+    		((CircleImageView)iv).setBorderWidth(0);
+    	}
     	Logger.d("DisplayUtil", "[grayImageView] ImageView:" + iv + " drawable:" + iv.getDrawable());
     	Bitmap bmp = ((BitmapDrawable)iv.getDrawable()).getBitmap();
     	iv.setImageBitmap(getGrayBitmap(bmp));

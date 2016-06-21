@@ -8,9 +8,9 @@
         android:id="@+id/id_irecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/info_activity_layout_bg"
+        android:background="@color/base_list_content_bg"
         ptr:ptrDrawable="@drawable/v5_loading"
-        ptr:ptrMode="both" />
+        ptr:ptrMode="pullFromStart" />
     
     <LinearLayout
         android:id="@+id/layout_container_empty"

@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:padding="8dp"
-        android:background="@color/main_color_dark" >			
+        android:background="@color/content_empty_tips_bg_color" >			
         
         <TextView
             android:id="@+id/id_monitor_tips"
@@ -62,7 +62,7 @@
 	    <LinearLayout
 	        android:id="@+id/layout_container_empty"
 	        android:visibility="gone"
-	        android:background="@color/content_empty_tips_bg_color"
+	        android:background="@color/base_list_content_bg"
 	        android:gravity="center"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"

@@ -170,7 +170,11 @@ public class QAOCustomer extends QAOBase {
 				customer.setAccessable(accessable);
 				Logger.d(TAG, "parseCustomerAccessableChange -> customer:" + customer.getDefaultName());
 				postEvent(customer, EventTag.ETAG_VISITORS_CHANGE);
-				postEvent(mAppInfo, EventTag.ETAG_SERVING_CSTM_CHANGE);
+				if (customer.getCstmType() == CustomerType.CustomerType_ServingAlive) {
+					postEvent(QAODefine.O_METHOD_CSTM_ACCESSABLE_CHANGE, EventTag.ETAG_SERVING_CSTM_CHANGE);
+				} else {
+					postEvent(mAppInfo, EventTag.ETAG_WAITING_CSTM_CHANGE);
+				}
 				postEvent(customer, EventTag.ETAG_ACCESSABLE_CHANGE);
 				//return;
 			} else {
@@ -249,7 +253,7 @@ public class QAOCustomer extends QAOBase {
 				mAppInfo.removeCustomer(cstm);
 			}
 		}
-		postEvent(mAppInfo, EventTag.ETAG_SERVING_CSTM_CHANGE);
+		postEvent(QAODefine.O_METHOD_GET_CUSTOMER_LIST, EventTag.ETAG_SERVING_CSTM_CHANGE);
 		
 		/* 应答对应登录成功后需进行仅此一次该请求 */
 		if (qao_data.has(QAODefine.CUSTOMER)) {
@@ -376,7 +380,7 @@ public class QAOCustomer extends QAOBase {
 		mAppInfo.getSessionBean(s_id).setInTrust(status == 1 ? true : false);
 		
 		// 通知界面更新[eventbus]
-		postEvent(mAppInfo, EventTag.ETAG_SERVING_CSTM_CHANGE);
+		postEvent(QAODefine.O_METHOD_GET_IN_TRUST, EventTag.ETAG_SERVING_CSTM_CHANGE);
 		postEvent(mAppInfo.getSessionBean(s_id), EventTag.ETAG_IN_TRUST_CHANGE);
 	}
 
@@ -429,7 +433,7 @@ public class QAOCustomer extends QAOBase {
 		mAppInfo.clearCustomerSession(customer);
 		
 		// 通知界面更新[eventbus]
-		postEvent(mAppInfo, EventTag.ETAG_SERVING_CSTM_CHANGE);
+		postEvent(QAODefine.O_METHOD_CSTM_JOIN_OUT, EventTag.ETAG_SERVING_CSTM_CHANGE);
 		postEvent(customer, EventTag.ETAG_CSTM_OUT);
 		postEvent(mAppInfo, EventTag.ETAG_VISITORS_CHANGE);
 	}
@@ -613,7 +617,7 @@ public class QAOCustomer extends QAOBase {
 		
 		// [通知界面][eventbus]
 		if (customer.getCstmType() == CustomerType.CustomerType_ServingAlive) {
-			postEvent(mAppInfo, EventTag.ETAG_SERVING_CSTM_CHANGE);
+			postEvent(QAODefine.O_METHOD_GET_CUSTOMER_MESSAGES, EventTag.ETAG_SERVING_CSTM_CHANGE);
 		} else if (customer.getCstmType() == CustomerType.CustomerType_WaitingAlive) {
 			postEvent(mAppInfo, EventTag.ETAG_WAITING_CSTM_CHANGE);
 		}

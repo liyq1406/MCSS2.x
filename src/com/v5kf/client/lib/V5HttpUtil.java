@@ -29,6 +29,16 @@ public class V5HttpUtil {
 		POST,
 		GET
 	}
+	
+	public static String urlStringCheck(String path) {
+		if (path.startsWith("http://") || path.startsWith("https://")) {
+			return path;
+		} else if (path.startsWith("//")) {
+			return "http:" + path;
+		} else {
+			return "http://" + path;
+		}
+	}
 
 	public static void post(final String url, final String entity, final HttpResponseHandler handler) {
 		new Thread(new Runnable() {
@@ -264,17 +274,19 @@ public class V5HttpUtil {
 //				}
 				if ((sha == null || sha.isEmpty())) {
 					myData = byteAppend(myData, lastBoundary.getBytes()); // last boundary
-				} else {
-					if (sha != null && !sha.isEmpty()) {
-						myData = byteAppend(myData, commonBoundary.getBytes());// 间隔 boundary
-						// 添加MD5
-						StringBuffer md5Content = new StringBuffer();
-						md5Content.append("Content-Disposition: form-data; name=\"sha\"" + LINE_END + LINE_END);
-						md5Content.append(sha);
-						myData = byteAppend(myData, md5Content.toString().getBytes());
-					}
-					myData = byteAppend(myData, lastBoundary.getBytes()); // last boundary
-				}
+				} 
+//				else {
+//					if (sha != null && !sha.isEmpty()) {
+//						myData = byteAppend(myData, commonBoundary.getBytes());// 间隔 boundary
+//						// 添加MD5
+//						StringBuffer md5Content = new StringBuffer();
+//						md5Content.append("Content-Disposition: form-data; name=\"sha\"" + LINE_END + LINE_END);
+//						md5Content.append(sha);
+//						myData = byteAppend(myData, md5Content.toString().getBytes());
+//					}
+//					myData = byteAppend(myData, lastBoundary.getBytes()); // last boundary
+//				}
+				
 //                DataInputStream in = new DataInputStream(new FileInputStream(file));  
 //                int bytes = 0;  
 //                byte[] myData = new byte[1024];  
@@ -290,8 +302,9 @@ public class V5HttpUtil {
 	public static void httpSync(String path, HttpMethod method, byte[] myData, Map<String, String> headers, HttpResponseHandler handler) {
 		URL url;
 		try {
+			String urlStr = urlStringCheck(path);
 			Logger.d(TAG, "[httpSync] path:" + path);
-			url = new URL(path);
+			url = new URL(urlStr);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setConnectTimeout(30000);
 			urlConnection.setReadTimeout(30000);

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import bupt.freeshare.swipelayoutlibrary.IAdapter;
@@ -88,6 +89,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
     	}
     	Logger.w(TAG, "托管状态：" + session.isInTrust());
     	if (session.isInTrust()) {
+    		holder.mIntrustBtn.setText(R.string.option_cancel_trust);
     		holder.mTrustIv.setVisibility(View.VISIBLE);
 //    		Drawable drawable = UITools.getDrawable(mActivity, R.drawable.v5_popmenu_in_trust);
 //    		drawable.setBounds(0, 0, holder.mTitle.getHeight(), holder.mTitle.getHeight());
@@ -97,6 +99,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 //    				null, 
 //    				null);
     	} else {
+    		holder.mIntrustBtn.setText(R.string.option_in_trust);
     		holder.mTrustIv.setVisibility(View.GONE);
 //    		holder.mTitle.setCompoundDrawables(null, null, null, null);
     	}
@@ -248,6 +251,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
         public ImageView mTrustIv;
         public View mContentView;
 //        public View mFuncLayout;
+        public Button mIntrustBtn;
         
         public SwipeLayout mSwipeLayout;
         
@@ -266,11 +270,12 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
             mBadgeView = new BadgeView(mActivity);
             mSwipeLayout = (SwipeLayout)itemView.findViewById(R.id.layout_chat_serving_session);
             mContentView.setOnClickListener(this);
-//            itemView.setOnLongClickListener(this);
+            itemView.setOnLongClickListener(this);
+            mIntrustBtn = (Button)itemView.findViewById(R.id.id_trust_btn);
             
             itemView.findViewById(R.id.more_btn).setOnClickListener(this);
             itemView.findViewById(R.id.layout_more).setOnClickListener(this);
-            itemView.findViewById(R.id.id_trust_btn).setOnClickListener(this);
+            mIntrustBtn.setOnClickListener(this);
             itemView.findViewById(R.id.id_switch_btn).setOnClickListener(this);
             itemView.findViewById(R.id.id_close_btn).setOnClickListener(this);
             
@@ -412,11 +417,13 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 					CustomerRequest creq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, mActivity);
 					if (mRecyclerBean.getSession().isInTrust()) {
 						/* 取消托管 */
+						mIntrustBtn.setText(R.string.option_cancel_trust);
 						mRecyclerBean.getSession().setInTrust(false);
 						creq.setInTrust(mRecyclerBean.getC_id(), 0);
 						mTrustIv.setVisibility(View.GONE);
 					} else {
 						/* 设置托管 */
+						mIntrustBtn.setText(R.string.option_in_trust);
 						mRecyclerBean.getSession().setInTrust(true);
 						creq.setInTrust(mRecyclerBean.getC_id(), 1);
 						mTrustIv.setVisibility(View.VISIBLE);

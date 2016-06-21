@@ -31,6 +31,7 @@ import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.WaitingSessionAdapter;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
+import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.WorkerSP;
 import com.zcw.togglebutton.ToggleButton;
 
@@ -184,7 +185,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
             	
             	resetRecyclerList();
 //            	mHandler.obtainMessage(HDL_UPDATE_UI).sendToTarget();
-            	mHandler.sendEmptyMessageDelayed(HDL_UPDATE_UI, 700);
+            	mHandler.sendEmptyMessageDelayed(HDL_UPDATE_UI, 200);
             }
 	    });
     }
@@ -196,10 +197,16 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
         	//mMonitorBtn.setToggleOn();
 			mMonitorTv.setText(R.string.in_monitor_tips);
 			mDotsTv.showAndPlay();
+			
+			mMonitorTv.setTextColor(UITools.getColor(R.color.md2x_blue));
+			mDotsTv.setTextColor(UITools.getColor(R.color.md2x_blue));
 		} else {
 			//mMonitorBtn.setToggleOff();
 			mMonitorTv.setText(R.string.start_monitor_tips);
 			mDotsTv.hideAndStop();
+			
+			mMonitorTv.setTextColor(UITools.getColor(R.color.md2x_gray));
+			mDotsTv.setTextColor(UITools.getColor(R.color.md2x_gray));
 		}
 	}
 
@@ -338,13 +345,14 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	protected void handleMessage(Message msg, ActivityBase activityBase) {
 		switch (msg.what) {
 		case HDL_UPDATE_UI:
-        	if (mAppInfo.getUser().isMonitor()) {
-    			mMonitorTv.setText(R.string.in_monitor_tips);
-    			mDotsTv.showAndPlay();
-    		} else {
-    			mMonitorTv.setText(R.string.start_monitor_tips);
-    			mDotsTv.hideAndStop();
-    		}
+//        	if (mAppInfo.getUser().isMonitor()) {
+//    			mMonitorTv.setText(R.string.in_monitor_tips);
+//    			mDotsTv.showAndPlay();
+//    		} else {
+//    			mMonitorTv.setText(R.string.start_monitor_tips);
+//    			mDotsTv.hideAndStop();
+//    		}
+        	updateMonitorStatus(mAppInfo.getUser().isMonitor());
 			break;
 		case HDL_STOP_REFRESH:
 			break;

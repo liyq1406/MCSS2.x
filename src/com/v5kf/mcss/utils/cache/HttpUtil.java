@@ -26,6 +26,7 @@ import javax.net.ssl.X509TrustManager;
 
 import com.v5kf.client.lib.Logger;
 import com.v5kf.client.lib.V5ClientConfig;
+import com.v5kf.client.lib.V5HttpUtil;
 import com.v5kf.mcss.utils.FileUtil;
 
 /**
@@ -59,7 +60,8 @@ public class HttpUtil {
 				}
 				buffer.deleteCharAt(buffer.length() - 1);
 			}
-			url = new URL(path);
+			String urlStr = V5HttpUtil.urlStringCheck(path);
+			url = new URL(urlStr);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setConnectTimeout(3000);
 			urlConnection.setRequestMethod("POST");
@@ -110,10 +112,12 @@ public class HttpUtil {
 	}
 
 	public static InputStream getInputStream(String path) {
+		String urlStr = V5HttpUtil.urlStringCheck(path);
+		Logger.i(TAG, "urlStr:" + urlStr);
 		URL url;
 		HttpURLConnection urlConnection;
 		try {
-			url = new URL(path);
+			url = new URL(urlStr);
 			
             if (url.getProtocol().toLowerCase().equals("https")) {
             	// [修改]trust all hosts，解决https访问失败问题

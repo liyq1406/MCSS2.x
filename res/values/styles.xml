@@ -335,7 +335,7 @@
     </style>
 
     <style name="CustomToggleButton">
-        <item name="toggleOnColor">#00BB1A</item>
+        <item name="toggleOnColor">#6fbff0</item><!-- #00BB1A -->
         <item name="toggleOffColor">#DFDFDF</item>
         <item name="toggleSpotColor">#FFFFFF</item>
         <item name="toggleOffBorderColor">#DFDFDF</item>

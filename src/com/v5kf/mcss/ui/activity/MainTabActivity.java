@@ -966,11 +966,24 @@ public class MainTabActivity extends BaseToolbarActivity {
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_SERVING_CSTM_CHANGE, mode = ThreadMode.MAIN)
-	private void servingCustomerChange(AppInfoKeeper appinfo) {
-		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
-		updateSessionBadge();
-		dismissProgress();
+	private void servingCustomerChange(String type) {
+		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE: " + type);
+		//updateSessionBadge();
+		//dismissProgress();
 		//getSupportActionBar().invalidateOptionsMenu();
+		switch (type) {
+		case QAODefine.O_METHOD_GET_CUSTOMER_LIST:
+		case QAODefine.O_METHOD_GET_CUSTOMER_MESSAGES:
+		case QAODefine.O_METHOD_CSTM_JOIN_OUT:
+			updateSessionBadge();
+			dismissProgress();
+			break;
+		case QAODefine.O_METHOD_CSTM_ACCESSABLE_CHANGE:
+		case QAODefine.O_METHOD_GET_IN_TRUST:
+		case QAODefine.O_TYPE_MESSAGE:
+			//
+			break;
+		}
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_WAITING_CSTM_CHANGE, mode = ThreadMode.MAIN)

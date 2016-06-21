@@ -11,9 +11,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
-import com.v5kf.mcss.ui.activity.V51xTabActivity;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 
 public class IntentUtil {

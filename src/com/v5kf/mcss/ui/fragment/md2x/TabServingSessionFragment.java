@@ -325,7 +325,7 @@ public class TabServingSessionFragment extends TabBaseFragment implements OnRefr
 	/***** event *****/
 
 	@Subscriber(tag = EventTag.ETAG_SERVING_CSTM_CHANGE, mode = ThreadMode.MAIN)
-	private void servingCustomerChange(AppInfoKeeper appinfo) {
+	private void servingCustomerChange(String type) {
 		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
 		// 更新整个列表
 		resetRecyclerList();

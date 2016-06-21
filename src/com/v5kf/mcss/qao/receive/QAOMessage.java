@@ -99,7 +99,7 @@ public class QAOMessage extends QAOBase {
 				
 				// [通知更新][eventbus]
 				if (customer.getCstmType() == CustomerType.CustomerType_ServingAlive) {
-					postEvent(mAppInfo, EventTag.ETAG_SERVING_CSTM_CHANGE);
+					postEvent(o_type, EventTag.ETAG_SERVING_CSTM_CHANGE);
 				} else if (customer.getCstmType() == CustomerType.CustomerType_WaitingAlive) {
 					postEvent(mAppInfo, EventTag.ETAG_WAITING_CSTM_CHANGE);
 				}

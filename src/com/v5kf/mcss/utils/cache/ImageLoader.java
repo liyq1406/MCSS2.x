@@ -82,10 +82,10 @@ public class ImageLoader {
 			else
 				imageView.setBackgroundResource(mDefaultImg);
 			
+			checkImageBorder(imageView);
 			if (mListener != null) {
 				mListener.onFailure(this, url, imageView);
 			}
-			checkImageBorder(imageView);
 			return;
 		} else {
 			resetImageBorder(imageView);
@@ -255,7 +255,9 @@ public class ImageLoader {
 			if (imageViewReused(photoToLoad))
 				return;
 			Bitmap bmp = getBitmap(photoToLoad.url);
-			memoryCache.put(photoToLoad.url, bmp);
+			if (bmp != null) {
+				memoryCache.put(photoToLoad.url, bmp);
+			}
 			Logger.d("ImageLoader", "259 memoryCache put:" + photoToLoad.url);
 			if (imageViewReused(photoToLoad))
 				return;
@@ -316,19 +318,20 @@ public class ImageLoader {
 					photoToLoad.imageView.setImageBitmap(bitmap);
 				else
 					photoToLoad.imageView.setBackgroundDrawable(new BitmapDrawable(bitmap));
+				resetImageBorder(photoToLoad.imageView);
 				if (mListener != null) {
 					mListener.onSuccess(mUrl, mImageView);
 				}
-				resetImageBorder(photoToLoad.imageView);
 			}  else { // 获取图片失败
 				if (isSrc)
 					photoToLoad.imageView.setImageResource(R.drawable.v5_img_src_error);
 				else
 					photoToLoad.imageView.setBackgroundResource(R.drawable.v5_img_src_error);
+				
+				checkImageBorder(photoToLoad.imageView);
 				if (mListener != null) {
 					mListener.onFailure(ImageLoader.this, mUrl, mImageView);
 				}
-				checkImageBorder(photoToLoad.imageView);
 			}
 		}
 	}
