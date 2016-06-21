@@ -112,8 +112,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		} else if (mCurrentPageIndex == 0) {
 			moveTaskToBack(true);
 		} else {
-			mNavigationView.getMenu().getItem(0).setChecked(true);
-			indicatorViewPager.setCurrentItem(0, false);
+			gotoSubPage(0);
 		}
     }
 	
@@ -396,7 +395,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	/**
 	 * 进入坐席个人信息页
 	 */
-	protected void gotoWorkerInfoActivity() {
+	public void gotoWorkerInfoActivity() {
 		Bundle bundle = new Bundle();
 		bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_ACTIVITY_START);
 		bundle.putString(Config.EXTRA_KEY_W_ID, mAppInfo.getUser().getW_id());			
@@ -404,6 +403,15 @@ public class MainTabActivity extends BaseToolbarActivity {
 		intent.putExtras(bundle);
 		startActivity(intent);
 		overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+	}
+	
+	/**
+	 * 跳到fragment
+	 * @param index
+	 */
+	public void gotoSubPage(int index) {
+		mNavigationView.getMenu().getItem(index).setChecked(true);
+		indicatorViewPager.setCurrentItem(index, false);
 	}
 
 	protected void onFragmentPageSelected(int position) {
@@ -431,7 +439,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	/**
 	 * 刷新Toolbar红点
 	 */
-	private void updateSessionBadge() {
+	public void updateSessionBadge() {
 		updateHomeBadge();
 		
 		int waitingCount = mAppInfo.getWaitingCustomerCount();
@@ -496,7 +504,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	/**
 	 * 更新整个侧边滑动栏
 	 */
-	private void updateSlideMenu() {
+	protected void updateSlideMenu() {
 		if (mNavigationView.getHeaderView(0) == null) {
 			return;
 		}
@@ -597,7 +605,7 @@ public class MainTabActivity extends BaseToolbarActivity {
      * @param showSeekBar MainTabActivity 
      * @return void
      */
-    private void showSeekBar() {
+    protected void showSeekBar() {
     	if (null == mSeekBarDialog) {
     		mSeekBarDialog = new ModeSeekbarDialog(this, mAppInfo.getUser());
     	}
@@ -985,6 +993,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	
 	@Subscriber(tag = EventTag.ETAG_LOGOUT_CHANGE, mode = ThreadMode.MAIN)
 	private void logoutChange(Integer error) {
+		Logger.d(TAG + "-eventbus", "logoutChange -> ETAG_LOGOUT_CHANGE");
 		mHandler.removeMessages(HDL_LOGOUT_TIMEOUT);
 		dismissProgressDialog();
 		if (error == 0) {
@@ -994,6 +1003,12 @@ public class MainTabActivity extends BaseToolbarActivity {
 		} else {
 			showAlertDialog(R.string.warning_logout_failed);
 		}
+	}
+
+	@Subscriber(tag = EventTag.ETAG_PICK_CSTM_OK, mode = ThreadMode.MAIN)
+	private void pickUpSuccess(AppInfoKeeper appinfo) {
+		Logger.d(TAG + "-eventbus", "pickUpSuccess -> ETAG_PICK_CSTM_OK");
+		gotoSubPage(0);
 	}
 
 }

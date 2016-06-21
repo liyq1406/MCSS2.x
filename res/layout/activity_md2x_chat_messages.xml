@@ -40,14 +40,15 @@
 		                
 		        <com.v5kf.mcss.ui.widget.CircleImageView
 		            android:id="@+id/cstm_photo_iv"
-		            android:layout_width="32dp"
-			        android:layout_height="32dp"
+		            android:layout_width="36dp"
+			        android:layout_height="36dp"
 			        android:layout_marginRight="8dp"
 			        android:src="@drawable/v5_photo_default_cstm"
 			        android:background="@color/transparent" />
 		        
 		        <ImageView
 		            android:id="@+id/more_iv"
+		            android:visibility="gone"
 		            android:layout_width="30dp"
 		            android:layout_height="30dp"
 		            android:layout_marginRight="6dp"

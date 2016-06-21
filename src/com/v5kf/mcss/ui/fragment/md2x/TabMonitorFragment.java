@@ -31,6 +31,7 @@ import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.WaitingSessionAdapter;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
+import com.v5kf.mcss.utils.WorkerSP;
 import com.zcw.togglebutton.ToggleButton;
 
 /**
@@ -88,7 +89,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	protected void onFragmentStartLazy() {
 		super.onFragmentStartLazy();
 		Log.d(TAG, TAG + " 显示 " + this);
-		updateMonitorStatus(mAppInfo.getUser().isMonitor());
+		updateMonitorStatus(mApplication.getWorkerSp().readBoolean(WorkerSP.SP_MONITOR_STATUS));
 //		this.mParentActivity.showToolbar();
 //		this.mParentActivity.hideFab();
 //		this.mParentActivity.setBarColor(UITools.getColor(R.color.main_color));
@@ -172,11 +173,15 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
         mMonitorBtn.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
             @Override
             public void onToggle(ToggleButton btn, boolean on) {
+            	Logger.i(TAG, "[onToggle]:" + on);
             	if (!on) { // 停止监控
             		mAppInfo.stopMonitor();
     			} else { // 开启监控
     				mAppInfo.startMonitor();
     			}
+            	// 保存监控状态
+            	mApplication.getWorkerSp().saveBoolean(WorkerSP.SP_MONITOR_STATUS, on);
+            	
             	resetRecyclerList();
 //            	mHandler.obtainMessage(HDL_UPDATE_UI).sendToTarget();
             	mHandler.sendEmptyMessageDelayed(HDL_UPDATE_UI, 700);
@@ -186,12 +191,13 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
     
     private void updateMonitorStatus(boolean monitor) {
     	Logger.d(TAG, "[updateMonitorStatus]" + monitor);
+    	mMonitorBtn.setSmoothChecked(monitor);
     	if (monitor) {
-        	mMonitorBtn.setToggleOn();
+        	//mMonitorBtn.setToggleOn();
 			mMonitorTv.setText(R.string.in_monitor_tips);
 			mDotsTv.showAndPlay();
 		} else {
-			mMonitorBtn.setToggleOff();
+			//mMonitorBtn.setToggleOff();
 			mMonitorTv.setText(R.string.start_monitor_tips);
 			mDotsTv.hideAndStop();
 		}

@@ -349,6 +349,7 @@ public class CustomApplication extends LitePalApplication {
 			mWorkerSp.saveReadedListInfo(readMap);
 		}
 		
+		// 保存监控状态
 		boolean monitor = mAppInfo.getUser().isMonitor();
 		if (monitor) {
 			mAppInfo.stopMonitor();

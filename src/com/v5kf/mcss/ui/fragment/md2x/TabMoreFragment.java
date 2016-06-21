@@ -65,7 +65,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	@SuppressWarnings("unused")
 	private RelativeLayout rl_autoboot, rl_switch_voice, rl_switch_vibrate, 
 		rl_feedback, rl_about, rl_update, rl_clearcache, rl_refresh, rl_service, rl_archworker; //rl_switch_notification_wait
-	private ToggleButton  mSwitchAutoBoot, mSwitchAutoLogin, mSwitchNotification,
+	private ToggleButton  mSwitchAutoLogin, mSwitchNotification,
 		mSwitchVoice, mSwitchVibrate; // mSwitchWaitNotification
 	private TextView mVersionTv;
 	private TextView mCacheSizeTv;
@@ -182,7 +182,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		mCacheSizeTv = (TextView) findViewById(R.id.id_cache_size_tv);
 		mUpdateProgress = (ProgressBar) findViewById(R.id.id_update_progress);
 
-		mSwitchAutoBoot = (ToggleButton) findViewById(R.id.switch_auto_boot);
+//		mSwitchAutoBoot = (ToggleButton) findViewById(R.id.switch_auto_boot);
 		mSwitchAutoLogin = (ToggleButton) findViewById(R.id.switch_auto_login);
 //		mSwitchWaitNotification = (SlideSwitchView) findViewById(R.id.switch_notification_wait);
 		mSwitchNotification = (ToggleButton) findViewById(R.id.switch_notification);
@@ -195,7 +195,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 ////		mSwitchWaitNotification.setOnChangeListener(this);
 //		mSwitchVoice.setOnChangeListener(this);
 //		mSwitchVibrate.setOnChangeListener(this);
-		mSwitchAutoBoot.setOnToggleChanged(this);
+//		mSwitchAutoBoot.setOnToggleChanged(this);
 		mSwitchAutoLogin.setOnToggleChanged(this);
 		mSwitchNotification.setOnToggleChanged(this);
 //		mSwitchWaitNotification.setOnToggleChanged(this);
@@ -236,22 +236,22 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		updateCacheSize();
 		
 		// 初始化
-		boolean isAllowAutoBoot = mSharedUtil.isAllowAutoboot();
-		mSwitchAutoBoot.setChecked(isAllowAutoBoot);
-		
+//		boolean isAllowAutoBoot = mSharedUtil.isAllowAutoboot();
+//		mSwitchAutoBoot.setChecked(isAllowAutoBoot);
+//		Logger.d(TAG, "isAllowAutoBoot:" + isAllowAutoBoot);
 		boolean isAllowAutoLogin = mWsp.readAutoLogin();
-		mSwitchAutoLogin.setChecked(isAllowAutoLogin);
-		
+		mSwitchAutoLogin.setSmoothChecked(isAllowAutoLogin);
+		Logger.d(TAG, "isAllowAutoLogin:" + isAllowAutoLogin);
 		boolean isAllowNotify = mSharedUtil.isAllowPushNotify();
+		Logger.d(TAG, "isAllowNotify:" + isAllowNotify);
+		mSwitchNotification.setSmoothChecked(isAllowNotify);
 		if (isAllowNotify) {
-			mSwitchNotification.setChecked(true);
 //			rl_switch_notification_wait.setVisibility(View.VISIBLE);
 			rl_switch_vibrate.setVisibility(View.VISIBLE);
 			rl_switch_voice.setVisibility(View.VISIBLE);
 			view1.setVisibility(View.VISIBLE);
 			view2.setVisibility(View.VISIBLE);
 		} else {
-			mSwitchNotification.setChecked(false);
 //			rl_switch_notification_wait.setVisibility(View.GONE);
 			rl_switch_vibrate.setVisibility(View.GONE);
 			rl_switch_voice.setVisibility(View.GONE);
@@ -263,10 +263,11 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 //		mSwitchWaitNotification.setChecked(isAllowNotifyWait);
 		
 		boolean isAllowVoice = mSharedUtil.isAllowVoice();
-		mSwitchVoice.setChecked(isAllowVoice);
-		
+		mSwitchVoice.setSmoothChecked(isAllowVoice);
+		Logger.d(TAG, "isAllowVoice:" + isAllowVoice);
 		boolean isAllowVibrate = mSharedUtil.isAllowVibrate();
-		mSwitchVibrate.setChecked(isAllowVibrate);
+		mSwitchVibrate.setSmoothChecked(isAllowVibrate);
+		Logger.d(TAG, "isAllowVibrate:" + isAllowVibrate);
 	}
 	
 	private void updateCacheSize() {

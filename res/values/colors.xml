@@ -134,7 +134,7 @@
     <color name="dialog_warning_btn_boder">#E0E1E2</color><!-- ?? -->
     <color name="dialog_option_item_bg_pressed">#cacaca</color><!-- 按下 -->
     
-    <!-- 底部button -->
+    <!-- 底部button @deprecated -->
     <color name="btn_green_bg">#01BA1B</color>
     <color name="btn_green_bg_pressed">#11CA0B</color>
     <color name="btn_red_bg">#E25252</color>

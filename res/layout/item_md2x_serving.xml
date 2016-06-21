@@ -213,6 +213,7 @@
 	        android:layout_height="match_parent"
 	        android:clickable="true"
 	        android:focusableInTouchMode="true"
+	        android:descendantFocusability="blocksDescendants"
 	        android:background="@drawable/md2x_session_pickup_selector"
 	        android:orientation="horizontal" >
 	        
@@ -228,8 +229,9 @@
 	            android:layout_width="32dp"
 	            android:layout_height="match_parent"
 	            android:gravity="center"
+	            android:focusable="false"
 	            android:background="@null"
-	            android:padding="0dp"
+	            android:padding="4dp"
 	            android:src="@drawable/v5_ic_session_more"
 	            android:layout_margin="0dp" />
 	        

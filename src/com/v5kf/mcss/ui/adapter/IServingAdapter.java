@@ -197,20 +197,18 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-//                if(nowOpen!=null) {
-//                    nowOpen.mSwipeLayout.close();
-//                    return true;
-//                } else{
-//                    if(event.getAction() ==  MotionEvent.ACTION_DOWN){
-////                        canDelete = true;
-//                    }
-//                }
-//                return false;
-            	return false;
+                if(nowOpen != null) {
+                    nowOpen.mSwipeLayout.close();
+                    return true;
+                } else{
+                    if(event.getAction() ==  MotionEvent.ACTION_DOWN){
+//                        canDelete = true;
+                    }
+                }
+                return false;
             }
         });
     }
-    
 
     @Override
     public int getItemCount() {
@@ -224,6 +222,11 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 
 	@Override
 	public boolean canDelete() {
+		return false;
+	}
+	
+	@Override
+	public boolean canDrag() {
 		return false;
 	}
 
@@ -265,6 +268,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
             mContentView.setOnClickListener(this);
 //            itemView.setOnLongClickListener(this);
             
+            itemView.findViewById(R.id.more_btn).setOnClickListener(this);
             itemView.findViewById(R.id.layout_more).setOnClickListener(this);
             itemView.findViewById(R.id.id_trust_btn).setOnClickListener(this);
             itemView.findViewById(R.id.id_switch_btn).setOnClickListener(this);
@@ -373,18 +377,17 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 				return;
 			}
 			switch (v.getId()) {
+			case R.id.more_btn:
 			case R.id.layout_more: // 展开
 				Logger.d(TAG, "mSwipeLayout.getState() -> " + mSwipeLayout.getState());
-				if(nowOpen != null) {
-                    nowOpen.mSwipeLayout.close();
-				}
 				if (nowOpen == this) {
 					nowOpen.mSwipeLayout.close();
 				} else {
 					if(nowOpen != null) {
 	                    nowOpen.mSwipeLayout.close();
-					} 
+					}
 					if (mSwipeLayout.getState() == State.Open) {
+						Logger.d(TAG, "mSwipeLayout.close()");
 						mSwipeLayout.close();
 					} else {
 						mSwipeLayout.open();
@@ -411,20 +414,22 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 						/* 取消托管 */
 						mRecyclerBean.getSession().setInTrust(false);
 						creq.setInTrust(mRecyclerBean.getC_id(), 0);
+						mTrustIv.setVisibility(View.GONE);
 					} else {
 						/* 设置托管 */
 						mRecyclerBean.getSession().setInTrust(true);
 						creq.setInTrust(mRecyclerBean.getC_id(), 1);
+						mTrustIv.setVisibility(View.VISIBLE);
 					}
 					creq.getInTrust(mRecyclerBean.getC_id());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				mSwipeLayout.close();
-				notifyItemChanged(getAdapterPosition());
+				//notifyItemChanged(getAdapterPosition());
 				break;
 			case R.id.id_switch_btn: { // 转接
-				mSwipeLayout.close();
+				//mSwipeLayout.close();
 				Intent intent = IntentUtil.getStartActivityIntent(
 						mActivity, 
 						WorkerTreeActivity.class, 
@@ -436,7 +441,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 			}
 				break;
 			case R.id.id_close_btn: // 关闭
-				mSwipeLayout.close();
+				//mSwipeLayout.close();
 				// 最好弹出提示框先
 				mActivity.showAlertDialog(R.string.confirm_end_session, new OnClickListener() {
 					

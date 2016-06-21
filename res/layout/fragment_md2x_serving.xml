@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/info_activity_layout_bg"
-        ptr:ptrDrawable="@drawable/v5kf_loading_outer"
+        ptr:ptrDrawable="@drawable/v5_loading"
         ptr:ptrMode="both" />
     
     <LinearLayout

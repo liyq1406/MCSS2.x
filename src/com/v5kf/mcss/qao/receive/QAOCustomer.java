@@ -71,6 +71,7 @@ public class QAOCustomer extends QAOBase {
 			
 		case QAODefine.O_METHOD_PICK_CUSTOMER:
 			// 成功则触发customer_join_in
+			postEvent(mAppInfo, EventTag.ETAG_PICK_CSTM_OK);
 			MobclickAgent.onEvent(mContext,"PICK_CUSTOMER");
 			break;
 			

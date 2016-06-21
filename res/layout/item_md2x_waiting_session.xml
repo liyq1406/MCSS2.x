@@ -152,6 +152,7 @@
         android:id="@+id/layout_pickup"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
         android:background="@drawable/md2x_session_pickup_selector"
         android:orientation="horizontal" >
         
@@ -170,6 +171,7 @@
             android:background="@null"
             android:padding="0dp"
             android:layout_margin="0dp"
+            android:focusable="false"
             android:textSize="15sp"
             android:text="@string/option_pickup"
             android:textColor="#40ABEB" />

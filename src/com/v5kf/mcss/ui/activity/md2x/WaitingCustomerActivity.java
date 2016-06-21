@@ -272,4 +272,10 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		Logger.d(TAG + "-eventbus", "onConnectionStart -> ETAG_CONNECTION_START");
 		showProgress();
 	}
+	
+	@Subscriber(tag = EventTag.ETAG_PICK_CSTM_OK, mode = ThreadMode.MAIN)
+	private void pickUpSuccess(AppInfoKeeper appinfo) {
+		Logger.d(TAG + "-eventbus", "pickUpSuccess -> ETAG_PICK_CSTM_OK");
+		finishActivity();
+	}
 }
