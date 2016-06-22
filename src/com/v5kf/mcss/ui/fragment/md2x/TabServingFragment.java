@@ -12,11 +12,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.chyrain.irecyclerview.IRecyclerView;
 import com.chyrain.irecyclerview.JingDongHeaderLayout;
@@ -56,6 +57,8 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	private IRecyclerView mIRecycleView;
 	private IServingAdapter mRecycleAdapter;
 	
+	private TextView mEmptyTipsTv;
+	
     public TabServingFragment(MainTabActivity activity, int index) {
 		super(activity, index);
 		mRecycleBeans = new ArrayList<>();
@@ -69,7 +72,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		Logger.d(TAG, TAG + " 将要创建View " + this);
 		initView();
     	initData();
-    	checkListEmpty();
+//    	checkListEmpty();
 	}
 
 	@Override
@@ -138,7 +141,8 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
     	}
     	
     	mIRecycleView.setAdapter(mRecycleAdapter);
-		mIRecycleView.getRefreshableView().addItemDecoration(new Divider());
+    	mIRecycleView.setLayoutManager(new LinearLayoutManager(mParentActivity, LinearLayoutManager.VERTICAL, false));
+		mIRecycleView.addItemDecoration(new Divider());
 		mIRecycleView.getRefreshableView().setScrollbarFadingEnabled(true);
 		mIRecycleView.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
         
@@ -148,47 +152,52 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
-				Toast.makeText(mParentActivity, "Pull Down!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(mParentActivity, "Pull Down!", Toast.LENGTH_SHORT).show();
 				onRefresh();
 			}
 
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
-				Toast.makeText(mParentActivity, "Pull Up!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(mParentActivity, "Pull Up!", Toast.LENGTH_SHORT).show();
 				
 			}
 		});
 		
+		if (mIRecycleView.getEmptyView() != null) {
+			mEmptyTipsTv = (TextView) mIRecycleView.getEmptyView().findViewById(R.id.layout_container_tv);
+		}
         /* 空白按钮 */
-        findViewById(R.id.layout_container_tv).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				onRefresh();
-			}
-		});
-    }
-    
-    
-    private void checkListEmpty() {
-    	if (null == mIRecycleView) {
-    		mIRecycleView = (IRecyclerView) findViewById(R.id.id_irecycler);
-    	}
-    	if (mRecycleBeans.size() == 0) {
-    		mIRecycleView.setVisibility(View.GONE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
-		} else {
-			mIRecycleView.setVisibility(View.VISIBLE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
+		if (mEmptyTipsTv != null) {
+			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					onRefresh();
+				}
+			});
 		}
     }
+    
+    
+//    private void checkListEmpty() {
+//    	if (null == mIRecycleView) {
+//    		mIRecycleView = (IRecyclerView) findViewById(R.id.id_irecycler);
+//    	}
+//    	if (mRecycleBeans.size() == 0) {
+//    		mIRecycleView.setVisibility(View.GONE);
+//			findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
+//		} else {
+//			mIRecycleView.setVisibility(View.VISIBLE);
+//			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
+//		}
+//    }
     
 
 	private void resetRecyclerList() {
 		mRecycleBeans.clear();
 		initData();
 		mRecycleAdapter.notifyDataSetChanged();
-		checkListEmpty();
+//		checkListEmpty();
 	}
     
     private boolean hasRecycleBeans(String c_id) {
@@ -215,7 +224,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		mRecycleAdapter.addOnTop(new IServingBean(cstm));
 //		mRecycleAdapter.notifyDataSetChanged();/*Null?*/
 //		mRecycleAdapter.notifyItemInserted(0);
-		checkListEmpty();
+//		checkListEmpty();
 		Logger.i(TAG, "[[[mRecycleBeans.add]]] c_id = " + cstm.getC_id());
 		return true;
 	}

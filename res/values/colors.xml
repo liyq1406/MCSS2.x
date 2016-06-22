@@ -79,9 +79,9 @@
     <!-- RecyclerView、列表背景色 -->
     <color name="base_list_content_bg">#ffffff</color>
     
-    <!-- 内容为空提示字体颜色 -->    
+    <!-- 内容为空提示字体颜色、背景色 -->    
     <color name="content_empty_tips_text_color">#bfbfbf</color>
-    <color name="content_empty_tips_bg_color">#efefef</color>
+    <color name="content_empty_tips_bg_color">#ffffff</color><!-- #efefef -->
     
     <!-- 对话框颜色 -->
     <!-- Button颜色 -->
@@ -191,9 +191,10 @@
     
     <!-- 对话内容列表 -->
     <color name="list_item_date_bg">#00000000</color><!-- 会话时间背景色 -->
-    <color name="list_item_date_text">#4B4B4B</color>
-    <color name="list_chat_blank_bg">#C6DADA</color><!-- 对话界面背景 -->
+    <color name="list_item_date_text">#B6B8B9</color>
+    <color name="list_chat_blank_bg">#ECEDF1</color><!-- 对话界面背景 -->
     <color name="list_chat_item_bg">@color/list_chat_blank_bg</color><!-- 对话item背景色 -->
+    <color name="list_item_left_text">#020202</color><!-- 对话item背景色 -->
     
     <!-- 会话列表 -->
     <color name="list_session_item_bg_normal">#ffffff</color>
@@ -267,6 +268,7 @@
     <color name="default_phpto_border_blue">#6FBFF0</color>
     
     <color name="md2x_blue">#6FBFF0</color>
+    <color name="md2x_blue_dark">#209de9</color>
     <color name="md2x_green">#79D655</color>
     <color name="md2x_gray">#BFBFBF</color>
     <!-- SmoothProgressBar -->

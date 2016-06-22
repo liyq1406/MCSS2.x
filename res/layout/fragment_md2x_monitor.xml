@@ -5,6 +5,7 @@
     
     <RelativeLayout
         android:id="@+id/layout_monitor"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:padding="8dp"
@@ -59,26 +60,46 @@
 	        android:layout_height="match_parent"
 	        android:background="@color/base_list_content_bg" />
 		    
-	    <LinearLayout
+	    <RelativeLayout
 	        android:id="@+id/layout_container_empty"
 	        android:visibility="gone"
 	        android:background="@color/base_list_content_bg"
-	        android:gravity="center"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
-	        android:orientation="vertical" >        
+	        android:orientation="horizontal" >
 	        
 	        <TextView
 	            android:id="@+id/layout_container_tv"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:drawableTop="@drawable/v5kf"
-	            android:drawablePadding="@dimen/tips_img_margin"
+	            android:layout_centerInParent="true"
 	            android:textSize="@dimen/content_empty_tips_text_size"
 	            android:textColor="@color/content_empty_tips_text_color"
 	            android:text="@string/monitor_empty_tips" />
 	        
-	    </LinearLayout>
+	        <ImageView
+	            android:id="@+id/layout_container_iv"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerHorizontal="true"
+	            android:layout_above="@+id/layout_container_tv"
+	            android:src="@drawable/v5kf"
+	            android:layout_marginBottom="@dimen/tips_img_margin"
+	            android:contentDescription="@string/contentDescription" />
+	        
+	        <pl.tajchert.sample.DotsTextView
+	    	    xmlns:dots="http://schemas.android.com/apk/res-auto"
+	    	    android:id="@+id/layout_container_dots"
+			    android:layout_width="wrap_content"
+			    android:layout_height="30dp"
+			    android:layout_alignBottom="@+id/layout_container_tv"
+			    android:layout_toRightOf="@+id/layout_container_tv"
+			    android:layout_toEndOf="@+id/layout_container_tv"
+			    android:textSize="22sp"
+			    dots:autoplay="false"
+			    dots:period="1000" />
+	        
+	    </RelativeLayout>
         
     </FrameLayout>
 

@@ -335,7 +335,7 @@ public class ChatMessagesActivity extends BaseChatActivity {
 		if (cstm.getC_id().equals(mCustomer.getC_id())) {
 			//UIUtil.noticeEndSession(this, cstm.getClosingReason());
 			setResult(Config.RESULT_CODE_PICKUP_CSTM);
-			finishActivity();
+			finish();
 		}
     }
 	

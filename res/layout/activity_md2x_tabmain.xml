@@ -54,6 +54,17 @@
 						style="@style/ActionBarTitle"
 						android:text="@string/conversation" />
 			        
+			        <com.zcw.togglebutton.ToggleButton
+			            xmlns:toggle="http://schemas.android.com/apk/res-auto"
+			            android:id="@+id/id_toolbar_toogle"
+			            android:visibility="gone"
+				        android:layout_width="50dp"
+				        android:layout_height="26dp"
+				        android:layout_gravity="end|center_vertical"
+			            android:layout_marginRight="8dp"
+			            android:layout_marginEnd="8dp"
+			            style="@style/CustomToggleButton" />
+			        
 				</android.support.v7.widget.Toolbar>
 				
 			    <View 

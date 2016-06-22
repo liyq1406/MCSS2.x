@@ -13,6 +13,7 @@
         android:id="@+id/layout_container_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:drawableTop="@drawable/v5kf"
         android:drawablePadding="@dimen/tips_img_margin"
         android:textSize="@dimen/content_empty_tips_text_size"

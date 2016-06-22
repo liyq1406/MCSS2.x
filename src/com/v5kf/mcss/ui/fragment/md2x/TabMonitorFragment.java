@@ -17,13 +17,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
-import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.CustomerBean;
+import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
@@ -55,6 +56,10 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	private ToggleButton mMonitorBtn;
 	private TextView mMonitorTv;
 	private DotsTextView mDotsTv;
+
+	private DotsTextView mEmptyDots;
+	private ViewGroup mEmptyLayout;
+	private TextView mEmptyTipsTv;
 
     public TabMonitorFragment(MainTabActivity activity, int index) {
 		super(activity, index);
@@ -169,6 +174,10 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
         mMonitorBtn = (ToggleButton) findViewById(R.id.id_monitor_toogle);
         mMonitorTv = (TextView) findViewById(R.id.id_monitor_tips);
         mDotsTv = (DotsTextView) findViewById(R.id.id_dots);
+        
+        mEmptyDots = (DotsTextView) findViewById(R.id.layout_container_dots);
+        mEmptyLayout = (ViewGroup) findViewById(R.id.layout_container_empty);
+        mEmptyTipsTv = (TextView) findViewById(R.id.layout_container_tv);
         updateMonitorStatus(mAppInfo.getUser().isMonitor());
         
         mMonitorBtn.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
@@ -192,21 +201,32 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
     
     private void updateMonitorStatus(boolean monitor) {
     	Logger.d(TAG, "[updateMonitorStatus]" + monitor);
+    	mParentActivity.updateMonitorState();
     	mMonitorBtn.setSmoothChecked(monitor);
     	if (monitor) {
         	//mMonitorBtn.setToggleOn();
-			mMonitorTv.setText(R.string.in_monitor_tips);
-			mDotsTv.showAndPlay();
+//			mMonitorTv.setText(R.string.in_monitor_tips);
+//			mDotsTv.showAndPlay();
+//			mMonitorTv.setTextColor(UITools.getColor(R.color.md2x_blue_dark));
+//			mDotsTv.setTextColor(UITools.getColor(R.color.md2x_blue_dark));
 			
-			mMonitorTv.setTextColor(UITools.getColor(R.color.md2x_blue));
-			mDotsTv.setTextColor(UITools.getColor(R.color.md2x_blue));
+			mEmptyTipsTv.setText(R.string.in_monitor_tips);
+			mEmptyTipsTv.setTextColor(UITools.getColor(R.color.md2x_blue_dark));
+			mEmptyDots.setTextColor(UITools.getColor(R.color.md2x_blue_dark));
+			mEmptyDots.setVisibility(View.VISIBLE);
+			mEmptyDots.showAndPlay();
 		} else {
 			//mMonitorBtn.setToggleOff();
-			mMonitorTv.setText(R.string.start_monitor_tips);
-			mDotsTv.hideAndStop();
+//			mMonitorTv.setText(R.string.start_monitor_tips);
+//			mDotsTv.hideAndStop();
+//			mMonitorTv.setTextColor(UITools.getColor(R.color.md2x_gray));
+//			mDotsTv.setTextColor(UITools.getColor(R.color.md2x_gray));
 			
-			mMonitorTv.setTextColor(UITools.getColor(R.color.md2x_gray));
-			mDotsTv.setTextColor(UITools.getColor(R.color.md2x_gray));
+			mEmptyTipsTv.setText(R.string.monitor_close_tips);
+			mEmptyTipsTv.setTextColor(UITools.getColor(R.color.content_empty_tips_text_color));
+			//mEmptyDots.setTextColor(UITools.getColor(R.color.content_empty_tips_text_color));
+			mEmptyDots.setVisibility(View.GONE);
+			mEmptyDots.hideAndStop();
 		}
 	}
 
@@ -216,10 +236,10 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
     	}
     	if (mRecycleBeans.size() == 0) {
     		mRecycleView.setVisibility(View.GONE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
+    		mEmptyLayout.setVisibility(View.VISIBLE);
 		} else {
 			mRecycleView.setVisibility(View.VISIBLE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
+			mEmptyLayout.setVisibility(View.GONE);
 		}
     }
 
@@ -228,7 +248,6 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 		initData();
 		mRecycleAdapter.notifyDataSetChanged();
 		checkListEmpty();
-		mParentActivity.updateMonitorBadge();
 	}
     
     private boolean hasRecycleBeans(String c_id) {
@@ -382,6 +401,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 		} else {
 			mAppInfo.getUser().setMonitor(false);
 			updateMonitorStatus(mAppInfo.getUser().isMonitor());
+			mParentActivity.updateMonitorBadge();
 		}
 		resetRecyclerList();
 	}
@@ -405,10 +425,11 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	}
 
 	@Subscriber(tag = EventTag.ETAG_MONITOR_STATE_CHANGE, mode = ThreadMode.MAIN)
-	private void updateMonitorStatus(AppInfoKeeper appinfo) {
+	private void updateMonitorStatus(WorkerBean user) {
 		Logger.d(TAG + "-eventbus", "updateMonitorStatus -> ETAG_MONITOR_CHANGE");
-		updateMonitorStatus(mAppInfo.getUser().isMonitor());
 		resetRecyclerList();
+		updateMonitorStatus(mAppInfo.getUser().isMonitor());
+		mParentActivity.updateMonitorBadge();
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_ACCESSABLE_CHANGE, mode = ThreadMode.MAIN)

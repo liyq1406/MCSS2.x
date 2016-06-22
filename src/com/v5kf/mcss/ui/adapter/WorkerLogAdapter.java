@@ -15,6 +15,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.WorkerLogBean;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
+import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.Logger;
 
 /**
@@ -26,6 +27,7 @@ public class WorkerLogAdapter extends RecyclerView.Adapter<WorkerLogAdapter.View
     private List<WorkerLogBean> mDatas ;
     private ActivityBase mActivity;
     private AppInfoKeeper mAppInfo;
+    private long mTmpDate;
 
     public WorkerLogAdapter(List<WorkerLogBean> datas, ActivityBase activity) {
     	super();
@@ -46,6 +48,15 @@ public class WorkerLogAdapter extends RecyclerView.Adapter<WorkerLogAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
     	WorkerLogBean workerLog = mDatas.get(position);
     	holder.setRecyclerBean(workerLog);
+    	
+    	holder.mLogTv.setText(workerLog.getDescription());
+//		if (!DateUtil.isSameDate(mTmpDate, workerLog.getTime())) {
+//			holder.mDateTv.setVisibility(View.VISIBLE);
+//			holder.mDateTv.setText(DateUtil.timeFormat(workerLog.getTime(), false));
+//		} else {
+//			holder.mDateTv.setVisibility(View.GONE);
+//		}
+//		mTmpDate = workerLog.getTime();
     }
 
     @Override
@@ -57,10 +68,12 @@ public class WorkerLogAdapter extends RecyclerView.Adapter<WorkerLogAdapter.View
     	private static final String TAG = "SessionRecyclerAdapter.ViewHolder";
     	private WorkerLogBean mRecyclerBean;
 
+    	public TextView mDateTv;
         public TextView mLogTv;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            mDateTv = (TextView) itemView.findViewById(R.id.id_log_date);
             mLogTv = (TextView) itemView.findViewById(R.id.id_worker_log_tv);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -88,8 +101,7 @@ public class WorkerLogAdapter extends RecyclerView.Adapter<WorkerLogAdapter.View
 
 		public void setRecyclerBean(WorkerLogBean bean) {
 			this.mRecyclerBean = bean;
-			
-			this.mLogTv.setText(bean.getDescription());
 		}
     }
+    
 }

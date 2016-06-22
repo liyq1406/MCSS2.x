@@ -35,6 +35,31 @@ public class DateUtil {
 		return calendar.getTimeInMillis();
 	}
 	
+	/**
+	 * 判断年月日是否相同
+	 * @param day1
+	 * @param day2
+	 * @return
+	 */
+	public static boolean isSameDate(long day1, long day2) {
+		if (day1 < 9999999999L) {
+			day1 = day1 * 1000;
+		}
+		if (day2 < 9999999999L) {
+			day2 = day2 * 1000;
+		}
+		Calendar mCalendar1 = Calendar.getInstance();
+		mCalendar1.setTimeInMillis(day1);
+		Calendar mCalendar2 = Calendar.getInstance();
+		mCalendar2.setTimeInMillis(day2);
+		if (mCalendar1.get(Calendar.DAY_OF_MONTH) == mCalendar2.get(Calendar.DAY_OF_MONTH) &&
+				mCalendar1.get(Calendar.MONTH) == mCalendar2.get(Calendar.MONTH) &&
+				mCalendar1.get(Calendar.YEAR) == mCalendar2.get(Calendar.YEAR)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static int getYear(long time) {
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(time);

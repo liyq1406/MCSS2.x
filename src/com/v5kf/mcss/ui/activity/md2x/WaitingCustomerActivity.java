@@ -216,7 +216,7 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == Config.REQUEST_CODE_WAITING_SESSION_FRAGMENT
 				&& resultCode == Config.RESULT_CODE_PICKUP_CSTM) {
-			finishActivity();
+			finish();
 		}
 	}
 
@@ -276,6 +276,6 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 	@Subscriber(tag = EventTag.ETAG_PICK_CSTM_OK, mode = ThreadMode.MAIN)
 	private void pickUpSuccess(AppInfoKeeper appinfo) {
 		Logger.d(TAG + "-eventbus", "pickUpSuccess -> ETAG_PICK_CSTM_OK");
-		finishActivity();
+		finish();
 	}
 }

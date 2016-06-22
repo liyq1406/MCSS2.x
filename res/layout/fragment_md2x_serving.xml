@@ -9,10 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/base_list_content_bg"
+        ptr:ptrEmptyLayout="@layout/layout_emptyview"
         ptr:ptrDrawable="@drawable/v5_loading"
         ptr:ptrMode="pullFromStart" />
     
-    <LinearLayout
+<!--     <LinearLayout
         android:id="@+id/layout_container_empty"
         android:visibility="gone"
         android:background="@color/content_empty_tips_bg_color"
@@ -33,5 +34,5 @@
             android:text="@string/serving_content_empty_tips" />
         
     </LinearLayout>
-
+ -->
 </RelativeLayout>

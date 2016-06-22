@@ -180,6 +180,7 @@
     <string name="worker_content_empty_tips">没有获取到坐席信息</string>
     <string name="material_img_empty_tips">未获取到图片素材</string>
     <string name="monitor_empty_tips">监控列表没有内容</string>
+    <string name="monitor_close_tips">监控未开启</string>
     
     <string name="no_more_msg">没有更多消息了</string>
     <string name="no_more">没有更多了</string>

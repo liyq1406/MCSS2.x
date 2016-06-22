@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-import com.malinskiy.superrecyclerview.OnMoreListener;
-import com.malinskiy.superrecyclerview.SuperRecyclerView;
+import com.chyrain.irecyclerview.RefreshRecyclerView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.entity.WorkerLogBean;
 import com.v5kf.mcss.ui.adapter.WorkerLogAdapter;
@@ -17,13 +19,13 @@ import com.v5kf.mcss.utils.WorkerLogUtil;
 
 public class WorkerLogActivity extends BaseToolbarActivity {
 	private static final String TAG = "WorkerLogActivity";
-	private SuperRecyclerView mLogList;
+	private RefreshRecyclerView mLogList;
 	private ArrayList<WorkerLogBean> mLogDatas;
 	private WorkerLogAdapter mAdapter;
 	private int mOffset = 0;
 	private boolean mFinish = false;
 	private boolean firstFinish = true;
-	private static final int NUM_PER_PAGE = 10;
+	private static final int NUM_PER_PAGE = 20;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,27 +44,39 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 	}
 	
 	private void initRecyclerView() {
-		mLogList = (SuperRecyclerView) findViewById(R.id.id_worker_log_list);
+		mLogList = (RefreshRecyclerView) findViewById(R.id.id_worker_log_list);
 		mLogList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 		mLogList.addItemDecoration(new RecyclerViewDivider(this, LinearLayoutManager.HORIZONTAL));
 		mLogList.setAdapter(mAdapter);
-		// when there is only 10 items to see in the recycler, this is triggered
-		mLogList.setupMoreListener(new OnMoreListener() {
-	      @Override
-	      public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-	    	  // Fetch more from Api or DB
-	    	  Logger.d(TAG, "[onMoreAsked]");
-	    	  if (mFinish) {
-	    		  if (firstFinish) {
-	    			  firstFinish = false;
-	    			  // 已加载完全部数据
-	    			  ShowShortToast("日志已全部加载完成");
-	    		  }
-	    		  mAdapter.notifyDataSetChanged();
-	    		  return;
-	    	  }
-	    	  updateData();
-	      }}, 1);
+		mLogList.getRefreshableView().setScrollbarFadingEnabled(true);
+		mLogList.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
+		
+		// Set a listener to be invoked when the list should be refreshed.
+		mLogList.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
+
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				//Toast.makeText(mApplication, "Pull Down!", Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				//Toast.makeText(mApplication, "Pull Up!", Toast.LENGTH_SHORT).show();
+				Logger.d(TAG, "[onMoreAsked]");
+		    	  if (mFinish) {
+		    		  if (firstFinish) {
+		    			  firstFinish = false;
+		    			  // 已加载完全部数据
+		    			  ShowShortToast("日志已全部加载完成");
+		    		  }
+		    		  mAdapter.notifyDataSetChanged();
+		    		  mLogList.onRefreshComplete();
+		    		  return;
+		    	  }
+		    	  updateData();
+			}
+		});
+		
 	}
 	
 	private void updateData() {
@@ -71,7 +85,8 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 		Logger.d(TAG, "[updateData] size:" + mLogDatas.size());
 		mOffset = mLogDatas.size();
 		// update UI
-		mAdapter.notifyDataSetChanged();		
+		mAdapter.notifyDataSetChanged();
+		mLogList.onRefreshComplete();
 	}
 
 	@Override

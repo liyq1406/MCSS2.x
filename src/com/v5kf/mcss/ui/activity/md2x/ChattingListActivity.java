@@ -1283,7 +1283,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		} else if (requestCode == Config.REQUEST_CODE_CUSTOMER_INFO) {
 			if (resultCode == Config.RESULT_CODE_END_SESSION) {
 				setFinishType(FIN_TYPE_NONE);
-				finishActivity();
+				finish();
 			}
 		} else if (requestCode == Config.REQUEST_CODE_ROBOT_CHAT) {
 			if (resultCode == Config.RESULT_CODE_FORWARD_MSG && data != null) {

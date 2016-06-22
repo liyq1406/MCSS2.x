@@ -102,7 +102,7 @@ public class QAOWorker extends QAOBase {
 			parseWorkerStatusPush();
 			break;
 		case QAODefine.O_METHOD_SET_WORKER_MONITOR:
-			
+			postEvent(mAppInfo.getUser(), EventTag.ETAG_MONITOR_STATE_CHANGE);
 			break;
 //		case QAODefine.O_METHOD_GET_WORKER_MONITOR:
 //			mAppInfo.getUser().setMonitor(qao_data.getBoolean("monitor"));

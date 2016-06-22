@@ -32,7 +32,7 @@
             android:gravity="center_vertical"
             android:layout_height="wrap_content"
             android:minHeight="40dp"
-            android:textColor="@color/black"
+            android:textColor="@color/list_item_left_text"
             android:background="@drawable/list_from_customer_bg"
             android:textSize="@dimen/v5_chat_list_text_size" />
 	    

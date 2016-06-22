@@ -47,6 +47,7 @@ import com.v5kf.mcss.config.Config.ReloginReason;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.ArchWorkerBean;
+import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
@@ -70,7 +71,9 @@ import com.v5kf.mcss.ui.widget.ModeSeekbarDialog;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
+import com.v5kf.mcss.utils.WorkerSP;
 import com.v5kf.mcss.utils.cache.ImageLoader;
+import com.zcw.togglebutton.ToggleButton;
 
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
@@ -91,6 +94,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	
 	private int mCurrentPageIndex;
 	
+	// drawer
 	private CircleImageView mAvatar;
 	private TextView mName;
 	private TextView mGroup;
@@ -103,6 +107,9 @@ public class MainTabActivity extends BaseToolbarActivity {
 	
 	private String[] tabNames;
 	private int[] tabIcons;
+	
+	// toolbar
+	private ToggleButton mToolbarToggle;
 	
 	@Override
     public void onBackPressed() {
@@ -421,13 +428,19 @@ public class MainTabActivity extends BaseToolbarActivity {
 		
 		updateHomeBadge();
 		
+		if (mToolbarToggle != null) {
+			mToolbarToggle.setVisibility(View.GONE);
+		}
 		switch (position) {
 		case 0:
+			break;
+		case 3:
 			hideFab();
+			mToolbarToggle.setVisibility(View.VISIBLE);
+			updateMonitorState();
 			break;
 		case 1:
 		case 2:
-		case 3:
 		case 4:
 			hideFab();
 			break;
@@ -436,6 +449,26 @@ public class MainTabActivity extends BaseToolbarActivity {
 		}
 	}
 	
+	public void updateMonitorState() {
+		if (mToolbarToggle == null) {
+			mToolbarToggle = (ToggleButton)findViewById(R.id.id_toolbar_toogle);
+			mToolbarToggle.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
+	            @Override
+	            public void onToggle(ToggleButton btn, boolean on) {
+	            	Logger.i(TAG, "[onToggle]:" + on);
+	            	if (!on) { // 停止监控
+	            		mAppInfo.stopMonitor();
+	    			} else { // 开启监控
+	    				mAppInfo.startMonitor();
+	    			}
+	            	// 保存监控状态
+	            	mApplication.getWorkerSp().saveBoolean(WorkerSP.SP_MONITOR_STATUS, on);
+	            }
+		    });
+		}
+		mToolbarToggle.setSmoothChecked(mAppInfo.getUser().isMonitor());
+	}
+
 	/**
 	 * 刷新Toolbar红点
 	 */
@@ -473,7 +506,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		TextView explore = (TextView) mNavigationView.getMenu().findItem(R.id.drawer_explore).getActionView().findViewById(R.id.badge_msg);
 		if (mAppInfo.getMonitorMap().size() > 0) {
 			explore.setVisibility(View.VISIBLE);
-			explore.setText("" + mAppInfo.getCustomerMap().size());
+			explore.setText("" + mAppInfo.getMonitorMap().size());
 		} else {
 			explore.setVisibility(View.GONE);
 		}
@@ -1024,4 +1057,15 @@ public class MainTabActivity extends BaseToolbarActivity {
 		gotoSubPage(0);
 	}
 
+	@Subscriber(tag = EventTag.ETAG_MONITOR_IN, mode = ThreadMode.MAIN)
+	private void onMonitorIn(CustomerBean cstm) {
+		Logger.d(TAG + "-eventbus", "onMonitorIn -> ETAG_MONITOR_IN");
+		updateMonitorBadge();
+	}
+
+	@Subscriber(tag = EventTag.ETAG_MONITOR_OUT, mode = ThreadMode.MAIN)
+	private void onMonitorOut(CustomerBean cstm) {
+		Logger.d(TAG + "-eventbus", "onMonitorOut -> ETAG_MONITOR_OUT");
+		updateMonitorBadge();
+	}
 }
