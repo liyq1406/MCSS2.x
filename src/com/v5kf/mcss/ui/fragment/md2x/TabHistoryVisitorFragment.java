@@ -90,7 +90,7 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 			initView();
 		}
 		if (mRecycleBeans.isEmpty()) {
-			//mParentActivity.showProgress();
+			mParentActivity.showProgress();
 			mRefreshRecyclerView.setRefreshing();
 			initData(false);
 		}
