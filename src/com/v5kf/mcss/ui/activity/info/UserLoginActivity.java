@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity;
+package com.v5kf.mcss.ui.activity.info;
 
 import java.util.List;
 
@@ -34,6 +34,7 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.NetworkManager;
 import com.v5kf.mcss.service.NetworkManager.NetworkListener;
+import com.v5kf.mcss.ui.activity.md2x.BaseLoginActivity;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.utils.DbUtil;
 import com.v5kf.mcss.utils.IntentUtil;

@@ -7,10 +7,10 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
+import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerBean;
-import com.v5kf.mcss.entity.CustomerBean.CustomerType;
+import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
-import com.v5kf.mcss.ui.activity.md2x.CustomerInfoListActivity;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
@@ -149,11 +149,14 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 		}
 		
 		// 清空此会话的未读消息数量和通知栏
-		if (mCustomer.getCstmType() == CustomerType.CustomerType_ServingAlive) { // 服务中列表客户
-			Logger.i(TAG, "[onStart] 进入会话 对话中。。。");
-			mApplication.setOnChat(true);
-			mApplication.setOnChatCustomer(c_id);
-		}
+//		if (mCustomer.getCstmType() == CustomerType.CustomerType_ServingAlive) { // 服务中列表客户
+//			Logger.i(TAG, "[onStart] 进入会话 对话中。。。");
+//			mApplication.setOnChat(true);
+//			mApplication.setOnChatCustomer(c_id);
+//		}
+		mApplication.setOnChat(true);
+		mApplication.setOnChatCustomer(c_id);
+		
 		mAppInfo.clearUnreadMessageNumOfSession(mCustomer.getSession());
 		mApplication.clearNotification(c_id);
 	}
@@ -163,6 +166,11 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 	protected void onStop() {
 		super.onStop();
 		mApplication.setOnChat(false);
+		
+		// 清空未读
+    	if (mCustomer != null && mCustomer.getSession() != null) {
+    		mCustomer.getSession().clearUnreadMessageNum();
+    	}
 	}
 	
 	
@@ -192,6 +200,7 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 	}
 	
 	protected void setFinishType(int type) {
+		postEvent(QAODefine.O_TYPE_MESSAGE, EventTag.ETAG_SERVING_CSTM_CHANGE);
 		switch (type) {
 		case FIN_TYPE_NONE:
 			if (isMessageAdded) {

@@ -54,13 +54,17 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	
 	// 监控开关
 	private ToggleButton mMonitorBtn;
-	private TextView mMonitorTv;
-	private DotsTextView mDotsTv;
+//	private TextView mMonitorTv;
+//	private DotsTextView mDotsTv;
 
 	private DotsTextView mEmptyDots;
 	private ViewGroup mEmptyLayout;
 	private TextView mEmptyTipsTv;
 
+	public TabMonitorFragment() {
+		// TODO Auto-generated constructor stub
+	}
+	
     public TabMonitorFragment(MainTabActivity activity, int index) {
 		super(activity, index);
 		mRecycleBeans = new ArrayList<>();
@@ -95,7 +99,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	protected void onFragmentStartLazy() {
 		super.onFragmentStartLazy();
 		Log.d(TAG, TAG + " 显示 " + this);
-		updateMonitorStatus(mApplication.getWorkerSp().readBoolean(WorkerSP.SP_MONITOR_STATUS));
+		updateMonitorStatus(mAppInfo.getUser().isMonitor());//mApplication.getWorkerSp().readBoolean(WorkerSP.SP_MONITOR_STATUS)
 //		this.mParentActivity.showToolbar();
 //		this.mParentActivity.hideFab();
 //		this.mParentActivity.setBarColor(UITools.getColor(R.color.main_color));
@@ -167,13 +171,14 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 			
 			@Override
 			public void onClick(View v) {
-				onRefresh();
+				//onRefresh();
+				Logger.d(TAG, "monitor:" + mAppInfo.getUser().isMonitor());
 			}
 		});
         
         mMonitorBtn = (ToggleButton) findViewById(R.id.id_monitor_toogle);
-        mMonitorTv = (TextView) findViewById(R.id.id_monitor_tips);
-        mDotsTv = (DotsTextView) findViewById(R.id.id_dots);
+//        mMonitorTv = (TextView) findViewById(R.id.id_monitor_tips);
+//        mDotsTv = (DotsTextView) findViewById(R.id.id_dots);
         
         mEmptyDots = (DotsTextView) findViewById(R.id.layout_container_dots);
         mEmptyLayout = (ViewGroup) findViewById(R.id.layout_container_empty);
@@ -201,7 +206,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
     
     private void updateMonitorStatus(boolean monitor) {
     	Logger.d(TAG, "[updateMonitorStatus]" + monitor);
-    	mParentActivity.updateMonitorState();
+    	mParentActivity.updateMonitorState(monitor);
     	mMonitorBtn.setSmoothChecked(monitor);
     	if (monitor) {
         	//mMonitorBtn.setToggleOn();
@@ -392,6 +397,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)
 	private void connectionChange(Boolean isConnect) {
 		if (isConnect) {
+			updateMonitorStatus(mAppInfo.getUser().isMonitor());
 //			try {
 //				WorkerRequest wReq = (WorkerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, mParentActivity);
 //				wReq.getWorkerMonitor();
@@ -399,8 +405,8 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 //				e.printStackTrace();
 //			}
 		} else {
-			mAppInfo.getUser().setMonitor(false);
-			updateMonitorStatus(mAppInfo.getUser().isMonitor());
+			//mAppInfo.getUser().setMonitor(false);
+			updateMonitorStatus(false);
 			mParentActivity.updateMonitorBadge();
 		}
 		resetRecyclerList();
@@ -426,7 +432,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 
 	@Subscriber(tag = EventTag.ETAG_MONITOR_STATE_CHANGE, mode = ThreadMode.MAIN)
 	private void updateMonitorStatus(WorkerBean user) {
-		Logger.d(TAG + "-eventbus", "updateMonitorStatus -> ETAG_MONITOR_CHANGE");
+		Logger.d(TAG + "-eventbus", "updateMonitorStatus -> ETAG_MONITOR_STATE_CHANGE");
 		resetRecyclerList();
 		updateMonitorStatus(mAppInfo.getUser().isMonitor());
 		mParentActivity.updateMonitorBadge();

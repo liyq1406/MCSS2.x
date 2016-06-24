@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.os.Message;
 
 import com.umeng.update.UmengUpdateAgent;
 import com.v5kf.mcss.R;
-import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
+import com.v5kf.mcss.ui.activity.MainTabActivity;
 
 public abstract class BaseLoginActivity extends ActivityBase {
 

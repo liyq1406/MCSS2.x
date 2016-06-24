@@ -19,10 +19,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rockerhieu.emojicon.EmojiconTextView;
 import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.client.lib.entity.V5ArticlesMessage;
 import com.v5kf.client.lib.entity.V5Message;
+import com.v5kf.client.ui.emojicon.EmojiconTextView;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.manage.RequestManager;

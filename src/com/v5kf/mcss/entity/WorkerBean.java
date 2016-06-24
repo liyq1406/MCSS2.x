@@ -2,13 +2,12 @@ package com.v5kf.mcss.entity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.simple.eventbus.EventBus;
 
 import android.text.TextUtils;
 
 import com.v5kf.client.lib.V5Util;
 import com.v5kf.mcss.config.QAODefine;
-import com.v5kf.mcss.eventbus.EventTag;
+import com.v5kf.mcss.utils.Logger;
 
 /**
  * 登录APP的坐席对象
@@ -62,8 +61,9 @@ public class WorkerBean extends BaseBean {
 		connects = config.optInt(QAODefine.WORKER_CONNECTS);
 		accepts = config.optInt(QAODefine.WORKER_ACCEPTS);
 		if (config.has("monitor")) {
-			monitor = config.optBoolean("monitor");
-			EventBus.getDefault().post(this, EventTag.ETAG_MONITOR_STATE_CHANGE);
+			Logger.d("WorkerBean", "monitor:" + config.optBoolean("monitor"));
+//			monitor = config.optBoolean("monitor");
+//			EventBus.getDefault().post(this, EventTag.ETAG_MONITOR_STATE_CHANGE);
 		}
 	}
 	

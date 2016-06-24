@@ -132,7 +132,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_history_messages);
+		setContentView(R.layout.activity_md2x_history_messages);
 		
 		int year = DateUtil.getYear();
 		int month = DateUtil.getMonth();

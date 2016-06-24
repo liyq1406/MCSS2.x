@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity;
+package com.v5kf.mcss.ui.activity.info;
 
 import android.app.Activity;
 import android.content.Context;

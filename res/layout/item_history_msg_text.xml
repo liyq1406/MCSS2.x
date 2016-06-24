@@ -43,7 +43,7 @@
         android:layout_marginTop="@dimen/info_item_margin_sv"
         android:orientation="horizontal" >
 	    
-        <com.rockerhieu.emojicon.EmojiconTextView
+        <com.v5kf.client.ui.emojicon.EmojiconTextView
             android:id="@+id/id_msg_text"
             emojicon:emojiconAlignment="baseline"
             emojicon:emojiconSize="@dimen/chat_text_emoji_iconsize"

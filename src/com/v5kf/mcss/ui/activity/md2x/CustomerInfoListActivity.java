@@ -420,7 +420,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 							creq.endSession(c_id);
 							setResult(Config.RESULT_CODE_END_SESSION);
 							dismissWarningDialog();
-							finishActivity();
+							finish();
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
@@ -453,7 +453,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 							}
 							setResult(Config.RESULT_CODE_PICKUP_CSTM);
 							dismissWarningDialog();
-							finishActivity();
+							finish();
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
@@ -530,4 +530,5 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 			finishActivity();
 		}
 	}
+	
 }

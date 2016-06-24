@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity.info;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,23 +18,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.rockerhieu.emojicon.EmojiconEditText;
 import com.v5kf.client.lib.V5MessageManager;
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5TextMessage;
+import com.v5kf.client.ui.emojicon.EmojiconEditText;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.MessageRequest;
-import com.v5kf.mcss.ui.activity.BaseActivity;
-import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
 import com.v5kf.mcss.ui.adapter.RobotRecyclerAdapter;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
 import com.v5kf.mcss.utils.Logger;
 
-public class RobotChatActivity extends BaseActivity {
+public class RobotChatActivity extends BaseToolbarActivity {
 	private static final String TAG = "RobotChatActivity";
 	private static final int HDL_WHAT_FINISH = 98;
 	

@@ -20,7 +20,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
         
-        <com.rockerhieu.emojicon.EmojiconTextView
+        <com.v5kf.client.ui.emojicon.EmojiconTextView
             android:id="@+id/id_to_msg_text"
             emojicon:emojiconAlignment="baseline"
             emojicon:emojiconSize="@dimen/chat_text_emoji_iconsize"

@@ -6,7 +6,7 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +29,11 @@ public class ActionSheetDialog {
 	private ScrollView sLayout_content;
 	private boolean showTitle = false;
 	private List<SheetItem> sheetItemList;
-	private Display display;
+	private DisplayMetrics display;
 
 	public ActionSheetDialog(Context context) {
 		this.context = context;
-		WindowManager windowManager = (WindowManager) context
-				.getSystemService(Context.WINDOW_SERVICE);
-		display = windowManager.getDefaultDisplay();
+		display = context.getResources().getDisplayMetrics();
 	}
 
 	public ActionSheetDialog builder() {
@@ -44,7 +42,7 @@ public class ActionSheetDialog {
 				R.layout.v5_view_actionsheet, null);
 
 		// 设置Dialog最小宽度为屏幕宽度
-		view.setMinimumWidth(display.getWidth());
+		view.setMinimumWidth(display.widthPixels);
 
 		// 获取自定义Dialog布局中的控件
 		sLayout_content = (ScrollView) view.findViewById(R.id.sLayout_content);
@@ -63,7 +61,7 @@ public class ActionSheetDialog {
 		dialog = new Dialog(context, R.style.ActionSheetDialogStyle);
 		dialog.setContentView(view);
 		Window dialogWindow = dialog.getWindow();
-		dialogWindow.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+		dialogWindow.setGravity(Gravity.START | Gravity.BOTTOM);
 		WindowManager.LayoutParams lp = dialogWindow.getAttributes();
 		lp.x = 0;
 		lp.y = 0;
@@ -120,7 +118,7 @@ public class ActionSheetDialog {
 		if (size >= 7) {
 			LinearLayout.LayoutParams params = (LayoutParams) sLayout_content
 					.getLayoutParams();
-			params.height = display.getHeight() / 2;
+			params.height = display.heightPixels / 2;
 			sLayout_content.setLayoutParams(params);
 		}
 

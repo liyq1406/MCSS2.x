@@ -38,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="4dp"
-        ptr:ptrDrawable="@drawable/v5_loading"
         ptr:ptrMode="pullFromEnd"
         ptr:ptrEmptyLayout="@layout/layout_emptyview" />
 

@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rockerhieu.emojicon.EmojiconTextView;
+import com.v5kf.client.ui.emojicon.EmojiconTextView;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
@@ -96,9 +98,12 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
     	
     	// 最新消息未获取到
     	if (mAppInfo.getLastestMessageOfCustomer(customer) != null) {
-	    	String content = mAppInfo.getLastestMessageOfCustomer(customer).getDefaultContent(mActivity).replaceAll("<", "&lt;");
-	    	content = content.replaceAll(">", "&gt;");
-	    	holder.mContent.setText(Html.fromHtml(content));
+	    	String content = mAppInfo.getLastestMessageOfCustomer(customer).getDefaultContent(mActivity);
+//	    	content = content.replaceAll("<", "&lt;");
+//	    	content = content.replaceAll(">", "&gt;");
+	    	Spanned spanText = Html.fromHtml(content.replace("\n", "<br>"));
+	    	holder.mContent.setText(spanText);
+			holder.mContent.setMovementMethod(LinkMovementMethod.getInstance());
     	} else {
     		holder.mContent.setText("");
     	}

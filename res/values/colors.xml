@@ -133,6 +133,8 @@
     <color name="dialog_option_item_boder">#E0E1E2</color>
     <color name="dialog_warning_btn_boder">#E0E1E2</color><!-- ?? -->
     <color name="dialog_option_item_bg_pressed">#cacaca</color><!-- 按下 -->
+    <color name="dialog_alert_btn_bg_pressed">#a0f0f0f0</color>
+    <color name="dialog_alert_empty_bg">#def2f2f2</color>
     
     <!-- 底部button @deprecated -->
     <color name="btn_green_bg">#01BA1B</color>
@@ -205,8 +207,8 @@
     <color name="v5_badge_color">#ffff3a20</color>
     
     <!-- V5 SDK -->
-    <color name="v5_ques_bg_select">#DADADA</color>
-    <color name="v5_ques_bg_normal">#EBECEE</color>
+    <color name="v5_ques_bg_select">#EBECEE</color>
+    <color name="v5_ques_bg_normal">@color/v5_key_bar_bg</color>
     
     <!-- actionsheet -->
     <color name="trans">#00000000</color>

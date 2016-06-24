@@ -13,14 +13,15 @@ import org.simple.eventbus.ThreadMode;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.widget.TextView;
 
+import com.chyrain.irecyclerview.RefreshRecyclerView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
@@ -32,6 +33,7 @@ import com.v5kf.mcss.qao.request.WorkerRequest;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.WorkerListAdapter;
+import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
 
@@ -48,10 +50,15 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 	private static final String TAG = "WorkerListFragment";
 	
 	private List<ArchWorkerBean> mDatas;
-	private RecyclerView mListView;
+	private RefreshRecyclerView mRefreshRecyclerView;
 	private LinearLayoutManager mLayoutManager;
-	private WorkerListAdapter mAdapter;	
-	private SwipeRefreshLayout mSwipeRefresh;
+	private WorkerListAdapter mAdapter;
+	
+	private TextView mEmptyTipsTv;
+	
+	public TabWorkerListFragment() {
+		// TODO Auto-generated constructor stub
+	}
 	
     public TabWorkerListFragment(MainTabActivity activity, int index) {
 		super(activity, index);
@@ -62,12 +69,11 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
     @Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
-		setContentView(R.layout.fragment_contact_wlist);
+		setContentView(R.layout.fragment_md2x_contact_wlist);
 
 		Logger.d(TAG, TAG + " 将要创建View " + this);
 		initView();
     	loadData();
-    	checkListEmpty();
 	}
 
 	@Override
@@ -113,6 +119,9 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 	}
     
 	private void loadData() {
+		//mParentActivity.showProgress();
+		mRefreshRecyclerView.setRefreshing();
+		
 		/* 获取企业坐席列表 */
 		if (Config.USE_DB) {
 			for (ArchWorkerBean cow : DataSupport.findAll(ArchWorkerBean.class)) {
@@ -128,6 +137,8 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 		WorkerStatusCompartor wsc = new WorkerStatusCompartor();
 		Collections.sort(mDatas, wsc);		
 		mAdapter.notifyDataSetChanged();
+		
+		mHandler.obtainMessage(HDL_STOP_REFRESH).sendToTarget();
 	}
 	
 	private void addWorkerBean(ArchWorkerBean cow) {
@@ -149,60 +160,50 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 	 * @throws IllegalArgumentException 
      */
     private void initView() {
-    	if (null == mListView) {
-    		mListView = (RecyclerView) findViewById(R.id.id_recycle_view);
+    	if (null == mRefreshRecyclerView) {
+    		mRefreshRecyclerView = (RefreshRecyclerView) findViewById(R.id.id_irecycler_worker);
     	}
     	if (null == mAdapter) {
     		mAdapter = new WorkerListAdapter(mParentActivity, mDatas);
     	}
     	mLayoutManager = new LinearLayoutManager(mParentActivity, LinearLayoutManager.VERTICAL, false);
-    	mListView.setLayoutManager(mLayoutManager);
-    	mListView.addItemDecoration(new Divider());
-    	mListView.setAdapter(mAdapter);
-    	mListView.setScrollbarFadingEnabled(true);
-    	mListView.setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
-    	mListView.setAdapter(mAdapter);
+    	mRefreshRecyclerView.setLayoutManager(mLayoutManager);
+    	mRefreshRecyclerView.addItemDecoration(new Divider());
+    	mRefreshRecyclerView.setAdapter(mAdapter);
+    	mRefreshRecyclerView.getRefreshableView().setScrollbarFadingEnabled(true);
+    	mRefreshRecyclerView.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
     	
-    	/* 刷新控件 */
-        if (null == mSwipeRefresh) {
-        	mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        }
-        mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeColors(R.color.green, R.color.red,  
-        	    R.color.blue, R.color.yellow);
-        
-    	addListListener();
-    }
-    
-    
-    private void addListListener() {
-		getView().findViewById(R.id.layout_container_tv).setOnClickListener(new OnClickListener() {
-			
+    	mRefreshRecyclerView.setHeaderLayout(new V5RefreshLayout(mParentActivity));
+    	mRefreshRecyclerView.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
+
 			@Override
-			public void onClick(View v) {
-				Logger.d(TAG, "--- 点击消息为空提示图标 ---");
-//				mAppInfo.clearRunTimeInfo();
-//				mActivity.onWebsocketLogin();
+			public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				//Toast.makeText(mParentActivity, "Pull Down!", Toast.LENGTH_SHORT).show();
 				onRefresh();
-//				updateWorkersList();
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				//Toast.makeText(mParentActivity, "Pull Up!", Toast.LENGTH_SHORT).show();
+				
 			}
 		});
-	}
-     
-    
-    private void checkListEmpty() {
-    	if (null == mListView) {
-    		mListView = (RecyclerView) findViewById(R.id.id_recycle_view);
-    	}
-    	if (mDatas.size() == 0) {
-    		mSwipeRefresh.setVisibility(View.GONE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
-		} else {
-			mSwipeRefresh.setVisibility(View.VISIBLE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
+		
+		if (mRefreshRecyclerView.getEmptyView() != null) {
+			mEmptyTipsTv = (TextView) mRefreshRecyclerView.getEmptyView().findViewById(R.id.layout_container_tv);
+		}
+        /* 空白按钮 */
+		if (mEmptyTipsTv != null) {
+			mEmptyTipsTv.setText(R.string.worker_list_empty_tips);
+//			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					onRefresh();
+//				}
+//			});
 		}
     }
-    
     
 //	private void updateContactBean(String wid) {
 //		if (null == wid || wid.isEmpty()) {
@@ -232,7 +233,6 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 	private void updateWorkersList() {
 		mDatas.clear();
 		loadData();
-		checkListEmpty();
 	}
     
 //	/**
@@ -276,9 +276,18 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 	protected void handleMessage(Message msg, ActivityBase baseActivity) {
 		switch (msg.what) {
 		case HDL_STOP_REFRESH:
-			if (mSwipeRefresh.isRefreshing()) {
-				mSwipeRefresh.setRefreshing(false);
+			mHandler.removeMessages(HDL_TIME_OUT);
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
 			}
+			mParentActivity.dismissProgress();
+			break;
+		case HDL_TIME_OUT:
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
+				onRefreshTimeOut();
+			}
+			mParentActivity.dismissProgress();
 			break;
 		}
 	}
@@ -289,12 +298,12 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 		try {
 			WorkerRequest wReq = (WorkerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, mParentActivity);
 			wReq.getArchWorkers();
-			mParentActivity.showProgress();
+//			mParentActivity.showProgress();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
-		mHandler.sendEmptyMessageDelayed(HDL_STOP_REFRESH, 3000);
+		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
 	}
 
 	/**
@@ -358,8 +367,7 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 	private void archWorkerChange(AppInfoKeeper appinfo) {
 		Logger.d(TAG + "-eventbus", "archWorkerChange -> ETAG_ARCH_WORKER_CHANGE");
 		updateWorkersList();
-		mParentActivity.dismissProgress();
-		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
+		mHandler.obtainMessage(HDL_STOP_REFRESH).sendToTarget();
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)

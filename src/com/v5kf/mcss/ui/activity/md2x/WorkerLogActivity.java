@@ -9,10 +9,12 @@ import android.support.v7.widget.RecyclerView;
 
 import com.chyrain.irecyclerview.RefreshRecyclerView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.entity.WorkerLogBean;
 import com.v5kf.mcss.ui.adapter.WorkerLogAdapter;
+import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.ui.widget.RecyclerViewDivider;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.WorkerLogUtil;
@@ -48,9 +50,11 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 		mLogList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 		mLogList.addItemDecoration(new RecyclerViewDivider(this, LinearLayoutManager.HORIZONTAL));
 		mLogList.setAdapter(mAdapter);
-		mLogList.getRefreshableView().setScrollbarFadingEnabled(true);
+//		mLogList.getRefreshableView().setScrollbarFadingEnabled(true);
 		mLogList.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
-		
+		mLogList.setHasPullUpFriction(false); // 没有上拉阻力
+		mLogList.setLoadingMoreWhenLastVisible(true);
+    	mLogList.setFooterLayout(new V5RefreshLayout(mApplication, Mode.PULL_FROM_END));
 		// Set a listener to be invoked when the list should be refreshed.
 		mLogList.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
 

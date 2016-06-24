@@ -2,11 +2,9 @@ package com.v5kf.mcss.ui.widget;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,7 +23,6 @@ public class AlertDialog {
 	private Button btn_neg;
 	private Button btn_pos;
 	private ImageView img_line;
-	private Display display;
 	private LinearLayout mCustomLayout;
 	private boolean showTitle = false;
 	private boolean showMsg = false;
@@ -34,9 +31,6 @@ public class AlertDialog {
 
 	public AlertDialog(Context context) {
 		this.context = context;
-		WindowManager windowManager = (WindowManager) context
-				.getSystemService(Context.WINDOW_SERVICE);
-		display = windowManager.getDefaultDisplay();
 	}
 
 	public AlertDialog builder() {
@@ -63,13 +57,14 @@ public class AlertDialog {
 		dialog.setContentView(view);
 
 		// 调整dialog背景大小
-		lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (display
-				.getWidth() * 0.85), LayoutParams.WRAP_CONTENT));
+		lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (context.getResources().
+				getDisplayMetrics().widthPixels * 0.80), LayoutParams.WRAP_CONTENT));
 
 		return this;
 	}
 
 	public AlertDialog setView(View v) {
+		mCustomLayout.setVisibility(View.VISIBLE);
 		mCustomLayout.addView(v);
 		return this;
 	}

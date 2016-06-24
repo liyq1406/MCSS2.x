@@ -30,4 +30,8 @@
 	<string name="v5_hot_question">常见问题：</string>
     <string name="v5_relative_question">相关问题：</string>
     
+    <string name="v5_permission_record_deny">录音失败，请检查是否开启录音权限!</string>
+    <string name="v5_permission_camera_deny">打开相机失败，请检查是否开启相机和存储权限!</string>
+    <string name="v5_permission_photo_deny">打开相册失败，请检查是否开启存储访问权限!</string>
+    
 </resources>

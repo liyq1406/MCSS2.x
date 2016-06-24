@@ -23,7 +23,7 @@
         android:layout_marginEnd="@dimen/chat_list_item_content_hr_matgin"
 	    android:layout_marginRight="@dimen/chat_list_item_content_hr_matgin" >
 
-	    <com.rockerhieu.emojicon.EmojiconTextView
+	    <com.v5kf.client.ui.emojicon.EmojiconTextView
             android:id="@+id/id_from_msg_text"
             emojicon:emojiconAlignment="baseline"
             emojicon:emojiconSize="@dimen/chat_text_emoji_iconsize"

@@ -4,7 +4,6 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.json.JSONException;
@@ -21,7 +20,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Process;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
 import com.tencent.android.tpush.XGIOperateCallback;
@@ -71,8 +74,8 @@ public class CustomApplication extends LitePalApplication {
 	private boolean isOnChat = false;
 	private String mOnChatCustomer = null;
 	
-	private int mNotificationId = 0;
-	private Map<String, Integer> mNotificationIdMap;
+//	private int mNotificationId = 0;
+//	private Map<String, Integer> mNotificationIdMap;
 	
 	private NotificationManager mNotificationManager;
 	
@@ -196,7 +199,7 @@ public class CustomApplication extends LitePalApplication {
 		mInstance = this;
 		mAppInfo = new AppInfoKeeper(this);
 		mActivitiePrefs = new CopyOnWriteArrayList<WeakReference<Activity>>();
-		mNotificationIdMap = new ConcurrentHashMap<String, Integer>();
+//		mNotificationIdMap = new ConcurrentHashMap<String, Integer>();
 		initApplication();	
 	}
 
@@ -304,6 +307,12 @@ public class CustomApplication extends LitePalApplication {
 		if (getWorkerSp().readAuthorization() == null) {
 			return;
 		}
+		
+		// 读取监控状态
+		if (mAppInfo.getUser() != null) {
+			mAppInfo.getUser().setMonitor(getWorkerSp().readBoolean(WorkerSP.SP_MONITOR_STATUS));
+		}
+		
 		if (getWorkerSp().readExitFlag() == ExitFlag.ExitFlag_NeedLogin) {
 			// 通知MainTabActivity
 			EventBus.getDefault().post(ReloginReason.ReloginReason_None, EventTag.ETAG_RELOGIN);
@@ -512,21 +521,6 @@ public class CustomApplication extends LitePalApplication {
 //	}
 	
 	
-	public void clearNotification(String c_id) {
-		if (null == c_id) {
-			Logger.w(TAG, "[clearNotification] null key");
-			return;
-		}
-		// 清空对应会话的通知栏消息 
-		Logger.d(TAG, "--- clearNotification of c_id:" + c_id);
-		getNotificationManager().cancel(getNotificationId(c_id));
-		mNotificationIdMap.remove(c_id);
-	}
-
-	public void clearNotification(int id) {
-		getNotificationManager().cancel(id);
-	}
-
 	public boolean isOnChat() {
 		return isOnChat;
 	}
@@ -535,24 +529,6 @@ public class CustomApplication extends LitePalApplication {
 		this.isOnChat = isOnChat;
 	}
 	
-	public int getNotificationId(String c_id) {
-		if (null == c_id || c_id.isEmpty()) {
-			return 0;
-		}
-		Integer id;
-		if (mNotificationIdMap.containsKey(c_id)) {
-			id = mNotificationIdMap.get(c_id);
-			if (null == id) {
-				return 10; // 从10开始, 0-9用作其他用途
-			}
-			return id;
-		}
-
-		id = ++mNotificationId;
-		mNotificationIdMap.put(c_id, id);
-		return id;
-	}
-
 	public String getOnChatCustomer() {
 		return mOnChatCustomer;
 	}
@@ -658,12 +634,44 @@ public class CustomApplication extends LitePalApplication {
 //	}
 	
 	public void noticeMessage(String text) {
-		try {
-	        // 显示通知，id必须不重复，否则新的通知会覆盖旧的通知（利用这一特性，可以对通知进行更新）
-	        getNotificationManager().notify(0, getNotification(text));
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
+		// [修改]使用铃声提示而非通知
+		innerNotice();
+
+//		try {
+//	        // 显示通知，id必须不重复，否则新的通知会覆盖旧的通知（利用这一特性，可以对通知进行更新）
+//	        getNotificationManager().notify(0, getNotification(text));
+//        } catch (Exception e) {
+//        	e.printStackTrace();
+//        }
+	}
+
+	private void innerNotice() {
+		if (getSpUtil().isAllowPushNotify()) {
+			if (getSpUtil().isAllowVibrate()) {
+				Vibrator vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);  
+	            // 等待3秒，震动3秒，从第0个索引开始，一直循环  
+	            vibrator.vibrate(new long[]{200, 200, 200, 200}, -1);
+			}
+			if (getSpUtil().isAllowVoice()) {
+				Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+		 		Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+		 		r.play();
+			}
+		}
+	}
+
+	public void noticeMessage(String c_id, String text) {
+		if (c_id != null && isOnChat() && c_id.equals(mOnChatCustomer)) { // 在对话界面中，不发通知
+			return;
+		}
+		innerNotice();
+		
+//		try {
+//			// 显示通知，id必须不重复，否则新的通知会覆盖旧的通知（利用这一特性，可以对通知进行更新）
+//			getNotificationManager().notify(getNotificationId(c_id), getNotification(text));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	protected Notification getNotification(String text) {
@@ -723,5 +731,38 @@ public class CustomApplication extends LitePalApplication {
         
         Notification notification = mBuilder.build();
         return notification;
+	}
+	
+	public int getNotificationId(String c_id) {
+		if (null == c_id || c_id.isEmpty()) {
+			return 0;
+		}
+//		Integer id;
+//		if (mNotificationIdMap.containsKey(c_id)) {
+//			id = mNotificationIdMap.get(c_id);
+//			if (null == id) {
+//				return 10; // 从10开始, 0-9用作其他用途
+//			}
+//			return id;
+//		}
+//
+//		id = ++mNotificationId;
+//		mNotificationIdMap.put(c_id, id);
+		return c_id.hashCode();
+	}
+	
+	public void clearNotification(String c_id) {
+		if (null == c_id) {
+			Logger.w(TAG, "[clearNotification] null key");
+			return;
+		}
+		// 清空对应会话的通知栏消息 
+		Logger.d(TAG, "--- clearNotification of c_id:" + c_id);
+		getNotificationManager().cancel(getNotificationId(c_id));
+//		mNotificationIdMap.remove(c_id);
+	}
+
+	public void clearNotification(int id) {
+		getNotificationManager().cancel(id);
 	}
 }

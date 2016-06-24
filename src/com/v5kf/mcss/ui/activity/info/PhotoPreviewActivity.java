@@ -26,7 +26,6 @@ import com.easemob.chatuidemo.widget.photoview.PhotoViewAttacher.OnPhotoTapListe
 import com.easemob.chatuidemo.widget.photoview.PhotoViewAttacher.OnViewTapListener;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
-import com.v5kf.mcss.ui.activity.BaseActivity;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
 import com.v5kf.mcss.utils.FileUtil;

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/dialog_alert_empty_bg" />
+    <!-- <stroke android:width="@dimen/dialog_border_width" android:color="@color/dialog_option_item_boder" /> -->
+	<stroke android:width="@dimen/alertsheet_border_width" android:color="@color/transparent" />
+    <corners android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp" android:topLeftRadius="@dimen/warning_side_btn_radius" android:topRightRadius="@dimen/warning_side_btn_radius" />
+
+    <padding android:bottom="10dp" android:left="10dp" android:right="10dp" android:top="10dp" />
+</shape>

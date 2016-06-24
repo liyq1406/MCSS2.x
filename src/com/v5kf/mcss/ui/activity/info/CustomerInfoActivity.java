@@ -22,7 +22,6 @@ import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
-import com.v5kf.mcss.ui.activity.BaseActivity;
 import com.v5kf.mcss.ui.activity.md2x.CustomerEditActivity;
 import com.v5kf.mcss.ui.activity.md2x.HistoryMessagesActivity;
 import com.v5kf.mcss.ui.widget.CircleImageView;

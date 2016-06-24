@@ -13,15 +13,16 @@ import org.simple.eventbus.ThreadMode;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.widget.TextView;
 
+import com.chyrain.irecyclerview.RefreshRecyclerView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
@@ -33,6 +34,7 @@ import com.v5kf.mcss.qao.request.TicketRequest;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.HistoryVisitorAdapter;
+import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.Logger;
@@ -50,11 +52,12 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 	private static final String TAG = "HistoryVisitorFragment";
 	private List<CustomerBean> mRecycleBeans; // c_id替代v_id
 	
-	private RecyclerView mRecyclerView;
+	private RefreshRecyclerView mRefreshRecyclerView;
 	private HistoryVisitorAdapter mRecyclerAdapter;
 	private LinearLayoutManager mLayoutManager;
 	
-	private SwipeRefreshLayout mSwipeRefresh;
+	private TextView mEmptyTipsTv;
+	
 	private boolean isLoadingMore = false;
 	
 	private boolean mHasMore = true;
@@ -63,6 +66,10 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 	private static final int NUM_PER_PAGE = 10; // 每次显示10个
 	private int mPages = 1;
 	private int mDayCount = 0;
+	
+	public TabHistoryVisitorFragment() {
+		// TODO Auto-generated constructor stub
+	}
 	
     public TabHistoryVisitorFragment(MainTabActivity activity, int index) {
 		super(activity, index);
@@ -76,16 +83,16 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
     @Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
-		setContentView(R.layout.fragment_contact_customer);
+		setContentView(R.layout.fragment_md2x_visitor_list);
 
 		Logger.d(TAG, TAG + " 将要创建View " + this);
-		if (mRecyclerView == null) {
+		if (mRefreshRecyclerView == null) {
 			initView();
 		}
 		if (mRecycleBeans.isEmpty()) {
-			mParentActivity.showProgress();
+			//mParentActivity.showProgress();
+			mRefreshRecyclerView.setRefreshing();
 			initData(false);
-	    	checkListEmpty();
 		}
 	}
 
@@ -183,85 +190,65 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
      */
     private void initView() {
     	mRecyclerAdapter = new HistoryVisitorAdapter(mRecycleBeans, mParentActivity);
-    	mRecyclerView = (RecyclerView) findViewById(R.id.id_recycle_view);
+    	mRefreshRecyclerView = (RefreshRecyclerView) findViewById(R.id.id_irecycler_visitor);
     	mLayoutManager = new LinearLayoutManager(mParentActivity, LinearLayoutManager.VERTICAL, false);
-		mRecyclerView.setLayoutManager(mLayoutManager);
-		mRecyclerView.addItemDecoration(new Divider());
-        mRecyclerView.setAdapter(mRecyclerAdapter);
-        mRecyclerView.setScrollbarFadingEnabled(true);
-        mRecyclerView.setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
-        
-        /* 刷新控件 */
-        if (null == mSwipeRefresh) {
-        	mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        }
-        mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeColors(R.color.green, R.color.red,  
-        	    R.color.blue, R.color.yellow);
-        
-        /* 空白按钮 */
-        findViewById(R.id.layout_container_tv).setOnClickListener(new OnClickListener() {
-			
+    	mRefreshRecyclerView.setLayoutManager(mLayoutManager);
+    	mRefreshRecyclerView.addItemDecoration(new Divider());
+    	mRefreshRecyclerView.setAdapter(mRecyclerAdapter);
+    	mRefreshRecyclerView.getRefreshableView().setScrollbarFadingEnabled(true);
+    	mRefreshRecyclerView.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
+    	mRefreshRecyclerView.setHasPullUpFriction(false); // 没有上拉阻力
+    	mRefreshRecyclerView.setLoadingMoreWhenLastVisible(true);
+    	mRefreshRecyclerView.setHeaderLayout(new V5RefreshLayout(mParentActivity));
+    	mRefreshRecyclerView.setFooterLayout(new V5RefreshLayout(mParentActivity, Mode.PULL_FROM_END));
+    	mRefreshRecyclerView.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
+
 			@Override
-			public void onClick(View v) {
+			public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				//Toast.makeText(mParentActivity, "Pull Down!", Toast.LENGTH_SHORT).show();
 				onRefresh();
 			}
-		});
-        
-        /* 上拉监听 */
-        mRecyclerView.addOnScrollListener(new OnScrollListener() {
-        	@Override
-        	public void onScrollStateChanged(RecyclerView recyclerView,
-        			int newState) {
-        		super.onScrollStateChanged(recyclerView, newState);
-        		int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-        		if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mRecyclerAdapter.getItemCount()
-        				&& mRecyclerAdapter.getItemCount() >= 10) {
-                    if (isLoadingMore) {
-                    	// 正在刷新中取消执行
-                    } else {
-                    	isLoadingMore = true;
-                    	if (mHasMore || mRecyclerAdapter.getItemCount() < mAppInfo.getVisitorMap().size()) {
-                        	setLoadMoreVisible(true);
-                        	mRecycleBeans.clear();
-            				Logger.d(TAG, "initcstmdata [LoadMore]");
-                    		initData(true);
-                    		mRecyclerAdapter.notifyDataSetChanged();
-                    		mHandler.sendEmptyMessageDelayed(HDL_STOP_LOAD, 5000);
-                    	} else {
-                    		isLoadingMore = false;
-                    		mHandler.sendEmptyMessage(HDL_STOP_LOAD);
-                    		mParentActivity.ShowShortToast(R.string.no_more);
-                    	}
-                    	Logger.i(TAG, "上拉加载 ...");
-                    }
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				//Toast.makeText(mParentActivity, "Pull Up!", Toast.LENGTH_SHORT).show();
+				if (isLoadingMore) {
+                	// 正在刷新中取消执行
+                } else {
+                	isLoadingMore = true;
+                	if (mHasMore || mRecyclerAdapter.getItemCount() < mAppInfo.getVisitorMap().size()) {
+                    	setLoadMoreVisible(true);
+                    	mRecycleBeans.clear();
+        				Logger.d(TAG, "initcstmdata [LoadMore]");
+                		initData(true);
+                		mRecyclerAdapter.notifyDataSetChanged();
+                		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
+                	} else {
+                		isLoadingMore = false;
+                		mHandler.sendEmptyMessage(HDL_STOP_LOAD);
+                		mParentActivity.ShowShortToast(R.string.no_more);
+                	}
+                	Logger.i(TAG, "上拉加载 ...");
                 }
-        	}
-        	
-        	@Override
-        	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        		super.onScrolled(recyclerView, dx, dy);        		        		
-        	}
+			}
 		});
-    }
-    
-    
-    private void checkListEmpty() {
-    	if (null == mRecyclerView) {
-    		mRecyclerView = (RecyclerView) getView().findViewById(R.id.id_recycle_view);
-    	}
-    	if (null == mSwipeRefresh) {
-    		mSwipeRefresh = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_refresh_layout);
-    	}
-    	if (mRecycleBeans.size() == 0) {
-    		mSwipeRefresh.setVisibility(View.GONE);
-    		findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
-		} else {
-			mSwipeRefresh.setVisibility(View.VISIBLE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
+		
+		if (mRefreshRecyclerView.getEmptyView() != null) {
+			mEmptyTipsTv = (TextView) mRefreshRecyclerView.getEmptyView().findViewById(R.id.layout_container_tv);
+		}
+        /* 空白按钮 */
+		if (mEmptyTipsTv != null) {
+			mEmptyTipsTv.setText(R.string.visitor_list_empty_tips);
+//			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					onRefresh();
+//				}
+//			});
 		}
     }
-
+    
     
     private boolean hasRecyclerBeans(String v_id) {
     	if (null == v_id || v_id.isEmpty()) {
@@ -400,22 +387,34 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 	
 	@Override
 	protected void handleMessage(Message msg, ActivityBase baseActivity) {
-		if (mRecyclerView == null || mSwipeRefresh == null) {
+		if (mRefreshRecyclerView == null) {
 			initView();
 		}
 		switch (msg.what) {
+		case HDL_TIME_OUT: // 超时
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
+				updateUI();
+				onRefreshTimeOut();
+			}
+			break;
 		case HDL_STOP_REFRESH: // 停止刷新
-			if (mSwipeRefresh.isRefreshing()) {
-				mSwipeRefresh.setRefreshing(false);
+			mHandler.removeMessages(HDL_TIME_OUT);
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
 				updateUI();
 			}
 			break;
 			
 		case HDL_STOP_LOAD: // 停止加载
+			mHandler.removeMessages(HDL_TIME_OUT);
 			if (isLoadingMore) {
 				isLoadingMore = false;
 				setLoadMoreVisible(false);
 				updateUI();
+			}
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
 			}
 			break;
 			
@@ -448,13 +447,12 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 		mRecycleBeans.clear();				
 		initData(false);
 		mRecyclerAdapter.notifyDataSetChanged();
-		checkListEmpty();
 	}
 
 	@Override
 	public void onRefresh() { // 下拉加载内存中数据，上拉加载则继续请求
 		Logger.i(TAG, "onRefresh ...");
-    	mParentActivity.showProgress();
+//    	mParentActivity.showProgress();
 		
 		/* 请求等待列表数据 */
 		if (!mAppInfo.getVisitorMap().isEmpty()) { // 已获取数据则只刷新今天数据
@@ -469,16 +467,14 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 			updateUI();
 		}
 		
-		mHandler.sendEmptyMessageDelayed(HDL_STOP_REFRESH, 3000);
+		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
 	}
 
 	
 	private void setLoadMoreVisible(boolean visible) {
 		if (visible) {
-			findViewById(R.id.load_more_layout).setVisibility(View.VISIBLE);
-			mRecyclerView.scrollToPosition(mRecyclerAdapter.getItemCount() - 1);
+			mRefreshRecyclerView.getRefreshableView().scrollToPosition(mRecyclerAdapter.getItemCount() - 1);
 		} else {
-			findViewById(R.id.load_more_layout).setVisibility(View.GONE);
 //			mRecyclerView.scrollToPosition(mRecyclerAdapter.getItemCount() - 1);
 		}
 	}

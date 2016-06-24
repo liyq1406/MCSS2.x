@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rockerhieu.emojicon.EmojiconTextView;
+import com.v5kf.client.ui.emojicon.EmojiconTextView;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
@@ -33,9 +33,9 @@ import com.v5kf.mcss.ui.widget.BadgeView;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
 import com.v5kf.mcss.utils.DateUtil;
-import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
+import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
 /**

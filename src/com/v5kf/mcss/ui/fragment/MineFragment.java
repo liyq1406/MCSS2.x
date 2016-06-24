@@ -26,7 +26,7 @@ import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.ArchWorkerBean;
 import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
-import com.v5kf.mcss.ui.activity.BaseActivity;
+import com.v5kf.mcss.ui.activity.info.BaseActivity;
 import com.v5kf.mcss.ui.activity.info.SettingModeActivity;
 import com.v5kf.mcss.ui.activity.info.SettingMoreActivity;
 import com.v5kf.mcss.ui.activity.info.SettingStatusActivity;

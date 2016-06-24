@@ -11,15 +11,16 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.widget.TextView;
 
+import com.chyrain.irecyclerview.RefreshRecyclerView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.client.lib.V5HttpUtil;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
 import com.v5kf.client.lib.entity.V5ArticleBean;
@@ -30,15 +31,16 @@ import com.v5kf.client.lib.entity.V5MusicMessage;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
-import com.v5kf.mcss.ui.activity.BaseActivity;
 import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
+import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.adapter.MaterialRecyclerAdapter;
+import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.URLCache;
 
-public class MaterialResActivity extends BaseActivity implements OnRefreshListener {
+public class MaterialResActivity extends BaseToolbarActivity implements OnRefreshListener {
 	private static final String TAG = "MaterialResActivity";
 	/* 素材类型 */
 	public static final int TYPE_IMG = 1;
@@ -47,6 +49,7 @@ public class MaterialResActivity extends BaseActivity implements OnRefreshListen
 	
 	protected static final int HDL_STOP_REFRESH = 11;
 	protected static final int HDL_STOP_LOAD = 12;
+	protected static final int HDL_UPDATE_UI = 13;
 	
 	private static final int ITEMS_PER_PAGE = 20;
 	private int mMaterialType;
@@ -56,7 +59,7 @@ public class MaterialResActivity extends BaseActivity implements OnRefreshListen
 	private boolean mHasMore = true;
 	
 	/* 瀑布流列表 */
-	private RecyclerView mRecyclerView;
+	private RefreshRecyclerView mRefreshRecyclerView;
 	/* 瀑布流适配器 */
 	private MaterialRecyclerAdapter mAdapter;
 	/* 数据源 */
@@ -64,15 +67,15 @@ public class MaterialResActivity extends BaseActivity implements OnRefreshListen
 	
 	private StaggeredGridLayoutManager mLayoutManager;
 	
-	/* 刷新控件 */
-	private SwipeRefreshLayout mSwipeRefresh;
+	private TextView mEmptyTipsTv;
+	/* 刷新标识 */
 	private boolean isLoadingMore = false;
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_material_res);
+		setContentView(R.layout.activity_md2x_material_res);
 		handleIntent();
 		findView();
 		initView();
@@ -93,92 +96,84 @@ public class MaterialResActivity extends BaseActivity implements OnRefreshListen
 	}
 
 	private void findView() {
-		mRecyclerView = (RecyclerView) findViewById(R.id.id_material_list);
-		mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+		mRefreshRecyclerView = (RefreshRecyclerView) findViewById(R.id.id_material_recycler);
 	}
 
 	private void initView() {
 		initTopBarForLeftBack(R.string.title_material);
 		initRecyclerView();
 		
-		/* 刷新控件 */
-        if (null == mSwipeRefresh) {
-        	mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        }
-        mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeColors(R.color.green, R.color.red,  
-        	    R.color.blue, R.color.yellow);
-        mSwipeRefresh.setEnabled(false);
-        
+		if (mRefreshRecyclerView.getEmptyView() != null) {
+			mEmptyTipsTv = (TextView) mRefreshRecyclerView.getEmptyView().findViewById(R.id.layout_container_tv);
+		}
         /* 空白按钮 */
-        findViewById(R.id.layout_container_tv).setOnClickListener(new OnClickListener() {			
-			@Override
-			public void onClick(View v) {
-				onRefresh();
-			}
-		});
-        
-        /* 上拉监听 */
-        mRecyclerView.addOnScrollListener(new OnScrollListener() {
-        	@Override
-        	public void onScrollStateChanged(RecyclerView recyclerView,
-        			int newState) {
-        		Logger.i(TAG, "onScrollStateChanged...");
-        		super.onScrollStateChanged(recyclerView, newState);
-        		int[] visibleItems = mLayoutManager.findLastVisibleItemPositions(null);
-        		int lastitem = Math.max(visibleItems[0], visibleItems[1]);
-        		if (newState == RecyclerView.SCROLL_STATE_IDLE && lastitem + 1 == mAdapter.getItemCount()
-        				&& mAdapter.getItemCount() >= ITEMS_PER_PAGE) {
-        			Logger.i(TAG, "onScrollStateChanged...");
-                    if (isLoadingMore) {
-                    	// 正在刷新中取消执行
-                    } else {
-                    	isLoadingMore = true;
-                    	if (mHasMore) {
-                        	setLoadMoreVisible(true);
-                        	loadData();
-                    		mHandler.sendEmptyMessageDelayed(HDL_STOP_LOAD, 5000);
-                    	} else {
-                    		mHandler.sendEmptyMessage(HDL_STOP_LOAD);
-                    		ShowShortToast(R.string.no_more);
-                    	}
-                    	Logger.i(TAG, "上拉加载 ...");
-                    }
-                }
-        	}
-        	
-        	@Override
-        	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        		super.onScrolled(recyclerView, dx, dy);        		        		
-        	}
-		});
+		if (mEmptyTipsTv != null) {
+			mEmptyTipsTv.setText(R.string.material_img_empty_tips);
+//			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					onRefresh();
+//				}
+//			});
+		}
 	}
 	
 	private void initRecyclerView() {
         /* 适配器初始化 */
         mDatas = new ArrayList<V5Message>();
         mAdapter = new MaterialRecyclerAdapter(this, mDatas);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        
+        mRefreshRecyclerView.setLayoutManager(mLayoutManager);
+    	mRefreshRecyclerView.getRefreshableView().setItemAnimator(new DefaultItemAnimator());
+    	mRefreshRecyclerView.setAdapter(mAdapter);
+    	mRefreshRecyclerView.getRefreshableView().setScrollbarFadingEnabled(true);
+    	mRefreshRecyclerView.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
+    	mRefreshRecyclerView.setHasPullUpFriction(false); // 没有上拉阻力
+    	mRefreshRecyclerView.setFooterLayout(new V5RefreshLayout(mApplication, Mode.PULL_FROM_END));
+    	mRefreshRecyclerView.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
+
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+//				onRefresh();
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				if (isLoadingMore) {
+                	// 正在刷新中取消执行
+                } else {
+                	isLoadingMore = true;
+                	if (mHasMore) {
+                    	setLoadMoreVisible(true);
+                    	loadData();
+                		mHandler.sendEmptyMessageDelayed(HDL_STOP_LOAD, 5000);
+                	} else {
+                		mHandler.sendEmptyMessage(HDL_STOP_LOAD);
+                		ShowShortToast(R.string.no_more);
+                	}
+                	Logger.i(TAG, "上拉加载 ...");
+                }
+			}
+		});
 	}
 	
-	private static String getAbsoluteUrl(int type, int page) {
+	private static String getAbsoluteUrl(int type, int page, int numPerPage) {
 		switch (type) {
 		case TYPE_IMG:
-			return String.format(Locale.CHINESE, Config.GET_IMAGE_URL, Config.SITE_ID, page);
+			return String.format(Locale.CHINESE, Config.GET_IMAGE_URL, Config.SITE_ID, page, numPerPage);
 		case TYPE_NEWS:
-			return String.format(Locale.CHINESE, Config.GET_NEWS_URL, Config.SITE_ID, page);
+			return String.format(Locale.CHINESE, Config.GET_NEWS_URL, Config.SITE_ID, page, numPerPage);
 		case TYPE_MUSIC:
-			return String.format(Locale.CHINESE, Config.GET_MUSIC_URL, Config.SITE_ID, page);
+			return String.format(Locale.CHINESE, Config.GET_MUSIC_URL, Config.SITE_ID, page, numPerPage);
 		default:
-			return String.format(Locale.CHINESE, Config.GET_IMAGE_URL, Config.SITE_ID, page);
+			return String.format(Locale.CHINESE, Config.GET_IMAGE_URL, Config.SITE_ID, page, numPerPage);
 		}
 	}
 	
 	private void loadData() {
-		final String url = getAbsoluteUrl(mMaterialType, mCurPage);
+		final String url = getAbsoluteUrl(mMaterialType, mCurPage, ITEMS_PER_PAGE);
 		// 1.先获取对应的url缓存
 		final URLCache urlCache = new URLCache();
 		String responseString = urlCache.get(url);
@@ -310,28 +305,12 @@ public class MaterialResActivity extends BaseActivity implements OnRefreshListen
 				mHasMore = false;
 			}
 		} else {
-			ShowToast("没有更多了");
+			ShowToast(R.string.no_more);
 		}
 		
-		mAdapter.notifyDataSetChanged();
-		checkListEmpty();
+		mHandler.obtainMessage(HDL_UPDATE_UI).sendToTarget();
 	}
 
-	private void checkListEmpty() {
-    	if (null == mRecyclerView) {
-    		mRecyclerView = (RecyclerView) findViewById(R.id.id_material_list);
-    	}
-    	if (mDatas.size() == 0) {
-//    		mRecyclerView.setVisibility(View.GONE);
-    		mSwipeRefresh.setVisibility(View.GONE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
-		} else {
-//			mRecyclerView.setVisibility(View.VISIBLE);
-			mSwipeRefresh.setVisibility(View.VISIBLE);
-			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
-		}
-    }
-	
 	@Override
 	protected void handleMessage(Message msg) {
 		switch (msg.what) {
@@ -348,8 +327,8 @@ public class MaterialResActivity extends BaseActivity implements OnRefreshListen
 			break;
 			
 		case HDL_STOP_REFRESH: // 停止刷新
-			if (mSwipeRefresh.isRefreshing()) {
-				mSwipeRefresh.setRefreshing(false);
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
 			}
 			break;
 			
@@ -357,7 +336,11 @@ public class MaterialResActivity extends BaseActivity implements OnRefreshListen
 			if (isLoadingMore) {
 				isLoadingMore = false;
 				setLoadMoreVisible(false);
+				mRefreshRecyclerView.onRefreshComplete();
 			}
+			break;
+		case HDL_UPDATE_UI: // 停止加载
+			mAdapter.notifyDataSetChanged();
 			break;
 		}
 	}
@@ -372,10 +355,8 @@ public class MaterialResActivity extends BaseActivity implements OnRefreshListen
 	
 	private void setLoadMoreVisible(boolean visible) {
 		if (visible) {
-			findViewById(R.id.load_more_layout).setVisibility(View.VISIBLE);
-			mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
+			mRefreshRecyclerView.getRefreshableView().scrollToPosition(mAdapter.getItemCount() - 1);
 		} else {
-			findViewById(R.id.load_more_layout).setVisibility(View.GONE);
 //			mRecyclerView.scrollToPosition(mRecyclerAdapter.getItemCount() - 1);
 		}
 	}

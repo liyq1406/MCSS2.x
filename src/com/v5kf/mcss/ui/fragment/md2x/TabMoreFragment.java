@@ -75,6 +75,10 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	private SharePreferenceUtil mSharedUtil;
 	private WorkerSP mWsp;
 	
+	public TabMoreFragment() {
+		// TODO Auto-generated constructor stub
+	}
+	
     public TabMoreFragment(MainTabActivity activity, int index) {
 		super(activity, index);
 	}

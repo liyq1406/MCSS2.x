@@ -25,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.rockerhieu.emojicon.EmojiconTextView;
 import com.v5kf.client.lib.Logger;
 import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.client.lib.entity.V5ArticlesMessage;
@@ -35,6 +34,7 @@ import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5MessageDefine;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
 import com.v5kf.client.ui.ClientListLinearLayout.OnListLayoutClickListener;
+import com.v5kf.client.ui.emojicon.EmojiconTextView;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;

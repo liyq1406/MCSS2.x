@@ -126,9 +126,9 @@ public class Config {
 	/* v5kf站点相关数据获取 */
 	public static final String HOT_QUES_URL = "http://www.v5kf.com/public/api_dkf/get_hot_ques?sid="; // 常见问答url
 	/* 素材库资源 */
-	public static final String GET_IMAGE_URL = "http://www.v5kf.com/public/api_dkf/get_image_list?sid=%s&page=%d&list=20";
-	public static final String GET_NEWS_URL = "http://www.v5kf.com/public/api_dkf/get_news_list?sid=%s&page=%d&list=20";
-	public static final String GET_MUSIC_URL = "http://www.v5kf.com/public/api_dkf/get_music_list?sid=%s&page=%d&list=20";
+	public static final String GET_IMAGE_URL = "http://www.v5kf.com/public/api_dkf/get_image_list?sid=%s&page=%d&list=%d";
+	public static final String GET_NEWS_URL = "http://www.v5kf.com/public/api_dkf/get_news_list?sid=%s&page=%d&list=%d";
+	public static final String GET_MUSIC_URL = "http://www.v5kf.com/public/api_dkf/get_music_list?sid=%s&page=%d&list=%d";
 	
 	/* 腾讯地图web service API */
 	public static final String MAP_PIC_API_FORMAT = "http://apis.map.qq.com/ws/staticmap/v2/?center=%f,%f&zoom=15&size=300*200&maptype=roadmap&markers=size:small|color:0x207CC4|label:V|%f,%f&key=4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG";
@@ -138,7 +138,8 @@ public class Config {
 	public static String SITE_ID = "";
 	
 	/* 连接超时时间 */
-	public static final int WS_TIME_OUT = 20000; /* 10s */
+	public static final int SOCKET_TIME_OUT = 20000; /* 20s */
+	public static final int WS_TIME_OUT = 20000; /* 20s */
 	public static final long SESSION_TIME_DETA = 300; // 显示日期的时间间隔(单位:秒)
 	
 	/* Websocket 连接参数 */

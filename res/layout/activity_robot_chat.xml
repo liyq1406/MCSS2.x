@@ -8,9 +8,30 @@
     android:background="@color/info_activity_layout_bg"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/common_actionbar"
-        layout="@layout/include_action_bar" />
+    <android.support.design.widget.AppBarLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/id_app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:elevation="0dp" >
+		<!-- 去阴影 app:elevation="0dp" -->
+	
+	    <android.support.v7.widget.Toolbar
+			android:id="@+id/id_common_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="scroll|enterAlways"
+			app:layout_collapseMode="pin"
+			app:title="@string/title_robot_chat"
+			style="@style/ToolBarStyle" >
+			
+		</android.support.v7.widget.Toolbar>
+	
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/toolbar_border" />
+	</android.support.design.widget.AppBarLayout>
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,7 +39,7 @@
         android:background="@color/v5_key_bar_bg"
         android:padding="8dp" >
     
-	    <com.rockerhieu.emojicon.EmojiconEditText
+	    <com.v5kf.client.ui.emojicon.EmojiconEditText
 	        android:id="@+id/id_emoji_et"
 	        android:layout_width="match_parent"
 	        android:layout_height="120dp"

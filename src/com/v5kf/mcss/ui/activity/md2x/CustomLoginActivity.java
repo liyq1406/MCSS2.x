@@ -35,7 +35,6 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.NetworkManager;
 import com.v5kf.mcss.service.NetworkManager.NetworkListener;
-import com.v5kf.mcss.ui.activity.BaseLoginActivity;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.utils.DbUtil;
 import com.v5kf.mcss.utils.IntentUtil;

@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="com.v5kf.client.ui.ChatActivity" >
     
-<com.keyboard.EmoticonsKeyBoardBar
+<com.v5kf.client.ui.keyboard.EmoticonsKeyBoardBar
     android:id="@+id/chat_activity_keybar"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -73,7 +73,7 @@
 	        
 	    </RelativeLayout>
     </LinearLayout>
-</com.keyboard.EmoticonsKeyBoardBar>
+</com.v5kf.client.ui.keyboard.EmoticonsKeyBoardBar>
 
 <!-- 透明灰语音遮罩层 -->
 <RelativeLayout

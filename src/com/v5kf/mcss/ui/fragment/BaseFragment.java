@@ -19,7 +19,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.AppInfoKeeper;
-import com.v5kf.mcss.ui.activity.BaseActivity;
+import com.v5kf.mcss.ui.activity.info.BaseActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.utils.Logger;
 

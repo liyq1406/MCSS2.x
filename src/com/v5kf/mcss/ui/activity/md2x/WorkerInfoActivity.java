@@ -36,6 +36,7 @@ import com.v5kf.mcss.ui.widget.ActionSheetDialog;
 import com.v5kf.mcss.ui.widget.ActionSheetDialog.OnSheetItemClickListener;
 import com.v5kf.mcss.ui.widget.ActionSheetDialog.SheetItemColor;
 import com.v5kf.mcss.ui.widget.CircleImageView;
+import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.ImageLoader;
@@ -354,16 +355,24 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 						new OnSheetItemClickListener() {
 							@Override
 							public void onClick(int which) {
-								systemPhoto();
-								showProgressDialog();
+								if (DevUtils.hasPermission(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")) {
+									systemPhoto();
+									showProgressDialog();
+								} else {
+									showAlertDialog(R.string.v5_permission_photo_deny, null);
+								}
 							}
 						})
 				.addSheetItem(getString(R.string.camera), SheetItemColor.Blue,
 						new OnSheetItemClickListener() {
 							@Override
 							public void onClick(int which) {
-								cameraPhoto();
-								showProgressDialog();
+								if (DevUtils.hasPermission(getApplicationContext(), "android.permission.CAMERA")) {
+									cameraPhoto();
+									showProgressDialog();
+								} else {
+									showAlertDialog(R.string.v5_permission_camera_deny, null);
+								}
 							}
 						}).show();
 			break;

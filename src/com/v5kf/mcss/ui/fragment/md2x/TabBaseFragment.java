@@ -11,6 +11,7 @@ import android.os.Message;
 
 import com.chyrain.fragment.LazyFragment;
 import com.v5kf.mcss.CustomApplication;
+import com.v5kf.mcss.R;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
@@ -27,9 +28,14 @@ public abstract class TabBaseFragment extends LazyFragment {
 	protected static final int HDL_STOP_REFRESH = 11;
 	protected static final int HDL_STOP_LOAD = 12;
 	protected static final int HDL_UPDATE_UI = 13;
+	protected static final int HDL_TIME_OUT = 14;
 	
 	/* [修改]抽象方法改为普通方法 */
 	protected abstract void handleMessage(Message msg, ActivityBase baseActivity);
+	
+	public TabBaseFragment() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public TabBaseFragment(MainTabActivity activity, int index) {
 		this.mParentActivity = activity;
@@ -64,6 +70,10 @@ public abstract class TabBaseFragment extends LazyFragment {
 			return;
 		}
 		mParentActivity.setToolbarColor(bitmap);
+	}
+	
+	protected void onRefreshTimeOut() {
+		mParentActivity.ShowToast(R.string.on_refresh_time_out);
 	}
 	
 	/**

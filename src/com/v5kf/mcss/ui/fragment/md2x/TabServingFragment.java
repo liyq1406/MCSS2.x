@@ -15,12 +15,9 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.chyrain.irecyclerview.IRecyclerView;
-import com.chyrain.irecyclerview.JingDongHeaderLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.mcss.R;
@@ -36,6 +33,7 @@ import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.IServingAdapter;
 import com.v5kf.mcss.ui.entity.IServingBean;
+import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
@@ -58,6 +56,10 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	private IServingAdapter mRecycleAdapter;
 	
 	private TextView mEmptyTipsTv;
+	
+	public TabServingFragment() {
+		// TODO Auto-generated constructor stub
+	}
 	
     public TabServingFragment(MainTabActivity activity, int index) {
 		super(activity, index);
@@ -137,7 +139,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
     		mRecycleAdapter = new IServingAdapter(mRecycleBeans, mParentActivity);
     	}
     	if (null == mIRecycleView) {
-    		mIRecycleView = (IRecyclerView) findViewById(R.id.id_irecycler);
+    		mIRecycleView = (IRecyclerView) findViewById(R.id.id_irecycler_serving);
     	}
     	
     	mIRecycleView.setAdapter(mRecycleAdapter);
@@ -146,7 +148,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		mIRecycleView.getRefreshableView().setScrollbarFadingEnabled(true);
 		mIRecycleView.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
         
-		mIRecycleView.setHeaderLayout(new JingDongHeaderLayout(mParentActivity));
+		mIRecycleView.setHeaderLayout(new V5RefreshLayout(mParentActivity));
 		// Set a listener to be invoked when the list should be refreshed.
 		mIRecycleView.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
 
@@ -168,36 +170,22 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		}
         /* 空白按钮 */
 		if (mEmptyTipsTv != null) {
-			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					onRefresh();
-				}
-			});
+			mEmptyTipsTv.setText(R.string.serving_content_empty_tips);
+//			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					onRefresh();
+//				}
+//			});
 		}
     }
     
     
-//    private void checkListEmpty() {
-//    	if (null == mIRecycleView) {
-//    		mIRecycleView = (IRecyclerView) findViewById(R.id.id_irecycler);
-//    	}
-//    	if (mRecycleBeans.size() == 0) {
-//    		mIRecycleView.setVisibility(View.GONE);
-//			findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
-//		} else {
-//			mIRecycleView.setVisibility(View.VISIBLE);
-//			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
-//		}
-//    }
-    
-
 	private void resetRecyclerList() {
 		mRecycleBeans.clear();
 		initData();
 		mRecycleAdapter.notifyDataSetChanged();
-//		checkListEmpty();
 	}
     
     private boolean hasRecycleBeans(String c_id) {
@@ -315,9 +303,18 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	protected void handleMessage(Message msg, ActivityBase activityBase) {
 		switch (msg.what) {
 		case HDL_STOP_REFRESH:
+			mHandler.removeMessages(HDL_TIME_OUT);
 			if (mIRecycleView.isRefreshing()) {
 				mIRecycleView.onRefreshComplete();
 			}
+//			mParentActivity.dismissProgress();
+			break;
+		case HDL_TIME_OUT:
+			if (mIRecycleView.isRefreshing()) {
+				mIRecycleView.onRefreshComplete();
+				onRefreshTimeOut();
+			}
+//			mParentActivity.dismissProgress();
 			break;
 		}
 	}
@@ -332,12 +329,12 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		try {
 			CustomerRequest cReq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, mParentActivity);
 			cReq.getCustomerList();
-			mParentActivity.showProgress();
+//			mParentActivity.showProgress();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
-		mHandler.sendEmptyMessageDelayed(HDL_STOP_REFRESH, 3000);
+		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
 	}
 
 	/***** event *****/
@@ -347,7 +344,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
 		// 更新整个列表
 		resetRecyclerList();
-		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
+		mHandler.obtainMessage(HDL_STOP_REFRESH).sendToTarget();
 		
 		switch (type) {
 		case QAODefine.O_METHOD_GET_CUSTOMER_LIST:
@@ -379,6 +376,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	@Subscriber(tag = EventTag.ETAG_CSTM_OUT, mode = ThreadMode.MAIN)
 	private void updateCustomerOut(CustomerBean cstm) {
 		Logger.d(TAG + "-eventbus", "updateCustomerOut -> ETAG_CSTM_OUT");
-		UITools.noticeEndSession(this.getContext(), cstm);
+		//UITools.noticeEndSession(this.getContext(), cstm);
+		UITools.noticeEndSession(mIRecycleView, cstm);
     }
 }

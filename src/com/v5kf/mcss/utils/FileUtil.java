@@ -287,6 +287,9 @@ public class FileUtil { // [修改]修改保存位置，区分外置存储和内
         long size = 0;    
         try {  
             File[] fileList = file.listFiles();
+            if (null == fileList) {
+            	return size;
+            }
             for (int i = 0; i < fileList.length; i++) {     
                 if (fileList[i].isDirectory()) {     
                     size = size + getFolderSize(fileList[i]);    

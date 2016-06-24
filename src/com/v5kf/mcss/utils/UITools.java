@@ -23,6 +23,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -51,6 +52,12 @@ public class UITools {
 		String reason = stringOfEndReason(cstm.getClosingReason());
 		Toast.makeText(context, "\"" + cstm.getDefaultName() + "\"的会话结束：" + reason,
 				Toast.LENGTH_LONG).show();
+	}
+	
+	public static void noticeEndSession(View v,
+			CustomerBean cstm) {
+		String reason = "\"" + cstm.getDefaultName() + "\"的会话结束：" + stringOfEndReason(cstm.getClosingReason());
+		Snackbar.make(v, reason, Snackbar.LENGTH_SHORT).show();
 	}
 	
 	public static int intOfInterfaceType(String type) {
@@ -527,6 +534,7 @@ public class UITools {
      */
     public static void grayImageView(ImageView iv) {
     	if (iv instanceof CircleImageView) {
+    		((CircleImageView)iv).setBorderColor(UITools.getColor(R.color.transparent));
     		((CircleImageView)iv).setBorderWidth(0);
     	}
     	Logger.d("DisplayUtil", "[grayImageView] ImageView:" + iv + " drawable:" + iv.getDrawable());
@@ -617,4 +625,5 @@ public class UITools {
         Bitmap mRotateBitmap = Bitmap.createBitmap(mBitmap, 0, 0, width, height, matrix, true);  
         return mRotateBitmap;  
     }
+
 }

@@ -23,7 +23,7 @@ import bupt.freeshare.swipelayoutlibrary.SwipeLayout;
 import bupt.freeshare.swipelayoutlibrary.SwipeLayout.State;
 import bupt.freeshare.swipelayoutlibrary.SwipeLayout.SwipeConfig;
 
-import com.rockerhieu.emojicon.EmojiconTextView;
+import com.v5kf.client.ui.emojicon.EmojiconTextView;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;

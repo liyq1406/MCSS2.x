@@ -85,14 +85,17 @@ public class QAOManager {
 			Logger.e(
 					TAG + "." + o_type + "." + jsonMsg.optString(QAODefine.O_METHOD), 
 					"JSONException: " + e.getMessage());
+			e.printStackTrace();
 		} catch (NumberFormatException e) {
 			Logger.e(
 					TAG + "." + o_type + "." + jsonMsg.optString(QAODefine.O_METHOD), 
 					"NumberFormatException: " + e.getMessage());
+			e.printStackTrace();
 		} catch (Exception e) {
 			Logger.e(
 					TAG + "." + o_type + "." + jsonMsg.optString(QAODefine.O_METHOD), 
 					"Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	

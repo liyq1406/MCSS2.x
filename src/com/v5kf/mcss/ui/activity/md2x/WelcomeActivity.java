@@ -9,8 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 
-import com.keyboard.utils.EmoticonsUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.v5kf.client.ui.keyboard.EmoticonsUtils;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.ExitFlag;
@@ -20,7 +20,6 @@ import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.NetworkManager;
-import com.v5kf.mcss.ui.activity.BaseLoginActivity;
 import com.v5kf.mcss.ui.view.SystemBarTintManager;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;

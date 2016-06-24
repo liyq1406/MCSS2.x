@@ -1,4 +1,4 @@
-package com.v5kf.mcss.ui.activity.info;
+package com.v5kf.mcss.ui.activity.md2x;
 
 import java.io.IOException;
 
@@ -17,7 +17,6 @@ import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tencent.map.geolocation.TencentLocation;
@@ -39,20 +38,18 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.LocationBean;
 import com.v5kf.mcss.eventbus.EventTag;
-import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.MD5;
 import com.v5kf.mcss.utils.MapUtil;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
-public class LocationMapActivity extends ActivityBase implements TencentLocationListener, 
+public class LocationMapActivity extends BaseToolbarActivity implements TencentLocationListener, 
 		OnMarkerDraggedListener, OnScreenShotListener {
 	private static final String TAG = "LocationMapActivity";
 	private static int MAP_SHOW = 1;
 	private static int MAP_SEND = 2;
 	
 	/* Title Action Bar */
-	private LinearLayout mLeftLayout;
 	private Button mRightSendBtn;
 	private TextView mLocationDescTv;
 	
@@ -69,7 +66,7 @@ public class LocationMapActivity extends ActivityBase implements TencentLocation
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_location_map);
+		setContentView(R.layout.activity_md2x_location_map);
 		handleIntent();
 		findView();
 		initView();
@@ -162,7 +159,6 @@ public class LocationMapActivity extends ActivityBase implements TencentLocation
     }
 
 	private void findView() {
-		mLeftLayout = (LinearLayout) findViewById(R.id.header_layout_leftview_container);
 		mRightSendBtn = (Button) findViewById(R.id.btn_send);
 		mLocationDescTv = (TextView) findViewById(R.id.id_location_desc_tv);
 	}
@@ -231,16 +227,6 @@ public class LocationMapActivity extends ActivityBase implements TencentLocation
 		if (mMapType == MAP_SHOW) {
 			mRightSendBtn.setVisibility(View.GONE);
 		}
-		mLeftLayout.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mMapType == MAP_SEND) {
-					finishLocationMapActivity(false);
-				} else {
-					finishActivity();
-				}
-			}
-		});
 		mRightSendBtn.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {

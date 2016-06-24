@@ -29,7 +29,7 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.qao.request.WorkerRequest;
-import com.v5kf.mcss.ui.activity.BaseActivity;
+import com.v5kf.mcss.ui.activity.info.BaseActivity;
 import com.v5kf.mcss.ui.activity.md2x.WorkerInfoActivity;
 import com.v5kf.mcss.ui.adapter.tree.Node;
 import com.v5kf.mcss.ui.adapter.tree.SimpleTreeAdapter;

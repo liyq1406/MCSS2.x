@@ -39,16 +39,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.keyboard.EmoticonsKeyBoardBar;
-import com.keyboard.bean.EmoticonBean;
-import com.keyboard.utils.AppBean;
-import com.keyboard.utils.AppsAdapter.FuncItemClickListener;
-import com.keyboard.utils.EmoticonsUtils;
-import com.keyboard.utils.Utils;
-import com.keyboard.view.AppFuncPageView;
-import com.keyboard.view.EmoticonsIndicatorView;
-import com.keyboard.view.I.IView;
-import com.rockerhieu.emojicon.EmojiconEditText;
 import com.tencent.android.tpush.XGPushConfig;
 import com.v5kf.client.lib.DBHelper;
 import com.v5kf.client.lib.Logger;
@@ -70,12 +60,22 @@ import com.v5kf.client.lib.entity.V5MessageDefine;
 import com.v5kf.client.lib.entity.V5TextMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
 import com.v5kf.client.ui.QuesListAdapter.OnQuesClickListener;
+import com.v5kf.client.ui.emojicon.EmojiconEditText;
+import com.v5kf.client.ui.keyboard.AppBean;
+import com.v5kf.client.ui.keyboard.AppFuncPageView;
+import com.v5kf.client.ui.keyboard.AppsAdapter.FuncItemClickListener;
+import com.v5kf.client.ui.keyboard.EmoticonBean;
+import com.v5kf.client.ui.keyboard.EmoticonsIndicatorView;
+import com.v5kf.client.ui.keyboard.EmoticonsKeyBoardBar;
+import com.v5kf.client.ui.keyboard.EmoticonsUtils;
+import com.v5kf.client.ui.keyboard.IView;
+import com.v5kf.client.ui.keyboard.Utils;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.LocationBean;
-import com.v5kf.mcss.ui.activity.info.LocationMapActivity;
 import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
+import com.v5kf.mcss.ui.activity.md2x.LocationMapActivity;
 import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
@@ -192,7 +192,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 		tv_voice_second = (TextView) findViewById(R.id.tv_voice_second);
 		iv_record = (ImageView) findViewById(R.id.iv_record);
 		
-		mKeyBar.setBuilder(EmoticonsUtils.getBuilder(this));
+		mKeyBar.setBuilder(EmoticonsUtils.getBuilder(this, false));
 		
 		/* 添加表情删除按钮 */
 		View toolBtnView = mInflater.inflate(R.layout.view_toolbtn_right_simple, null);
@@ -218,7 +218,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 	}
 
 	private void initAppfunc() {
-		View viewApps =  mInflater.inflate(R.layout.view_apps, null);
+		View viewApps =  mInflater.inflate(R.layout.v5_view_apps, null);
 		mKeyBar.add(viewApps); // 位置1-添加“+”号打开的功能界面(富媒体输入)
 		
 		/* 图片、拍照、位置等功能界面 */
@@ -238,12 +238,12 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 		pageApps.setAppBeanList(mAppBeanList);
 		pageApps.setFuncItemClickListener(new FuncItemClickListener() {			
 			@Override
-			public void onFuncItemClick(View v, int id) {
+			public void onFuncItemClick(View v, AppBean bean) {
 				if (!isConnected) {
 					showToast(R.string.v5_waiting_for_connection);
 					return;
 				}
-				switch (id) {
+				switch (bean.getId()) {
 				case 0: // 常见问题
 					getHotQuesAndShow();				
 					break;
@@ -254,11 +254,19 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 					break;
 					
 				case 2: // 图片
-					openSystemPhoto();
+					if (DevUtils.hasPermission(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")) {
+						openSystemPhoto();
+					} else {
+						showAlertDialog(R.string.v5_permission_photo_deny, null);
+					}
 					break;
 					
 				case 3: // 拍照
-					cameraPhoto();
+					if (DevUtils.hasPermission(getApplicationContext(), "android.permission.CAMERA")) {
+						cameraPhoto();
+					} else {
+						showAlertDialog(R.string.v5_permission_camera_deny, null);
+					}
 					break;
 				
 				case 4: // 人工客服
@@ -367,7 +375,9 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
                     		
                     	}
 //                    	mRecyclerView.scrollToPosition(mDatas.size() - 1);
-                    	mRecyclerView.smoothScrollToPosition(mDatas.size() - 1);
+                    	if (mDatas.size() > 1) {
+                    		mRecyclerView.smoothScrollToPosition(mDatas.size() - 1);
+                    	}
                     }
                 });
             }
@@ -668,7 +678,9 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 			case 2: // 普通消息-来自机器人
 				if (!message.getDefaultContent(this).isEmpty()) {
 					addMessage(message);
-					CustomApplication.getInstance().noticeMessage(message.getDefaultContent(mApplication));
+					if (isForeground > 0) {
+						CustomApplication.getInstance().noticeMessage(message.getDefaultContent(mApplication));
+					}
 				}
 			break;
 			
@@ -1139,6 +1151,10 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				Logger.i(TAG, "ACTION_DOWN");
+				if (!DevUtils.hasPermission(getApplicationContext(), "android.permission.RECORD_AUDIO")) {
+					showAlertDialog(R.string.v5_permission_record_deny, null);
+					return false;
+				}
 				v.setPressed(true);
 				try {
 					// 开始录音

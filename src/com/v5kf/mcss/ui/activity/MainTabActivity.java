@@ -64,7 +64,6 @@ import com.v5kf.mcss.ui.fragment.md2x.TabHistoryVisitorFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabMonitorFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabMoreFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabServingFragment;
-import com.v5kf.mcss.ui.fragment.md2x.TabServingSessionFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabWorkerListFragment;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.ModeSeekbarDialog;
@@ -437,7 +436,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		case 3:
 			hideFab();
 			mToolbarToggle.setVisibility(View.VISIBLE);
-			updateMonitorState();
+			updateMonitorState(mAppInfo.getUser().isMonitor());
 			break;
 		case 1:
 		case 2:
@@ -449,7 +448,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		}
 	}
 	
-	public void updateMonitorState() {
+	public void updateMonitorState(boolean monitor) {
 		if (mToolbarToggle == null) {
 			mToolbarToggle = (ToggleButton)findViewById(R.id.id_toolbar_toogle);
 			mToolbarToggle.setOnToggleChanged(new ToggleButton.OnToggleChanged(){
@@ -466,7 +465,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	            }
 		    });
 		}
-		mToolbarToggle.setSmoothChecked(mAppInfo.getUser().isMonitor());
+		mToolbarToggle.setSmoothChecked(monitor);
 	}
 
 	/**
@@ -834,7 +833,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 				fragment = new TabMoreFragment(MainTabActivity.this, position);
 				break;
 			default:
-				fragment = new TabServingSessionFragment(MainTabActivity.this, position);
+				fragment = new TabServingFragment(MainTabActivity.this, position);
 				break;
 			}
 			
@@ -1002,14 +1001,13 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private void servingCustomerChange(String type) {
 		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE: " + type);
 		//updateSessionBadge();
-		//dismissProgress();
 		//getSupportActionBar().invalidateOptionsMenu();
+		dismissProgress();
 		switch (type) {
 		case QAODefine.O_METHOD_GET_CUSTOMER_LIST:
 		case QAODefine.O_METHOD_GET_CUSTOMER_MESSAGES:
 		case QAODefine.O_METHOD_CSTM_JOIN_OUT:
 			updateSessionBadge();
-			dismissProgress();
 			break;
 		case QAODefine.O_METHOD_CSTM_ACCESSABLE_CHANGE:
 		case QAODefine.O_METHOD_GET_IN_TRUST:

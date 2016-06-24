@@ -173,10 +173,12 @@
     
     <!-- 列表为空提示 -->
     <string name="layout_content_empty_tips">当前列表没有内容</string>
+    <string name="visitor_list_empty_tips">未发现历史客户</string>
     <string name="messages_content_empty_tips">未查找到该日消息记录</string>
     <string name="serving_content_empty_tips">当前还没有顾客接入</string>
     <string name="waiting_content_empty_tips">当前没有等待的顾客</string>
     <string name="visitor_content_empty_tips">您还没有历史会话</string>
+    <string name="worker_list_empty_tips">坐席列表为空</string>
     <string name="worker_content_empty_tips">没有获取到坐席信息</string>
     <string name="material_img_empty_tips">未获取到图片素材</string>
     <string name="monitor_empty_tips">监控列表没有内容</string>
@@ -374,4 +376,13 @@
     <string name="v_id_pre">visitorid&#160;:&#160;</string>
     <string name="o_id_pre">openid&#160;&#160;&#160;:&#160;</string>
     
+    <string name="pull_to_refresh_pulldown">下拉刷新</string>
+    <string name="pull_to_refresh_release">松开刷新</string>
+    <string name="pull_to_refresh_finish">刷新完成</string>
+    <string name="pull_to_refresh_refreshing">正在刷新</string>
+    <string name="pull_to_refresh_pullup">上拉加载</string>
+    <string name="pull_up_refresh_release">松开加载</string>
+    <string name="pull_up_refresh_finish">加载完成</string>
+    <string name="pull_up_refresh_refreshing">正在加载</string>
+    <string name="on_refresh_time_out">请求超时，检查网络后重试</string>
 </resources>

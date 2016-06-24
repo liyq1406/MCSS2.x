@@ -9,7 +9,7 @@
     android:paddingBottom="4dp"
     android:orientation="vertical" >
         
-    <com.rockerhieu.emojicon.EmojiconTextView
+    <com.v5kf.client.ui.emojicon.EmojiconTextView
         android:id="@+id/id_robot_text"
         emojicon:emojiconAlignment="baseline"
         emojicon:emojiconSize="18sp"

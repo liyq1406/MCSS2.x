@@ -2,18 +2,17 @@ package com.v5kf.mcss.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -21,6 +20,8 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -566,6 +567,13 @@ public class DevUtils {
 	    return BitmapFactory.decodeStream(isBm);
 	}
 	
+	public static Bitmap ratio(Bitmap bitmap, float scale) {
+		Matrix matrix = new Matrix(); 
+		matrix.postScale(scale, scale); //长和宽放大缩小的比例
+		Bitmap resizeBmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
+		return resizeBmp;
+	}
+	
 	/** 
      * Compress image by pixel, this will modify image width/height.  
      * Used to get thumbnail 
@@ -621,4 +629,23 @@ public class DevUtils {
     	}
     	return null;
 	}
+    
+    /**
+     * 检查是否具有特点权限
+     * @param context
+     * @param permission
+     * @return
+     */
+    public static boolean hasPermission(Context context, String permission) {
+    	return context.checkPermission(permission, android.os.Process.myPid(), context.getApplicationInfo().uid) == PackageManager.PERMISSION_GRANTED;
+    }
+    
+    public static boolean checkAndRequestPermission(Activity context, String permission, int requestCode) {
+    	int checkCallPhonePermission = ContextCompat.checkSelfPermission(context, permission);
+    	if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+    		ActivityCompat.requestPermissions(context, new String[]{permission}, requestCode);
+    		return false;
+    	}
+    	return true;
+    }
 }

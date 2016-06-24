@@ -30,7 +30,7 @@ import com.v5kf.mcss.entity.CustomerBean.CustomerType;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
-import com.v5kf.mcss.ui.activity.BaseActivity;
+import com.v5kf.mcss.ui.activity.info.BaseActivity;
 import com.v5kf.mcss.ui.adapter.WaitingSessionAdapter;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;

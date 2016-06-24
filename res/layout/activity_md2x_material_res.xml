@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <android.support.design.widget.AppBarLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/id_app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:elevation="0dp" >
+		<!-- 去阴影 app:elevation="0dp" -->
+	
+	    <android.support.v7.widget.Toolbar
+			android:id="@+id/id_common_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="scroll|enterAlways"
+			app:layout_collapseMode="pin"
+			app:title="@string/title_material"
+			style="@style/ToolBarStyle" >
+			
+		</android.support.v7.widget.Toolbar>
+	
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/toolbar_border" />
+	</android.support.design.widget.AppBarLayout>
+    
+	<com.chyrain.irecyclerview.RefreshRecyclerView
+        android:id="@+id/id_material_recycler"
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        ptr:ptrMode="pullFromEnd"
+        ptr:ptrEmptyLayout="@layout/layout_emptyview" />
+
+</LinearLayout>

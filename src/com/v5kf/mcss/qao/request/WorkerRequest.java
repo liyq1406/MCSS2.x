@@ -8,6 +8,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.WorkerBean;
+import com.v5kf.mcss.utils.Logger;
 
 
 public class WorkerRequest extends BaseRequest {
@@ -92,6 +93,7 @@ public class WorkerRequest extends BaseRequest {
 		mRequestJson.put(QAODefine.O_METHOD, QAODefine.O_METHOD_SET_WORKER_MONITOR);
 		mRequestJson.put("monitor", monitor);
 		sendRequest(mRequestJson.toString());
+		Logger.w("WorkerRequest", "setWorkerMonitor:" + monitor + " " + CustomApplication.getAppInfoInstance().getUser().isMonitor());
 		MobclickAgent.onEvent(mContext,"REQ_SET_WORKER_MONITOR");
 	}
 	

@@ -135,12 +135,14 @@ public class ImageLoader {
 				((CircleImageView)imageView).setBorderColor(UITools.getColor(R.color.default_phpto_border_blue)); // 坐席蓝、绿边框
 				((CircleImageView)imageView).setBorderWidth(3);
 			} else {
+				((CircleImageView)imageView).setBorderColor(UITools.getColor(R.color.transparent));
 				((CircleImageView)imageView).setBorderWidth(0);
 			}
 		}
 	}
 	private void resetImageBorder(ImageView imageView) {
 		if (imageView instanceof CircleImageView) {
+			((CircleImageView)imageView).setBorderColor(UITools.getColor(R.color.transparent));
 			((CircleImageView)imageView).setBorderWidth(0);
 		}
 	}

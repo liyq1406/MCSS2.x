@@ -24,7 +24,6 @@ import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.WorkerRequest;
-import com.v5kf.mcss.ui.activity.BaseActivity;
 import com.v5kf.mcss.ui.view.HeaderLayout.onLeftImageButtonClickListener;
 import com.v5kf.mcss.ui.view.HeaderLayout.onRightImageButtonClickListener;
 import com.v5kf.mcss.ui.widget.ModeSeekBar;

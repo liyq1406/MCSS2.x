@@ -39,16 +39,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.keyboard.EmoticonsKeyBoardBar;
-import com.keyboard.bean.EmoticonBean;
-import com.keyboard.utils.AppBean;
-import com.keyboard.utils.AppsAdapter.FuncItemClickListener;
-import com.keyboard.utils.EmoticonsUtils;
-import com.keyboard.utils.Utils;
-import com.keyboard.view.AppFuncPageView;
-import com.keyboard.view.EmoticonsIndicatorView;
-import com.keyboard.view.I.IView;
-import com.rockerhieu.emojicon.EmojiconEditText;
 import com.v5kf.client.lib.V5HttpUtil;
 import com.v5kf.client.lib.V5KFException.V5ExceptionStatus;
 import com.v5kf.client.lib.V5MessageManager;
@@ -59,6 +49,16 @@ import com.v5kf.client.lib.entity.V5LocationMessage;
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5TextMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
+import com.v5kf.client.ui.emojicon.EmojiconEditText;
+import com.v5kf.client.ui.keyboard.AppBean;
+import com.v5kf.client.ui.keyboard.AppFuncPageView;
+import com.v5kf.client.ui.keyboard.AppsAdapter.FuncItemClickListener;
+import com.v5kf.client.ui.keyboard.EmoticonBean;
+import com.v5kf.client.ui.keyboard.EmoticonsIndicatorView;
+import com.v5kf.client.ui.keyboard.EmoticonsKeyBoardBar;
+import com.v5kf.client.ui.keyboard.EmoticonsUtils;
+import com.v5kf.client.ui.keyboard.IView;
+import com.v5kf.client.ui.keyboard.Utils;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
@@ -70,9 +70,7 @@ import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.MessageSendHelper;
-import com.v5kf.mcss.ui.activity.info.LocationMapActivity;
 import com.v5kf.mcss.ui.activity.info.MaterialResActivity;
-import com.v5kf.mcss.ui.activity.info.RobotChatActivity;
 import com.v5kf.mcss.ui.adapter.ChattingListAdapter;
 import com.v5kf.mcss.ui.adapter.ChattingListAdapter.ChatMessagesListener;
 import com.v5kf.mcss.ui.adapter.RobotRecyclerAdapter;
@@ -92,7 +90,17 @@ import com.v5kf.mcss.utils.V5VoiceRecord;
 import com.v5kf.mcss.utils.VoiceErrorCode;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.v5kf.mcss.utils.cache.URLCache;
-//import com.keyboard.view.EmoticonsToolBarView;
+//import com.chyrain.EmoticonsKeyBoardBar;
+//import com.chyrain.bean.EmoticonBean;
+//import com.chyrain.utils.AppBean;
+//import com.chyrain.utils.AppsAdapter.FuncItemClickListener;
+//import com.chyrain.utils.EmoticonsUtils;
+//import com.chyrain.utils.Utils;
+//import com.chyrain.view.AppFuncPageView;
+//import com.chyrain.view.EmoticonsIndicatorView;
+//import com.chyrain.view.I.IView;
+//import com.chyrain.emojicon.EmojiconEditText;
+//import com.chyrain.view.EmoticonsToolBarView;
 
 /**
  * 
@@ -201,9 +209,6 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
     protected void onStop() {
     	super.onStop();
     	mKeyBar.setEditableState(false);
-    	
-    	// 清空未读
-    	mCustomer.getSession().clearUnreadMessageNum();
     }
     
     @Override
@@ -459,10 +464,10 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		tv_voice_second = (TextView) findViewById(R.id.tv_voice_second);
 		iv_record = (ImageView) findViewById(R.id.iv_record);
         
-        mKeyBar.setBuilder(EmoticonsUtils.getBuilder(this));
+        mKeyBar.setBuilder(EmoticonsUtils.getBuilder(this, false));
         
         /* 添加表情页底部选择栏按钮 */
-//		kv_bar.addToolView(com.keyboard.view.R.drawable.icon_face_pop);
+//		kv_bar.addToolView(com.chyrain.view.R.drawable.icon_face_pop);
 
 //		TextView tvLeft = new TextView(this);
 //		tvLeft.setText("LEFT");
@@ -588,9 +593,9 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	 * 多功能输入选项页初始化
 	 */
 	private void initAppfunc() {
-		View viewApps =  mInflater.inflate(R.layout.view_apps, null);
+		View viewApps =  mInflater.inflate(R.layout.v5_view_apps, null);
         mKeyBar.add(viewApps); // 位置1-添加“+”号打开的功能界面(多媒体输入)
-     
+        
         /* 图片、拍照、位置等功能界面 */
         AppFuncPageView pageApps = (AppFuncPageView)viewApps.findViewById(R.id.view_apv);
 		EmoticonsIndicatorView indicatorView = (EmoticonsIndicatorView)viewApps.findViewById(R.id.view_eiv);
@@ -607,7 +612,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
         }
         pageApps.setAppBeanList(mAppBeanList);
 		pageApps.setFuncItemClickListener(new FuncItemClickListener() {			
-			@Override
+			//@Override
 			public void onFuncItemClick(View v, int id) {
 				if (!checkCustomer()) {
 					if (!Config.DEBUG) {
@@ -631,7 +636,11 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 						mCustomer.getIface() == QAODefine.CSTM_IF_QQ) {
 						ShowToast(R.string.send_image_unsupport);
 					} else {
-						systemPhoto();
+						if (DevUtils.hasPermission(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")) {
+							systemPhoto();
+						} else {
+							showAlertDialog(R.string.v5_permission_photo_deny, null);
+						}
 					}
 					break;
 				case 3: // 拍照
@@ -639,7 +648,64 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 						mCustomer.getIface() == QAODefine.CSTM_IF_QQ) {
 						ShowToast(R.string.send_image_unsupport);
 					} else {
-						cameraPhoto();
+						if (DevUtils.hasPermission(getApplicationContext(), "android.permission.CAMERA")) {
+							cameraPhoto();
+						} else {
+							showAlertDialog(R.string.v5_permission_camera_deny, null);
+						}
+					}
+					break;
+				case 4: // 素材
+					gotoImageMaterialActivity();
+					break;
+				case 5: // 位置
+					showProgressDialog();
+					gotoLocationMapActivity();
+					break;
+				}
+			}
+
+			@Override
+			public void onFuncItemClick(View v, AppBean bean) {
+				if (!checkCustomer()) {
+					if (!Config.DEBUG) {
+						return;
+					}
+					Logger.e(TAG, "checkCustomer failed! null!");
+				}
+				if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+					ShowToast("客户暂时离开，无法接收消息");
+					return;
+				}
+				switch (bean.getId()) {
+				case 0: // 常见问答
+					getHotQuesAndShow();
+					break;
+				case 1: // 提问机器人
+					gotoRobotChatActivity();
+					break;
+				case 2: // 图片
+					if (mCustomer.getIface() == QAODefine.CSTM_IF_ALIPAY || 
+						mCustomer.getIface() == QAODefine.CSTM_IF_QQ) {
+						ShowToast(R.string.send_image_unsupport);
+					} else {
+						if (DevUtils.hasPermission(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")) {
+							systemPhoto();
+						} else {
+							showAlertDialog(R.string.v5_permission_photo_deny, null);
+						}
+					}
+					break;
+				case 3: // 拍照
+					if (mCustomer.getIface() == QAODefine.CSTM_IF_ALIPAY || 
+						mCustomer.getIface() == QAODefine.CSTM_IF_QQ) {
+						ShowToast(R.string.send_image_unsupport);
+					} else {
+						if (DevUtils.hasPermission(getApplicationContext(), "android.permission.CAMERA")) {
+							cameraPhoto();
+						} else {
+							showAlertDialog(R.string.v5_permission_camera_deny, null);
+						}
 					}
 					break;
 				case 4: // 素材
@@ -1445,6 +1511,10 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				Logger.e(TAG, "ACTION_DOWN");
+				if (!DevUtils.hasPermission(getApplicationContext(), "android.permission.RECORD_AUDIO")) {
+					showAlertDialog(R.string.v5_permission_record_deny, null);
+					return false;
+				}
 				if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
 					ShowToast("客户暂时离开，无法接收消息");
 					return false;

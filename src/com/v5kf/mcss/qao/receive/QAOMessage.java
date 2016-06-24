@@ -110,11 +110,11 @@ public class QAOMessage extends QAOBase {
 					if (customer.getCstmType() == CustomerType.CustomerType_WaitingAlive) {
 						if (mApplication.getSpUtil().isAllowPushWaitNotify()) {
 							/* [修改]震动&铃声 非通知栏提示 */
-							//mApplication.noticeMessage(message.getDefaultContent(mContext));
+							mApplication.noticeMessage(message.getDefaultContent(mContext));
 						}
 					} else {
 						if (message.getDirection() == QAODefine.MSG_DIR_TO_WORKER) {
-							mApplication.noticeMessage(message.getDefaultContent(mContext));
+							mApplication.noticeMessage(message.getC_id(), message.getDefaultContent(mContext));
 						}
 					}
 				}
