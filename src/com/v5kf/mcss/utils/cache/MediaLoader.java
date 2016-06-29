@@ -19,6 +19,7 @@ import com.v5kf.client.lib.entity.V5MessageDefine;
 import com.v5kf.client.lib.entity.V5MusicMessage;
 import com.v5kf.client.lib.entity.V5VideoMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
+import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 
@@ -151,6 +152,11 @@ public class MediaLoader {
 				MediaMetadataRetriever mediaDataRet = new MediaMetadataRetriever();
 				mediaDataRet.setDataSource(f.getAbsolutePath());
 				Bitmap bitmap = mediaDataRet.getFrameAtTime();
+				if (bitmap.getWidth() < 180 || bitmap.getHeight() < 180) {
+					float scale1 = 300 / bitmap.getWidth();
+					float scale2 = 300 / bitmap.getHeight();
+					bitmap = DevUtils.ratio(bitmap, scale1 > scale2 ? scale1 : scale2);
+				}
 				media.setCoverFrame(bitmap);
 				((V5VideoMessage)msg).setCoverFrame(bitmap);
 			} catch (Exception e) {
