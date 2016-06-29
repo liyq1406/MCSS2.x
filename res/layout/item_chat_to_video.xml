@@ -36,10 +36,10 @@
 		    	android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:adjustViewBounds="true"
-		        android:maxWidth="260dp"
-		        android:maxHeight="260dp"
-		        android:minWidth="180dp"
-		        android:minHeight="180dp"
+		        android:maxWidth="200dp"
+		        android:maxHeight="200dp"
+		        android:minWidth="100dp"
+		        android:minHeight="100dp"
 		        android:scaleType="fitCenter"
 		        android:padding="0dp"
 		        android:src="@drawable/img_default_video"
@@ -49,6 +49,12 @@
 	           	app:bubble_arrowOffset="@dimen/v5_bubble_arrow_offset"
 	           	app:bubble_arrowTop="@dimen/v5_bubble_arrow_top"
 	           	app:bubble_arrowWidth="@dimen/v5_bubble_arrow_width" />
+	        
+	        <SurfaceView
+	            android:id="@+id/id_video_surface"
+	            android:visibility="gone"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent" />
 	        
 	        <ImageView
 	            android:id="@+id/id_video_control_img"

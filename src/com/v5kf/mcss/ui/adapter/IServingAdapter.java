@@ -281,7 +281,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
             
             if (mSwipeLayout != null) {
             	// 设置滑动宽度
-            	mSwipeLayout.configSwipe(new SwipeConfig(UITools.dip2px(mActivity, 210), 0, 0));
+            	mSwipeLayout.configSwipe(new SwipeConfig((int)UITools.dip2px(mActivity, 210), 0, 0));
             }
         }
 

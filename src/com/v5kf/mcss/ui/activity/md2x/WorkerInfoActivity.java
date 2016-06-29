@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -164,7 +165,21 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 	
 	
 	private void initFirstLayout() {
-		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default, null);
+		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default, new ImageLoader.ImageLoaderListener() {
+			
+			@Override
+			public void onSuccess(String url, ImageView imageView) {
+				// TODO Auto-generated method stub
+				mHeadIv.requestLayout();
+			}
+			
+			@Override
+			public void onFailure(ImageLoader imageLoader, String url,
+					ImageView imageView) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		if (mWorker != null) {
 			initTopBarForOnlyTitle(R.string.mine_info);
 			imgLoader.DisplayImage(mWorker.getPhoto(), mHeadIv);

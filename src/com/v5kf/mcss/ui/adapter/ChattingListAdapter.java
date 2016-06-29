@@ -18,11 +18,15 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -453,7 +457,7 @@ public class ChattingListAdapter extends BaseAdapter {
 		case TYPE_VIDEO_R: {
 			V5VideoMessage videoMessage = (V5VideoMessage)chatMessage.getMessage();
 			if (videoMessage.getCoverFrame() != null) {
-				holder.mVideoBgIv.setImageBitmap(videoMessage.getCoverFrame());
+				loadVideo(holder, videoMessage);
 			}
 			
 			// 播放状态
@@ -487,7 +491,7 @@ public class ChattingListAdapter extends BaseAdapter {
 					//((V5VideoMessage)msg).setFilePath(media.getLocalPath());
 					Logger.d(TAG, "list load Video onSuccess ----- ");
 					if (media.getCoverFrame() != null) {
-						((ViewHolder)obj).mVideoBgIv.setImageBitmap(media.getCoverFrame());
+						loadVideo((ViewHolder)obj, (V5VideoMessage)msg);
 					}
 				}
 				
@@ -627,6 +631,28 @@ public class ChattingListAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	private void loadVideo(ViewHolder holder, V5VideoMessage videoMessage) {
+		holder.mVideoBgIv.setImageBitmap(videoMessage.getCoverFrame());
+		
+		// 设置宽高
+		int width = videoMessage.getCoverFrame().getWidth();
+		int height = videoMessage.getCoverFrame().getHeight();
+		float density = mActivity.getResources().getDisplayMetrics().density;
+		float maxWH = MediaLoader.VIDEO_COVER_MAX_WH * density + 0.5f;
+		float minWH = MediaLoader.VIDEO_COVER_MIN_WH * density + 0.5f;
+		if (width > maxWH && height > maxWH) {
+			float scale = Math.max(maxWH / width, maxWH / height);
+			width = (int)scale * width;
+			height = (int)scale * height;
+		} else if (width < minWH && height < minWH) {
+			float scale = Math.max(minWH / width, minWH / height);
+			width = (int)scale * width;
+			height = (int)scale * height;
+		}
+		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+	}
+
 	private void sendStateChange(ViewHolder holder, final ChatRecyclerBean chatMessage) {
     	if (holder.mSendFailedIv != null && holder.mSendingPb != null) {
     		if (chatMessage.getMessage().getState() == V5Message.STATE_FAILURE) {
@@ -682,6 +708,8 @@ public class ChattingListAdapter extends BaseAdapter {
         /* 视频 */
         public ImageView mVideoControlIv; // 播放按钮
         public ImageView mVideoBgIv; // 视频背景
+        public SurfaceView mVideoSurface;
+        public SurfaceHolder mVideoSurfaceHolder;
         
         /* 音乐 */
         public ImageView mMusicControlIv;
@@ -789,7 +817,49 @@ public class ChattingListAdapter extends BaseAdapter {
             case TYPE_VIDEO_R:
             	mVideoBgIv = (ImageView) itemView.findViewById(R.id.id_video_bg);
             	mVideoControlIv = (ImageView) itemView.findViewById(R.id.id_video_control_img);
+            	mVideoSurface = (SurfaceView) itemView.findViewById(R.id.id_video_surface);
+            	mVideoSurfaceHolder = mVideoSurface.getHolder();
             	mVideoControlIv.setOnClickListener(this);
+            	mVideoSurface.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						if (mVideoControlIv.getVisibility() == View.GONE) {
+							mVideoControlIv.setVisibility(View.VISIBLE);
+							mVideoControlIv.postDelayed(new Runnable() {
+								
+								@Override
+								public void run() {
+									if (mChatBean.isPlaying()) {
+										mVideoControlIv.setVisibility(View.GONE);
+									}
+								}
+							}, 1000);
+						}
+					}
+				});
+//				mVideoSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
+//				
+//					@Override
+//					public void surfaceDestroyed(SurfaceHolder holder) {
+//						// TODO Auto-generated method stub
+//						Logger.w(TAG, "[SurfaceHolder.surfaceDestroyed]");
+//					}
+//					
+//					@Override
+//					public void surfaceCreated(SurfaceHolder holder) {
+//						// TODO Auto-generated method stub
+//						Logger.w(TAG, "[SurfaceHolder.surfaceCreated]");
+//						
+//					}
+//					
+//					@Override
+//					public void surfaceChanged(SurfaceHolder holder, int format, int width,
+//							int height) {
+//						// TODO Auto-generated method stub
+//						Logger.w(TAG, "[SurfaceHolder.surfaceChanged]");
+//					}
+//				});
             	break;
             	
             case TYPE_MUSIC_L:
@@ -917,7 +987,27 @@ public class ChattingListAdapter extends BaseAdapter {
 				break;
 				
 			case R.id.id_video_control_img: // 点击视频播放
-				
+				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_VIDEO ||
+						mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_SHORT_VIDEO) {
+					if (mChatBean.isPlaying()) { // 停止播放
+						stopPlayingVideo();
+					} else { // 开始播放
+//						if (mVoiceAnimDrawable != null) {
+//							mVoiceAnimDrawable.stop();
+//						}
+						startPlaying((V5VideoMessage)mChatBean.getMessage(), new OnCompletionListener() {
+							
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								Logger.i(TAG, "MediaPlayer - completePlaying");
+								updateVideoStopPlayingState();
+								mp.release();
+								mp = null;
+								mPlayer = null;
+							}
+						});
+					}
+				}
 				break;
 
 			case R.id.id_music_control_img: // 点击音乐播放
@@ -1146,17 +1236,19 @@ public class ChattingListAdapter extends BaseAdapter {
 		}
 
 		public void updateVideoStartPlayingState() {
-			Logger.i(TAG, "UI - updateMusicStartPlayingState position:" + mPosition);
+			Logger.i(TAG, "UI - updateVideoStartPlayingState position:" + mPosition);
 			mChatBean.setPlaying(true);
 			mVideoControlIv.setImageResource(R.drawable.img_music_stop);
 			mVideoControlIv.setVisibility(View.GONE);
+			mVideoSurface.setVisibility(View.VISIBLE);
 		}
 		
 		public void updateVideoStopPlayingState() {
-			Logger.i(TAG, "UI - updateMusicStopPlayingState position:" + mPosition);
+			Logger.i(TAG, "UI - updateVideoStopPlayingState position:" + mPosition);
 			mChatBean.setPlaying(false);
 			mVideoControlIv.setImageResource(R.drawable.img_music_play);
 			mVideoControlIv.setVisibility(View.VISIBLE);
+			mVideoSurface.setVisibility(View.GONE);
 		}
 		
 		public void updateVoiceStartPlayingState() {
@@ -1217,6 +1309,7 @@ public class ChattingListAdapter extends BaseAdapter {
 	            mPlayer.setOnCompletionListener(completionListener);
 				updateVoiceStartPlayingState();
 	        } catch (Exception e) {
+	        	e.printStackTrace();
 	            Logger.e(TAG, "MediaPlayer prepare() failed");
 	            mPlayer.release();
 	    		mPlayer = null;
@@ -1251,6 +1344,7 @@ public class ChattingListAdapter extends BaseAdapter {
 				mPlayer.setOnCompletionListener(completionListener);
 				updateMusicStartPlayingState();
 			} catch (Exception e) {
+				e.printStackTrace();
 				Logger.e(TAG, "MediaPlayer prepare() failed");
 				mPlayer.release();
 				mPlayer = null;
@@ -1276,6 +1370,88 @@ public class ChattingListAdapter extends BaseAdapter {
 	    		mPlayer = null;
 	    	}
 	    	updateMusicStopPlayingState();
+	    }
+	    
+	    private void startPlaying(final V5VideoMessage videoMessage, final OnCompletionListener completionListener) {
+			Logger.i(TAG, "MediaPlayer - startPlaying " + mPosition + " mVideoSurfaceHolder:" + mVideoSurfaceHolder.isCreating());
+			if (mPlayer != null) {
+				if (mPlayer.isPlaying()) {
+					mPlayer.stop();
+				}
+				mPlayer.release();
+				mPlayer = null;
+				Logger.i(TAG, "MediaPlayer - stopPlaying all others");
+				resetOtherItemsExcept(mChatBean);
+			}
+			try {
+				//mVideoSurfaceHolder.setKeepScreenOn(true);
+				mVideoSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
+					
+					@Override
+					public void surfaceDestroyed(SurfaceHolder holder) {
+						// TODO Auto-generated method stub
+						Logger.d(TAG, "[SurfaceHolder.surfaceDestroyed]");
+					}
+					
+					@Override
+					public void surfaceCreated(SurfaceHolder holder) {
+						// TODO Auto-generated method stub
+						Logger.d(TAG, "[SurfaceHolder.surfaceCreated]");
+						// 必须在surface创建后才能初始化MediaPlayer,否则不会显示图像
+						mPlayer = new MediaPlayer();
+						mPlayer.setOnErrorListener(new OnErrorListener() {
+							
+							@Override
+							public boolean onError(MediaPlayer mp, int what, int extra) {
+								Logger.e(TAG, "MediaPlayer - onError");
+								return false;
+							}
+						});
+						mPlayer.setOnCompletionListener(completionListener);
+						mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+							
+							@Override
+							public void onPrepared(MediaPlayer mp) {
+								// TODO Auto-generated method stub
+								Logger.d(TAG, "[MediaPlayer.onPrepared]");
+								mPlayer.start();
+								updateVideoStartPlayingState();
+							}
+						});
+						try {
+							mPlayer.setDataSource(videoMessage.getFilePath());
+							mPlayer.setDisplay(mVideoSurfaceHolder);
+							mPlayer.prepare();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					
+					@Override
+					public void surfaceChanged(SurfaceHolder holder, int format, int width,
+							int height) {
+						// TODO Auto-generated method stub
+						Logger.d(TAG, "[SurfaceHolder.surfaceChanged]");
+					}
+				});
+				mVideoSurface.setVisibility(View.VISIBLE);
+			} catch (Exception e) {
+				e.printStackTrace();
+				Logger.e(TAG, "MediaPlayer prepare() failed");
+				mPlayer.release();
+				mPlayer = null;
+				updateVideoStopPlayingState(); // UI
+			}
+		}
+	    
+	    private void stopPlayingVideo() {
+	    	Logger.i(TAG, "MediaPlayer - stopPlayingVideo " + mPosition);
+	    	if (mPlayer != null) {
+	    		mPlayer.stop();
+	    		mPlayer.release();
+	    		mPlayer = null;
+	    	}
+	    	updateVideoStopPlayingState();
 	    }
 
 		public void setPosition(int mPosition) {

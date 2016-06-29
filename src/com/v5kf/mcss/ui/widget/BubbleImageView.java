@@ -26,7 +26,7 @@ import com.v5kf.mcss.utils.UITools;
 
 public class BubbleImageView extends ImageView {
 
-	private int mMinWH = 48; // 最小图片显示大小，单位dp
+	private float mMinWH = 48.0f; // 最小图片显示大小，单位dp
 
 	private static final int LOCATION_LEFT = 0;
 	private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
