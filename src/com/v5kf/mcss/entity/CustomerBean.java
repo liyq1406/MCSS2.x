@@ -70,6 +70,9 @@ public class CustomerBean extends BaseBean implements Serializable {
 	private String accessable;
 	private String f_id;
 	
+	/* 最新会话结束时间 */
+	private long last_time;
+	
 	// [修改]结构优化，加入session对象
 	private SessionBean session;	// 当前会话
 	private List<SessionBean> sessionArray; // 历史会话列表
@@ -374,7 +377,7 @@ public class CustomerBean extends BaseBean implements Serializable {
 		}
 		
 		if (visitor_id != null && !visitor_id.isEmpty()) {
-			Logger.d("CustomerName", "visitor_id=" + visitor_id);
+			//Logger.d("CustomerName", "visitor_id=" + visitor_id);
 			String s = "" + visitor_id;
 			if (s.length() >= 8) {
 				return s.substring(0, 3) + getResString(R.string.default_prefix_name) + s.substring(s.length() - 5, s.length());
@@ -382,7 +385,7 @@ public class CustomerBean extends BaseBean implements Serializable {
 				return s;
 			}
 		} else if (c_id != null && !c_id.isEmpty()) {
-			Logger.d("CustomerName", "c_id=" + c_id);
+			//Logger.d("CustomerName", "c_id=" + c_id);
 			String s = c_id;
 			if (s.length() >= 8) {
 				return s.substring(0, 3) + getResString(R.string.default_prefix_name) + s.substring(s.length() - 5, s.length());
@@ -637,6 +640,14 @@ public class CustomerBean extends BaseBean implements Serializable {
 
 	public void setClosingReason(int closingReason) {
 		this.closingReason = closingReason;
+	}
+
+	public long getLast_time() {
+		return last_time;
+	}
+
+	public void setLast_time(long last_time) {
+		this.last_time = last_time;
 	}
 	
 //	public void parseCustomerJoinIn(JSONObject json) throws NumberFormatException, JSONException {

@@ -114,10 +114,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 			if (null == mCustomer) {
 				/* 查找对话中客户 */
 				if (!TextUtils.isEmpty(c_id)) {
-					mCustomer = mAppInfo.getCustomerBean(c_id);
-					if (mCustomer == null) {
-						mCustomer = mAppInfo.getMonitorCustomer(c_id);
-					}
+					mCustomer = mAppInfo.getAliveCustomer(c_id);
 				}
 	        }
 		}

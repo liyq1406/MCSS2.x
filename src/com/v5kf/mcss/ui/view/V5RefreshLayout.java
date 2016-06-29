@@ -17,7 +17,6 @@ import com.handmark.pulltorefresh.library.LoadingLayoutBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.nineoldandroids.view.ViewHelper;
 import com.v5kf.mcss.R;
-import com.v5kf.mcss.utils.Logger;
 
 /**
  * Created by zwenkai on 2015/12/19.

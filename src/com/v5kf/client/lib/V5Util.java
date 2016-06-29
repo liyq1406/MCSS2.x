@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -633,7 +632,7 @@ public class V5Util {
      * @return 
      * @throws IOException 
      */  
-    public static long getAmrDuration(File file) throws IOException {  
+    public static long getMediaDuration(File file) throws IOException {  
         long duration = 0;  
 //        int[] packedSize = { 12, 13, 15, 17, 19, 20, 26, 31, 5, 0, 0, 0, 0, 0, 0, 0 };  
 //        RandomAccessFile randomAccessFile = null;  

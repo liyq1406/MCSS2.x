@@ -183,11 +183,11 @@ public abstract class V5Message extends DataSupport implements Serializable {
 			defContentId = "v5_def_content_voice";
 			break;
 
-		case V5MessageDefine.MSG_TYPE_VEDIO:
+		case V5MessageDefine.MSG_TYPE_VIDEO:
 			defContentId = "v5_def_content_vedio";
 			break;
 
-		case V5MessageDefine.MSG_TYPE_SHORT_VEDIO:
+		case V5MessageDefine.MSG_TYPE_SHORT_VIDEO:
 			defContentId = "v5_def_content_short_vedio";
 			break;
 

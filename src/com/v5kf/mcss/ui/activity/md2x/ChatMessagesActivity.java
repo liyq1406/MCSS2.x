@@ -174,7 +174,7 @@ public class ChatMessagesActivity extends BaseChatActivity {
 
 	private boolean checkCustomer() {
 		if (mCustomer == null) {
-			mCustomer = mAppInfo.getCustomerBean(c_id);
+			mCustomer = mAppInfo.getAliveCustomer(c_id);
 		}
 		return mCustomer != null;
 	}

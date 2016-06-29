@@ -17,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chyrain.irecyclerview.RefreshRecyclerView;
@@ -26,7 +27,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
-import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
@@ -47,9 +47,9 @@ import com.v5kf.mcss.utils.Logger;
  * @description
  *
  */
-public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefreshListener {
+public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRefreshListener {
 	
-	private static final String TAG = "HistoryVisitorFragment";
+	private static final String TAG = "TabHistoryCustomerFragment";
 	private List<CustomerBean> mRecycleBeans; // c_id替代v_id
 	
 	private RefreshRecyclerView mRefreshRecyclerView;
@@ -61,22 +61,22 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 	private boolean isLoadingMore = false;
 	
 	private boolean mHasMore = true;
-	private int mCurYear, mCurMonth, mCurDay;
+//	private int mCurYear, mCurMonth, mCurDay;
+//	private long mCurUTC;
+//	private String mAfterSid; // 最新sid, 大
+	private String mBeforeSid; // 最小sid
 	
 	private static final int NUM_PER_PAGE = 10; // 每次显示10个
 	private int mPages = 1;
-	private int mDayCount = 0;
 	
-	public TabHistoryVisitorFragment() {
+	public TabHistoryCustomerFragment() {
 		// TODO Auto-generated constructor stub
 	}
 	
-    public TabHistoryVisitorFragment(MainTabActivity activity, int index) {
+    public TabHistoryCustomerFragment(MainTabActivity activity, int index) {
 		super(activity, index);
 		mRecycleBeans = new ArrayList<>();
-		mCurYear = DateUtil.getYear();
-    	mCurMonth = DateUtil.getMonth();
-    	mCurDay = DateUtil.getDay();
+			
 	}
     
 
@@ -117,6 +117,9 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 	protected void onFragmentStopLazy() {
 		super.onFragmentStopLazy();
 		Log.d(TAG, TAG + " 掩藏 " + this);
+		if (mRefreshRecyclerView.isRefreshing()) {
+			mRefreshRecyclerView.onRefreshComplete();
+		}
 	}
 
 	@Override
@@ -136,52 +139,56 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 		super.onDestroy();
 		Log.d(TAG, TAG + " 所在的Activity onDestroy " + this);
 	}
-    
 	
 	private void initData(boolean addPage) {
 		if (addPage) {
 			Logger.w(TAG, "mPages++");
 			mPages++;
-		}
-		
-		Map<String, CustomerBean> cstmMap = mAppInfo.getVisitorMap();
-		if (cstmMap.isEmpty() && mHasMore) { // 2015/12/12 修复BUG：加入mHasMore判断
-			mCurYear = DateUtil.getYear();
-	    	mCurMonth = DateUtil.getMonth();
-	    	mCurDay = DateUtil.getDay();
-	    	mHasMore = true;
-			getHistoricalCustomerOfDay(mCurYear, mCurMonth, mCurDay);
-			Logger.d(TAG, "initcstmdata [onToday customer get]");
+			getHistoricalCustomer(mBeforeSid, true);
 			return;
 		}
-		Logger.i(TAG, "initData(...):" + cstmMap.size() + " mPages:" + mPages + " mHasMore:" + mHasMore);
 		
-		for (CustomerBean cstm : cstmMap.values()) {
+		Map<String, CustomerBean> vMap = mAppInfo.getVisitorMap();
+		if (vMap.isEmpty() && mHasMore) { // 2015/12/12 修复BUG：加入mHasMore判断
+	    	mHasMore = true;
+			getHistoricalCustomer("0", true);
+			Logger.d(TAG, "initcstmdata [first group customer get]");
+			return;
+		}
+		Logger.i(TAG, "initData(...):" + vMap.size() + " mPages:" + mPages + " mHasMore:" + mHasMore);
+		
+		for (CustomerBean cstm : vMap.values()) {
 			if (cstm.getIface() == QAODefine.CSTM_IF_NULL) { // 排除(v_id = 2251356029924705000)错误数据
 				continue;
 			}
 			
         	addRecyclerBean(cstm);
         	// 获取到的客户数量达到最少显示量
-        	if (mRecycleBeans.size() >= mPages * NUM_PER_PAGE) {
-    			mDayCount = 0;
-        		break;
+//        	if (mAfterSid == null) {
+//        		mAfterSid = cstm.getS_id();
+//        	} else if (cstm.getS_id() != null && cstm.getS_id().compareTo(mAfterSid) > 0) {
+//        		mAfterSid = cstm.getS_id();
+//        	}
+        	if (mBeforeSid == null || mBeforeSid.equals("0")) {
+        		mBeforeSid = cstm.getS_id();
+        	} else if (cstm.getS_id() != null && cstm.getS_id().compareTo(mBeforeSid) < 0) {
+        		mBeforeSid = cstm.getS_id();
         	}
 		}
 		
-		if (mRecycleBeans.size() < (mPages * NUM_PER_PAGE) && mHasMore) {
-//			getLastMonthCustomer();
-			getLastDayCustomer();
-		} else {
-			// 排序按照最新活动时间排序
-			if (mRecycleBeans.size() > 1) {
-				CustomerTimeCompartor ctc = new CustomerTimeCompartor();
-				Collections.sort(mRecycleBeans, ctc);
-			}
-			
-			mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
-			mHandler.sendEmptyMessage(HDL_STOP_LOAD);
+		// 排序按照最新活动时间排序
+		if (mRecycleBeans.size() > 1) {
+			CustomerTimeCompartor ctc = new CustomerTimeCompartor();
+			Collections.sort(mRecycleBeans, ctc);
 		}
+		for (CustomerBean cstm : mRecycleBeans) {
+			Logger.d(TAG, "last_time:" + cstm.getLast_time() + " name:" + cstm.getDefaultName());
+		}
+		
+//		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
+//		mHandler.sendEmptyMessage(HDL_STOP_LOAD);
+		mRecyclerAdapter.notifyDataSetChanged();
+		mHandler.sendEmptyMessage(HDL_STOP_PROGRESS);
 	}
 	
 
@@ -206,30 +213,25 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 			@Override
 			public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
 				//Toast.makeText(mParentActivity, "Pull Down!", Toast.LENGTH_SHORT).show();
+				Logger.d(TAG, "[onPullDownToRefresh]");
 				onRefresh();
 			}
 
 			@Override
 			public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
 				//Toast.makeText(mParentActivity, "Pull Up!", Toast.LENGTH_SHORT).show();
-				if (isLoadingMore) {
-                	// 正在刷新中取消执行
-                } else {
-                	isLoadingMore = true;
-                	if (mHasMore || mRecyclerAdapter.getItemCount() < mAppInfo.getVisitorMap().size()) {
-                    	setLoadMoreVisible(true);
-                    	mRecycleBeans.clear();
-        				Logger.d(TAG, "initcstmdata [LoadMore]");
-                		initData(true);
-                		mRecyclerAdapter.notifyDataSetChanged();
-                		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
-                	} else {
-                		isLoadingMore = false;
-                		mHandler.sendEmptyMessage(HDL_STOP_LOAD);
-                		mParentActivity.ShowShortToast(R.string.no_more);
-                	}
+				Logger.d(TAG, "[onPullUpToRefresh]");
+				isLoadingMore = true;
+            	if (mHasMore || mRecyclerAdapter.getItemCount() < mAppInfo.getVisitorMap().size()) {
+    				Logger.d(TAG, "initcstmdata [LoadMore]");
+            		initData(true);
                 	Logger.i(TAG, "上拉加载 ...");
-                }
+            		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
+            	} else {
+            		mParentActivity.ShowShortToast(R.string.no_more);
+            		Logger.i(TAG, "没有更多了");
+            		mHandler.sendEmptyMessage(HDL_STOP_PROGRESS);
+            	}
 			}
 		});
 		
@@ -239,34 +241,42 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
         /* 空白按钮 */
 		if (mEmptyTipsTv != null) {
 			mEmptyTipsTv.setText(R.string.visitor_list_empty_tips);
-//			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
-//				
-//				@Override
-//				public void onClick(View v) {
-//					onRefresh();
-//				}
-//			});
+			mEmptyTipsTv.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (!mRefreshRecyclerView.isRefreshing()) {
+						mRefreshRecyclerView.setRefreshing();
+						onRefresh();
+					}
+				}
+			});
 		}
     }
     
     
-    private boolean hasRecyclerBeans(String v_id) {
+    /**
+     * -1表示未找到，其他值表示对于的position
+     * @param v_id
+     * @return
+     */
+    private int hasRecyclerBeans(String v_id) {
     	if (null == v_id || v_id.isEmpty()) {
     		Logger.e(TAG, "[hasRecyclerBeans] Null v_id");
-    		return true;
+    		return -1;
     	}
     	
-    	for (CustomerBean bean : mRecycleBeans) {
-    		if (bean.getVisitor_id().equals(v_id)) {
-    			return true;
+    	for (int i = 0; i < mRecycleBeans.size(); i++) {
+    		if (mRecycleBeans.get(i).getVisitor_id().equals(v_id)) {
+    			return i;
     		}
     	}
     	
-    	return false;
+    	return -1;
     }
     
     private boolean addRecyclerBean(CustomerBean cstm) {
-    	if (null == cstm || hasRecyclerBeans(cstm.getVisitor_id())) {
+    	if (null == cstm || hasRecyclerBeans(cstm.getVisitor_id()) >= 0) {
     		Logger.d(TAG, "Already hasRecyclerBeans ====");
     		return false;
     	}
@@ -288,91 +298,33 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 		Logger.d(TAG, "[addRecycleBean(" + mRecycleBeans.size() + ")] v_id = " + cstm.getVisitor_id());
 		return true;
 	}
-    
 
-	private void getMonthCustomer() {
-		Logger.d(TAG, "[getLastMonthCustomer] Year:" + mCurYear + " Month:" + mCurMonth + " hasMore:" + mHasMore);
-		if (!isValidDate(mCurYear, mCurMonth, mCurDay)) {
-			mHasMore = false;
-			Logger.w(TAG, "[getLastMonthCustomer] mHasMore:" + mHasMore);
-			mHandler.sendEmptyMessageDelayed(HDL_UPDATE_UI, 500);
-			return;
-		}
-		try {
-			TicketRequest tReq = (TicketRequest) RequestManager.getRequest(QAODefine.O_TYPE_WTICKET, mParentActivity);
-			tReq.getHistoricalCustomer(mCurYear, mCurMonth, 0);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * 查找前一天的客户
-	 * @param getLastDayCustomer HistoryVisitorFragment 
-	 * @return void
-	 */
-	private void getLastDayCustomer() {
-		Logger.d(TAG, "[getLastDayCustomer] mCurMonth:" + mCurMonth + " mCurDay:" + mCurDay);
-		if (mCurDay == 1) {
-			if (mRecycleBeans.size() < NUM_PER_PAGE) { // 跨月查找且数量不足直接查整月
-				if (mCurMonth == 1) {
-					mCurMonth = 12;
-					mCurYear--;
-				} else {
-					mCurMonth--;
-				}
-				getMonthCustomer();
-				mDayCount = 0;
-				return;
-			}
-			if (mCurMonth == 1) {
-				mCurMonth = 12;
-				mCurYear--;
-			} else {
-				mCurMonth--;
-			}
-			mCurDay = DateUtil.getMonthDays(mCurYear, mCurMonth);
-		} else {
-			mCurDay--;
-		}
-		getHistoricalCustomerOfDay(mCurYear, mCurMonth, mCurDay);
-		mDayCount++;
-	}
-	
-
-	private void getHistoricalCustomerOfDay(int mCurYear, int mCurMonth,
-			int mCurDay) {
-		Logger.d(TAG, "[getHistoricalCustomerOfDay] Year:" + mCurYear + " Month:" + mCurMonth + " Day:" + mCurDay + " hasMore:" + mHasMore);
-		if (!isValidDate(mCurYear, mCurMonth, mCurDay)) {
-			mHasMore = false;
-			mHandler.sendEmptyMessageDelayed(HDL_UPDATE_UI, 500);
-			return;
-		}
-		try {
-			TicketRequest tReq = (TicketRequest) RequestManager.getRequest(QAODefine.O_TYPE_WTICKET, mParentActivity);
-			tReq.getHistoricalCustomer(mCurYear, mCurMonth, mCurDay);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
+    private void getHistoricalCustomer(String s_id, boolean before) {
+    	try {
+	    	TicketRequest tReq = (TicketRequest)RequestManager.getRequest(QAODefine.O_TYPE_WTICKET, mApplication);
+	    	tReq.getHistoricalCustomer(s_id, NUM_PER_PAGE, before);
+    	} catch (JSONException e) {
+    		e.printStackTrace();
+    	}
+    }
     
   	
-	private boolean isValidDate(int year, int month, int day) {
-		long date = DateUtil.getDate(year, month, day);
-		if (date > DateUtil.getCurrentLongTime()) {
-			return false;
-		}
-		if (mAppInfo.getUser().getCreate_time() > 0) { // 查询时间不小于账号创建时间
-			date = date/1000 + 24*3600;
-			if (date < mAppInfo.getUser().getCreate_time()) {
-				return false;
-			}
-		}
-		if (year < Config.SYS_YEAR || (year == Config.SYS_YEAR && month < Config.SYS_MONTH)) {
-			return false;
-		}
-		return true;
-	}
+//	private boolean isValidDate(int year, int month, int day) {
+//		long date = DateUtil.getDate(year, month, day);
+//		if (date > DateUtil.getCurrentLongTime()) {
+//			return false;
+//		}
+//		if (mAppInfo.getUser().getCreate_time() > 0) { // 查询时间不小于账号创建时间
+//			date = date/1000 + 24*3600;
+//			if (date < mAppInfo.getUser().getCreate_time()) {
+//				return false;
+//			}
+//		}
+//		if (year < Config.SYS_YEAR || (year == Config.SYS_YEAR && month < Config.SYS_MONTH)) {
+//			return false;
+//		}
+//		return true;
+//	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -394,24 +346,23 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 		case HDL_TIME_OUT: // 超时
 			if (mRefreshRecyclerView.isRefreshing()) {
 				mRefreshRecyclerView.onRefreshComplete();
-				updateUI();
+				mRecyclerAdapter.notifyDataSetChanged();
 				onRefreshTimeOut();
 			}
 			break;
 		case HDL_STOP_REFRESH: // 停止刷新
 			mHandler.removeMessages(HDL_TIME_OUT);
+			initData(false);
 			if (mRefreshRecyclerView.isRefreshing()) {
 				mRefreshRecyclerView.onRefreshComplete();
-				updateUI();
 			}
 			break;
 			
 		case HDL_STOP_LOAD: // 停止加载
 			mHandler.removeMessages(HDL_TIME_OUT);
+			initData(false);
 			if (isLoadingMore) {
 				isLoadingMore = false;
-				setLoadMoreVisible(false);
-				updateUI();
 			}
 			if (mRefreshRecyclerView.isRefreshing()) {
 				mRefreshRecyclerView.onRefreshComplete();
@@ -420,11 +371,21 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 			
 		case HDL_UPDATE_UI: // 更新ui
 			Logger.d(TAG, "initcstmdata [UPDATE_UI]");
-			updateUI();
+			mHandler.removeMessages(HDL_TIME_OUT);
+			initData(false);
+			if (isLoadingMore) {
+				isLoadingMore = false;
+			}
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
+			}
 			break;
 			
 		case HDL_STOP_PROGRESS: // 停止progress
 			mParentActivity.dismissProgress();
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
+			}
 			break;
 		}
 	}
@@ -443,40 +404,29 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 		}
 	}
 
-	private void updateUI() {
-		mRecycleBeans.clear();				
-		initData(false);
-		mRecyclerAdapter.notifyDataSetChanged();
-	}
-
 	@Override
 	public void onRefresh() { // 下拉加载内存中数据，上拉加载则继续请求
 		Logger.i(TAG, "onRefresh ...");
 //    	mParentActivity.showProgress();
 		
 		/* 请求等待列表数据 */
-		if (!mAppInfo.getVisitorMap().isEmpty()) { // 已获取数据则只刷新今天数据
-			getHistoricalCustomerOfDay(DateUtil.getYear(), DateUtil.getMonth(), DateUtil.getDay());
-			Logger.d(TAG, "initcstmdata [onRefresh - today]");
-		} else {
-			mCurYear = DateUtil.getYear();
-	    	mCurMonth = DateUtil.getMonth();
-	    	mCurDay = DateUtil.getDay();
-	    	mHasMore = true;
-			Logger.d(TAG, "initcstmdata [onRefresh - all]");
-			updateUI();
-		}
+//		if (!mAppInfo.getVisitorMap().isEmpty()) { // 已获取数据则只刷新今天数据
+//			getHistoricalCustomer(mAfterSid, false);
+//			Logger.d(TAG, "initcstmdata [onRefresh - today]");
+//		} else {
+//	    	mHasMore = true;
+//	    	mPages = 0;
+//			Logger.d(TAG, "initcstmdata [onRefresh - all]");
+//			initData(false);
+//		}
+		mHasMore = true;
+    	mPages = 0;
+    	mBeforeSid = null;
+		Logger.d(TAG, "initcstmdata [onRefresh - all]");
+		initData(true);
 		
+		Logger.i(TAG, "下拉刷新...");
 		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
-	}
-
-	
-	private void setLoadMoreVisible(boolean visible) {
-		if (visible) {
-			mRefreshRecyclerView.getRefreshableView().scrollToPosition(mRecyclerAdapter.getItemCount() - 1);
-		} else {
-//			mRecyclerView.scrollToPosition(mRecyclerAdapter.getItemCount() - 1);
-		}
 	}
 	
 	/**
@@ -492,16 +442,18 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 
 		@Override
 		public int compare(CustomerBean lhs, CustomerBean rhs) {
-			// 可接入客户优先显示
-			if (lhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE) && rhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
-				return 0;
-			} else if (lhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
-				return -1;
-			} else if (rhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
-				return 1;
-			}
-			long l = lhs.getVirtual() == null ? 0 : lhs.getVirtual().getActive_time();
-			long r = rhs.getVirtual() == null ? 0 : rhs.getVirtual().getActive_time();
+//			// [取消]可接入客户优先显示
+//			if (lhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE) && rhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
+//				return 0;
+//			} else if (lhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
+//				return -1;
+//			} else if (rhs.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
+//				return 1;
+//			}
+//			long l = lhs.getVirtual() == null ? 0 : lhs.getVirtual().getActive_time();
+//			long r = rhs.getVirtual() == null ? 0 : rhs.getVirtual().getActive_time();
+			long l = lhs.getLast_time();
+			long r = rhs.getLast_time();
 			if (l == 0 || r == 0) {
 				//Logger.w(TAG, "CustomerBean sort -> null Active_time virtual:" + lhs.getDefaultName() + lhs.getVirtual() + rhs.getDefaultName() + rhs.getVirtual());
 				if (l == 0 && r == 0) {
@@ -511,8 +463,6 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 				} else {
 					return -1;
 				}
-			} else if (l == r) {
-				return 0;
 			} else {
 				if (r > l) {
 					return 1;
@@ -535,30 +485,30 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 			updateInfoOfVisitor(cstm.getVisitor_id());
 		}
 	}
-
+	
+	/**
+	 * 增减历史客户
+	 * @param appinfo
+	 */
 	@Subscriber(tag = EventTag.ETAG_VISITORS_CHANGE, mode = ThreadMode.MAIN)
-	private void visitorsChange(AppInfoKeeper appinfo) {
+	private void visitorsChange(Integer numChanged) {
 		Logger.d(TAG + "-eventbus", "visitorsChange -> ETAG_VISITORS_CHANGE");
-		if ((mAppInfo.getVisitorMap().size() < (mPages * NUM_PER_PAGE)) && mHasMore) {
-			if (mDayCount >= 5) {
-				getMonthCustomer();
-				mCurDay = 1;
-				mDayCount = 0;
-			} else {
-				getLastDayCustomer();
-			}
-			if (mAppInfo.getVisitorMap().size() > mRecycleBeans.size()) {
-				mHandler.sendEmptyMessageDelayed(HDL_STOP_PROGRESS, 2000);
-				updateUI();
-			}
-		} else {
-			mDayCount = 0;
-			Logger.d(TAG, "initcstmdata [Receive HISTORICAL_CUSTOMER]");
-			mHandler.sendEmptyMessageDelayed(HDL_STOP_PROGRESS, 2000);
-			updateUI();
-		}
+//		if ((mAppInfo.getVisitorMap().size() < (mPages * NUM_PER_PAGE)) && mHasMore) {
+//			getHistoricalCustomer(mBeforeSid, true);
+//			if (mAppInfo.getVisitorMap().size() > mRecycleBeans.size()) {
+//				mHandler.sendEmptyMessageDelayed(HDL_STOP_PROGRESS, 2000);
+//			}
+//		} else {
+//			Logger.d(TAG, "initcstmdata [Receive HISTORICAL_CUSTOMER]");
+//			mHandler.sendEmptyMessageDelayed(HDL_STOP_PROGRESS, 2000);
+//		}
 //		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
 //		mHandler.sendEmptyMessage(HDL_STOP_LOAD);
+		if (numChanged < NUM_PER_PAGE) {
+			mHasMore = false;
+		}
+		mHandler.sendEmptyMessage(HDL_UPDATE_UI);
+		mHandler.sendEmptyMessageDelayed(HDL_STOP_PROGRESS, 2000);
     }
 	
 	/**
@@ -566,23 +516,40 @@ public class TabHistoryVisitorFragment extends TabBaseFragment implements OnRefr
 	 * @param customerBean
 	 */
 	@Subscriber(tag = EventTag.ETAG_VISITORS_CHANGE, mode = ThreadMode.MAIN)
-	private void visitorsChange(CustomerBean customerBean) {
-		Logger.d(TAG + "-eventbus", "visitorsChange -> ETAG_VISITORS_CHANGE");
-		mDayCount = 0;
-		Logger.d(TAG, "initcstmdata [Receive HISTORICAL_CUSTOMER]");
-		updateUI();
+	private void visitorChange(CustomerBean customerBean) {
+		int position = mRecycleBeans.indexOf(customerBean);
+		Logger.d(TAG + "-eventbus", "visitorsChange(CustomerBean) -> ETAG_VISITORS_CHANGE pos:" + position);
+		if (position >= 0) {
+			mRecyclerAdapter.notifyItemChanged(position);
+		}
+		//mHandler.sendEmptyMessage(HDL_UPDATE_UI);
     }
+
+	/**
+	 * 加入一个历史客户(列表顶部)
+	 * @param customerBean
+	 */
+	@Subscriber(tag = EventTag.ETAG_VISITORS_IN, mode = ThreadMode.MAIN)
+	private void visitorIn(CustomerBean customerBean) {
+		Logger.d(TAG + "-eventbus", "visitorIn(CustomerBean) -> ETAG_VISITORS_IN");
+		customerBean.setLast_time(DateUtil.getCurrentLongTime()/1000);
+		int pos = hasRecyclerBeans(customerBean.getVisitor_id());
+		if (pos >= 0) {
+			mRecycleBeans.add(0, mRecycleBeans.remove(pos));
+			mRecyclerAdapter.notifyItemRangeChanged(0, pos);
+		} else {
+			mRecycleBeans.add(0, customerBean);
+			mRecyclerAdapter.notifyItemInserted(0);
+		}
+	}
 	
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)
 	private void connectionChange(Boolean isConnect) {
 		if (isConnect) {
 			//
 		} else {
-			mCurYear = DateUtil.getYear();
-	    	mCurMonth = DateUtil.getMonth();
-	    	mCurDay = DateUtil.getDay();
 	    	mHasMore = true;
-			updateUI();
+	    	initData(false);
 		}
 	}
 }

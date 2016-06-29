@@ -6,12 +6,7 @@ import org.json.JSONObject;
 import android.content.Context;
 
 import com.umeng.analytics.MobclickAgent;
-import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.config.QAODefine;
-import com.v5kf.mcss.entity.AppInfoKeeper;
-import com.v5kf.mcss.entity.CustomerBean;
-import com.v5kf.mcss.entity.CustomerBean.CustomerType;
-import com.v5kf.mcss.eventbus.EventTag;
 
 public class CustomerRequest extends BaseRequest {
 	/* get_customer_messages */

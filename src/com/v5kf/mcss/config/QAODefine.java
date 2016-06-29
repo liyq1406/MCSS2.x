@@ -112,8 +112,8 @@ public class QAODefine {
 	public static final int MSG_TYPE_LINK = 4;
 	public static final int MSG_TYPE_EVENT = 5;
 	public static final int MSG_TYPE_VOICE = 6;
-	public static final int MSG_TYPE_VEDIO = 7;
-	public static final int MSG_TYPE_SHORT_VEDIO = 8;
+	public static final int MSG_TYPE_VIDEO = 7;
+	public static final int MSG_TYPE_SHORT_VIDEO = 8;
 	public static final int MSG_TYPE_NEWS = 9; /* 单图文、多图文 统一到此类型 */
 	public static final int MSG_TYPE_MUSIC = 10;	
 	public static final int MSG_TYPE_WXCS = 11;	/* 切换到多客服 */

@@ -4,7 +4,7 @@
     android:id="@+id/id_left_msg_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
+    android:padding="4dp"
     android:background="@drawable/btn_selector"
     android:orientation="vertical" >
 	
@@ -12,9 +12,7 @@
         android:id="@+id/ic_news_img_iv"
     	android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-		android:adjustViewBounds="true"
-        android:src="@drawable/v5_img_src_loading"
+        style="@style/Multi_News_Header_Image"
         android:contentDescription="@string/contentDescription" />
     
     <TextView

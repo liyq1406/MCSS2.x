@@ -10,9 +10,15 @@ import java.util.concurrent.Executors;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 
 import com.v5kf.client.lib.V5Util;
 import com.v5kf.client.lib.entity.V5Message;
+import com.v5kf.client.lib.entity.V5MessageDefine;
+import com.v5kf.client.lib.entity.V5MusicMessage;
+import com.v5kf.client.lib.entity.V5VideoMessage;
+import com.v5kf.client.lib.entity.V5VoiceMessage;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 
@@ -76,6 +82,7 @@ public class MediaLoader {
 //		url = u1 + u2;
 		MediaCache media = mediaCaches.get(url);
 		if (media != null) {
+			loadMediaCache(media, message);
 			Logger.i(TAG, "From MemoryCache:" + url);
 			if (mListener != null) {
 				mListener.onSuccess(message, mObj, media);
@@ -90,7 +97,7 @@ public class MediaLoader {
 		executorService.submit(new PhotosLoader(p));
 	}
 
-	private MediaCache getMediaData(String url) {
+	private MediaCache getMediaData(String url, V5Message message) {
 		Logger.w(TAG, "MediaLoader-->getMediaData:" + url);
 		if (null == url) {
 			return null;
@@ -100,45 +107,78 @@ public class MediaLoader {
 			
 			// 从sd卡获取
 			if (f.exists()) {
-//				MediaPlayer mediaPlayer = new MediaPlayer();
-//				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//				mediaPlayer.setDataSource(f.getAbsolutePath());
-				long duration = V5Util.getAmrDuration(f);
-				MediaCache media = new MediaCache();
-				media.setLocalPath(f.getAbsolutePath());
-				media.setDuration(duration);
-				Logger.d(TAG, "From FileCache:" + url + " duration:" + duration);
-				return media;
+				Logger.d(TAG, "From FileCache:" + url);
+				return getMediaCacheFromFile(f, message);
 			} else { // 判断是否本地路径
 				File path = new File(url);
 				if (path.exists()) {
-//					MediaPlayer mediaPlayer = new MediaPlayer();
-//					mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//					mediaPlayer.setDataSource(path.getAbsolutePath());
-					long duration = V5Util.getAmrDuration(path);
-					MediaCache media = new MediaCache();
-					media.setLocalPath(path.getAbsolutePath());
-					media.setDuration(duration);
-					Logger.d(TAG, "From LocalFile:" + url + " duration:" + duration);
-					return media;
+					Logger.d(TAG, "From LocalFile:" + url);
+					return getMediaCacheFromFile(path, message);
 				}
 			}
 			
 			// 从网络
 			HttpUtil.CopyStream(url, f);
 			
-//			MediaPlayer mediaPlayer = new MediaPlayer();
-//			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//			mediaPlayer.setDataSource(f.getAbsolutePath());
-			long duration = V5Util.getAmrDuration(f);
-			MediaCache media = new MediaCache();
-			media.setLocalPath(f.getAbsolutePath());
-			media.setDuration(duration);
-			Logger.d(TAG, "MediaLoader-->download:" + url + " duration:" + duration);
-			return media;
+			Logger.d(TAG, "MediaLoader-->download:" + url);
+			return getMediaCacheFromFile(f, message);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
+		}
+	}
+	
+	private MediaCache getMediaCacheFromFile(File f, V5Message msg) {
+		MediaCache media = new MediaCache();
+		media.setLocalPath(f.getAbsolutePath());
+		
+		switch (msg.getMessage_type()) {
+		case V5MessageDefine.MSG_TYPE_VOICE:
+			((V5VoiceMessage)msg).setFilePath(f.getAbsolutePath());
+			try {
+				long duration = V5Util.getMediaDuration(f);
+				media.setDuration(duration);
+				((V5VoiceMessage)msg).setDuration(duration);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case V5MessageDefine.MSG_TYPE_SHORT_VIDEO:
+		case V5MessageDefine.MSG_TYPE_VIDEO:
+			((V5VideoMessage)msg).setFilePath(f.getAbsolutePath());
+			try {
+				// 获得cover fram Bitmap
+				MediaMetadataRetriever mediaDataRet = new MediaMetadataRetriever();
+				mediaDataRet.setDataSource(f.getAbsolutePath());
+				Bitmap bitmap = mediaDataRet.getFrameAtTime();
+				media.setCoverFrame(bitmap);
+				((V5VideoMessage)msg).setCoverFrame(bitmap);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case V5MessageDefine.MSG_TYPE_MUSIC:
+			((V5MusicMessage)msg).setFilePath(f.getAbsolutePath());
+			break;
+		}
+		
+		return media;
+	}
+	
+	private void loadMediaCache(MediaCache media, V5Message msg) {
+		switch (msg.getMessage_type()) {
+		case V5MessageDefine.MSG_TYPE_VOICE:
+			((V5VoiceMessage)msg).setFilePath(media.getLocalPath());
+			((V5VoiceMessage)msg).setDuration(media.getDuration());
+			break;
+		case V5MessageDefine.MSG_TYPE_SHORT_VIDEO:
+		case V5MessageDefine.MSG_TYPE_VIDEO:
+			((V5VideoMessage)msg).setFilePath(media.getLocalPath());
+			((V5VideoMessage)msg).setCoverFrame(media.getCoverFrame());
+			break;
+		case V5MessageDefine.MSG_TYPE_MUSIC:
+			((V5MusicMessage)msg).setFilePath(media.getLocalPath());
+			break;
 		}
 	}
 
@@ -167,11 +207,11 @@ public class MediaLoader {
 
 		@Override
 		public void run() {
-			MediaCache media = getMediaData(photoToLoad.url);
+			MediaCache media = getMediaData(photoToLoad.url, photoToLoad.mMessage);
 			if (media != null) {
 				mediaCaches.put(photoToLoad.url, media);
+				Logger.d(TAG, "memoryCache put:" + photoToLoad.url);
 			}
-			Logger.d(TAG, "memoryCache put:" + photoToLoad.url);
 			
 			MediaDisplayer md = new MediaDisplayer(media, photoToLoad);
 			Activity a = (Activity) mContext;

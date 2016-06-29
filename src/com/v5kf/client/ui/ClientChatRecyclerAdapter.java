@@ -334,8 +334,8 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 					
 					@Override
 					public void onSuccess(V5Message msg, Object obj, MediaCache media) {
-						((V5VoiceMessage)msg).setFilePath(media.getLocalPath());
-						((V5VoiceMessage)msg).setDuration(media.getDuration());
+						//((V5VoiceMessage)msg).setFilePath(media.getLocalPath());
+						//((V5VoiceMessage)msg).setDuration(media.getDuration());
 //						if (((V5VoiceMessage)msg).getFilePath() == null) { // 非本地文件
 //							msg.setState(V5Message.STATE_ARRIVED);
 //							//sendStateChange(holder, voiceMessage);
@@ -494,15 +494,15 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 
         public ChatItemViewHolder(int viewType, View itemView) {
             super(itemView);
+            
+            mDate = (TextView) itemView.findViewById(R.id.id_chat_msg_date);
             switch (viewType) {
             case TYPE_LEFT_TEXT:
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mMsg = (EmojiconTextView) itemView.findViewById(R.id.id_from_msg_text);
             	mMsg.setOnClickListener(this);
             	break;
             	
             case TYPE_RIGHT_TEXT:
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mMsg = (EmojiconTextView) itemView.findViewById(R.id.id_to_msg_text);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
@@ -510,7 +510,6 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_SINGLE_NEWS:
-            	mDate = (TextView) itemView.findViewById(R.id.id_news_msg_date);
             	mNewsPic = (ImageView) itemView.findViewById(R.id.chat_item_news_img);
             	mNewsTitle = (TextView) itemView.findViewById(R.id.id_news_title_inner_text);
             	mNewsContent = (TextView) itemView.findViewById(R.id.id_news_desc_text);
@@ -518,7 +517,6 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_NEWS:
-            	mDate = (TextView) itemView.findViewById(R.id.id_news_msg_date);
             	mNewsListLayout = (ClientListLinearLayout) itemView.findViewById(R.id.id_news_layout);
             	mNewsListLayout.setOnListLayoutClickListener(new OnListLayoutClickListener() {
 					
@@ -532,7 +530,6 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_LOCATION_R:
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mMapIv = (ImageView) itemView.findViewById(R.id.ic_map_img_iv);
             	mLbsDescTv = (TextView) itemView.findViewById(R.id.id_map_address_text);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
@@ -542,7 +539,6 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_LOCATION_L:
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mMapIv = (ImageView) itemView.findViewById(R.id.ic_map_img_iv);
             	mLbsDescTv = (TextView) itemView.findViewById(R.id.id_map_address_text);
             	//mBubbleLayout = itemView.findViewById(R.id.id_left_location_layout);
@@ -550,14 +546,12 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_IMG_L:
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mMapIv = (ImageView) itemView.findViewById(R.id.ic_type_img_iv);
             	//mBubbleLayout = itemView.findViewById(R.id.id_left_image_layout);
             	mMapIv.setOnClickListener(this);
             	break;
 
             case TYPE_IMG_R:
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mMapIv = (ImageView) itemView.findViewById(R.id.ic_type_img_iv);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
@@ -567,7 +561,6 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             
             case TYPE_VOICE_L:
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mBubbleLayout = (View) itemView.findViewById(R.id.id_left_voice_layout);
             	mVoiceIv = (ImageView) itemView.findViewById(R.id.id_from_voice_iv);
             	mVoiceSecondTv = (TextView) itemView.findViewById(R.id.id_from_voice_tv);
@@ -575,7 +568,6 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_VOICE_R:
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mBubbleLayout = (View) itemView.findViewById(R.id.id_right_voice_layout);
             	mVoiceIv = (ImageView) itemView.findViewById(R.id.id_to_voice_iv);
             	mVoiceSecondTv = (TextView) itemView.findViewById(R.id.id_to_voice_tv);
@@ -586,12 +578,10 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_TIPS:
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mMsg = (TextView) itemView.findViewById(R.id.id_msg_tips);
             	break;
             	
             default:
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mMsg = (EmojiconTextView) itemView.findViewById(R.id.id_to_msg_text);
                 mMsg.setOnClickListener(this);
             	break;

@@ -33,13 +33,15 @@
 	        android:background="@color/toolbar_border" />
 	</android.support.design.widget.AppBarLayout>
     
-	<com.chyrain.irecyclerview.RefreshRecyclerView
-        android:id="@+id/id_material_recycler"
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    <com.chyrain.view.indicator.ScrollIndicatorView
+        android:id="@+id/id_material_indicator"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        ptr:ptrMode="pullFromEnd"
-        ptr:ptrEmptyLayout="@layout/layout_emptyview" />
+        android:layout_height="35dp" />
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_material_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
 </LinearLayout>

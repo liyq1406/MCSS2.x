@@ -60,7 +60,7 @@ import com.v5kf.mcss.ui.activity.md2x.CustomLoginActivity;
 import com.v5kf.mcss.ui.activity.md2x.WaitingCustomerActivity;
 import com.v5kf.mcss.ui.activity.md2x.WorkerInfoActivity;
 import com.v5kf.mcss.ui.activity.md2x.WorkerLogActivity;
-import com.v5kf.mcss.ui.fragment.md2x.TabHistoryVisitorFragment;
+import com.v5kf.mcss.ui.fragment.md2x.TabHistoryCustomerFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabMonitorFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabMoreFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabServingFragment;
@@ -112,6 +112,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	
 	@Override
     public void onBackPressed() {
+		Logger.d(TAG, "[onBackPressed]");
 		if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
 			Logger.d(TAG, "mDrawerLayout.isDrawerOpen");
 			mDrawerLayout.closeDrawers();
@@ -348,27 +349,32 @@ public class MainTabActivity extends BaseToolbarActivity {
 		        case R.id.drawer_session: // 对话
 		        	menuItem.setChecked(true);
 			        mDrawerLayout.closeDrawers();
-			        indicatorViewPager.setCurrentItem(0, false);
+			        mCurrentPageIndex = 0;
+//			        indicatorViewPager.setCurrentItem(0, false);
 		        	break;
 		        case R.id.drawer_worker: // 客服
 		        	menuItem.setChecked(true);
 			        mDrawerLayout.closeDrawers();
-			        indicatorViewPager.setCurrentItem(1, false);
+			        mCurrentPageIndex = 1;
+//			        indicatorViewPager.setCurrentItem(1, false);
 		        	break;
 		        case R.id.drawer_history: // 历史
 		        	menuItem.setChecked(true);
 			        mDrawerLayout.closeDrawers();
-			        indicatorViewPager.setCurrentItem(2, false);
+			        mCurrentPageIndex = 2;
+//			        indicatorViewPager.setCurrentItem(2, false);
 		        	break;
 		        case R.id.drawer_explore: // 发现
 		        	menuItem.setChecked(true);
 			        mDrawerLayout.closeDrawers();
-			        indicatorViewPager.setCurrentItem(3, false);
+			        mCurrentPageIndex = 3;
+//			        indicatorViewPager.setCurrentItem(3, false);
 		        	break;
 		        case R.id.drawer_more: // 更多
 		        	menuItem.setChecked(true);
 		        	mDrawerLayout.closeDrawers();
-		        	indicatorViewPager.setCurrentItem(4, false);
+		        	mCurrentPageIndex = 4;
+//		        	indicatorViewPager.setCurrentItem(4, false);
 		        	break;
 		        case R.id.drawer_quit: // 退出登录
 		        	menuItem.setChecked(false);
@@ -396,6 +402,33 @@ public class MainTabActivity extends BaseToolbarActivity {
 		        return true;
 		    }
 		});
+		
+		mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+			
+			@Override
+			public void onDrawerStateChanged(int arg0) {
+//				Logger.d(TAG, "<drawer>onDrawerStateChanged:" + arg0);
+			}
+			
+			@Override
+			public void onDrawerSlide(View arg0, float arg1) {
+//				Logger.d(TAG, "<drawer>onDrawerSlide:" + arg1);
+				if (arg1 == 0) {
+					// TODO
+					indicatorViewPager.setCurrentItem(mCurrentPageIndex, false);
+				}
+			}
+			
+			@Override
+			public void onDrawerOpened(View arg0) {
+//				Logger.d(TAG, "<drawer>onDrawerOpened");
+			}
+			
+			@Override
+			public void onDrawerClosed(View arg0) {
+//				Logger.d(TAG, "<drawer>onDrawerClosed");
+			}
+		});
 	}
 	
 	/**
@@ -416,6 +449,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	 * @param index
 	 */
 	public void gotoSubPage(int index) {
+		mCurrentPageIndex = index;
 		mNavigationView.getMenu().getItem(index).setChecked(true);
 		indicatorViewPager.setCurrentItem(index, false);
 	}
@@ -670,7 +704,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 			@Override
 			public void onPageSelected(int position) {
 				mCurrentPageIndex = position;
-				Logger.d(TAG, "onPageSelected: " + position);
+//				Logger.d(TAG, "<drawer>onPageSelected: " + position);
 				
 				onFragmentPageSelected(position);
 			}
@@ -678,14 +712,16 @@ public class MainTabActivity extends BaseToolbarActivity {
 			@Override
 			public void onPageScrolled(int position, float positionOffset,
 					int positionOffsetPixels) {
-				// TODO Auto-generated method stub
-				
+//				Logger.d(TAG, "<drawer>onPageScrolled: " + position + " positionOffset:" + positionOffset);
+				// 用来监控页面是否滑动完毕，只有滑动完毕后才能加载内容，解决滑动时卡顿的问题  
+                if (positionOffset == 1 || positionOffset == 0) {  
+                    //添加逻辑代码  
+                }
 			}
 			
 			@Override
 			public void onPageScrollStateChanged(int state) {
-				// TODO Auto-generated method stub
-				
+//				Logger.d(TAG, "<drawer>onPageScrollStateChanged:" + state);
 			}
 		});
 		// 禁止viewpager的滑动事件
@@ -824,7 +860,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 				fragment = new TabWorkerListFragment(MainTabActivity.this, position);
 				break;
 			case 2:
-				fragment = new TabHistoryVisitorFragment(MainTabActivity.this, position);
+				fragment = new TabHistoryCustomerFragment(MainTabActivity.this, position);
 				break;
 			case 3:
 				fragment = new TabMonitorFragment(MainTabActivity.this, position);

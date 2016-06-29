@@ -28,6 +28,18 @@
 			app:layout_collapseMode="pin"
 			app:title="@string/app_name"
 			style="@style/ToolBarStyle" >
+			
+	        <ImageView
+	            android:id="@+id/more_iv"
+	            android:visibility="visible"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:layout_marginRight="6dp"
+	            android:layout_marginEnd="6dp"
+	            android:layout_gravity="center_vertical|end"
+	            android:scaleType="fitXY"
+	            android:src="@drawable/v5_action_bar_more"
+	            android:contentDescription="@string/contentDescription" />
 	        
 		</android.support.v7.widget.Toolbar>
 	

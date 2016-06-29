@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.chyrain.irecyclerview.RefreshRecyclerView
+        android:id="@+id/id_material_recycler"
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+	    android:scrollbarStyle="outsideOverlay"
+	    android:padding="2dp"
+	    
+        ptr:ptrMode="pullFromEnd"
+        ptr:ptrEmptyLayout="@layout/layout_emptyview" />
+    
+    <ProgressBar
+        android:id="@+id/id_loading_progress"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        style="@style/custom_progress_bar_large" />
+
+</FrameLayout>

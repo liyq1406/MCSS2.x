@@ -51,7 +51,7 @@ public class CustomerEditActivity extends BaseToolbarActivity implements OnClick
 		}
 		
 		if (null != c_id) { // CSTM_ACTIVE
-			mCustomer = mAppInfo.getCustomerBean(c_id);
+			mCustomer = mAppInfo.getAliveCustomer(c_id);
 			if (null == mCustomer) {
 	        	Logger.e(TAG, "Customer(null) not found");
 	        	finishActivity();
@@ -71,6 +71,15 @@ public class CustomerEditActivity extends BaseToolbarActivity implements OnClick
 		handleIntent();
 		findView();
 		initView();
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (null == mCustomer) {
+        	Logger.e(TAG, "[onStart] Customer(null) not found");
+        	finishActivity();
+        }
 	}
 	
 	@Override
@@ -156,6 +165,9 @@ public class CustomerEditActivity extends BaseToolbarActivity implements OnClick
 	}
 
 	private void initFirstLayout() {
+		if (mCustomer == null) {
+			return;
+		}
 		mNickNameTv.setText(mCustomer.getDefaultName());
 		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm, null);
     	imgLoader.DisplayImage(mCustomer.getDefaultPhoto(), mHeadIv);
@@ -178,6 +190,10 @@ public class CustomerEditActivity extends BaseToolbarActivity implements OnClick
 	}
 
 	private void initLayoutWithTextview() {
+		if (mCustomer == null) {
+			return;
+		}
+		
 		// 真实姓名
 		if (mCustomer.getDefaultRealname() != null && !mCustomer.getDefaultRealname().isEmpty()) {
 			mRealnameEt.setText(mCustomer.getDefaultRealname());

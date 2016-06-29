@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.v5kf.client.lib.Logger;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.utils.DevUtils;
 

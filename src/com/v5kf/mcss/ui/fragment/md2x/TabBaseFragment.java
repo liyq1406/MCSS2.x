@@ -48,6 +48,9 @@ public abstract class TabBaseFragment extends LazyFragment {
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
+		if (mParentActivity == null) {
+			mParentActivity = (MainTabActivity)getActivity();
+		}
 		
 		// 注册event对象
         EventBus.getDefault().register(this);

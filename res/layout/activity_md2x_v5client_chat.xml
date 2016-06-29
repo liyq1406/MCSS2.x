@@ -65,6 +65,8 @@
 			        android:layout_height="wrap_content"
 			        android:focusable="true"
 					android:focusableInTouchMode="true"
+					android:scrollbars="vertical"
+	    			android:scrollbarStyle="outsideOverlay"
 			        android:divider="@null"
 			        android:dividerHeight="5dp"
 			        android:background="@color/list_chat_blank_bg"/>

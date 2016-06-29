@@ -61,7 +61,7 @@ public class CustomerInfoActivity extends BaseActivity implements OnClickListene
 		}
 		
 		if (null != c_id) { // CSTM_ACTIVE
-			mCustomer = mAppInfo.getCustomerBean(c_id);
+			mCustomer = mAppInfo.getAliveCustomer(c_id);
 			if (null == mCustomer) {
 	        	Logger.e(TAG, "Customer(null) not found c_id=" + c_id);
 	        	finishActivity();

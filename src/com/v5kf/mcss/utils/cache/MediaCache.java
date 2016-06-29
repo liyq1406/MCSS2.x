@@ -1,9 +1,12 @@
 package com.v5kf.mcss.utils.cache;
 
+import android.graphics.Bitmap;
+
 
 public class MediaCache {
 	private String localPath;	// 本地路径
 	private long duration;		// 秒
+	private Bitmap coverFrame;  // 视频帧
 	
 	public String getLocalPath() {
 		return localPath;
@@ -19,6 +22,14 @@ public class MediaCache {
 
 	public void setDuration(long duration) {
 		this.duration = duration;
+	}
+
+	public Bitmap getCoverFrame() {
+		return coverFrame;
+	}
+
+	public void setCoverFrame(Bitmap coverFrame) {
+		this.coverFrame = coverFrame;
 	}
 	
 }

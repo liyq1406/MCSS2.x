@@ -165,28 +165,22 @@ public class QAOCustomer extends QAOBase {
 		}
 		String accessable = qao_data.optString("accessable");
 		if (c_id != null) {
-			CustomerBean customer = this.mAppInfo.getCustomerBean(c_id);
+			CustomerBean customer = this.mAppInfo.getAliveCustomer(c_id);
 			if (customer != null) {
 				customer.setAccessable(accessable);
 				Logger.d(TAG, "parseCustomerAccessableChange -> customer:" + customer.getDefaultName());
-				postEvent(customer, EventTag.ETAG_VISITORS_CHANGE);
 				if (customer.getCstmType() == CustomerType.CustomerType_ServingAlive) {
 					postEvent(QAODefine.O_METHOD_CSTM_ACCESSABLE_CHANGE, EventTag.ETAG_SERVING_CSTM_CHANGE);
-				} else {
+				} else if (customer.getCstmType() == CustomerType.CustomerType_WaitingAlive) {
 					postEvent(mAppInfo, EventTag.ETAG_WAITING_CSTM_CHANGE);
 				}
 				postEvent(customer, EventTag.ETAG_ACCESSABLE_CHANGE);
+				//postEvent(customer, EventTag.ETAG_VISITORS_CHANGE);
 				//return;
-			} else {
-				customer = this.mAppInfo.getMonitorCustomer(c_id);
-				if (customer != null) {
-					customer.setAccessable(accessable);
-					postEvent(customer, EventTag.ETAG_ACCESSABLE_CHANGE);
-				}
 			}
 		}
 		if (visitor_id != null) {
-			CustomerBean customer = this.mAppInfo.getCustomerBean(visitor_id);
+			CustomerBean customer = this.mAppInfo.getVisitor(visitor_id);
 			if (customer != null) {
 				customer.setAccessable(accessable);
 				Logger.d(TAG, "parseCustomerAccessableChange -> visitor:" + customer.getDefaultName());
@@ -214,10 +208,7 @@ public class QAOCustomer extends QAOBase {
 		CustomerBean customer = null;
 		if (qao_data.has(QAODefine.C_ID)) {
 			c_id = qao_data.getString(QAODefine.C_ID);
-			customer = mAppInfo.getCustomerBean(c_id); // 找CustomerMap
-			if (customer == null) { // 找MonitorMap
-				customer = mAppInfo.getMonitorCustomer(c_id);
-			}
+			customer = mAppInfo.getAliveCustomer(c_id); // 找CustomerMap
 		} else if (qao_data.has(QAODefine.U_ID)) {
 			u_id = qao_data.getString(QAODefine.U_ID);
 			customer = mAppInfo.getVisitor(u_id); // 找VisitorMap
@@ -435,7 +426,7 @@ public class QAOCustomer extends QAOBase {
 		// 通知界面更新[eventbus]
 		postEvent(QAODefine.O_METHOD_CSTM_JOIN_OUT, EventTag.ETAG_SERVING_CSTM_CHANGE);
 		postEvent(customer, EventTag.ETAG_CSTM_OUT);
-		postEvent(mAppInfo, EventTag.ETAG_VISITORS_CHANGE);
+		postEvent(customer, EventTag.ETAG_VISITORS_IN);
 	}
 
 	private void parseCstmWaitIn() throws NumberFormatException, JSONException {

@@ -14,8 +14,8 @@ public class ChatRecyclerBean {
 	private String name;	// Customer Name
 	private String time;	// from msgContent->create_time
 	
-	// [添加]语音相关
-	private boolean voicePlaying;
+	// [添加]语音相关，播放状态
+	private boolean isPlaying;
 	
 	// 是否会话第一句话(与Adapter是否显示日期相关)
 	private boolean isSessionStart;
@@ -110,12 +110,12 @@ public class ChatRecyclerBean {
 		this.isSelected = isSelected;
 	}
 
-	public boolean isVoicePlaying() {
-		return voicePlaying;
+	public boolean isPlaying() {
+		return isPlaying;
 	}
 
-	public void setVoicePlaying(boolean voicePlaying) {
-		this.voicePlaying = voicePlaying;
+	public void setPlaying(boolean playing) {
+		this.isPlaying = playing;
 	}
 
 }

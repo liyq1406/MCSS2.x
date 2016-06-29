@@ -12,6 +12,7 @@ import com.v5kf.client.lib.entity.V5LocationMessage;
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5MusicMessage;
 import com.v5kf.client.lib.entity.V5TextMessage;
+import com.v5kf.client.lib.entity.V5VideoMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
 
 
@@ -78,6 +79,11 @@ public class V5MessageManager {
 			
 		case V5MessageDefine.MSG_TYPE_VOICE:
 			message = new V5VoiceMessage(jsonMsg);
+			break;
+			
+		case V5MessageDefine.MSG_TYPE_SHORT_VIDEO:
+		case V5MessageDefine.MSG_TYPE_VIDEO:
+			message = new V5VideoMessage(jsonMsg);
 			break;
 		
 		case V5MessageDefine.MSG_TYPE_MUSIC:
@@ -157,6 +163,16 @@ public class V5MessageManager {
 	 */
 	public static V5VoiceMessage obtainVoiceMessage(String filePath) {
 		V5VoiceMessage message = new V5VoiceMessage(filePath);
+		return message;
+	}
+
+	/**
+	 * 发送本地视频，提供视频路径
+	 * @param filePath
+	 * @return
+	 */
+	public static V5VideoMessage obtainVideoMessage(String filePath) {
+		V5VideoMessage message = new V5VideoMessage(filePath);
 		return message;
 	}
 	

@@ -68,10 +68,7 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 		}
 		
 		if (null != c_id) { // CSTM_ALIVE_WAIT
-			mCustomer = mAppInfo.getCustomerBean(c_id);
-			if (mCustomer == null) {
-				mCustomer = mAppInfo.getMonitorCustomer(c_id);
-			}
+			mCustomer = mAppInfo.getAliveCustomer(c_id);
 	        if (null == mCustomer) {
 	        	Logger.e(TAG, "Customer(null) not found");
 	        	finish();

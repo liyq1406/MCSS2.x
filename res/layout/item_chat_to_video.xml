@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/id_left_msg_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/chat_list_horizontal_padding"
+    android:paddingRight="@dimen/chat_list_horizontal_padding"
+    android:paddingTop="@dimen/chat_list_vertical_padding"
+    android:paddingBottom="@dimen/chat_list_vertical_padding"
+    android:background="@color/list_chat_item_bg"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/id_chat_msg_date"
+        android:visibility="gone"
+        style="@style/list_item_top_date" />
+    
+	<RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+		<FrameLayout
+			android:id="@+id/id_right_video_layout"
+	        android:baselineAligned="false"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:padding="0dp"
+	        android:layout_alignParentEnd="true"
+			android:layout_alignParentRight="true"
+		    android:layout_marginLeft="@dimen/chat_list_item_content_hr_matgin"
+            android:layout_marginStart="@dimen/chat_list_item_content_hr_matgin" >
+	        
+	        <com.v5kf.mcss.ui.widget.BubbleImageView
+		        android:id="@+id/id_video_bg"
+		    	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:maxWidth="220dp"
+		        android:maxHeight="220dp"
+		        android:minWidth="100dp"
+		        android:minHeight="100dp"
+		        android:adjustViewBounds="true"
+		        android:scaleType="fitCenter"
+		        android:padding="0dp"
+		        android:src="@drawable/img_default_video"
+		        app:bubble_angle="@dimen/v5_bubble_image_radius"
+	           	app:bubble_arrowHeight="@dimen/v5_bubble_arrow_height"
+	           	app:bubble_arrowLocation="right"
+	           	app:bubble_arrowOffset="@dimen/v5_bubble_arrow_offset"
+	           	app:bubble_arrowTop="@dimen/v5_bubble_arrow_top"
+	           	app:bubble_arrowWidth="@dimen/v5_bubble_arrow_width" />
+	        
+	        <ImageView
+	            android:id="@+id/id_video_control_img"
+	            android:layout_width="40dp"
+	            android:layout_height="40dp"
+	            android:layout_gravity="center"
+	            android:src="@drawable/img_music_play"
+	            android:contentDescription="@string/contentDescription" />
+        
+    	</FrameLayout>
+		
+		<FrameLayout
+            android:id="@+id/id_msg_send_progress"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="-50dp"
+            android:layout_marginEnd="-50dp"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_toStartOf="@id/id_right_video_layout"
+			android:layout_toLeftOf="@id/id_right_video_layout" >
+            
+            <ProgressBar
+			    android:id="@+id/id_msg_out_pb"
+			    android:layout_gravity="center_vertical|end"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    style="?android:attr/progressBarStyleSmallInverse"
+			    android:visibility="gone" />
+            
+            <ImageView
+                android:id="@+id/id_msg_fail_iv"
+                android:layout_gravity="center_vertical|end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/v5_btn_redo_refresh_selector"
+                android:visibility="gone"
+                android:contentDescription="@string/contentDescription" />
+            
+        </FrameLayout>
+		
+	</RelativeLayout>
+	        
+</LinearLayout>

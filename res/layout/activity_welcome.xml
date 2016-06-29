@@ -2,42 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#14B7F2"
     android:orientation="vertical" >
     
-    <ImageView 
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/contentDescription"
-        android:src="@drawable/v5_launch_pic" />
+        android:background="#14B7F2"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
     
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-		android:background="@color/welcome_bg"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+		android:background="#14B7F2"
 		android:orientation="horizontal" >
         
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:scaleType="centerCrop"
+	        android:contentDescription="@string/contentDescription"
+	        android:src="@drawable/v5_launch_pic" />
+        
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/id_copyright"
             android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
-            android:weightSum="4"
-            android:orientation="horizontal" >            
+            android:textColor="#008EC2"
+            android:textSize="12sp"
+            android:text="Copyright©2012 - 2016 V5KF.COM All Rights Reserved" />
         
-            <View android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="0dp" />
-            
-	        <ImageView
-	            android:layout_weight="2"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"   
-	            android:layout_gravity="center_horizontal"
-	            android:src="@drawable/v5_launch_text_pic"
-	            android:contentDescription="@string/contentDescription" />
+        <TextView
+            android:id="@+id/id_copyright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:textColor="#008EC2"
+            android:textSize="12sp"
+            android:text="智客网络版权所有" />
         
-        </LinearLayout>
     </RelativeLayout>
-
+    
 </LinearLayout>

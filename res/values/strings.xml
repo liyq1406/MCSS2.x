@@ -144,7 +144,10 @@
     <string name="option_robot_answer">提问机器人</string>
     <string name="option_forward_msg">转发</string>
     <string name="is_in_trust"><Data><![CDATA[<font color=\"#a67f00\">(托管中)</font> ]]></Data></string>
-        
+    <string name="title">标题</string>    
+    <string name="description">描述</string>  
+    <string name="default_voice_lenth">0.0s</string>  
+    
     <!-- Mine Fragment -->
     <string name="nickname">昵称</string>
     <string name="text_from_iface">分组:</string>
@@ -180,7 +183,7 @@
     <string name="visitor_content_empty_tips">您还没有历史会话</string>
     <string name="worker_list_empty_tips">坐席列表为空</string>
     <string name="worker_content_empty_tips">没有获取到坐席信息</string>
-    <string name="material_img_empty_tips">未获取到图片素材</string>
+    <string name="material_empty_tips">素材列表为空</string>
     <string name="monitor_empty_tips">监控列表没有内容</string>
     <string name="monitor_close_tips">监控未开启</string>
     

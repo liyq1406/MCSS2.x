@@ -9,7 +9,7 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>    
     <color name="dark_gray">#7F8891</color>
-    <color name="light_gray">#cacaca</color><!-- #eaeaea -->
+    <color name="light_gray">#eaeaea</color><!-- #cacaca -->
     <color name="transparent">#00000000</color>
     
     <color name="color_edittext_field">#7f7f7f</color>
@@ -43,8 +43,8 @@
     <color name="color_date_text_blue">#00a2e8</color>
     
     <!-- 消息发送按钮 -->
-    <color name="btn_chat_send_normal">#46d142</color>
-    <color name="btn_chat_send_pressed">#45c01a</color>
+    <color name="btn_chat_send_normal">@color/white</color>
+    <color name="btn_chat_send_pressed">#EFEFEF</color>
     
     <!-- 退出登录按钮 -->
     <color name="btn_logout_normal">#EE2C2C</color>
@@ -188,8 +188,9 @@
     <color name="history_date_text">#BABABA</color>
     
     <!-- 图片素材activity -->
-    <color name="meterail_img_bg_normal">#E8E8E8</color>
-    <color name="meterail_img_bg_pressed">#B6B6B6</color>
+    <color name="meterail_img_bg_normal">#FFFFFF</color>
+    <color name="meterail_img_bg_pressed">#E8E8E8</color>
+    <color name="meterail_border_color">#B8B8B8</color>
     
     <!-- 对话内容列表 -->
     <color name="list_item_date_bg">#00000000</color><!-- 会话时间背景色 -->
@@ -216,6 +217,7 @@
     <color name="actionsheet_blue">#037BFF</color>
     <color name="actionsheet_red">#FD4A2E</color>
     <color name="actionsheet_gray">#8F8F8F</color>
+    <color name="actionsheet_divider">@color/alertdialog_line</color><!-- #07F0F0F0 -->
     
     <!-- main主题颜色 -->
     <!-- main_color_primary：主体颜色、标题栏颜色 -->
@@ -286,4 +288,7 @@
     <!-- 侧滑栏item选中背景 -->
     <color name="menu_bg_focus">#ECEDF1</color>
     
+    <!-- Material tap -->
+    <color name="tab_top_text_1">#aaa</color>
+    <color name="tab_top_text_2">#000</color>
 </resources>

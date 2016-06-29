@@ -8,7 +8,7 @@
 
     <!-- 对话框属性值 -->
     <dimen name="dialog_border_width">0.0dp</dimen>
-    <dimen name="alertsheet_border_width">@dimen/base_line_width_s</dimen>
+    <dimen name="alertsheet_border_width">0px</dimen>
     <dimen name="corner_angle">3dp</dimen>
     
     <dimen name="dialog_width">283dp</dimen>
@@ -58,11 +58,12 @@
     <dimen name="chat_list_iface_img_width">18dip</dimen>
 
     <!-- Chat聊天页面 -->
+    <dimen name="chat_list_item_content_hr_matgin">50dip</dimen><!-- 大屏手机平板此值需设大 -->
+    <dimen name="chat_list_article_content_hr_matgin">5dip</dimen><!-- 大屏手机平板此值需设大 -->
     <dimen name="chat_list_vertical_padding">7dip</dimen>
     <dimen name="chat_list_horizontal_padding">8dip</dimen>
     <dimen name="chat_list_item_content_h_matgin">50dip</dimen>
     <dimen name="chat_list_item_search_width">25dip</dimen>
-    <dimen name="chat_list_item_content_hr_matgin">50dip</dimen>
     <dimen name="chat_bottom_edit_layout_v_margin">0dip</dimen>
     <dimen name="chat_bottom_edit_layout_h_padding">6dip</dimen>
     <dimen name="chat_bottom_edit_layout_min_height">48dip</dimen>
@@ -159,4 +160,7 @@
     <dimen name="progress_size_s">26dp</dimen>
     <dimen name="progress_size_m">52dp</dimen>
     <dimen name="progress_size_l">72dp</dimen>
+    
+    <dimen name="material_tab_top_fontsize">15sp</dimen>
+    <dimen name="material_grid_item_margin">2dp</dimen>
 </resources>

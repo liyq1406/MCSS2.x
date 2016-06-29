@@ -44,41 +44,16 @@
         android:layout_height="0dp"
         android:layout_weight="1" >
 	    
-	    <android.support.v4.widget.SwipeRefreshLayout
-	        android:id="@+id/swipe_refresh_layout"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" >
-	    
-		    <android.support.v7.widget.RecyclerView
-		        android:id="@+id/id_recycle_view"
-		        android:visibility="visible"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:background="@color/base_list_content_bg" />
-		
-	    </android.support.v4.widget.SwipeRefreshLayout>
-	    
-	    <LinearLayout
-	        android:id="@+id/layout_container_empty"
-	        android:visibility="gone"
-	        android:background="@color/content_empty_tips_bg_color"
-	        android:gravity="center"
+	    <com.chyrain.irecyclerview.RefreshRecyclerView
+	        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+	        android:id="@+id/id_irecycler_waiting"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
-	        android:layout_centerInParent="true"
-	        android:orientation="vertical" >        
-	        
-	        <TextView
-	            android:id="@+id/layout_container_tv"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:drawableTop="@drawable/v5kf"
-	            android:drawablePadding="@dimen/tips_img_margin"
-	            android:textSize="@dimen/content_empty_tips_text_size"
-	            android:textColor="@color/content_empty_tips_text_color"
-	            android:text="@string/waiting_content_empty_tips" />
-	        
-	    </LinearLayout>
+	        android:background="@color/base_list_content_bg"
+	        android:scrollbars="vertical"
+		    android:scrollbarStyle="outsideOverlay"
+	        ptr:ptrEmptyLayout="@layout/layout_emptyview"
+	        ptr:ptrMode="pullFromStart" />
 	    
 	    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
 		    xmlns:android="http://schemas.android.com/apk/res/android"

@@ -11,6 +11,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.v5kf.mcss.R;
@@ -29,6 +30,7 @@ public class WebViewActivity extends BaseToolbarActivity {
 	
 	// 标题栏弹窗
 	private TitlePopup mTitlePopup;
+	private ImageView mMoreIv;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class WebViewActivity extends BaseToolbarActivity {
 		mWebView = (WebView) findViewById(R.id.id_web_view);
 		mLoadingLl = (LinearLayout) findViewById(R.id.layout_container_empty);
 		mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+		mMoreIv = (ImageView) findViewById(R.id.more_iv);
 	}
 
 	private void initView() {
@@ -128,6 +131,14 @@ public class WebViewActivity extends BaseToolbarActivity {
 			}
 		});
 		mWebView.loadUrl(mUrl);
+		
+		mMoreIv.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mTitlePopup.show(v);
+			}
+		});
 	}
 
 	private void initTitleBar() {
@@ -136,7 +147,7 @@ public class WebViewActivity extends BaseToolbarActivity {
 			mTitleId = R.string.app_name;
 		}
 		initTopBarForLeftBack(mTitleId);
-		// TODO toolbar右侧按钮
+		// toolbar右侧按钮
 //		initTopBarForLeftImageAndRightImage(
 //				mTitleId, 
 //				R.drawable.v5_baritem_back, 

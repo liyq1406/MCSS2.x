@@ -20,6 +20,7 @@ public class EventTag {
 	public static final String ETAG_SERVING_CSTM_CHANGE = "serving_customer_change_tag"; // 服务中列表
 	public static final String ETAG_WAITING_CSTM_CHANGE = "waiting_customer_change_tag"; // 排队列表
 	public static final String ETAG_VISITORS_CHANGE = "visitors_change_tag"; // 访客列表
+	public static final String ETAG_VISITORS_IN = "visitors_IN_tag"; // 访客列表增加
 	public static final String ETAG_ARCH_WORKER_CHANGE = "arch_worker_change_tag"; // 坐席列表
 	public static final String ETAG_PICK_CSTM_ERROR = "pick_customer_error_tag"; // 主动接入失败
 	public static final String ETAG_PICK_CSTM_OK = "pick_customer_ok_tag"; // 主动接入失败

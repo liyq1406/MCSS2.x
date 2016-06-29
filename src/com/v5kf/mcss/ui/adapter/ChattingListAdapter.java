@@ -1,6 +1,5 @@
 package com.v5kf.mcss.ui.adapter;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,6 +32,8 @@ import com.v5kf.client.lib.entity.V5ArticlesMessage;
 import com.v5kf.client.lib.entity.V5ImageMessage;
 import com.v5kf.client.lib.entity.V5LocationMessage;
 import com.v5kf.client.lib.entity.V5Message;
+import com.v5kf.client.lib.entity.V5MusicMessage;
+import com.v5kf.client.lib.entity.V5VideoMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
 import com.v5kf.client.ui.emojicon.EmojiconTextView;
 import com.v5kf.mcss.R;
@@ -75,7 +76,11 @@ public class ChattingListAdapter extends BaseAdapter {
 	private static final int TYPE_IMG_R = 7;
 	private static final int TYPE_VOICE_L = 8;
 	private static final int TYPE_VOICE_R = 9;	
-	public static final int TYPE_TIPS = 10;
+	public static final int TYPE_TIPS = 10; // 中间位置的提示性消息
+	private static final int TYPE_VIDEO_L = 11;
+	private static final int TYPE_VIDEO_R = 12;
+	private static final int TYPE_MUSIC_L = 13;
+	private static final int TYPE_MUSIC_R = 14;
 	
 	private LayoutInflater mInflater;
 	private List<ChatRecyclerBean> mRecycleBeans;
@@ -114,7 +119,7 @@ public class ChattingListAdapter extends BaseAdapter {
 	
 	@Override
 	public int getViewTypeCount() {
-		return 11;
+		return 15;
 	}
 	
 	@Override
@@ -157,6 +162,25 @@ public class ChattingListAdapter extends BaseAdapter {
     		} else if (msgDir == QAODefine.MSG_DIR_TO_CUSTOMER ||
     				msgDir == QAODefine.MSG_DIR_FROM_ROBOT) {
     			return TYPE_VOICE_R;
+    		}
+    	} else if (msgType == QAODefine.MSG_TYPE_VIDEO ||
+    			msgType == QAODefine.MSG_TYPE_SHORT_VIDEO) {
+    		if (msgDir == QAODefine.MSG_DIR_TO_WORKER || 
+    				msgDir == QAODefine.MSG_DIR_FROM_WAITING ||
+    				msgDir == QAODefine.MSG_DIR_R2WM) {
+    			return TYPE_VIDEO_L;
+    		} else if (msgDir == QAODefine.MSG_DIR_TO_CUSTOMER ||
+    				msgDir == QAODefine.MSG_DIR_FROM_ROBOT) {
+    			return TYPE_VIDEO_R;
+    		}
+    	} else if (msgType == QAODefine.MSG_TYPE_MUSIC) {
+    		if (msgDir == QAODefine.MSG_DIR_TO_WORKER || 
+    				msgDir == QAODefine.MSG_DIR_FROM_WAITING ||
+    				msgDir == QAODefine.MSG_DIR_R2WM) {
+    			return TYPE_MUSIC_L;
+    		} else if (msgDir == QAODefine.MSG_DIR_TO_CUSTOMER ||
+    				msgDir == QAODefine.MSG_DIR_FROM_ROBOT) {
+    			return TYPE_MUSIC_R;
     		}
     	} else if (msgType == QAODefine.MSG_TYPE_WXCS ||
     			msgType == QAODefine.MSG_TYPE_CONTROL) {
@@ -226,6 +250,26 @@ public class ChattingListAdapter extends BaseAdapter {
 
             case TYPE_VOICE_R:
             	convertView = mInflater.inflate(R.layout.item_chat_to_voice, parent, false);
+            	holder = new ViewHolder(viewType, convertView);
+            	break;
+            	
+            case TYPE_VIDEO_L:
+            	convertView = mInflater.inflate(R.layout.item_chat_from_video, parent, false);
+            	holder = new ViewHolder(viewType, convertView);
+            	break;
+            	
+            case TYPE_VIDEO_R:
+            	convertView = mInflater.inflate(R.layout.item_chat_to_video, parent, false);
+            	holder = new ViewHolder(viewType, convertView);
+            	break;
+
+            case TYPE_MUSIC_L:
+            	convertView = mInflater.inflate(R.layout.item_chat_from_music, parent, false);
+            	holder = new ViewHolder(viewType, convertView);
+            	break;
+            	
+            case TYPE_MUSIC_R:
+            	convertView = mInflater.inflate(R.layout.item_chat_to_music, parent, false);
             	holder = new ViewHolder(viewType, convertView);
             	break;
             	
@@ -331,18 +375,19 @@ public class ChattingListAdapter extends BaseAdapter {
 			Logger.d(TAG, "list load Voice ----- duration:" + voiceMessage.getDuration());
         	holder.mVoiceSecondTv.setText(String.format("%.1f″", voiceMessage.getDuration()/1000.0f));
         	
-        	// 背景
-			if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_WORKER || 
-					chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING ||
-					chatMessage.getDir() == QAODefine.MSG_DIR_R2WM) {
-				holder.mVoiceLayout.setBackgroundResource(R.drawable.list_from_customer_bg);
-			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_FROM_ROBOT) {
-				holder.mVoiceLayout.setBackgroundResource(R.drawable.list_to_robot_bg);
-			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_CUSTOMER) {
-				holder.mVoiceLayout.setBackgroundResource(R.drawable.list_to_worker_bg);
-			}
+//        	// 背景
+//			if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_WORKER || 
+//					chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING ||
+//					chatMessage.getDir() == QAODefine.MSG_DIR_R2WM) {
+//				holder.mBgLayout.setBackgroundResource(R.drawable.list_from_customer_bg);
+//			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_FROM_ROBOT) {
+//				holder.mBgLayout.setBackgroundResource(R.drawable.list_to_robot_bg);
+//			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_CUSTOMER) {
+//				holder.mBgLayout.setBackgroundResource(R.drawable.list_to_worker_bg);
+//			}
+        	
 			// 语音状态
-        	if (chatMessage.isVoicePlaying()) {
+        	if (chatMessage.isPlaying()) {
         		holder.updateVoiceStartPlayingState();
         	} else {
         		holder.updateVoiceStopPlayingState();
@@ -378,8 +423,8 @@ public class ChattingListAdapter extends BaseAdapter {
 //						msg.setState(V5Message.STATE_ARRIVED);
 //						sendStateChange(holder, chatMessage);
 //					}
-					((V5VoiceMessage)msg).setFilePath(media.getLocalPath());
-					((V5VoiceMessage)msg).setDuration(media.getDuration());
+					//((V5VoiceMessage)msg).setFilePath(media.getLocalPath());
+					//((V5VoiceMessage)msg).setDuration(media.getDuration());
 					Logger.d(TAG, "list load Voice onSuccess ----- duration:" + voiceMessage.getDuration());
 					((ViewHolder)obj).mVoiceSecondTv.setText(String.format("%.1f″", voiceMessage.getDuration()/1000.0f));
 				}
@@ -404,6 +449,122 @@ public class ChattingListAdapter extends BaseAdapter {
 		}
 			break;
 		
+		case TYPE_VIDEO_L:
+		case TYPE_VIDEO_R: {
+			V5VideoMessage videoMessage = (V5VideoMessage)chatMessage.getMessage();
+			if (videoMessage.getCoverFrame() != null) {
+				holder.mVideoBgIv.setImageBitmap(videoMessage.getCoverFrame());
+			}
+			
+			// 播放状态
+        	if (chatMessage.isPlaying()) {
+        		holder.updateVideoStartPlayingState();
+        	} else {
+        		holder.updateVideoStopPlayingState();
+        	}
+			if (videoMessage.getFilePath() != null && FileUtil.isFileExists(videoMessage.getFilePath())) { // 已加载则不需要loadMedia
+				Logger.d(TAG, "---Video 已加载---");
+				break;
+			} else {
+				Logger.d(TAG, "---Video 首次加载---");
+			}
+			
+			// 加载语音
+        	String url = videoMessage.getUrl();
+        	if (TextUtils.isEmpty(url)) {
+        		if (TextUtils.isEmpty(videoMessage.getMessage_id()) && videoMessage.getFilePath() != null) {
+        			url = videoMessage.getFilePath();
+        		} else {
+        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, videoMessage.getMessage_id());
+        			videoMessage.setUrl(url);
+        		}
+        	}
+        	Logger.d(TAG, "Video url:" + url + " sendState:" + videoMessage.getState());
+        	MediaLoader mediaLoader = new MediaLoader(mActivity, holder, new MediaLoaderListener() {
+				
+				@Override
+				public void onSuccess(V5Message msg, Object obj, MediaCache media) {
+					//((V5VideoMessage)msg).setFilePath(media.getLocalPath());
+					Logger.d(TAG, "list load Video onSuccess ----- ");
+					if (media.getCoverFrame() != null) {
+						((ViewHolder)obj).mVideoBgIv.setImageBitmap(media.getCoverFrame());
+					}
+				}
+				
+				@Override
+				public void onFailure(final MediaLoader mediaLoader, final V5Message msg, Object obj) {
+					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
+							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+						mActivity.getHandler().postDelayed(new Runnable() {
+							public void run() {
+								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
+							}
+						}, 500); // 0.5s后重试
+					}
+				}
+			});
+        	mediaLoader.loadMedia(url, videoMessage, null);
+		}
+			break;
+			
+		case TYPE_MUSIC_L:
+		case TYPE_MUSIC_R:
+			V5MusicMessage musicMessage = (V5MusicMessage)chatMessage.getMessage();
+			if (!TextUtils.isEmpty(musicMessage.getTitle()) || !TextUtils.isEmpty(musicMessage.getTitle())) {
+				holder.mMusicContentLayout.setVisibility(View.VISIBLE);
+				holder.mMusicTitle.setText(musicMessage.getTitle());
+				holder.mMusicDescription.setText(musicMessage.getDescription());
+			} else {
+				holder.mMusicContentLayout.setVisibility(View.GONE);
+			}
+			
+			// 语音状态
+        	if (chatMessage.isPlaying()) {
+        		holder.updateMusicStartPlayingState();
+        	} else {
+        		holder.updateMusicStopPlayingState();
+        	}
+			if (musicMessage.getFilePath() != null && FileUtil.isFileExists(musicMessage.getFilePath())) { // 已加载则不需要loadMedia
+				Logger.d(TAG, "---Music 已加载---");
+				break;
+			} else {
+				Logger.d(TAG, "---Music 首次加载---");
+			}
+			
+			// 加载语音
+        	String url = musicMessage.getMusic_url();
+        	if (TextUtils.isEmpty(url)) {
+        		if (TextUtils.isEmpty(musicMessage.getMessage_id()) && musicMessage.getFilePath() != null) {
+        			url = musicMessage.getFilePath();
+        		} else {
+        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, musicMessage.getMessage_id());
+        			musicMessage.setMusic_url(url);
+        		}
+        	}
+        	Logger.d(TAG, "Music url:" + url + " sendState:" + musicMessage.getState());
+        	MediaLoader mediaLoader = new MediaLoader(mActivity, holder, new MediaLoaderListener() {
+				
+				@Override
+				public void onSuccess(V5Message msg, Object obj, MediaCache media) {
+					//((V5MusicMessage)msg).setFilePath(media.getLocalPath());
+					Logger.d(TAG, "list load Voice onSuccess ----- ");
+				}
+				
+				@Override
+				public void onFailure(final MediaLoader mediaLoader, final V5Message msg, Object obj) {
+					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
+							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+						mActivity.getHandler().postDelayed(new Runnable() {
+							public void run() {
+								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
+							}
+						}, 500); // 0.5s后重试
+					}
+				}
+			});
+        	mediaLoader.loadMedia(url, musicMessage, null);
+			break;
+			
 		case TYPE_TIPS: {
 			holder.mTips.setText(chatMessage.getDefaultContent(mActivity));
 			break;
@@ -416,24 +577,39 @@ public class ChattingListAdapter extends BaseAdapter {
 			holder.mMsg.setText(text);
 			holder.mMsg.setMovementMethod(LinkMovementMethod.getInstance());
 			
-			if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_WORKER ||
-					chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING ||
-					chatMessage.getDir() == QAODefine.MSG_DIR_R2WM) {
-				holder.mMsg.setBackgroundResource(R.drawable.list_from_customer_bg);
-//				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_photo_default_cstm);
-//	        	imgLoader.DisplayImage(mActivity.getCustomerPhoto(), holder.mPic);
-			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_FROM_ROBOT) {
-//				holder.mPic.setImageResource(R.drawable.ic_launcher);
-				holder.mMsg.setBackgroundResource(R.drawable.list_to_robot_bg);
-			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_CUSTOMER) {
-				holder.mMsg.setBackgroundResource(R.drawable.list_to_worker_bg);
-//				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5kf);
-//	        	imgLoader.DisplayImage(mActivity.getWorkerPhoto(), holder.mPic);
-			}
+//			// 背景
+//			if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_WORKER ||
+//					chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING ||
+//					chatMessage.getDir() == QAODefine.MSG_DIR_R2WM) {
+//				holder.mMsg.setBackgroundResource(R.drawable.list_from_customer_bg);
+////				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_photo_default_cstm);
+////	        	imgLoader.DisplayImage(mActivity.getCustomerPhoto(), holder.mPic);
+//			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_FROM_ROBOT) {
+////				holder.mPic.setImageResource(R.drawable.ic_launcher);
+//				holder.mMsg.setBackgroundResource(R.drawable.list_to_robot_bg);
+//			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_CUSTOMER) {
+//				holder.mMsg.setBackgroundResource(R.drawable.list_to_worker_bg);
+////				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5kf);
+////	        	imgLoader.DisplayImage(mActivity.getWorkerPhoto(), holder.mPic);
+//			}
 		}
 		break;
         }
         
+        // 背景
+ 		if (holder.mBgLayout != null) {
+ 			if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_WORKER || 
+ 					chatMessage.getDir() == QAODefine.MSG_DIR_FROM_WAITING ||
+ 					chatMessage.getDir() == QAODefine.MSG_DIR_R2WM) {
+ 				holder.mBgLayout.setBackgroundResource(R.drawable.list_from_customer_bg);
+ 			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_FROM_ROBOT) {
+ 				holder.mBgLayout.setBackgroundResource(R.drawable.list_to_robot_bg);
+ 			} else if (chatMessage.getDir() == QAODefine.MSG_DIR_TO_CUSTOMER) {
+ 				holder.mBgLayout.setBackgroundResource(R.drawable.list_to_worker_bg);
+ 			}
+ 		}
+        
+ 		// 发送状态
         sendStateChange(holder, chatMessage);
 		if (holder.mSendFailedIv != null && holder.mSendingPb != null && 
 				chatMessage.getMessage().getDirection() == QAODefine.MSG_DIR_TO_CUSTOMER) {
@@ -480,6 +656,7 @@ public class ChattingListAdapter extends BaseAdapter {
 //		public CircleImageView mPic;
         public TextView mDate;
         public EmojiconTextView mMsg;
+        public View mBgLayout;
         
         /* 单图文news */
         public TextView mNewsTitle;
@@ -498,37 +675,46 @@ public class ChattingListAdapter extends BaseAdapter {
         // 共用mMapIv
         
         /* 语音 */
-        public View mVoiceLayout;
         public ImageView mVoiceIv;
         public TextView mVoiceSecondTv;
         public AnimationDrawable mVoiceAnimDrawable;
+        
+        /* 视频 */
+        public ImageView mVideoControlIv; // 播放按钮
+        public ImageView mVideoBgIv; // 视频背景
+        
+        /* 音乐 */
+        public ImageView mMusicControlIv;
+        public TextView mMusicTitle;
+        public TextView mMusicDescription;
+        public ViewGroup mMusicContentLayout;
         
         /* Tips */
         public TextView mTips;
 
         public ViewHolder(int viewType, View itemView) {
         	this.mViewType = viewType;
+        	mDate = (TextView) itemView.findViewById(R.id.id_chat_msg_date);
             switch (viewType) {
             case TYPE_LEFT_TEXT:
 //            	mPic = (CircleImageView) itemView.findViewById(R.id.chat_item_left_img);
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mMsg = (EmojiconTextView) itemView.findViewById(R.id.id_from_msg_text);
-                mMsg.setOnClickListener(this);
+            	mBgLayout = mMsg;
+            	mBgLayout.setOnClickListener(this);
                 mMsg.setOnLongClickListener(this);
             	break;
             	
             case TYPE_RIGHT_TEXT:
 //            	mPic = (CircleImageView) itemView.findViewById(R.id.chat_item_right_img);
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mMsg = (EmojiconTextView) itemView.findViewById(R.id.id_to_msg_text);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
-                mMsg.setOnClickListener(this);
+            	mBgLayout = mMsg;
+            	mBgLayout.setOnClickListener(this);
                 mMsg.setOnLongClickListener(this);
             	break;
             	
             case TYPE_SINGLE_NEWS:
-            	mDate = (TextView) itemView.findViewById(R.id.id_news_msg_date);
             	mNewsPic = (ImageView) itemView.findViewById(R.id.chat_item_news_img);
             	mNewsTitle = (TextView) itemView.findViewById(R.id.id_news_title_inner_text);
             	mNewsContent = (TextView) itemView.findViewById(R.id.id_news_desc_text);
@@ -536,7 +722,6 @@ public class ChattingListAdapter extends BaseAdapter {
             	break;
             	
             case TYPE_NEWS:
-            	mDate = (TextView) itemView.findViewById(R.id.id_news_msg_date);
             	mNewsListLayout = (ListLinearLayout) itemView.findViewById(R.id.id_news_layout);
             	mNewsListLayout.setOnListLayoutClickListener(new OnListLayoutClickListener() {
 					
@@ -553,7 +738,6 @@ public class ChattingListAdapter extends BaseAdapter {
             	
             case TYPE_LOCATION_R:
 //            	mPic = (CircleImageView) itemView.findViewById(R.id.chat_item_right_img);
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mMapIv = (ImageView) itemView.findViewById(R.id.ic_map_img_iv);
             	mLbsDescTv = (TextView) itemView.findViewById(R.id.id_map_address_text);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
@@ -564,7 +748,6 @@ public class ChattingListAdapter extends BaseAdapter {
             	
             case TYPE_LOCATION_L:
 //            	mPic = (CircleImageView) itemView.findViewById(R.id.chat_item_left_img);
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mMapIv = (ImageView) itemView.findViewById(R.id.ic_map_img_iv);
             	mLbsDescTv = (TextView) itemView.findViewById(R.id.id_map_address_text);
             	mMapIv.setOnClickListener(this);
@@ -572,14 +755,12 @@ public class ChattingListAdapter extends BaseAdapter {
             	break;
             	
             case TYPE_IMG_L:
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mMapIv = (ImageView) itemView.findViewById(R.id.ic_type_img_iv);
             	mMapIv.setOnClickListener(this);
             	mMapIv.setOnLongClickListener(this);
             	break;
 
             case TYPE_IMG_R:
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mMapIv = (ImageView) itemView.findViewById(R.id.ic_type_img_iv);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
@@ -588,31 +769,54 @@ public class ChattingListAdapter extends BaseAdapter {
             	break;
             	
             case TYPE_VOICE_L:
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
-            	mVoiceLayout = (View) itemView.findViewById(R.id.id_left_voice_layout);
+            	mBgLayout = (View) itemView.findViewById(R.id.id_left_voice_layout);
             	mVoiceIv = (ImageView) itemView.findViewById(R.id.id_from_voice_iv);
             	mVoiceSecondTv = (TextView) itemView.findViewById(R.id.id_from_voice_tv);
-            	mVoiceLayout.setOnClickListener(this);
+            	mBgLayout.setOnClickListener(this);
             	break;
             	
             case TYPE_VOICE_R:
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
-            	mVoiceLayout = (View) itemView.findViewById(R.id.id_right_voice_layout);
+            	mBgLayout = (View) itemView.findViewById(R.id.id_right_voice_layout);
             	mVoiceIv = (ImageView) itemView.findViewById(R.id.id_to_voice_iv);
             	mVoiceSecondTv = (TextView) itemView.findViewById(R.id.id_to_voice_tv);
             	
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
-            	mVoiceLayout.setOnClickListener(this);
+            	mBgLayout.setOnClickListener(this);
+            	break;
+            	
+            case TYPE_VIDEO_L:
+            case TYPE_VIDEO_R:
+            	mVideoBgIv = (ImageView) itemView.findViewById(R.id.id_video_bg);
+            	mVideoControlIv = (ImageView) itemView.findViewById(R.id.id_video_control_img);
+            	mVideoControlIv.setOnClickListener(this);
+            	break;
+            	
+            case TYPE_MUSIC_L:
+            	mMusicContentLayout = (ViewGroup) itemView.findViewById(R.id.id_music_content_layout);
+            	mMusicControlIv = (ImageView) itemView.findViewById(R.id.id_music_control_img);
+            	mMusicTitle = (TextView) itemView.findViewById(R.id.id_music_title);
+            	mMusicDescription = (TextView) itemView.findViewById(R.id.id_music_desc);
+            	mBgLayout = (View) itemView.findViewById(R.id.id_left_music_layout);
+            	mBgLayout.setOnClickListener(this);
+            	mMusicControlIv.setOnClickListener(this);
+            	break;
+            	
+            case TYPE_MUSIC_R:
+            	mMusicContentLayout = (ViewGroup) itemView.findViewById(R.id.id_music_content_layout);
+            	mMusicControlIv = (ImageView) itemView.findViewById(R.id.id_music_control_img);
+            	mMusicTitle = (TextView) itemView.findViewById(R.id.id_music_title);
+            	mMusicDescription = (TextView) itemView.findViewById(R.id.id_music_desc);
+            	mBgLayout = (View) itemView.findViewById(R.id.id_right_music_layout);
+            	mBgLayout.setOnClickListener(this);
+            	mMusicControlIv.setOnClickListener(this);
             	break;
             	
             case TYPE_TIPS:
-            	mDate = (TextView) itemView.findViewById(R.id.id_from_msg_date);
             	mTips = (TextView) itemView.findViewById(R.id.id_msg_tips);
             	break;
             	
             default:
-            	mDate = (TextView) itemView.findViewById(R.id.id_to_msg_date);
             	mMsg = (EmojiconTextView) itemView.findViewById(R.id.id_to_msg_text);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
@@ -691,8 +895,8 @@ public class ChattingListAdapter extends BaseAdapter {
 			case R.id.id_left_voice_layout:
 			case R.id.id_right_voice_layout: // 点击语音
 				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_VOICE) {
-					if (mChatBean.isVoicePlaying()) { // 停止播放
-						stopPlaying();
+					if (mChatBean.isPlaying()) { // 停止播放
+						stopPlayingVoice();
 					} else { // 开始播放
 //						if (mVoiceAnimDrawable != null) {
 //							mVoiceAnimDrawable.stop();
@@ -703,6 +907,33 @@ public class ChattingListAdapter extends BaseAdapter {
 							public void onCompletion(MediaPlayer mp) {
 								Logger.i(TAG, "MediaPlayer - completePlaying");
 								updateVoiceStopPlayingState();
+								mp.release();
+								mp = null;
+								mPlayer = null;
+							}
+						});
+					}
+				}
+				break;
+				
+			case R.id.id_video_control_img: // 点击视频播放
+				
+				break;
+
+			case R.id.id_music_control_img: // 点击音乐播放
+				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_MUSIC) {
+					if (mChatBean.isPlaying()) { // 停止播放
+						stopPlayingMusic();
+					} else { // 开始播放
+//						if (mVoiceAnimDrawable != null) {
+//							mVoiceAnimDrawable.stop();
+//						}
+						startPlaying((V5MusicMessage)mChatBean.getMessage(), new OnCompletionListener() {
+							
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								Logger.i(TAG, "MediaPlayer - completePlaying");
+								updateMusicStopPlayingState();
 								mp.release();
 								mp = null;
 								mPlayer = null;
@@ -902,9 +1133,35 @@ public class ChattingListAdapter extends BaseAdapter {
 			}
 		}
 		
+		public void updateMusicStartPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStartPlayingState position:" + mPosition);
+			mChatBean.setPlaying(true);
+			mMusicControlIv.setImageResource(R.drawable.img_music_stop);
+		}
+
+		public void updateMusicStopPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStopPlayingState position:" + mPosition);
+			mChatBean.setPlaying(false);
+			mMusicControlIv.setImageResource(R.drawable.img_music_play);
+		}
+
+		public void updateVideoStartPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStartPlayingState position:" + mPosition);
+			mChatBean.setPlaying(true);
+			mVideoControlIv.setImageResource(R.drawable.img_music_stop);
+			mVideoControlIv.setVisibility(View.GONE);
+		}
+		
+		public void updateVideoStopPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStopPlayingState position:" + mPosition);
+			mChatBean.setPlaying(false);
+			mVideoControlIv.setImageResource(R.drawable.img_music_play);
+			mVideoControlIv.setVisibility(View.VISIBLE);
+		}
+		
 		public void updateVoiceStartPlayingState() {
 			Logger.i(TAG, "UI - updateVoiceStartPlayingState position:" + mPosition);
-			mChatBean.setVoicePlaying(true);
+			mChatBean.setPlaying(true);
 			mVoiceIv.setBackgroundResource(R.anim.anim_rightwhite_voice);
 			if (mChatBean.getDir() == QAODefine.MSG_DIR_TO_WORKER || 
 					mChatBean.getDir() == QAODefine.MSG_DIR_FROM_WAITING) {
@@ -919,7 +1176,7 @@ public class ChattingListAdapter extends BaseAdapter {
 		
 		public void updateVoiceStopPlayingState() {
 			Logger.i(TAG, "UI - updateVoiceStopPlayingState position:" + mPosition);
-			mChatBean.setVoicePlaying(false);
+			mChatBean.setPlaying(false);
 			if (mVoiceAnimDrawable != null) {
 				mVoiceAnimDrawable.stop();
 				mVoiceAnimDrawable = null;
@@ -959,7 +1216,7 @@ public class ChattingListAdapter extends BaseAdapter {
 				});
 	            mPlayer.setOnCompletionListener(completionListener);
 				updateVoiceStartPlayingState();
-	        } catch (IOException e) {
+	        } catch (Exception e) {
 	            Logger.e(TAG, "MediaPlayer prepare() failed");
 	            mPlayer.release();
 	    		mPlayer = null;
@@ -967,14 +1224,58 @@ public class ChattingListAdapter extends BaseAdapter {
 	        }
 	    }
 	    
-	    private void stopPlaying() {
-	    	Logger.i(TAG, "MediaPlayer - stopPlayer " + mPosition);
+		private void startPlaying(V5MusicMessage musicMessage, OnCompletionListener completionListener) {
+			Logger.i(TAG, "MediaPlayer - startPlaying " + mPosition);
+			if (mPlayer != null) {
+				if (mPlayer.isPlaying()) {
+					mPlayer.stop();
+				}
+				mPlayer.release();
+				mPlayer = null;
+				Logger.i(TAG, "MediaPlayer - stopPlaying all others");
+				resetOtherItemsExcept(mChatBean);
+			}
+			mPlayer = new MediaPlayer();
+			try {
+				mPlayer.setDataSource(musicMessage.getFilePath());
+				mPlayer.prepare();
+				mPlayer.start();
+				mPlayer.setOnErrorListener(new OnErrorListener() {
+					
+					@Override
+					public boolean onError(MediaPlayer mp, int what, int extra) {
+						Logger.e(TAG, "MediaPlayer - onError");
+						return false;
+					}
+				});
+				mPlayer.setOnCompletionListener(completionListener);
+				updateMusicStartPlayingState();
+			} catch (Exception e) {
+				Logger.e(TAG, "MediaPlayer prepare() failed");
+				mPlayer.release();
+				mPlayer = null;
+				updateMusicStopPlayingState(); // UI
+			}
+		}
+	    
+	    private void stopPlayingVoice() {
+	    	Logger.i(TAG, "MediaPlayer - stopPlayingVoice " + mPosition);
 	    	if (mPlayer != null) {
 	    		mPlayer.stop();
 	        	mPlayer.release();
 	        	mPlayer = null;
 	    	}
 	        updateVoiceStopPlayingState();
+	    }
+
+	    private void stopPlayingMusic() {
+	    	Logger.i(TAG, "MediaPlayer - stopPlayingMusic " + mPosition);
+	    	if (mPlayer != null) {
+	    		mPlayer.stop();
+	    		mPlayer.release();
+	    		mPlayer = null;
+	    	}
+	    	updateMusicStopPlayingState();
 	    }
 
 		public void setPosition(int mPosition) {
@@ -985,9 +1286,9 @@ public class ChattingListAdapter extends BaseAdapter {
     private void resetOtherItemsExcept(ChatRecyclerBean chatBean) {
     	Logger.d(TAG, "resetOtherItems");
 		for (ChatRecyclerBean bean : this.mRecycleBeans) {
-			bean.setVoicePlaying(false);
+			bean.setPlaying(false);
 		}
-		chatBean.setVoicePlaying(true);
+		chatBean.setPlaying(true);
 		notifyDataSetChanged();
 	}
     

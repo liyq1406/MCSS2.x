@@ -2,6 +2,7 @@ package com.v5kf.mcss.ui.adapter;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +23,10 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
+import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
+import com.v5kf.mcss.ui.fragment.md2x.MaterialBaseFragment;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
+import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
@@ -43,13 +47,15 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 	protected static final String TAG = "MaterialRecyclerAdapter";
 	private LayoutInflater mInflater;
 	private List<V5Message> mRecyclerBeans;
+	private MaterialBaseFragment mFragment;
 	private ActivityBase mActivity;
 	
-    public MaterialRecyclerAdapter(ActivityBase activity, List<V5Message> recyclerBeans) {
+    public MaterialRecyclerAdapter(MaterialBaseFragment fragment, ActivityBase activity, List<V5Message> recyclerBeans) {
         super();
         this.mRecyclerBeans = recyclerBeans;
+        this.mFragment = fragment;
         this.mActivity = activity;
-        mInflater = LayoutInflater.from(activity);
+        mInflater = LayoutInflater.from(mFragment.getActivity());
     }
 
     @Override
@@ -152,7 +158,7 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
     
     class RobotViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-    	private static final String TAG = "RobotRecyclerAdapter.RobotViewHolder";
+    	private static final String TAG = "MaterialRecyclerAdapter.RobotViewHolder";
     	
     	private V5Message mBean;
         public Button mSendBtn;
@@ -229,10 +235,21 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 				
 				break;
 				
+			case R.id.id_news_layout:
+				if (getItemViewType() == TYPE_SINGLE_NEWS) {
+					onSingleNewsClick(((V5ArticlesMessage)mBean).getArticles().get(0).getUrl());
+				}
+				break;
+				
 			case R.id.id_material_img: // 查看图片
 				mActivity.gotoImageActivity(((V5ImageMessage)mBean).getDefaultPicUrl());
 				break;
 			}
+		}
+		
+		private void onSingleNewsClick(String url) {
+			Intent i = IntentUtil.getStartWebViewIntent(mActivity, WebViewActivity.class, url, 0);
+			mActivity.gotoActivity(i);
 		}
 
 		private void onSendClick() {
@@ -241,7 +258,7 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 			Bundle bundle = new Bundle();
 			bundle.putInt(BaseChatActivity.MSG_KEY_POSITION, getAdapterPosition());
 			msg.setData(bundle);
-			mActivity.sendHandlerMessage(msg);
+			mFragment.sendHandlerMessage(msg);
 		}
 		
 		public V5Message getBean() {
@@ -252,5 +269,5 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 			this.mBean = bean;
 		}
 
-    }	
+    }
 }

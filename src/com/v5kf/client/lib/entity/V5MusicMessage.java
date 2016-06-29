@@ -17,6 +17,8 @@ public class V5MusicMessage extends V5Message {
 	private String description;
 	private String thumb_id;
 	
+	private String filePath; // 本地路径
+	
 	public V5MusicMessage() {
 		// TODO Auto-generated constructor stub
 		super();
@@ -91,6 +93,14 @@ public class V5MusicMessage extends V5Message {
 
 	public void setThumb_id(String thumb_id) {
 		this.thumb_id = thumb_id;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 

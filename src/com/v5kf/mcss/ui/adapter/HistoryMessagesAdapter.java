@@ -152,7 +152,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 			Logger.d(TAG, "list load Voice ----- duration:" + voiceMessage.getDuration());
         	holder.mVoiceSecondTv.setText(String.format("%.1f″", voiceMessage.getDuration()/1000.0f));
         	// 语音状态
-        	if (chatBean.isVoicePlaying()) {
+        	if (chatBean.isPlaying()) {
         		holder.updateVoiceStartPlayingState();
         	} else {
         		holder.updateVoiceStopPlayingState();
@@ -179,8 +179,8 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 				
 				@Override
 				public void onSuccess(V5Message msg, Object obj, MediaCache media) {
-					((V5VoiceMessage)msg).setFilePath(media.getLocalPath());
-					((V5VoiceMessage)msg).setDuration(media.getDuration());
+					//((V5VoiceMessage)msg).setFilePath(media.getLocalPath());
+					//((V5VoiceMessage)msg).setDuration(media.getDuration());
 					msg.setState(V5Message.STATE_ARRIVED);
 					((ViewHolder)obj).mVoiceSecondTv.setText(String.format("%.1f″", media.getDuration()/1000.0f));
 				}
@@ -423,7 +423,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 			case R.id.id_type_voice_layout: // 点击语音
 				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_VOICE) { // 点击语音
 //					resetOtherItems();					
-					if (mChatBean.isVoicePlaying()) { // 停止播放
+					if (mChatBean.isPlaying()) { // 停止播放
 						stopPlaying();
 					} else { // 开始播放
 						if (mVoiceAnimDrawable != null) {
@@ -450,7 +450,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 		
 		public void updateVoiceStartPlayingState() {
 			Logger.i(TAG, "UI - updateVoiceStartPlayingState");
-			mChatBean.setVoicePlaying(true);
+			mChatBean.setPlaying(true);
 			mVoiceIv.setBackgroundResource(R.anim.anim_leftgray_voice);
 			mVoiceAnimDrawable = (AnimationDrawable)mVoiceIv.getBackground();
 			mVoiceAnimDrawable.start();						
@@ -458,7 +458,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 		
 		public void updateVoiceStopPlayingState() {
 			Logger.i(TAG, "UI - updateVoiceStopPlayingState");
-			mChatBean.setVoicePlaying(false);
+			mChatBean.setPlaying(false);
 			if (mVoiceAnimDrawable != null) {
 				mVoiceAnimDrawable.stop();
 				mVoiceAnimDrawable = null;
@@ -550,9 +550,9 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
     private void resetOtherItemsExcept(ChatRecyclerBean chatBean) {
     	Logger.d(TAG, "resetOtherItems");
 		for (ChatRecyclerBean bean : this.mRecycleBeans) {
-			bean.setVoicePlaying(false);
+			bean.setPlaying(false);
 			if (bean == chatBean) {
-				bean.setVoicePlaying(true);
+				bean.setPlaying(true);
 			}
 		}
 		notifyDataSetChanged();

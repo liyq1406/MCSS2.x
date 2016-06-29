@@ -216,6 +216,15 @@ public class AppInfoKeeper {
 		}
 		return mCustomerMap.get(c_id);
 	}
+
+	public CustomerBean getAliveCustomer(String c_id) {
+		if (null == c_id) {
+			Logger.w(TAG, "[getCustomerBean] null key");
+			return null;
+		}
+		CustomerBean cstm = mCustomerMap.get(c_id);
+		return cstm == null ? mMonitorMap.get(c_id) : cstm;
+	}
 	
 	/**
 	 * 获得统计会话未读消息数量(显示于通知栏上的消息)

@@ -67,7 +67,7 @@ public class QAOTicket extends QAOBase {
 	private void parseGetHistoricalCustomer() throws JSONException {
 		if (qao_data.getLong("o_sequence") >= 2147483648L) {
 			// [更新界面][eventbus]
-			postEvent(mAppInfo, EventTag.ETAG_VISITORS_CHANGE);
+			postEvent(Integer.valueOf((int) (qao_data.getLong("o_sequence") - 2147483648L)), EventTag.ETAG_VISITORS_CHANGE);
 			return;
 		}
 		String v_id = qao_data.getString(QAODefine.VISITOR_ID);
@@ -78,6 +78,7 @@ public class QAOTicket extends QAOBase {
 			visitor.setCstmType(CustomerType.CustomerType_Visitor);
 			visitor.initCustomerInfo(qao_data);
 			mAppInfo.addVisitor(visitor);
+			// [修改]不需要立即请求getCustomerInfo，已携带nickname、photo等基本信息
 			/* 不存在visitor则请求visitor_info */
 			List<CustomerVirtualBean> list = DataSupport.where("visitor_id = ?", v_id).find(CustomerVirtualBean.class);
 			Logger.d("QAOTicket", "[litepal] read visitor_id.isEmpty = " + list.isEmpty());
@@ -89,6 +90,11 @@ public class QAOTicket extends QAOBase {
 			visitor.setLastType(CustomerBean.LAST_TYPE_OF_HISTORICAL_CSTM);
 		} else {
 			visitor.initCustomerInfo(qao_data);
+		}
+		if (qao_data.has("last_time")) { // 最新会话结束时间
+			if (visitor.getLast_time() < qao_data.getLong("last_time")) {
+				visitor.setLast_time(qao_data.getLong("last_time"));
+			}
 		}
 	}
 

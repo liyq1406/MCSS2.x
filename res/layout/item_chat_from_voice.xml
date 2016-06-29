@@ -12,7 +12,7 @@
     android:orientation="vertical" >
     
     <TextView
-        android:id="@+id/id_from_msg_date"
+        android:id="@+id/id_chat_msg_date"
         android:visibility="gone"
         style="@style/list_item_top_date" />
     
@@ -42,7 +42,7 @@
             android:layout_centerVertical="true"
             android:textSize="@dimen/v5_chat_list_voice_text_size"
             android:textColor="@color/dark_gray"
-            android:text="0.0s" />
+            android:text="@string/default_voice_lenth" />
         
         <ImageView
 	        android:id="@+id/id_from_voice_iv"
@@ -52,6 +52,7 @@
 	        android:layout_toRightOf="@id/id_from_voice_tv"
 	        android:layout_toEndOf="@id/id_from_voice_tv"
 	        android:layout_marginLeft="8dp"
+	        android:layout_marginStart="8dp"
 	        android:minWidth="140dp"
 	        android:minHeight="140dp"
 	        android:adjustViewBounds="true"

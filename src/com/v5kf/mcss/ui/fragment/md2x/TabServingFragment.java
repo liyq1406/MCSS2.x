@@ -11,10 +11,12 @@ import org.simple.eventbus.ThreadMode;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chyrain.irecyclerview.IRecyclerView;
@@ -35,6 +37,7 @@ import com.v5kf.mcss.ui.adapter.IServingAdapter;
 import com.v5kf.mcss.ui.entity.IServingBean;
 import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.ui.widget.Divider;
+import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 
@@ -71,11 +74,33 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		super.onCreateViewLazy(savedInstanceState);
 		setContentView(R.layout.fragment_md2x_serving);
 
-		Logger.d(TAG, TAG + " 将要创建View " + this);
+		Logger.d(TAG, TAG + " 将要创建View " + this + " savedInstanceState:" + savedInstanceState);
+		if (savedInstanceState != null) {
+			Logger.e(TAG, TAG + " onCreateViewLazy savedInstanceState not null");
+		}
 		initView();
-    	initData();
+		initData();
 //    	checkListEmpty();
+		Logger.d(TAG, TAG + " onCreateViewLazy done ");
 	}
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    	// TODO Auto-generated method stub
+    	//super.onSaveInstanceState(outState);
+    	Logger.d(TAG, TAG + "[onSaveInstanceState] outState:" + outState);
+    }
+    
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+    	Logger.d(TAG, TAG + "[onViewStateRestored] savedInstanceState:" + savedInstanceState);
+    	try {
+    		super.onViewStateRestored(savedInstanceState);
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	savedInstanceState = null;
+    }
 
 	@Override
 	protected void onResumeLazy() {
@@ -171,13 +196,19 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
         /* 空白按钮 */
 		if (mEmptyTipsTv != null) {
 			mEmptyTipsTv.setText(R.string.serving_content_empty_tips);
-//			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
-//				
-//				@Override
-//				public void onClick(View v) {
-//					onRefresh();
-//				}
-//			});
+			mEmptyTipsTv.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					//onRefresh();
+					mIRecycleView.setRefreshing();
+					
+					Logger.i(TAG, "UTC:" + DateUtil.getUTCTime()
+							+ " UTSString:" + DateUtil.getLocalTimeFromUTC(DateUtil.getUTCTime()));
+					Logger.i(TAG, "Date:" + DateUtil.getCurrentLongTime()
+							+ " DateString:" + DateUtil.getCurrentTime());
+				}
+			});
 		}
     }
     
@@ -263,39 +294,39 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 			Logger.w(TAG, "Activity result with no Intent data");
 			return;
 		}
-		if (requestCode == Config.REQUEST_CODE_SERVING_SESSION_FRAGMENT) {
-			String c_id = data.getStringExtra(Config.EXTRA_KEY_C_ID);
-			if (mRecycleAdapter == null) {
-				Logger.e(TAG, "[onActivityResult] mRecycleAdapter is null, activity not create");
-				return;
-			}
-			switch (resultCode) {
-			case Config.RESULT_CODE_CHAT_CONTENT_ADD: { // 消息内容增加且未读->已读
-				int pos = updateRecycleBean(c_id, true, false, true);
-				if (pos >= 0) {
-					mRecycleAdapter.notifyItemRangeChanged(0, pos + 1);
-				}
-				break;
-			} 
-			
-			case Config.RESULT_CODE_CHAT_CONTENT_NOCHANGE: { // 聊天内容未变，仅改变消息未读->已读
-				int pos = updateRecycleBean(c_id, false, false, true);
-				if (pos >= 0) {
-					mRecycleAdapter.notifyItemRangeChanged(0, pos + 1);
-				}
-			}
-			
-			case Config.RESULT_CODE_SWITCH_OK: { // 转接成功
-				
-				break;
-			}
-			
-			case Config.RESULT_CODE_SWITCH_FAIL: { // 转接失败
-				
-				break;
-			}
-			}
-		}
+//		if (requestCode == Config.REQUEST_CODE_SERVING_SESSION_FRAGMENT) {
+//			String c_id = data.getStringExtra(Config.EXTRA_KEY_C_ID);
+//			if (mRecycleAdapter == null) {
+//				Logger.e(TAG, "[onActivityResult] mRecycleAdapter is null, activity not create");
+//				return;
+//			}
+//			switch (resultCode) {
+//			case Config.RESULT_CODE_CHAT_CONTENT_ADD: { // 消息内容增加且未读->已读
+//				int pos = updateRecycleBean(c_id, true, false, true);
+//				if (pos >= 0) {
+//					mRecycleAdapter.notifyItemRangeChanged(0, pos + 1);
+//				}
+//				break;
+//			} 
+//			
+//			case Config.RESULT_CODE_CHAT_CONTENT_NOCHANGE: { // 聊天内容未变，仅改变消息未读->已读
+//				int pos = updateRecycleBean(c_id, false, false, true);
+//				if (pos >= 0) {
+//					mRecycleAdapter.notifyItemRangeChanged(0, pos + 1);
+//				}
+//			}
+//			
+//			case Config.RESULT_CODE_SWITCH_OK: { // 转接成功
+//				
+//				break;
+//			}
+//			
+//			case Config.RESULT_CODE_SWITCH_FAIL: { // 转接失败
+//				
+//				break;
+//			}
+//			}
+//		}
 	}
 	
 	

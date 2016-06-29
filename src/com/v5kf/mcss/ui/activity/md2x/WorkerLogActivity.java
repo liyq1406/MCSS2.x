@@ -50,8 +50,8 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 		mLogList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 		mLogList.addItemDecoration(new RecyclerViewDivider(this, LinearLayoutManager.HORIZONTAL));
 		mLogList.setAdapter(mAdapter);
-//		mLogList.getRefreshableView().setScrollbarFadingEnabled(true);
-		mLogList.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
+		mLogList.getRefreshableView().setScrollbarFadingEnabled(true);
+//		mLogList.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
 		mLogList.setHasPullUpFriction(false); // 没有上拉阻力
 		mLogList.setLoadingMoreWhenLastVisible(true);
     	mLogList.setFooterLayout(new V5RefreshLayout(mApplication, Mode.PULL_FROM_END));

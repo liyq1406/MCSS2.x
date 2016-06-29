@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.v5kf.mcss.R;
+import com.v5kf.mcss.utils.UITools;
 
 public class ActionSheetDialog {
 	private Context context;
@@ -121,6 +122,14 @@ public class ActionSheetDialog {
 			params.height = display.heightPixels / 2;
 			sLayout_content.setLayoutParams(params);
 		}
+		
+		if (showTitle) {
+			View v = new View(context);
+			v.setBackgroundColor(UITools.getColor(R.color.actionsheet_divider));
+			v.setLayoutParams(new LinearLayout.LayoutParams(
+					LayoutParams.MATCH_PARENT, 1));
+			lLayout_content.addView(v);
+		}
 
 		// 循环添加条目
 		for (int i = 1; i <= size; i++) {
@@ -184,6 +193,13 @@ public class ActionSheetDialog {
 			});
 
 			lLayout_content.addView(textView);
+			if (i < size) {
+				View v = new View(context);
+				v.setBackgroundColor(UITools.getColor(R.color.actionsheet_divider));
+				v.setLayoutParams(new LinearLayout.LayoutParams(
+						LayoutParams.MATCH_PARENT, 1));
+				lLayout_content.addView(v);
+			}
 		}
 	}
 

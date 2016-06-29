@@ -143,6 +143,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	private RobotRecyclerAdapter mRobotAdapter;
 	private List<ChatRecyclerBean> mRobotDatas;
 	
+	/* 消息列表 */
 	private List<ChatRecyclerBean> mDatas;
 //	private V5Message mMessage;
 //	private EditText mChatEdit;
@@ -202,7 +203,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
     	super.onStart();
     	
     	// 刷新customer
-    	mCustomer = mAppInfo.getCustomerBean(c_id);
+    	mCustomer = mAppInfo.getAliveCustomer(c_id);
     }
 
     @Override
@@ -419,7 +420,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
     
 	private boolean checkCustomer() {
 		if (mCustomer == null) {
-			mCustomer = mAppInfo.getCustomerBean(c_id);
+			mCustomer = mAppInfo.getAliveCustomer(c_id);
 		}
 		return mCustomer != null;
 	}

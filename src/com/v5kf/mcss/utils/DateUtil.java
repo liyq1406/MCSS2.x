@@ -1,5 +1,6 @@
 package com.v5kf.mcss.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,6 +18,42 @@ public class DateUtil {
 
 	public DateUtil() {
 	}
+	
+	/**
+	 * 获得当前的utc时间
+	 * @return
+	 */
+	public static long getUTCTime() {  
+		// 1、取得本地时间：  
+		Calendar cal = Calendar.getInstance() ;  
+		// 2、取得时间偏移量：  
+		int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);  
+		// 3、取得夏令时差：  
+		int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);  
+		// 4、从本地时间里扣除这些差量，即可以取得UTC时间：  
+		cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+		return cal.getTimeInMillis();
+	}
+
+	/** 
+     * 将UTC时间转换为东八区时间 
+     * @param UTCTime 
+     * @return 
+     */  
+    public static String getLocalTimeFromUTC(long UTCTime){  
+        java.util.Date UTCDate = null ;  
+        String localTimeStr = null ;  
+        try {  
+            UTCDate = new Date(UTCTime); 
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", LOCALE);
+            //format.setTimeZone(TimeZone.getTimeZone("GMT-8")) ;  
+            localTimeStr = format.format(UTCDate) ;  
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+           
+        return localTimeStr ;  
+    }
 	
 	/**
 	 * 获得指定日期的long类型时间TimeInMillis

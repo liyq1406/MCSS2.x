@@ -75,6 +75,38 @@ public class TicketRequest extends BaseRequest {
 		MobclickAgent.onEvent(mContext,"REQ_GET_HISTORICAL_CUSTOMER");
 	}
 
+	/**
+	 * 
+	 * @param utc
+	 * @param size
+	 * @param before 加载时为true，刷新时为false
+	 * @throws JSONException
+	 */
+	public void getHistoricalCustomer(String s_id, int size, boolean before) throws JSONException {
+		mRequestJson.put(QAODefine.O_METHOD, QAODefine.O_METHOD_GET_HISTORICAL_CUSTOMER);
+		if (s_id == null) {
+			mRequestJson.put("s_id", 0);
+		} else {
+			mRequestJson.put("s_id", s_id);
+		}
+		mRequestJson.put("before", before);
+		if (!before) {
+			size = 0;
+		}
+		mRequestJson.put("size", size);
+		sendRequest(mRequestJson.toString());
+		MobclickAgent.onEvent(mContext,"REQ_GET_HISTORICAL_CUSTOMER");
+	}
+
+	public void getHistoricalCustomer(long utc, int size, boolean before) throws JSONException {
+		mRequestJson.put(QAODefine.O_METHOD, QAODefine.O_METHOD_GET_HISTORICAL_CUSTOMER);
+		mRequestJson.put("utc", utc);
+		mRequestJson.put("size", size);
+		mRequestJson.put("before", before);
+		sendRequest(mRequestJson.toString());
+		MobclickAgent.onEvent(mContext,"REQ_GET_HISTORICAL_CUSTOMER");
+	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

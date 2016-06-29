@@ -11,7 +11,7 @@
     android:orientation="vertical" >
     
     <TextView
-        android:id="@+id/id_to_msg_date"
+        android:id="@+id/id_chat_msg_date"
         android:visibility="gone"
         style="@style/list_item_top_date" />
     
@@ -26,8 +26,8 @@
 		    android:minHeight="@dimen/v5_chat_list_voice_layout_minH"
 			android:layout_alignParentEnd="true"
 			android:layout_alignParentRight="true"
-		    android:layout_marginLeft="50dp"
-            android:layout_marginStart="50dp"
+		    android:layout_marginLeft="@dimen/chat_list_item_content_hr_matgin"
+            android:layout_marginStart="@dimen/chat_list_item_content_hr_matgin"
 		    android:paddingTop="4dp"
 		    android:paddingBottom="4dp"
 		    android:paddingLeft="8dp"
@@ -43,6 +43,7 @@
 		        android:layout_height="@dimen/v5_chat_list_voice_wh"
 		        android:layout_centerVertical="true"
 		        android:layout_marginRight="8dp"
+		        android:layout_marginEnd="8dp"
 		        android:adjustViewBounds="true"
 		        android:scaleType="centerInside"
 		        android:background="@drawable/chat_animation_right_white3"
@@ -59,7 +60,7 @@
 	            android:layout_centerVertical="true"
 	            android:textSize="@dimen/v5_chat_list_voice_text_size"
 	            android:textColor="@color/white"
-	            android:text="0.0s" />
+	            android:text="@string/default_voice_lenth" />
 		    
 		</RelativeLayout>
 		
@@ -76,7 +77,7 @@
             
             <ProgressBar
 			    android:id="@+id/id_msg_out_pb"
-			    android:layout_gravity="center_vertical|right"
+			    android:layout_gravity="center_vertical|end"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    style="?android:attr/progressBarStyleSmallInverse"
@@ -84,11 +85,12 @@
             
             <ImageView
                 android:id="@+id/id_msg_fail_iv"
-                android:layout_gravity="center_vertical|right"
+                android:layout_gravity="center_vertical|end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/v5_btn_redo_refresh_selector"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:contentDescription="@string/contentDescription" />
             
         </FrameLayout>
 		

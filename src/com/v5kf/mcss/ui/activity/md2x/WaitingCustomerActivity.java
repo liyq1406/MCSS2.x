@@ -12,14 +12,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 
+import com.chyrain.irecyclerview.RefreshRecyclerView;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.client.lib.websocket.WebSocketClient;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
@@ -31,6 +34,7 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.ui.adapter.WaitingSessionAdapter;
+import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
 
@@ -41,12 +45,13 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 	protected static final int HDL_STOP_REFRESH = 11;
 	protected static final int HDL_STOP_LOAD = 12;
 	protected static final int HDL_UPDATE_UI = 13;
+	protected static final int HDL_TIME_OUT = 14;
 	
 	private List<CustomerBean> mRecycleBeans;
 	
-	private RecyclerView mRecycleView;
+	private RefreshRecyclerView mRefreshRecyclerView;
 	private WaitingSessionAdapter mRecycleAdapter;
-	private SwipeRefreshLayout mSwipeRefresh;
+	private TextView mEmptyTipsTv;
 	
 	private SmoothProgressBar mTopProgressBar;
 
@@ -58,7 +63,6 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		mRecycleBeans = new ArrayList<>();
 		initView();
 		loadData();
-		checkListEmpty();
 	}
 	
 	@Override
@@ -84,34 +88,48 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		if (null == mRecycleAdapter) {
     		mRecycleAdapter = new WaitingSessionAdapter(mRecycleBeans, this);
     	}
-    	if (null == mRecycleView) {
-    		mRecycleView = (RecyclerView) findViewById(R.id.id_recycle_view);
+    	if (null == mRefreshRecyclerView) {
+    		mRefreshRecyclerView = (RefreshRecyclerView) findViewById(R.id.id_irecycler_waiting);
     	}
     	
     	LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-		mRecycleView.setLayoutManager(layoutManager);
-		mRecycleView.addItemDecoration(new Divider());
-        mRecycleView.setAdapter(mRecycleAdapter);
+    	mRefreshRecyclerView.setLayoutManager(layoutManager);
+    	mRefreshRecyclerView.addItemDecoration(new Divider());
+    	mRefreshRecyclerView.setAdapter(mRecycleAdapter);
 //        mRecycleView.setScrollbarFadingEnabled(true);
 //        mRecycleView.setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
         
-        /* 刷新控件 */
-        if (null == mSwipeRefresh) {
-        	mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        }
-        mSwipeRefresh.setOnRefreshListener(this);
-//        mSwipeRefresh.setProgressViewOffset(false, start, end);
-        mSwipeRefresh.setColorSchemeColors(R.color.green, R.color.red,  
-        	    R.color.blue, R.color.yellow);
-        
-        /* 空白按钮 */
-        findViewById(R.id.layout_container_tv).setOnClickListener(new OnClickListener() {
-			
+    	mRefreshRecyclerView.setHeaderLayout(new V5RefreshLayout(this));
+    	mRefreshRecyclerView.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
+
 			@Override
-			public void onClick(View v) {
+			public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				//Toast.makeText(mParentActivity, "Pull Down!", Toast.LENGTH_SHORT).show();
 				onRefresh();
 			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> refreshView) {
+				//Toast.makeText(mParentActivity, "Pull Up!", Toast.LENGTH_SHORT).show();
+				
+			}
 		});
+		
+		if (mRefreshRecyclerView.getEmptyView() != null) {
+			mEmptyTipsTv = (TextView) mRefreshRecyclerView.getEmptyView().findViewById(R.id.layout_container_tv);
+		}
+        /* 空白按钮 */
+		if (mEmptyTipsTv != null) {
+			mEmptyTipsTv.setText(R.string.waiting_content_empty_tips);
+			mEmptyTipsTv.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					mRefreshRecyclerView.setRefreshing();
+					onRefresh();
+				}
+			});
+		}
 	}
 
 	private void initToolbar() {
@@ -130,7 +148,6 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
     	}
 		mRecycleBeans.add(0, cstm);
 		mRecycleAdapter.notifyDataSetChanged();
-		checkListEmpty();
 		Logger.i(TAG, "[[[mRecycleBeans.add]]] c_id = " + cstm.getC_id());
 		return true;
 	}
@@ -149,28 +166,10 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
     	return false;
     }
 	
-	private void checkListEmpty() {
-		if (null == mRecycleView) {
-    		mRecycleView = (RecyclerView) findViewById(R.id.id_recycle_view);
-    	}
-    	if (mRecycleBeans.size() == 0) {
-//			mRecycleView.setVisibility(View.INVISIBLE);
-    		mSwipeRefresh.setVisibility(View.GONE);
-//    		mRecycleView.setBackgroundResource(R.color.transparent);
-			findViewById(R.id.layout_container_empty).setVisibility(View.VISIBLE);
-		} else {
-//			mRecycleView.setVisibility(View.VISIBLE);
-			mSwipeRefresh.setVisibility(View.VISIBLE);
-//			mRecycleView.setBackgroundResource(R.color.base_list_content_bg);
-			findViewById(R.id.layout_container_empty).setVisibility(View.GONE);
-		}
-    }
-	
 	private void resetRecyclerList() {
 		mRecycleBeans.clear();
 		loadData();
 		mRecycleAdapter.notifyDataSetChanged();
-		checkListEmpty();
 	}
 	
 	private void showProgress() {
@@ -198,11 +197,23 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 	protected void handleMessage(Message msg) {
 		switch (msg.what) {
 		case HDL_STOP_REFRESH:
-			if (mSwipeRefresh.isRefreshing()) {
-				mSwipeRefresh.setRefreshing(false);
+			mHandler.removeMessages(HDL_TIME_OUT);
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
 			}
 			break;
+		case HDL_TIME_OUT:
+			if (mRefreshRecyclerView.isRefreshing()) {
+				mRefreshRecyclerView.onRefreshComplete();
+				onRefreshTimeOut();
+			}
+			dismissProgress();
+			break;
 		}
+	}
+
+	protected void onRefreshTimeOut() {
+		ShowToast(R.string.on_refresh_time_out);
 	}
 
 	@Override
@@ -227,12 +238,11 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		try {
 			CustomerRequest cReq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, this);
 			cReq.getWaitingCustomer();
-			showProgress();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
-		mHandler.sendEmptyMessageDelayed(HDL_STOP_REFRESH, 3000);
+		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
 	}
 
 	/***** event *****/
@@ -254,7 +264,7 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		// 更新整个列表
 		resetRecyclerList();
 		dismissProgress();
-		mHandler.sendEmptyMessage(HDL_STOP_REFRESH);
+		mHandler.sendEmptyMessageDelayed(HDL_STOP_REFRESH, 200);
     }
 	
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)
