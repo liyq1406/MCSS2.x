@@ -2,7 +2,6 @@ package com.v5kf.mcss.ui.adapter;
 
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
@@ -23,10 +22,8 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
-import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.fragment.md2x.MaterialBaseFragment;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
@@ -248,8 +245,7 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 		}
 		
 		private void onSingleNewsClick(String url) {
-			Intent i = IntentUtil.getStartWebViewIntent(mActivity, WebViewActivity.class, url, 0);
-			mActivity.gotoActivity(i);
+			mActivity.gotoWebViewActivity(url);
 		}
 
 		private void onSendClick() {

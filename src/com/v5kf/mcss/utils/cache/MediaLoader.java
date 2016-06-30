@@ -19,15 +19,14 @@ import com.v5kf.client.lib.entity.V5MessageDefine;
 import com.v5kf.client.lib.entity.V5MusicMessage;
 import com.v5kf.client.lib.entity.V5VideoMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
-import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 
 public class MediaLoader {
 	private static final String TAG = "MediaLoader";
-	public static final int VIDEO_COVER_MIN_WH = 140; //dp
-	public static final int VIDEO_COVER_MAX_WH = 200; //dp
+	public static final int VIDEO_COVER_MIN_WH = 170; //dp
+	public static final int VIDEO_COVER_MAX_WH = 240; //dp
 	
 	private FileCache fileCache;
 	private ExecutorService executorService;
@@ -48,9 +47,9 @@ public class MediaLoader {
 
 	/**
 	 * @param context
-	 *            涓婁笅鏂囧璞�
+	 *            上下文对豿
 	 * @param flag
-	 *            true涓簊ource璧勬簮锛宖alse涓篵ackground璧勬簮
+	 *            true为source资源，false为background资源
 	 */
 	public MediaLoader(Context context, Object obj, MediaLoaderListener listener) {
 		fileCache = new FileCache(context, FileUtil.getMediaCachePath(context));
@@ -66,7 +65,7 @@ public class MediaLoader {
 	}
 
 	/**
-	 * 鍔犺浇濯掍綋(鏈湴璺緞銆佺綉缁滆矾寰�)
+	 * 加载媒体(本地路径、网络路徿)
 	 * @param url
 	 */
 	public void loadMedia(String url, V5Message message, MediaLoaderListener listener) {
@@ -76,7 +75,7 @@ public class MediaLoader {
 		}
 		this.mUrl = url;
 //		this.mMessage = message;
-		// 鍙栨秷url缂栫爜
+		// 取消url编码
 //		String u1 = url.substring(0, url.lastIndexOf("/") + 1);
 //		String u2 = url.substring(url.lastIndexOf("/") + 1);
 //		try {
@@ -108,13 +107,13 @@ public class MediaLoader {
 			return null;
 		}
 		try {
-			File f = fileCache.getFile(url); // amr鏂囦欢
+			File f = fileCache.getFile(url); // amr文件
 			
-			// 浠巗d鍗¤幏鍙�
+			// 从sd卡获叿
 			if (f.exists()) {
 				Logger.d(TAG, "From FileCache:" + url);
 				return getMediaCacheFromFile(f, message);
-			} else { // 鍒ゆ柇鏄惁鏈湴璺緞
+			} else { // 判断是否本地路径
 				File path = new File(url);
 				if (path.exists()) {
 					Logger.d(TAG, "From LocalFile:" + url);
@@ -122,7 +121,7 @@ public class MediaLoader {
 				}
 			}
 			
-			// 浠庣綉缁�
+			// 从网绿
 			HttpUtil.CopyStream(url, f);
 			
 			Logger.d(TAG, "MediaLoader-->download:" + url);
@@ -152,16 +151,16 @@ public class MediaLoader {
 		case V5MessageDefine.MSG_TYPE_VIDEO:
 			((V5VideoMessage)msg).setFilePath(f.getAbsolutePath());
 			try {
-				// 鑾峰緱cover fram Bitmap
+				// 获得cover fram Bitmap
 				MediaMetadataRetriever mediaDataRet = new MediaMetadataRetriever();
 				mediaDataRet.setDataSource(f.getAbsolutePath());
 				Bitmap bitmap = mediaDataRet.getFrameAtTime();
-				Logger.d(TAG, UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) + "ratio 放大前视频缩略图:" + bitmap.getWidth() +" "+ bitmap.getHeight());
+				Logger.d(TAG, UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) + "ratio ؅ճǰ˓Ƶ̵Ôͼ:" + bitmap.getWidth() +" "+ bitmap.getHeight());
 //				if (bitmap.getWidth() < UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) || bitmap.getHeight() < UITools.dip2px(mContext, VIDEO_COVER_MIN_WH)) {
 //					float scale1 = UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) / bitmap.getWidth();
 //					float scale2 = UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) / bitmap.getHeight();
 //					bitmap = DevUtils.ratio(bitmap, scale1 > scale2 ? scale1 : scale2);
-//					Logger.d(TAG, UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) + "ratio 放大后视频缩略图:" + bitmap.getWidth() +" "+ bitmap.getHeight());
+//					Logger.d(TAG, UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) + "ratio ؅ճ۳˓Ƶ̵Ôͼ:" + bitmap.getWidth() +" "+ bitmap.getHeight());
 //				}
 				media.setCoverFrame(bitmap);
 				((V5VideoMessage)msg).setCoverFrame(bitmap);
@@ -195,7 +194,7 @@ public class MediaLoader {
 	}
 
 	/**
-	 * 浠诲姟闃熷垪
+	 * 任务队列
 	 * 
 	 * @author Scorpio.Liu
 	 * 
@@ -232,7 +231,7 @@ public class MediaLoader {
 	}
 	
 	/**
-	 * 鏄剧ず浣嶅浘鍦║I绾跨▼
+	 * 显示位图在UI线程
 	 * 
 	 * @author Scorpio.Liu
 	 * 
@@ -251,7 +250,7 @@ public class MediaLoader {
 				if (mListener != null) {
 					mListener.onSuccess(photoToLoad.mMessage, mObj, media);
 				}
-			} else { // 鑾峰彇澶辫触
+			} else { // 获取失败
 				FileUtil.deleteFile(fileCache.getFile(photoToLoad.url).getAbsolutePath());
 				if (mListener != null) {
 					mListener.onFailure(MediaLoader.this, photoToLoad.mMessage, mObj);
@@ -261,7 +260,7 @@ public class MediaLoader {
 	}
 
 	/**
-	 * 鍦ㄩ�傚綋鐨勬椂鏈烘竻鐞嗗浘鐗囩紦瀛�
+	 * 在鿂当的时机清理图片缓孿
 	 */
 	public void clearCache() {
 		mediaCaches.clear();
@@ -269,14 +268,14 @@ public class MediaLoader {
 	}
 
 	/**
-	 * 鍦ㄩ�傚綋鐨勬椂鏈烘竻鐞嗗唴瀛樺浘鐗囩紦瀛�
+	 * 在鿂当的时机清理内存图片缓孿
 	 */
 	public static void clearMemoryCache() {
 		mediaCaches.clear();
 	}
 	
 	/**
-	 * 缂撳瓨Bitmap鍥剧墖锛宨d鍙负url
+	 * 缓存Bitmap图片，id可为url
 	 * @param bmp
 	 * @param id
 	 * @throws IOException
@@ -303,7 +302,7 @@ public class MediaLoader {
 	
 	public static void copyPathToFileCche(Context context, File src, String url) {
 		FileCache cache = new FileCache(context, FileUtil.getMediaCachePath(context));
-		File f = cache.getFile(url); // 缂撳瓨鐨刟mr鏂囦欢
+		File f = cache.getFile(url); // 缓存的amr文件
 		src.renameTo(f);
 	}
 }

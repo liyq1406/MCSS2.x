@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.json.JSONException;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
@@ -29,10 +28,8 @@ import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.MessageRequest;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.BaseChatActivity;
-import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
@@ -241,13 +238,7 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 					
 					@Override
 					public void onClick(View v, String url) {
-						Intent intent = IntentUtil.getStartWebViewIntent(
-								mActivity, 
-								WebViewActivity.class, 
-								url, 
-								0);
-						mActivity.startActivity(intent);
-						mActivity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+						mActivity.gotoWebViewActivity(url);
 					}
 				});
             }

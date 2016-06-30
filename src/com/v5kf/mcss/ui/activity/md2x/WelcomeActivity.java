@@ -43,6 +43,12 @@ public class WelcomeActivity extends BaseLoginActivity {
 	private WorkerSP mWSP;
 	private boolean isForeground = false;
 	
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		finish();
+	}
+	
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP) 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,13 +60,17 @@ public class WelcomeActivity extends BaseLoginActivity {
 		isForeground = true;
 		initView();
 		
-		// 初始化任务
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				initTask();
-			}
-		}).start();
+//		if (!mWSP.readBoolean("v5_inited")) {
+//			gotoActivityAndFinishThis(GuideActivity.class);
+//		} else {
+			// 初始化任务
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					initTask();
+				}
+			}).start();
+//		}
 		
 		/* 初始网络状态 */
 		mApplication.setNetworkState(NetworkManager.getNetworkState(this));
@@ -186,7 +196,11 @@ public class WelcomeActivity extends BaseLoginActivity {
 			case LoginStatus_Unlogin:
 				stopService(new Intent(this, CoreService.class));
 				if (mWarningDialog == null || !mWarningDialog.isShowing()) {
-					gotoActivityAndFinishThis(CustomLoginActivity.class);
+					if (!mWSP.readBoolean("v5_inited")) {
+						gotoActivityAndFinishThis(GuideActivity.class);
+					} else {
+						gotoActivityAndFinishThis(CustomLoginActivity.class);
+					}
 				}
 				break;
 			case LoginStatus_LogErr:

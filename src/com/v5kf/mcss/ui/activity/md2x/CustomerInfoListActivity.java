@@ -472,9 +472,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 		String type = mCustomer.getIfaceString();
 		String open_id = mCustomer.getVirtual().getOpen_id();
 		String url = mAppInfo.getSiteInfo().getKexi_plus_url() + "&type=" + type + "&open_id=" + open_id;
-		Intent iKexi = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, 
-				url, R.string.kexi_plus);
-		gotoActivity(iKexi);
+		gotoWebViewActivity(url, R.string.kexi_plus);
 	}
 
 	private void gotoShowImageActivity(String pic_url) {

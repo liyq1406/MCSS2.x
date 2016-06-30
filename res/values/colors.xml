@@ -275,6 +275,7 @@
     <color name="md2x_blue_dark">#209de9</color>
     <color name="md2x_green">#79D655</color>
     <color name="md2x_gray">#BFBFBF</color>
+    <color name="md2x_guide_bg">#14B7F2</color>
     <!-- SmoothProgressBar -->
     <integer-array name="progress_colors">
         <item>@color/md2x_blue</item>

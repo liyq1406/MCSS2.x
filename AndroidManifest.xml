@@ -65,7 +65,7 @@
         android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme.Transparent" >
+        android:theme="@style/AppTheme.Normal" >
         
         <meta-data android:name="TencentMapSDK" android:value="4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG" />
         <meta-data android:value="55efad6e67e58e47fe001197" android:name="UMENG_APPKEY"/>
@@ -73,12 +73,18 @@
 		
         <activity
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Normal"
+            android:theme="@style/AppTheme"
             android:name="com.v5kf.mcss.ui.activity.md2x.WelcomeActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:name="com.v5kf.mcss.ui.activity.md2x.GuideActivity" >
         </activity>
         
         <activity
@@ -91,7 +97,7 @@
         <activity
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Normal"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"
             android:name="com.v5kf.mcss.ui.activity.info.UserLoginActivity" >            
         </activity>
@@ -168,6 +174,11 @@
             android:theme="@style/AppTheme.Fullscreen"
             android:name="com.v5kf.mcss.ui.activity.md2x.ShowImageActivity" >
         </activity>
+
+        <activity
+            android:theme="@style/AppTheme.VideoFullscreen"
+            android:name="com.v5kf.mcss.ui.activity.md2x.VideoPlayActivity" >
+        </activity>
         
         <activity
             android:screenOrientation="portrait"
@@ -204,7 +215,12 @@
         <activity
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Normal"
             android:name="com.v5kf.mcss.ui.activity.MainTabActivity" >
+        </activity>
+
+        <activity
+            android:name="com.v5kf.mcss.ui.activity.AAMainActivity" >
         </activity>
         
         <activity

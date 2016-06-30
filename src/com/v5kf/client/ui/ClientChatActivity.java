@@ -172,7 +172,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
         config.setUid(mAppInfo.getUser().getW_id());
         config.setAvatar(mAppInfo.getUser().getPhoto()); // 头像
         config.setGender(mAppInfo.getUser().getGender()); // 性别
-        config.setDeviceToken(XGPushConfig.getToken(this));
+        config.setDeviceToken(mApplication.getDeviceToken());
         
         V5ClientAgent.getInstance().start(this, this); // 开启消息服务
     }
@@ -859,8 +859,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 	}
 
 	private void onSingleNewsClick(String url) {
-		Intent i = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, url, 0);
-		gotoActivity(i);
+		gotoWebViewActivity(url);
 	}
 
 //	@Override
@@ -959,8 +958,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 				V5ArticlesMessage articles = (V5ArticlesMessage) message;
 				if (articles != null && articles.getArticles().size() > newsPos) {
 					String url = articles.getArticles().get(newsPos).getUrl();
-					Intent i = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, url, 0);
-					gotoActivity(i);
+					gotoWebViewActivity(url);
 				}
 			}
 		}		

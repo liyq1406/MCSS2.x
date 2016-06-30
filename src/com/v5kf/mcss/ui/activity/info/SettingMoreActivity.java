@@ -6,7 +6,6 @@ import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import com.v5kf.mcss.config.Config.AppStatus;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.activity.md2x.CustomLoginActivity;
-import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.widget.CheckboxDialog;
 import com.v5kf.mcss.ui.widget.CheckboxDialog.CheckboxDialogListener;
 import com.v5kf.mcss.ui.widget.SlideSwitchView;
@@ -38,7 +36,6 @@ import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
 import com.v5kf.mcss.utils.DbUtil;
 import com.v5kf.mcss.utils.FileUtil;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.SharePreferenceUtil;
 import com.v5kf.mcss.utils.WorkerSP;
@@ -232,15 +229,12 @@ public class SettingMoreActivity extends BaseToolbarActivity implements OnClickL
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.layout_feedback: // 用户反馈
-			Intent iFb = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, 
-					Config.URL_FEED_BACK, R.string.app_feedback);
-			gotoActivity(iFb);
+			gotoWebViewActivity(Config.URL_FEED_BACK, R.string.app_feedback);
 			break;
 			
 		case R.id.layout_about: // 关于
-			Intent iAb = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, 
-					Config.URL_ABOUT, R.string.app_about);
-			gotoActivity(iAb);
+			// TODO 改用本地页面
+			gotoWebViewActivity(Config.URL_ABOUT, R.string.app_about);
 			break;
 			
 		case R.id.layout_update: // 检查更新

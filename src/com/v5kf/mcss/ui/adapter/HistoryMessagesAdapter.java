@@ -34,13 +34,11 @@ import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.LocationMapActivity;
-import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
 import com.v5kf.mcss.ui.widget.ListLinearLayout.OnListLayoutClickListener;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.FileUtil;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.MapUtil;
 import com.v5kf.mcss.utils.UITools;
@@ -381,13 +379,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
     					
     					@Override
     					public void onClick(View v, String url) {
-    						Intent intent = IntentUtil.getStartWebViewIntent(
-    								mActivity, 
-    								WebViewActivity.class, 
-    								url, 
-    								0);
-    						mActivity.startActivity(intent);
-    						mActivity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+    						mActivity.gotoWebViewActivity(url);
     					}
     				});
                 }
@@ -467,8 +459,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 		}
 		
 		private void onSingleNewsClick(String url) {
-			Intent i = IntentUtil.getStartWebViewIntent(mActivity, WebViewActivity.class, url, 0);
-			mActivity.gotoActivity(i);
+			mActivity.gotoWebViewActivity(url);
 		}
 
 		@Override

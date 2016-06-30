@@ -92,6 +92,7 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 		if (mRecycleBeans.isEmpty()) {
 			mParentActivity.showProgress();
 			mRefreshRecyclerView.setRefreshing();
+			mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
 			initData(false);
 		}
 	}
@@ -106,6 +107,15 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 	protected void onFragmentStartLazy() {
 		super.onFragmentStartLazy();
 		Log.d(TAG, TAG + " 显示 " + this);
+//		if (mRecycleBeans.isEmpty()) {
+//			mParentActivity.showProgress();
+//			if (!mRefreshRecyclerView.isRefreshing()) {
+//				mRefreshRecyclerView.setRefreshing();
+//			}
+//			mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
+//			initData(false);
+//		}
+		
 //		this.mParentActivity.showToolbar();
 //		this.mParentActivity.hideFab();
 //		this.mParentActivity.setBarColor(UITools.getColor(R.color.main_color));
@@ -344,6 +354,7 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 		}
 		switch (msg.what) {
 		case HDL_TIME_OUT: // 超时
+			mParentActivity.dismissProgress();
 			if (mRefreshRecyclerView.isRefreshing()) {
 				mRefreshRecyclerView.onRefreshComplete();
 				mRecyclerAdapter.notifyDataSetChanged();

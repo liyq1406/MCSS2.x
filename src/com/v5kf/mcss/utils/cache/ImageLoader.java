@@ -118,7 +118,7 @@ public class ImageLoader {
 			else
 				imageView.setBackgroundResource(mDefaultImg);
 			Logger.d("ImageLoader", "DisplayImage -> queuePhoto -> 临时图片");
-//			checkImageBorder(imageView);
+			checkImageBorder(imageView);
 		}
 	}
 	

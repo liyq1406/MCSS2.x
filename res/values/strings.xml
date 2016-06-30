@@ -335,12 +335,15 @@
     <!-- ShowImageActivity 长按菜单 -->
     <string name="option_save_image">保存到手机</string>
     <string name="on_image_saveed">图片已保存到"%s"</string>
+    <string name="on_video_saveed_fmt">视频已保存到"%s"</string>
+    <string name="on_video_saveed_failed">视频保存失败</string>
     
     <!-- 图片素材页 -->
     <string name="title_material">素材</string>
     <string name="empty_string"></string>
     <string name="empty_content">内容为空</string>
     <string name="music_play">播放</string>
+    <string name="video_play">视频播放</string>
     
     <!-- CheckboxDialog -->
     <string name="check_media_cache">图片等媒体缓存(建议清理)</string>
@@ -358,6 +361,8 @@
     <string name="artificial_service_failed">转人工客服失败</string>
     
     <string name="open_by_browser">浏览器打开</string>
+    <string name="save_vedio">保存到本地</string>
+    <string name="open_by_vedioplayer">播放器打开</string>
     <string name="new_client_message">●</string>
     
     <string name="send_image_unsupport">此会话不接收图片上传</string>

@@ -137,6 +137,7 @@ public class Config {
 	public static String USER_ID = "10000_abc";
 	public static String SITE_ID = "";
 	
+	
 	/* 连接超时时间 */
 	public static final int SOCKET_TIME_OUT = 20000; /* 20s */
 	public static final int WS_TIME_OUT = 20000; /* 20s */

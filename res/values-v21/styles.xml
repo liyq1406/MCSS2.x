@@ -5,7 +5,7 @@
         AppBaseTheme from BOTH res/values/styles.xml and
         res/values-v11/styles.xml on API 14+ devices.
     -->
-    <style name="AppTheme" parent="AppTheme.Base">
+    <style name="AppTheme" parent="AppTheme_Base">
         <item name="actionBarStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="android:actionBarStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         
@@ -13,12 +13,12 @@
         <item name="windowActionBar">false</item>
   		<item name="windowNoTitle">true</item>
   		
-        <!-- Navigation bar color
+        
         <item name="android:windowTranslucentStatus">true</item>
-         -->
+        <!-- Navigation bar color -->
+        
         <item name="android:navigationBarColor">@color/main_color</item>
-    	<item name="android:statusBarColor">@android:color/transparent</item>
-    	<item name="android:windowIsTranslucent">true</item>
+    	<!-- <item name="android:statusBarColor">@android:color/transparent</item> -->
     	
     	<!-- 来自知乎 -->
     	<item name="android:windowDrawsSystemBarBackgrounds">true</item>

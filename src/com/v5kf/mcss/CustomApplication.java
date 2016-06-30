@@ -19,6 +19,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -74,6 +75,7 @@ public class CustomApplication extends LitePalApplication {
 	private boolean isOnChat = false;
 	private String mOnChatCustomer = null;
 	
+	private String mDeviceToken;
 //	private int mNotificationId = 0;
 //	private Map<String, Integer> mNotificationIdMap;
 	
@@ -226,11 +228,17 @@ public class CustomApplication extends LitePalApplication {
 		// 传递的参数为ApplicationContext
 		Context context = getApplicationContext();
 		Logger.d(TAG, "[XGPush] 信鸽注册状态：" + XGPushManager.getServiceStatus(getApplicationContext()));
-		
-		XGPushManager.registerPush(context, "v5kf2015", new XGIOperateCallback() {
+		String version = null;
+		try {
+			version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		XGPushManager.registerPush(context, version, new XGIOperateCallback() {
 			
 			@Override
 			public void onSuccess(Object arg0, int arg1) {
+				setDeviceToken((String)arg0);
 				Logger.i(TAG, "信鸽注册成功token：" + (String)arg0);
 			}
 			
@@ -764,5 +772,17 @@ public class CustomApplication extends LitePalApplication {
 
 	public void clearNotification(int id) {
 		getNotificationManager().cancel(id);
+	}
+
+	public String getDeviceToken() {
+		if (mDeviceToken == null) {
+			mDeviceToken = getWorkerSp().readString("device_token");
+		}
+		return mDeviceToken;
+	}
+
+	public void setDeviceToken(String deviceToken) {
+		getWorkerSp().saveString("device_token", deviceToken);
+		this.mDeviceToken = deviceToken;
 	}
 }

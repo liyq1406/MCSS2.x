@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="AppTheme.Base">
+    <style name="AppTheme" parent="AppTheme_Base">
         <item name="actionBarStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="android:actionBarStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         
@@ -11,8 +11,7 @@
   		<!-- Window action弹出时覆盖部分布局 -->
         <item name="windowActionModeOverlay">true</item>
         
-        <item name="android:windowIsTranslucent">true</item>
-	    <item name="android:windowTranslucentStatus">true</item>  
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
     
 	<style name="Theme.TransparencyDemo" parent="AppTheme">  
@@ -25,7 +24,7 @@
 		<!-- item name="android:windowTranslucentNavigation">true</item -->
 	</style>
     <style name="AppTheme.Normal">
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
 	    <item name="android:windowTranslucentStatus">true</item>
 		<!-- item name="android:windowTranslucentNavigation">true</item -->
 	</style>
@@ -35,6 +34,14 @@
 	    <item name="android:windowTranslucentStatus">true</item>  
 		<!-- item name="android:windowTranslucentNavigation">true</item> 
         <item name="android:windowFullscreen">true</item> -->
+        <item name="android:windowBackground">@color/transparent_gray</item>
+        <item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>
+	</style>
+
+    <style name="AppTheme.VideoFullscreen">
+	    <item name="android:windowTranslucentStatus">true</item>
+		<item name="android:windowTranslucentNavigation">true</item>
+        <!-- <item name="android:windowFullscreen">true</item> -->
         <item name="android:windowBackground">@color/transparent_gray</item>
         <item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>
 	</style>

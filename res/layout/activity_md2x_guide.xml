@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinator_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/md2x_guide_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/guide_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.chyrain.view.indicator.FixedIndicatorView
+        android:id="@+id/guide_indicator"
+        android:layout_width="60dp"
+        android:layout_height="10dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal|bottom" />
+    
+</android.support.design.widget.CoordinatorLayout>

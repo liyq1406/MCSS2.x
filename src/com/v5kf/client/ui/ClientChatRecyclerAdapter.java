@@ -6,8 +6,6 @@ import java.util.Locale;
 
 import org.json.JSONException;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -41,10 +39,9 @@ import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.MessageRequest;
 import com.v5kf.mcss.service.CoreService;
-import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
+import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.FileUtil;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.MapUtil;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.v5kf.mcss.utils.cache.MediaCache;
@@ -75,12 +72,12 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 	protected static final String TAG = "OnChatRecyclerAdapter";
 	private LayoutInflater mInflater;
 	private List<V5ChatBean> mRecycleBeans ;
-	private Activity mContext;
+	private ActivityBase mContext;
 	private OnRecyclerClickListener mListener;
 	// 语音
 	private MediaPlayer mPlayer;
 	
-    public ClientChatRecyclerAdapter(Activity context, List<V5ChatBean> mRecycleBeans, OnRecyclerClickListener listener) {
+    public ClientChatRecyclerAdapter(ActivityBase context, List<V5ChatBean> mRecycleBeans, OnRecyclerClickListener listener) {
         super();
         this.mRecycleBeans = mRecycleBeans;
         this.mContext = context;
@@ -595,13 +592,7 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 					
 					@Override
 					public void onClick(View v, String url) {
-						Intent intent = IntentUtil.getStartWebViewIntent(
-								mContext, 
-								WebViewActivity.class, 
-								url, 
-								0);
-						mContext.startActivity(intent);
-						mContext.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+						mContext.gotoWebViewActivity(url);
 					}
 				});
             }

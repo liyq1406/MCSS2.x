@@ -570,7 +570,7 @@ public class AppInfoKeeper {
 						&& msg.getCandidate().get(0).getDirection() == QAODefine.MSG_DIR_FROM_ROBOT) {
 					break;
 				}
-				Logger.i(TAG, "candidate:" + msg.getCandidate() != null ? msg.getCandidate().get(0).getDefaultContent(mContext) : "null" + " getTotalUnreplyMessageNum of msg:" + msg.getDefaultContent(mContext));
+//				Logger.i(TAG, "candidate:" + msg.getCandidate() != null ? msg.getCandidate().get(0).getDefaultContent(mContext) : "null" + " getTotalUnreplyMessageNum of msg:" + msg.getDefaultContent(mContext));
 				totalNum++;
 			}
 		}

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+<RelativeLayout
+    android:id="@+id/id_video_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black" >
+    
+	<FrameLayout
+	    android:id="@+id/content_layout"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@color/black" >
+	    <!-- android:layout_below="@+id/id_app_bar_layout" -->
+	    
+	    <ImageView
+	        android:id="@+id/id_video_bg"
+	        android:layout_gravity="center"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:scaleType="fitCenter"
+	        android:contentDescription="@string/contentDescription" />
+	
+		<VideoView
+	        android:id="@+id/id_video_view"
+	        android:layout_gravity="center"
+	        android:visibility="gone"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" />	    
+	    
+		<ImageView
+            android:id="@+id/id_video_control_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:src="@drawable/img_music_play"
+            android:contentDescription="@string/contentDescription" />
+	     
+    </FrameLayout>
+    
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/id_app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:background="@color/transparent"
+		android:paddingTop="@dimen/status_bar_height"
+		app:elevation="0dp" >
+		<!-- 去阴影 app:elevation="0dp" -->
+	
+	    <android.support.v7.widget.Toolbar
+			android:id="@+id/id_common_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_scrollFlags="scroll|enterAlways"
+			app:layout_collapseMode="pin"
+			app:title="@string/video_play"
+			android:background="@color/transparent"
+			style="@style/ToolBarStyle" >
+			
+	        <ImageView
+	            android:id="@+id/more_iv"
+	            android:visibility="visible"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:layout_marginRight="6dp"
+	            android:layout_marginEnd="6dp"
+	            android:layout_gravity="center_vertical|end"
+	            android:scaleType="fitXY"
+	            android:src="@drawable/v5_action_bar_more"
+	            android:contentDescription="@string/contentDescription" />
+	        
+		</android.support.v7.widget.Toolbar>
+	
+	    <View 
+	        android:visibility="gone"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/base_line_width_s"
+	        android:background="@color/toolbar_border" />
+	</android.support.design.widget.AppBarLayout>
+    
+</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

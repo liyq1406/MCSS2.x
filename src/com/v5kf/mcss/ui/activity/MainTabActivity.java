@@ -273,6 +273,8 @@ public class MainTabActivity extends BaseToolbarActivity {
 				@Override
 				public void onClick(View v) {
 					gotoActivity(WorkerLogActivity.class);
+					//TODO
+//					gotoActivity(AAMainActivity.class);
 				}
 			});
 			

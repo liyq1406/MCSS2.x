@@ -27,7 +27,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.tencent.android.tpush.XGPushConfig;
 import com.umeng.analytics.MobclickAgent;
 import com.v5kf.client.lib.V5HttpUtil;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
@@ -214,7 +213,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 				mClient.disconnect(-1, "Normal disconnect");
 				mClient = null;
 				mUri = Config.WS_PROTOCOL + "://" + Config.WS_HOST + Config.WS_PATH + "?id=" + id + "&site=" 
-						+ site + "&dev=android&client=1026&device_token=" + XGPushConfig.getToken(getApplicationContext()) + "&auth=" + auth;
+						+ site + "&dev=android&client=1026&device_token=" + mApplication.getDeviceToken() + "&auth=" + auth;
 				Logger.i(TAG, "uri:" + mUri);
 					
 				mClient = new WebSocketClient(URI.create(mUri), this, null);
@@ -227,14 +226,14 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 					mClient.disconnect(-1, "Normal disconnect");
 					mClient = null;
 					mUri = Config.WS_PROTOCOL + "://" + Config.WS_HOST + Config.WS_PATH + "?id=" + id + "&site=" 
-							+ site + "&dev=android&client=1026&device_token=" + XGPushConfig.getToken(getApplicationContext()) + "&auth=" + auth;
+							+ site + "&dev=android&client=1026&device_token=" + mApplication.getDeviceToken() + "&auth=" + auth;
 					Logger.i(TAG, "uri:" + mUri);
 						
 					mClient = new WebSocketClient(URI.create(mUri), this, null);
 				}			
 			} else {
 				mUri = Config.WS_PROTOCOL + "://" + Config.WS_HOST + Config.WS_PATH + "?id=" + id + "&site=" 
-						+ site + "&dev=android&client=1026&device_token=" + XGPushConfig.getToken(getApplicationContext()) + "&auth=" + auth;
+						+ site + "&dev=android&client=1026&device_token=" + mApplication.getDeviceToken() + "&auth=" + auth;
 				Logger.i(TAG, "uri:" + mUri);
 					
 				mClient = new WebSocketClient(URI.create(mUri), this, null);

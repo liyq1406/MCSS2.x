@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.simple.eventbus.EventBus;
 
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import com.v5kf.mcss.config.Config.AppStatus;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
-import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.activity.md2x.WorkerTreeActivity;
 import com.v5kf.mcss.ui.widget.CheckboxDialog;
 import com.v5kf.mcss.ui.widget.CheckboxDialog.CheckboxDialogListener;
@@ -37,7 +35,6 @@ import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
 import com.v5kf.mcss.utils.DbUtil;
 import com.v5kf.mcss.utils.FileUtil;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.SharePreferenceUtil;
 import com.v5kf.mcss.utils.WorkerSP;
@@ -301,15 +298,12 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 			mParentActivity.gotoActivity(WorkerTreeActivity.class);
 			break;
 		case R.id.layout_feedback: // 用户反馈
-			Intent iFb = IntentUtil.getStartWebViewIntent(mParentActivity, WebViewActivity.class, 
-					Config.URL_FEED_BACK, R.string.app_feedback);
-			mParentActivity.gotoActivity(iFb);
+			mParentActivity.gotoWebViewActivity(Config.URL_FEED_BACK, R.string.app_feedback);
 			break;
 			
 		case R.id.layout_about: // 关于
-			Intent iAb = IntentUtil.getStartWebViewIntent(mParentActivity, WebViewActivity.class, 
-					Config.URL_ABOUT, R.string.app_about);
-			mParentActivity.gotoActivity(iAb);
+			// TODO 改为native页面
+			mParentActivity.gotoWebViewActivity(Config.URL_ABOUT, R.string.app_about);
 			break;
 			
 		case R.id.layout_update: // 检查更新

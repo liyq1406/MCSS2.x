@@ -160,6 +160,15 @@ public class FileUtil { // [修改]修改保存位置，区分外置存储和内
 	}
 
 	/**
+	 * 保存视频的路径(外置存储)
+	 * @param context
+	 * @return
+	 */
+	public static String getVideoSavePath(Context context) {
+		return getExternalV5KFPath(context) + "/video";
+	}
+
+	/**
 	 * 内部图片缓存路径[新增]
 	 * @param context
 	 * @return
@@ -240,6 +249,10 @@ public class FileUtil { // [修改]修改保存位置，区分外置存储和内
 	 * 获得图片保存名称
 	 * @return
 	 */
+	public static String getVideoName(String tag, String suffix) {
+		return "v5kf_" + tag + DateUtil.getCurrentLongTime() + "." + (suffix == null ? "mp4" : suffix);
+	}
+
 	public static String getImageName(String tag) {
 		return "v5kf_" + tag + DateUtil.getCurrentLongTime() + ".jpg";
 	}

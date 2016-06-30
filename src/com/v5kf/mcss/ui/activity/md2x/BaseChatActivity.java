@@ -139,7 +139,7 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (null == mCustomer) {
+		if (c_id == null || null == mCustomer || mAppInfo.getAliveCustomer(c_id) == null) {
 			finishActivity();
 			Logger.e(TAG, "Null customer so finish.");
 			return;

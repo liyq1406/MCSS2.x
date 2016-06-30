@@ -19,12 +19,10 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -48,8 +46,8 @@ import com.v5kf.mcss.qao.request.MessageRequest;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.ChatMessagesActivity;
 import com.v5kf.mcss.ui.activity.md2x.LocationMapActivity;
-import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
+import com.v5kf.mcss.ui.widget.BubbleSurfaceView;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
@@ -57,7 +55,6 @@ import com.v5kf.mcss.ui.widget.ListLinearLayout.OnListLayoutClickListener;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.MapUtil;
 import com.v5kf.mcss.utils.cache.ImageLoader;
@@ -708,7 +705,7 @@ public class ChattingListAdapter extends BaseAdapter {
         /* 视频 */
         public ImageView mVideoControlIv; // 播放按钮
         public ImageView mVideoBgIv; // 视频背景
-        public SurfaceView mVideoSurface;
+        public BubbleSurfaceView mVideoSurface;
         public SurfaceHolder mVideoSurfaceHolder;
         
         /* 音乐 */
@@ -817,9 +814,10 @@ public class ChattingListAdapter extends BaseAdapter {
             case TYPE_VIDEO_R:
             	mVideoBgIv = (ImageView) itemView.findViewById(R.id.id_video_bg);
             	mVideoControlIv = (ImageView) itemView.findViewById(R.id.id_video_control_img);
-            	mVideoSurface = (SurfaceView) itemView.findViewById(R.id.id_video_surface);
+            	mVideoSurface = (BubbleSurfaceView) itemView.findViewById(R.id.id_video_surface);
             	mVideoSurfaceHolder = mVideoSurface.getHolder();
             	mVideoControlIv.setOnClickListener(this);
+            	mVideoBgIv.setOnClickListener(this);
             	mVideoSurface.setOnClickListener(new OnClickListener() {
 					
 					@Override
@@ -838,28 +836,65 @@ public class ChattingListAdapter extends BaseAdapter {
 						}
 					}
 				});
-//				mVideoSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
-//				
-//					@Override
-//					public void surfaceDestroyed(SurfaceHolder holder) {
-//						// TODO Auto-generated method stub
-//						Logger.w(TAG, "[SurfaceHolder.surfaceDestroyed]");
-//					}
-//					
-//					@Override
-//					public void surfaceCreated(SurfaceHolder holder) {
-//						// TODO Auto-generated method stub
-//						Logger.w(TAG, "[SurfaceHolder.surfaceCreated]");
-//						
-//					}
-//					
-//					@Override
-//					public void surfaceChanged(SurfaceHolder holder, int format, int width,
-//							int height) {
-//						// TODO Auto-generated method stub
-//						Logger.w(TAG, "[SurfaceHolder.surfaceChanged]");
-//					}
-//				});
+            	mVideoSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
+					
+					@Override
+					public void surfaceDestroyed(SurfaceHolder holder) {
+						// TODO Auto-generated method stub
+						Logger.d(TAG, "[SurfaceHolder.surfaceDestroyed]");
+					}
+					
+					@Override
+					public void surfaceCreated(SurfaceHolder holder) {
+						// TODO Auto-generated method stub
+						Logger.d(TAG, "[SurfaceHolder.surfaceCreated]");
+						// 必须在surface创建后才能初始化MediaPlayer,否则不会显示图像
+						mPlayer = new MediaPlayer();
+						mPlayer.setOnErrorListener(new OnErrorListener() {
+							
+							@Override
+							public boolean onError(MediaPlayer mp, int what, int extra) {
+								Logger.e(TAG, "MediaPlayer - onError");
+								return false;
+							}
+						});
+						mPlayer.setOnCompletionListener(new OnCompletionListener() {
+							
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								Logger.i(TAG, "MediaPlayer - completePlaying");
+								updateVideoStopPlayingState();
+								mp.release();
+								mp = null;
+								mPlayer = null;
+							}
+						});
+						mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+							
+							@Override
+							public void onPrepared(MediaPlayer mp) {
+								// TODO Auto-generated method stub
+								Logger.d(TAG, "[MediaPlayer.onPrepared]");
+								mPlayer.start();
+								updateVideoStartPlayingState();
+							}
+						});
+						try {
+							mPlayer.setDataSource(((V5VideoMessage)mChatBean.getMessage()).getFilePath());
+							mPlayer.setDisplay(mVideoSurfaceHolder);
+							mPlayer.prepare();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					
+					@Override
+					public void surfaceChanged(SurfaceHolder holder, int format, int width,
+							int height) {
+						// TODO Auto-generated method stub
+						Logger.d(TAG, "[SurfaceHolder.surfaceChanged]");
+					}
+				});
             	break;
             	
             case TYPE_MUSIC_L:
@@ -903,13 +938,7 @@ public class ChattingListAdapter extends BaseAdapter {
 					
 					@Override
 					public void onClick(View v, String url) {
-						Intent intent = IntentUtil.getStartWebViewIntent(
-								mActivity, 
-								WebViewActivity.class, 
-								url, 
-								0);
-						mActivity.startActivity(intent);
-						mActivity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+						mActivity.gotoWebViewActivity(url);
 					}
 				});
             }
@@ -1033,6 +1062,10 @@ public class ChattingListAdapter extends BaseAdapter {
 				}
 				break;
 			
+			case R.id.id_video_bg: // 点击视频背景
+				mActivity.gotoVedioPlayActivity(((V5VideoMessage)mChatBean.getMessage()).getFilePath());
+				break;
+				
 			default:
 				/* 点击其他地方隐藏bottom bar */
 				Message msg = new Message();
@@ -1055,8 +1088,7 @@ public class ChattingListAdapter extends BaseAdapter {
 		}
 
 		private void onSingleNewsClick(String url) {
-			Intent i = IntentUtil.getStartWebViewIntent(mActivity, WebViewActivity.class, url, 0);
-			mActivity.gotoActivity(i);
+			mActivity.gotoWebViewActivity(url);
 		}
 
 		@Override
@@ -1385,55 +1417,55 @@ public class ChattingListAdapter extends BaseAdapter {
 			}
 			try {
 				//mVideoSurfaceHolder.setKeepScreenOn(true);
-				mVideoSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
-					
-					@Override
-					public void surfaceDestroyed(SurfaceHolder holder) {
-						// TODO Auto-generated method stub
-						Logger.d(TAG, "[SurfaceHolder.surfaceDestroyed]");
-					}
-					
-					@Override
-					public void surfaceCreated(SurfaceHolder holder) {
-						// TODO Auto-generated method stub
-						Logger.d(TAG, "[SurfaceHolder.surfaceCreated]");
-						// 必须在surface创建后才能初始化MediaPlayer,否则不会显示图像
-						mPlayer = new MediaPlayer();
-						mPlayer.setOnErrorListener(new OnErrorListener() {
-							
-							@Override
-							public boolean onError(MediaPlayer mp, int what, int extra) {
-								Logger.e(TAG, "MediaPlayer - onError");
-								return false;
-							}
-						});
-						mPlayer.setOnCompletionListener(completionListener);
-						mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-							
-							@Override
-							public void onPrepared(MediaPlayer mp) {
-								// TODO Auto-generated method stub
-								Logger.d(TAG, "[MediaPlayer.onPrepared]");
-								mPlayer.start();
-								updateVideoStartPlayingState();
-							}
-						});
-						try {
-							mPlayer.setDataSource(videoMessage.getFilePath());
-							mPlayer.setDisplay(mVideoSurfaceHolder);
-							mPlayer.prepare();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					
-					@Override
-					public void surfaceChanged(SurfaceHolder holder, int format, int width,
-							int height) {
-						// TODO Auto-generated method stub
-						Logger.d(TAG, "[SurfaceHolder.surfaceChanged]");
-					}
-				});
+//				mVideoSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
+//					
+//					@Override
+//					public void surfaceDestroyed(SurfaceHolder holder) {
+//						// TODO Auto-generated method stub
+//						Logger.d(TAG, "[SurfaceHolder.surfaceDestroyed]");
+//					}
+//					
+//					@Override
+//					public void surfaceCreated(SurfaceHolder holder) {
+//						// TODO Auto-generated method stub
+//						Logger.d(TAG, "[SurfaceHolder.surfaceCreated]");
+//						// 必须在surface创建后才能初始化MediaPlayer,否则不会显示图像
+//						mPlayer = new MediaPlayer();
+//						mPlayer.setOnErrorListener(new OnErrorListener() {
+//							
+//							@Override
+//							public boolean onError(MediaPlayer mp, int what, int extra) {
+//								Logger.e(TAG, "MediaPlayer - onError");
+//								return false;
+//							}
+//						});
+//						mPlayer.setOnCompletionListener(completionListener);
+//						mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//							
+//							@Override
+//							public void onPrepared(MediaPlayer mp) {
+//								// TODO Auto-generated method stub
+//								Logger.d(TAG, "[MediaPlayer.onPrepared]");
+//								mPlayer.start();
+//								updateVideoStartPlayingState();
+//							}
+//						});
+//						try {
+//							mPlayer.setDataSource(videoMessage.getFilePath());
+//							mPlayer.setDisplay(mVideoSurfaceHolder);
+//							mPlayer.prepare();
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//					}
+//					
+//					@Override
+//					public void surfaceChanged(SurfaceHolder holder, int format, int width,
+//							int height) {
+//						// TODO Auto-generated method stub
+//						Logger.d(TAG, "[SurfaceHolder.surfaceChanged]");
+//					}
+//				});
 				mVideoSurface.setVisibility(View.VISIBLE);
 			} catch (Exception e) {
 				e.printStackTrace();

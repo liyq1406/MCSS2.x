@@ -42,6 +42,7 @@ import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
 import com.v5kf.mcss.ui.widget.CustomProgressDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
+import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 
 public abstract class ActivityBase extends SwipeBackActivity {
@@ -93,7 +94,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Logger.d("LifeCycle", "---onCreate---");
 		super.onCreate(savedInstanceState);
-//		setSwipeBackEnable(false);
+		setSwipeBackEnable(true);
 		
 		mApplication = (CustomApplication)getApplication();
 		mAppInfo = mApplication.getAppInfo();		
@@ -411,13 +412,6 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		startActivity(intent);
 	}
 
-	public void gotoImageActivity(String pic_url) {
-		Intent intent = new Intent(this, ShowImageActivity.class);
-		intent.putExtra("pic_url", pic_url);
-		startActivity(intent);
-		//overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
-		// TODO
-	}
 	public void finishImageActivity() {
 		finish();
 		//overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
@@ -720,5 +714,35 @@ public abstract class ActivityBase extends SwipeBackActivity {
 			mAlertDialog.dismiss();
 			mAlertDialog = null;
 		}
+	}
+	
+	public void gotoImageActivity(String pic_url) {
+		Intent intent = new Intent(this, ShowImageActivity.class);
+		intent.putExtra("pic_url", pic_url);
+		startActivity(intent);
+		//overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
+		// TODO
+	}
+	
+	public void gotoVedioPlayActivity(String filePath) {
+		// TODO Auto-generated method stub
+		Logger.d("ActivityBase", "[gotoVedioPlayActivity] file:" + filePath);
+		Bundle bundle = new Bundle();
+		bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_ACTIVITY_START);
+		bundle.putString("file_path", filePath);
+		
+		Intent intent = new Intent(this, VideoPlayActivity.class);
+		intent.putExtras(bundle);
+		gotoActivity(intent);
+	}
+	
+	public void gotoWebViewActivity(String url) {
+		Intent i = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, url, 0);
+		gotoActivity(i);
+	}
+	
+	public void gotoWebViewActivity(String url, int titleId) {
+		Intent i = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, url, titleId);
+		gotoActivity(i);
 	}
 }

@@ -89,7 +89,7 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 		
 		// 设置状态栏颜色 -> [修改]不设置，让view顶到头
 		/* 在API19以上改变状态栏颜色 */
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         	Window window = getWindow();
 			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
 					| WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
