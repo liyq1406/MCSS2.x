@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.chyrain.fragment.LazyFragment;
+import com.v5kf.client.lib.Logger;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.entity.AppInfoKeeper;
@@ -35,14 +36,18 @@ public abstract class TabBaseFragment extends LazyFragment {
 	
 	public TabBaseFragment() {
 		// TODO Auto-generated constructor stub
+		Logger.d("TabBaseFragment", "TabBaseFragment()");
+		this.mApplication = CustomApplication.getInstance();
+		this.mAppInfo = mApplication.getAppInfo();
+		this.mHandler = new FragmentHandler(this);
+		this.mParentActivity = (MainTabActivity)getActivity();
 	}
 	
 	public TabBaseFragment(MainTabActivity activity, int index) {
+		this();
+		Logger.d("TabBaseFragment", "TabBaseFragment(MainTabActivity activity, int index)");
 		this.mParentActivity = activity;
 		this.mIndex = index;
-		this.mApplication = (CustomApplication) mParentActivity.getApplication();
-		this.mAppInfo = mApplication.getAppInfo();
-		this.mHandler = new FragmentHandler(this);
 	}
 	
 	@Override

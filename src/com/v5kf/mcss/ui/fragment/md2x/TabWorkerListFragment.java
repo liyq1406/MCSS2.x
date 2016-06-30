@@ -57,7 +57,9 @@ public class TabWorkerListFragment extends TabBaseFragment implements OnRefreshL
 	private TextView mEmptyTipsTv;
 	
 	public TabWorkerListFragment() {
+		super();
 		// TODO Auto-generated constructor stub
+		mDatas = new ArrayList<>();
 	}
 	
     public TabWorkerListFragment(MainTabActivity activity, int index) {

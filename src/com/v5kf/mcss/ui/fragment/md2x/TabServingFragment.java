@@ -62,6 +62,8 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	
 	public TabServingFragment() {
 		// TODO Auto-generated constructor stub
+		super();
+		mRecycleBeans = new ArrayList<>();
 	}
 	
     public TabServingFragment(MainTabActivity activity, int index) {

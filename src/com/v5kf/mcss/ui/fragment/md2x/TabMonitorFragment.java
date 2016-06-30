@@ -62,7 +62,9 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	private TextView mEmptyTipsTv;
 
 	public TabMonitorFragment() {
+		super();
 		// TODO Auto-generated constructor stub
+		mRecycleBeans = new ArrayList<>();
 	}
 	
     public TabMonitorFragment(MainTabActivity activity, int index) {

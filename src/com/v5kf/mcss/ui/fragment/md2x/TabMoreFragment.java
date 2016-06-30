@@ -73,6 +73,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	private WorkerSP mWsp;
 	
 	public TabMoreFragment() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 	

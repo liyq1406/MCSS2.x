@@ -70,13 +70,14 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 	private int mPages = 1;
 	
 	public TabHistoryCustomerFragment() {
+		super();
 		// TODO Auto-generated constructor stub
+		mRecycleBeans = new ArrayList<>();
 	}
 	
     public TabHistoryCustomerFragment(MainTabActivity activity, int index) {
 		super(activity, index);
 		mRecycleBeans = new ArrayList<>();
-			
 	}
     
 

@@ -90,16 +90,22 @@ public class MaterialBaseFragment extends LazyFragment {
 	
 	public MaterialBaseFragment() {
 		// TODO Auto-generated constructor stub
+		this.mApplication = (CustomApplication) mParentActivity.getApplication();
+		this.mAppInfo = mApplication.getAppInfo();
+		this.mHandler = new FragmentHandler(this);
 	}
 	
 	public MaterialBaseFragment(ActivityBase activity, int index) {
 		this.mParentActivity = activity;
 		this.mIndex = index;
-		// TODO
 		this.mMaterialType = index + 1;
-		this.mApplication = (CustomApplication) mParentActivity.getApplication();
-		this.mAppInfo = mApplication.getAppInfo();
-		this.mHandler = new FragmentHandler(this);
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		
 	}
 	
 	@Override
