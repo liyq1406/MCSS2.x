@@ -21,7 +21,9 @@ public class Config {
 	public static final boolean ENABLE_WORKER_LOG = true;
 	public static final int LOG_LEVEL = Logger.VERBOS;
 	public static final boolean USE_THUMBNAIL = true;
+	public static final boolean ENABLE_PLAY_VEDIO_IN_LIST = false;
 	public static final boolean SHOW_VID_OID = true; // 是否显示客户信息的v_id、o_id
+	public static final String V5KF_COM = "http://www.v5kf.com/public/website/page.html?sid=10000&id=14146&&first=1&ref=link&uid=&share=wxFriend";
 	
 	/** 
 	 * App Status 应用状态
@@ -221,6 +223,13 @@ public class Config {
 	public static final int REQUEST_CODE_CAMERA = 15; // 拍照返回图片
 	public static final int REQUEST_CODE_CROP = 16; // 裁剪返回图片
 	public static final int REQUEST_CODE_PHOTO_PREV = 17; // 预览图片
+	/* 权限申请返回码 */
+	public static final int REQUEST_PERMISSION_CAMERA = 101; // 拍照权限
+	public static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 102; // 存储权限
+	public static final int REQUEST_PERMISSION_RECORD_AUDIO = 103; // 录音权限
+	public static final int REQUEST_PERMISSION_ACCESS_FINE_LOCATION = 104; // GPS位置权限
+	public static final int REQUEST_PERMISSION_ACCESS_COARSE_LOCATION = 105; // 网络位置权限
+	public static final int REQUEST_PERMISSION_ALL = 100; // 全部权限
 
 	public static final int RESULT_CODE_NULL = 0;
 	public static final int RESULT_CODE_WORKER_INFO_CHANGE = 1;

@@ -12,7 +12,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.ui.view.ActionItem;
@@ -25,7 +24,7 @@ public class WebViewActivity extends BaseToolbarActivity {
 	private WebView mWebView;
 	private String mUrl;
 	private int mTitleId;
-	private LinearLayout mLoadingLl;
+//	private LinearLayout mLoadingLl;
 	private SwipeRefreshLayout mSwipeLayout;
 	
 	// 标题栏弹窗
@@ -40,6 +39,8 @@ public class WebViewActivity extends BaseToolbarActivity {
 		handleIntent();
 		findView();
 		initView();
+//		mLoadingLl.setVisibility(View.VISIBLE);
+		showProgressDialog();
 	}
 	
 	@Override
@@ -65,7 +66,7 @@ public class WebViewActivity extends BaseToolbarActivity {
 
 	private void findView() {
 		mWebView = (WebView) findViewById(R.id.id_web_view);
-		mLoadingLl = (LinearLayout) findViewById(R.id.layout_container_empty);
+//		mLoadingLl = (LinearLayout) findViewById(R.id.layout_container_empty);
 		mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 		mMoreIv = (ImageView) findViewById(R.id.more_iv);
 	}
@@ -93,7 +94,6 @@ public class WebViewActivity extends BaseToolbarActivity {
                 	getToolbar().setTitle(title);  
                 }
             }  
-  
         };  
         // 设置setWebChromeClient对象  
         mWebView.setWebChromeClient(wvcc);
@@ -104,8 +104,9 @@ public class WebViewActivity extends BaseToolbarActivity {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				view.loadUrl(url);
-				mSwipeLayout.setVisibility(View.GONE);
-				mLoadingLl.setVisibility(View.VISIBLE);
+//				mSwipeLayout.setVisibility(View.GONE);
+//				mLoadingLl.setVisibility(View.VISIBLE);
+				showProgressDialog();
 		        return true;
 			}
 			
@@ -117,8 +118,9 @@ public class WebViewActivity extends BaseToolbarActivity {
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
-				mSwipeLayout.setVisibility(View.VISIBLE);
-				mLoadingLl.setVisibility(View.GONE);
+//				mSwipeLayout.setVisibility(View.VISIBLE);
+//				mLoadingLl.setVisibility(View.GONE);
+				dismissProgressDialog();
 				mSwipeLayout.setRefreshing(false);
 			}
 			
@@ -144,9 +146,10 @@ public class WebViewActivity extends BaseToolbarActivity {
 	private void initTitleBar() {
 		initPopupMenu();
 		if (mTitleId == 0) {
-			mTitleId = R.string.app_name;
+			initTopBarForLeftBack(R.string.app_name);
+		} else {
+			initTopBarForLeftBack(mTitleId);
 		}
-		initTopBarForLeftBack(mTitleId);
 		// toolbar右侧按钮
 //		initTopBarForLeftImageAndRightImage(
 //				mTitleId, 

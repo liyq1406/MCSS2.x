@@ -12,13 +12,17 @@ package com.v5kf.mcss.ui.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.v5kf.mcss.R;
+import com.v5kf.mcss.utils.Logger;
 
 public class CheckboxDialog extends Dialog implements android.view.View.OnClickListener {
 
@@ -43,8 +47,18 @@ public class CheckboxDialog extends Dialog implements android.view.View.OnClickL
 
     public CheckboxDialog(Context context) {
         super(context, R.style.custom_dialog);
-        setContentView(R.layout.dialog_checkbox);
+        View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_checkbox, null);
+        setContentView(contentView);
         
+        // 调整dialog背景大小
+        int dialogWidth = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.80);
+        int maxWidth = (int) context.getResources().getDimension(R.dimen.dialog_width);
+		Logger.w("CustomProgressDialog", "width dimen:" + dialogWidth + context.getResources().getDisplayMetrics().density);
+		if (dialogWidth > maxWidth) {
+			dialogWidth = maxWidth;
+		}
+		contentView.setLayoutParams(new FrameLayout.LayoutParams(dialogWidth, LayoutParams.WRAP_CONTENT));
+		
         findView();
         initDialog();
         

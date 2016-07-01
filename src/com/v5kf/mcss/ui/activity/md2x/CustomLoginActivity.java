@@ -17,10 +17,9 @@ import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.v5kf.client.lib.V5HttpUtil;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
@@ -55,6 +54,7 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 	
 	private EditText mSiteNameEt, mUserNameEt, mUserPwdEt;
 	private CircleImageView mWorkerPhoto;
+	private TextView mTipsTv;
 	
 	private NetworkManager mNetReceiver;
 	
@@ -90,16 +90,16 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 		// 设置状态栏颜色 -> [修改]不设置，让view顶到头
 		/* 在API19以上改变状态栏颜色 */
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        	Window window = getWindow();
-			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-					| WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-			window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//							| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-							| View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            //window.setStatusBarColor(UITools.getColor(this, R.color.base_status_bar_bg));
-//            window.setStatusBarColor(Color.TRANSPARENT);
-//            window.setNavigationBarColor(Color.TRANSPARENT);
+//        	Window window = getWindow();
+//			window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+//					| WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//			window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+////							| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//							| View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            //window.setStatusBarColor(UITools.getColor(this, R.color.base_status_bar_bg));
+////            window.setStatusBarColor(Color.TRANSPARENT);
+////            window.setNavigationBarColor(Color.TRANSPARENT);
         }
 		
 		Logger.w(TAG, "android.os.Build.MODEL = " + android.os.Build.MODEL);
@@ -146,6 +146,7 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 		mUserPwdEt = (EditText) findViewById(R.id.user_pwd_et);
 		mSiteNameEt = (EditText) findViewById(R.id.site_name_et);
 		mWorkerPhoto = (CircleImageView) findViewById(R.id.login_worker_photo);
+		mTipsTv = (TextView) findViewById(R.id.account_tips);
 	}
 	
 
@@ -158,6 +159,15 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 			ImageLoader imageLoader = new ImageLoader(this, true, R.drawable.v5_photo_default);
 			imageLoader.DisplayImage(mWsp.readWorkerPhoto(), mWorkerPhoto);
 		}
+		
+		mTipsTv.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				gotoWebViewActivity(Config.V5KF_COM, 0); //R.string.app_name
+			}
+		});
 	}
 
 	@Override

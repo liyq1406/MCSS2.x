@@ -370,7 +370,7 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 						new OnSheetItemClickListener() {
 							@Override
 							public void onClick(int which) {
-								if (DevUtils.hasPermission(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")) {
+								if (DevUtils.hasPermission(WorkerInfoActivity.this, "android.permission.WRITE_EXTERNAL_STORAGE")) {
 									systemPhoto();
 									showProgressDialog();
 								} else {
@@ -382,7 +382,7 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 						new OnSheetItemClickListener() {
 							@Override
 							public void onClick(int which) {
-								if (DevUtils.hasPermission(getApplicationContext(), "android.permission.CAMERA")) {
+								if (DevUtils.hasPermission(WorkerInfoActivity.this, "android.permission.CAMERA")) {
 									cameraPhoto();
 									showProgressDialog();
 								} else {

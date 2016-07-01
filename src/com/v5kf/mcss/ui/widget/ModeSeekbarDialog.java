@@ -15,7 +15,10 @@ import org.json.JSONException;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.WorkerRequest;
 import com.v5kf.mcss.ui.widget.ModeSeekBar.OnProgressChangedListener;
+import com.v5kf.mcss.utils.Logger;
 
 public class ModeSeekbarDialog extends Dialog implements android.view.View.OnClickListener {
 
@@ -51,12 +55,22 @@ public class ModeSeekbarDialog extends Dialog implements android.view.View.OnCli
 
     public ModeSeekbarDialog(Context context, WorkerBean user) {
         super(context, R.style.custom_dialog);
-        setContentView(R.layout.dialog_seekbar);
+        View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_seekbar, null);
+        setContentView(contentView);
         
         this.mUser = user;
 
         findView();
         initDialog();
+        
+        // 调整dialog背景大小
+        int dialogWidth = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.80);
+        int maxWidth = (int) context.getResources().getDimension(R.dimen.dialog_width);
+		Logger.w("CustomProgressDialog", "width dimen:" + dialogWidth + context.getResources().getDisplayMetrics().density);
+		if (dialogWidth > maxWidth) {
+			dialogWidth = maxWidth;
+		}
+		contentView.setLayoutParams(new FrameLayout.LayoutParams(dialogWidth, LayoutParams.WRAP_CONTENT));
         
         setCanceledOnTouchOutside(true);
         setCancelable(true);

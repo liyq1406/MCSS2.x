@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dialog_width"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/white_shape"
+    android:background="@drawable/v5_alert_bg"
     android:orientation="vertical"
-    android:paddingTop="33.3dp" >
+    android:paddingTop="23.3dp" >
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -16,10 +16,10 @@
         android:id="@+id/tv_process_dialog_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="33.3dp"
-        android:paddingRight="33.3dp"
-        android:paddingTop="33.3dp"
-        android:paddingBottom="33.3dp"
+        android:paddingLeft="23.3dp"
+        android:paddingRight="23.3dp"
+        android:paddingTop="23.3dp"
+        android:paddingBottom="23.3dp"
         android:layout_gravity="center"
         android:textColor="@color/dialog_title_text_color"
         android:textSize="@dimen/dialog_title_text_size" />

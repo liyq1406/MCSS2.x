@@ -57,8 +57,12 @@ public class AlertDialog {
 		dialog.setContentView(view);
 
 		// 调整dialog背景大小
-		lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (context.getResources().
-				getDisplayMetrics().widthPixels * 0.80), LayoutParams.WRAP_CONTENT));
+		int dialogWidth = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.80);
+		int maxWidth = (int) context.getResources().getDimension(R.dimen.dialog_width);
+		if (dialogWidth > maxWidth) {
+			dialogWidth = maxWidth;
+		}
+		lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams(dialogWidth, LayoutParams.WRAP_CONTENT));
 
 		return this;
 	}

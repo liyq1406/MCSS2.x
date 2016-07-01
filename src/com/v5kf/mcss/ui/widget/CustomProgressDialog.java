@@ -18,9 +18,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.v5kf.mcss.R;
+import com.v5kf.mcss.utils.Logger;
 
 
 public class CustomProgressDialog extends Dialog {
@@ -47,6 +49,16 @@ public class CustomProgressDialog extends Dialog {
         } else {
             contentView = LayoutInflater.from(context).inflate(R.layout.dialog_process_without_text, null);
         }
+        
+        // 调整dialog背景大小
+        int dialogWidth = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.80);
+        int maxWidth = (int) context.getResources().getDimension(R.dimen.dialog_width);
+		Logger.w("CustomProgressDialog", "width dimen:" + dialogWidth + context.getResources().getDisplayMetrics().density);
+		if (dialogWidth > maxWidth) {
+			dialogWidth = maxWidth;
+		}
+		contentView.setLayoutParams(new FrameLayout.LayoutParams(dialogWidth, LayoutParams.WRAP_CONTENT));
+        
         customProgressDialog.setContentView(contentView, params);
         customProgressDialog.getWindow().getAttributes().gravity = Gravity.CENTER;
 

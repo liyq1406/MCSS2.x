@@ -455,6 +455,8 @@ public class ChattingListAdapter extends BaseAdapter {
 			V5VideoMessage videoMessage = (V5VideoMessage)chatMessage.getMessage();
 			if (videoMessage.getCoverFrame() != null) {
 				loadVideo(holder, videoMessage);
+			} else {
+				holder.mVideoBgIv.setImageResource(R.drawable.img_default_video);
 			}
 			
 			// 播放状态
@@ -481,14 +483,15 @@ public class ChattingListAdapter extends BaseAdapter {
         		}
         	}
         	Logger.d(TAG, "Video url:" + url + " sendState:" + videoMessage.getState());
-        	MediaLoader mediaLoader = new MediaLoader(mActivity, holder, new MediaLoaderListener() {
+        	MediaLoader mediaLoader = new MediaLoader(mActivity, chatMessage, new MediaLoaderListener() {
 				
 				@Override
 				public void onSuccess(V5Message msg, Object obj, MediaCache media) {
 					//((V5VideoMessage)msg).setFilePath(media.getLocalPath());
 					Logger.d(TAG, "list load Video onSuccess ----- ");
 					if (media.getCoverFrame() != null) {
-						loadVideo((ViewHolder)obj, (V5VideoMessage)msg);
+						notifyDataSetChanged();
+						//loadVideo((ViewHolder)obj, (V5VideoMessage)msg);
 					}
 				}
 				
@@ -500,7 +503,7 @@ public class ChattingListAdapter extends BaseAdapter {
 							public void run() {
 								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
 							}
-						}, 500); // 0.5s后重试
+						}, 1000); // 1s后重试
 					}
 				}
 			});
@@ -1015,30 +1018,6 @@ public class ChattingListAdapter extends BaseAdapter {
 				}
 				break;
 				
-			case R.id.id_video_control_img: // 点击视频播放
-				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_VIDEO ||
-						mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_SHORT_VIDEO) {
-					if (mChatBean.isPlaying()) { // 停止播放
-						stopPlayingVideo();
-					} else { // 开始播放
-//						if (mVoiceAnimDrawable != null) {
-//							mVoiceAnimDrawable.stop();
-//						}
-						startPlaying((V5VideoMessage)mChatBean.getMessage(), new OnCompletionListener() {
-							
-							@Override
-							public void onCompletion(MediaPlayer mp) {
-								Logger.i(TAG, "MediaPlayer - completePlaying");
-								updateVideoStopPlayingState();
-								mp.release();
-								mp = null;
-								mPlayer = null;
-							}
-						});
-					}
-				}
-				break;
-
 			case R.id.id_music_control_img: // 点击音乐播放
 				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_MUSIC) {
 					if (mChatBean.isPlaying()) { // 停止播放
@@ -1062,6 +1041,31 @@ public class ChattingListAdapter extends BaseAdapter {
 				}
 				break;
 			
+			case R.id.id_video_control_img: // 点击视频播放
+				if (Config.ENABLE_PLAY_VEDIO_IN_LIST) {
+					if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_VIDEO ||
+							mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_SHORT_VIDEO) {
+						if (mChatBean.isPlaying()) { // 停止播放
+							stopPlayingVideo();
+						} else { // 开始播放
+	//						if (mVoiceAnimDrawable != null) {
+	//							mVoiceAnimDrawable.stop();
+	//						}
+							startPlaying((V5VideoMessage)mChatBean.getMessage(), new OnCompletionListener() {
+								
+								@Override
+								public void onCompletion(MediaPlayer mp) {
+									Logger.i(TAG, "MediaPlayer - completePlaying");
+									updateVideoStopPlayingState();
+									mp.release();
+									mp = null;
+									mPlayer = null;
+								}
+							});
+						}
+					}
+					break;
+				}
 			case R.id.id_video_bg: // 点击视频背景
 				mActivity.gotoVedioPlayActivity(((V5VideoMessage)mChatBean.getMessage()).getFilePath());
 				break;

@@ -23,6 +23,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.ui.activity.info.BaseActivity;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
+import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
@@ -126,8 +127,15 @@ public class ShowImageActivity extends BaseActivity implements ImageLoaderListen
 			public void onClick(View view) {
 				switch (view.getId()) {
 				case R.id.btn_dialog_only_option:	// 保存图片
-					saveImage();
-					ShowToast(String.format(getString(R.string.on_image_saveed), mFileName));
+					if (DevUtils.hasPermission(ShowImageActivity.this, "android.permission.WRITE_EXTERNAL_STORAGE")) {
+						if (saveImage()) {
+							ShowToast(String.format(getString(R.string.on_image_saveed), mFileName));
+						} else {
+							ShowToast(R.string.on_image_saveed_failed);
+						}
+					} else {
+						showAlertDialog(R.string.v5_permission_photo_deny, null);
+					}
 					break;
 				}
 			}
@@ -139,11 +147,16 @@ public class ShowImageActivity extends BaseActivity implements ImageLoaderListen
 		});
 	}
 
-	protected void saveImage() {
+	protected boolean saveImage() {
 		mPhotoIv.setDrawingCacheEnabled(true);
 		Bitmap tempBmp = Bitmap.createBitmap(mPhotoIv.getDrawingCache());
 		mPhotoIv.setDrawingCacheEnabled(false);
 		mFileName = saveBitmap2File(tempBmp);
+		if (null == mFileName) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	public String saveBitmap2File(Bitmap bitmap) {

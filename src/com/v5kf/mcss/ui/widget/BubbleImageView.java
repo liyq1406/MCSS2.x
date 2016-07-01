@@ -46,6 +46,9 @@ public class BubbleImageView extends ImageView {
 	private Matrix mShaderMatrix;
 	private int mBitmapWidth;
 	private int mBitmapHeight;
+	
+	private RectF mRect;
+	private Path mPath;
 
 	public BubbleImageView(Context context) {
 		super(context);
@@ -81,17 +84,21 @@ public class BubbleImageView extends ImageView {
 		if (getDrawable() == null) {
 			return;
 		}
-		RectF rect = new RectF(getPaddingLeft(), getPaddingTop(), getRight() - getLeft() - getPaddingRight(), getBottom() - getTop() - getPaddingBottom());
-
-		Path path = new Path();
-
-		if (mArrowLocation == LOCATION_LEFT) {
-			leftPath(rect, path);
-		} else {
-			rightPath(rect, path);
+		if (mRect == null) {
+			mRect = new RectF(getPaddingLeft(), getPaddingTop(), getRight() - getLeft() - getPaddingRight(), getBottom() - getTop() - getPaddingBottom());
 		}
 
-		canvas.drawPath(path, mBitmapPaint);
+		if (mPath == null) {
+			mPath = new Path();
+		}
+
+		if (mArrowLocation == LOCATION_LEFT) {
+			leftPath(mRect, mPath);
+		} else {
+			rightPath(mRect, mPath);
+		}
+
+		canvas.drawPath(mPath, mBitmapPaint);
 	}
 
 	public void rightPath(RectF rect, Path path) {

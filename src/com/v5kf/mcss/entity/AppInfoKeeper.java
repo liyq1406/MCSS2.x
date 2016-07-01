@@ -222,8 +222,8 @@ public class AppInfoKeeper {
 			Logger.w(TAG, "[getCustomerBean] null key");
 			return null;
 		}
-		CustomerBean cstm = mCustomerMap.get(c_id);
-		return cstm == null ? mMonitorMap.get(c_id) : cstm;
+		CustomerBean cstm = getCustomerMap().get(c_id);
+		return cstm == null ? getMonitorMap().get(c_id) : cstm;
 	}
 	
 	/**

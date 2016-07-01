@@ -172,11 +172,13 @@
 
         <activity
             android:theme="@style/AppTheme.Fullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="com.v5kf.mcss.ui.activity.md2x.ShowImageActivity" >
         </activity>
 
         <activity
             android:theme="@style/AppTheme.VideoFullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="com.v5kf.mcss.ui.activity.md2x.VideoPlayActivity" >
         </activity>
         
@@ -220,11 +222,13 @@
         </activity>
 
         <activity
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="com.v5kf.mcss.ui.activity.AAMainActivity" >
         </activity>
         
         <activity
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"
             android:name="com.v5kf.mcss.ui.activity.md2x.CustomLoginActivity" >
         </activity>

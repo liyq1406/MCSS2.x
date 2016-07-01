@@ -130,7 +130,7 @@
     <color name="dialog_text_color">#000000</color>
     <color name="dialog_divider_v">#E0E1E2</color>
     <color name="dialog_divider_h">#E0E1E2</color>
-    <color name="dialog_option_item_boder">#E0E1E2</color>
+    <color name="dialog_option_item_boder">@color/actionsheet_divider</color>
     <color name="dialog_warning_btn_boder">#E0E1E2</color><!-- ?? -->
     <color name="dialog_option_item_bg_pressed">#cacaca</color><!-- 按下 -->
     <color name="dialog_alert_btn_bg_pressed">#a0f0f0f0</color>

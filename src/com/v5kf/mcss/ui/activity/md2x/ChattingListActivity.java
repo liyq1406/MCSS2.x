@@ -613,58 +613,6 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
         }
         pageApps.setAppBeanList(mAppBeanList);
 		pageApps.setFuncItemClickListener(new FuncItemClickListener() {			
-			//@Override
-			public void onFuncItemClick(View v, int id) {
-				if (!checkCustomer()) {
-					if (!Config.DEBUG) {
-						return;
-					}
-					Logger.e(TAG, "checkCustomer failed! null!");
-				}
-				if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-					ShowToast("客户暂时离开，无法接收消息");
-					return;
-				}
-				switch (id) {
-				case 0: // 常见问答
-					getHotQuesAndShow();
-					break;
-				case 1: // 提问机器人
-					gotoRobotChatActivity();
-					break;
-				case 2: // 图片
-					if (mCustomer.getIface() == QAODefine.CSTM_IF_ALIPAY || 
-						mCustomer.getIface() == QAODefine.CSTM_IF_QQ) {
-						ShowToast(R.string.send_image_unsupport);
-					} else {
-						if (DevUtils.hasPermission(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")) {
-							systemPhoto();
-						} else {
-							showAlertDialog(R.string.v5_permission_photo_deny, null);
-						}
-					}
-					break;
-				case 3: // 拍照
-					if (mCustomer.getIface() == QAODefine.CSTM_IF_ALIPAY || 
-						mCustomer.getIface() == QAODefine.CSTM_IF_QQ) {
-						ShowToast(R.string.send_image_unsupport);
-					} else {
-						if (DevUtils.hasPermission(getApplicationContext(), "android.permission.CAMERA")) {
-							cameraPhoto();
-						} else {
-							showAlertDialog(R.string.v5_permission_camera_deny, null);
-						}
-					}
-					break;
-				case 4: // 素材
-					gotoImageMaterialActivity();
-					break;
-				case 5: // 位置
-					showProgressDialog();
-					gotoLocationMapActivity();
-					break;
-				}
-			}
 
 			@Override
 			public void onFuncItemClick(View v, AppBean bean) {
@@ -690,7 +638,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 						mCustomer.getIface() == QAODefine.CSTM_IF_QQ) {
 						ShowToast(R.string.send_image_unsupport);
 					} else {
-						if (DevUtils.hasPermission(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")) {
+						if (DevUtils.hasPermission(ChattingListActivity.this, "android.permission.WRITE_EXTERNAL_STORAGE")) {
 							systemPhoto();
 						} else {
 							showAlertDialog(R.string.v5_permission_photo_deny, null);
@@ -702,7 +650,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 						mCustomer.getIface() == QAODefine.CSTM_IF_QQ) {
 						ShowToast(R.string.send_image_unsupport);
 					} else {
-						if (DevUtils.hasPermission(getApplicationContext(), "android.permission.CAMERA")) {
+						if (DevUtils.hasPermission(ChattingListActivity.this, "android.permission.CAMERA")) {
 							cameraPhoto();
 						} else {
 							showAlertDialog(R.string.v5_permission_camera_deny, null);
@@ -713,8 +661,13 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 					gotoImageMaterialActivity();
 					break;
 				case 5: // 位置
-					showProgressDialog();
-					gotoLocationMapActivity();
+					if (DevUtils.checkAndRequestPermission(ChattingListActivity.this, 
+							new String[]{"android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"})) {
+						//showProgressDialog();
+						gotoLocationMapActivity();
+					} else {
+						showAlertDialog(R.string.v5_permission_location_deny, null);
+					}
 					break;
 				}
 			}
@@ -1512,7 +1465,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				Logger.e(TAG, "ACTION_DOWN");
-				if (!DevUtils.hasPermission(getApplicationContext(), "android.permission.RECORD_AUDIO")) {
+				if (!DevUtils.hasPermission(ChattingListActivity.this, "android.permission.RECORD_AUDIO")) {
 					showAlertDialog(R.string.v5_permission_record_deny, null);
 					return false;
 				}

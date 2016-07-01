@@ -94,9 +94,9 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Logger.d("LifeCycle", "---onCreate---");
 		super.onCreate(savedInstanceState);
-		setSwipeBackEnable(true);
+		setSwipeBackEnable(false);
 		
-		mApplication = (CustomApplication)getApplication();
+		mApplication = CustomApplication.getInstance();
 		mAppInfo = mApplication.getAppInfo();		
 		mHandler = new BaseHandler(this);
 		mReceiver = new WebsocktReadReceiver();

@@ -39,7 +39,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tencent.android.tpush.XGPushConfig;
 import com.v5kf.client.lib.DBHelper;
 import com.v5kf.client.lib.Logger;
 import com.v5kf.client.lib.V5ClientAgent;
@@ -76,12 +75,10 @@ import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.LocationBean;
 import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.activity.md2x.LocationMapActivity;
-import com.v5kf.mcss.ui.activity.md2x.WebViewActivity;
 import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.V5VoiceRecord;
 import com.v5kf.mcss.utils.V5VoiceRecord.VoiceRecordListener;
 import com.v5kf.mcss.utils.VoiceErrorCode;
@@ -254,7 +251,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 					break;
 					
 				case 2: // 图片
-					if (DevUtils.hasPermission(getApplicationContext(), "android.permission.WRITE_EXTERNAL_STORAGE")) {
+					if (DevUtils.hasPermission(ClientChatActivity.this, "android.permission.WRITE_EXTERNAL_STORAGE")) {
 						openSystemPhoto();
 					} else {
 						showAlertDialog(R.string.v5_permission_photo_deny, null);
@@ -262,7 +259,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 					break;
 					
 				case 3: // 拍照
-					if (DevUtils.hasPermission(getApplicationContext(), "android.permission.CAMERA")) {
+					if (DevUtils.hasPermission(ClientChatActivity.this, "android.permission.CAMERA")) {
 						cameraPhoto();
 					} else {
 						showAlertDialog(R.string.v5_permission_camera_deny, null);
@@ -288,9 +285,14 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 					break;
 				
 				case 5: // 位置
-					Intent intent = new Intent(ClientChatActivity.this, LocationMapActivity.class);
-					startActivityForResult(intent, Config.REQUEST_CODE_GET_LOCATION);
-					overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+					if (DevUtils.checkAndRequestPermission(ClientChatActivity.this, 
+							new String[]{"android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION"})) {
+						Intent intent = new Intent(ClientChatActivity.this, LocationMapActivity.class);
+						startActivityForResult(intent, Config.REQUEST_CODE_GET_LOCATION);
+						overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+					} else {
+						showAlertDialog(R.string.v5_permission_location_deny, null);
+					}
 					break;
 				}
 			}
@@ -1149,7 +1151,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				Logger.i(TAG, "ACTION_DOWN");
-				if (!DevUtils.hasPermission(getApplicationContext(), "android.permission.RECORD_AUDIO")) {
+				if (!DevUtils.hasPermission(ClientChatActivity.this, "android.permission.RECORD_AUDIO")) {
 					showAlertDialog(R.string.v5_permission_record_deny, null);
 					return false;
 				}

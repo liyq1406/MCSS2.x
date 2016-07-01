@@ -9,14 +9,17 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.UiThread;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
@@ -28,6 +31,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.ui.view.ActionItem;
 import com.v5kf.mcss.ui.view.TitlePopup;
 import com.v5kf.mcss.ui.view.TitlePopup.OnItemOnClickListener;
+import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
@@ -38,6 +42,9 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 	private VideoView mVideoView;
 	private ImageView mVideoControlIv;
 	private ImageView mVideoBgIv;
+	
+	private MediaController mMediaController;
+	
 	private String mFilePath;
 	private int mTitleId;
 	
@@ -57,6 +64,19 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 		findView();
 		initView();
 		
+		// Toolbar 设置
+		final ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			// 启用home as up, 改变返回按钮颜色为main_color_accent
+		    Drawable upArrow = getResources().getDrawable(R.drawable.v5_action_bar_back);
+		    upArrow.setColorFilter(getResources().getColor(R.color.white), android.graphics.PorterDuff.Mode.SRC_ATOP);
+		    actionBar.setHomeAsUpIndicator(upArrow);
+		    
+		    actionBar.setDisplayHomeAsUpEnabled(true);
+		    actionBar.setHomeButtonEnabled(true);
+		    actionBar.setDisplayShowHomeEnabled(true);
+		}
+		getToolbar().setTitleTextColor(UITools.getColor(R.color.white));
 		getToolbar().setBackgroundColor(UITools.getColor(R.color.transparent));
 	}
 	
@@ -68,10 +88,51 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 	
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
 		
 		resetPlayer();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuItem itemSave = menu.add(0, 1, Menu.NONE, R.string.save_vedio);
+		itemSave.setIcon(R.drawable.v5_action_bar_ok);
+		itemSave.setShortcut('0', 's');
+		itemSave.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+		MenuItem itemOpen = menu.add(0, 2, Menu.NONE, R.string.open_by_vedioplayer);
+		itemOpen.setIcon(R.drawable.v5_action_bar_ok);
+		itemOpen.setShortcut('0', 'o');
+		itemOpen.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 1:
+			Logger.d("WebViewActivity", "保存本地");
+			if (DevUtils.hasPermission(VideoPlayActivity.this, "android.permission.WRITE_EXTERNAL_STORAGE")) {
+				String des = saveFile();
+				if (des != null) {
+					ShowToast(String.format(getString(R.string.on_video_saveed_fmt), des));
+				} else {
+					ShowToast(R.string.on_video_saveed_failed);
+				}
+			} else {
+				showAlertDialog(R.string.v5_permission_photo_deny, null);
+			}
+			break;
+		case 2:
+			Logger.d("WebViewActivity", "点击在浏览器中打开");
+			Intent intent = new Intent(Intent.ACTION_VIEW);   
+	        intent.setAction("android.intent.action.VIEW");    
+	        Uri content_url = Uri.parse(mFilePath);   
+	        intent.setDataAndType(content_url, "video/*");
+	        startActivity(intent);
+		}
+		
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void handleIntent() {
@@ -95,13 +156,15 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 		mAppBarLayout = (AppBarLayout) findViewById(R.id.id_app_bar_layout);
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1) private void initView() {
+	@SuppressLint("NewApi") 
+	private void initView() {
 		initTitleBar();
+		mMoreIv.setVisibility(View.GONE);
 		
 		// 获得cover fram Bitmap
 		MediaMetadataRetriever mediaDataRet = new MediaMetadataRetriever();
 		mediaDataRet.setDataSource(mFilePath);
-		Bitmap bitmap = mediaDataRet.getFrameAtTime();
+		Bitmap bitmap = mediaDataRet.getFrameAtTime(0);
 		mVideoBgIv.setImageBitmap(bitmap);
 		
 		mMoreIv.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +179,6 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 			
 			@Override
 			public void onCompletion(MediaPlayer mp) {
-				// TODO Auto-generated method stub
 				Logger.d(TAG, "[onCompletion]");
 				resetPlayer();
 			}
@@ -126,7 +188,6 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 			
 			@Override
 			public boolean onError(MediaPlayer mp, int what, int extra) {
-				// TODO Auto-generated method stub
 				Logger.d(TAG, "[onError]");
 				return false;
 			}
@@ -137,7 +198,6 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 				
 				@Override
 				public boolean onInfo(MediaPlayer mp, int what, int extra) {
-					// TODO Auto-generated method stub
 					Logger.d(TAG, "[onInfo]");
 					return false;
 				}
@@ -148,45 +208,33 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 			
 			@Override
 			public void onPrepared(MediaPlayer mp) {
-				// TODO Auto-generated method stub
 				Logger.d(TAG, "[onPrepared]");
 				mVideoControlIv.setVisibility(View.GONE);
 				mVideoBgIv.setVisibility(View.GONE);
+				if (mAppBarLayout.getVisibility() != View.VISIBLE) {
+					mRLayout.setSystemUiVisibility(View.INVISIBLE);
+				}
 			}
 		});
 		
-		mVideoControlIv.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Logger.d(TAG, "[onClick] - start");
-//				if (mVideoView.isPlaying()) {
-//					mVideoControlIv.setVisibility(View.VISIBLE);
-//					mVideoControlIv.setImageResource(R.drawable.img_music_stop);
-//					mVideoControlIv.postDelayed(new Runnable() {
-//						
-//						@Override
-//						public void run() {
-//							if (mVideoView.isPlaying()) {
-//								mVideoControlIv.setVisibility(View.GONE);
-//							}
-//						}
-//					}, 1000);
-//				} else {
-					mVideoView.setVisibility(View.VISIBLE);
-					Uri uri = Uri.parse(mFilePath);  
-					mVideoView.setMediaController(new MediaController(VideoPlayActivity.this));    
-					mVideoView.setVideoURI(uri);
-					mVideoView.start();    
-					mVideoView.requestFocus();
-//				}
-			}
-		});
+		mVideoControlIv.setOnClickListener(this);
+//		mVideoControlIv.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				Logger.d(TAG, "[onClick] - start");
+//					mVideoView.setVisibility(View.VISIBLE);
+//					Uri uri = Uri.parse(mFilePath);  
+//					mVideoView.setMediaController(new MediaController(VideoPlayActivity.this));    
+//					mVideoView.setVideoURI(uri);
+//					mVideoView.start();    
+//					mVideoView.requestFocus();
+//			}
+//		});
 		
 		findViewById(R.id.content_layout).setOnClickListener(this);
 		findViewById(R.id.id_video_bg).setOnClickListener(this);
-		findViewById(R.id.id_video_view).setOnClickListener(this);
+//		findViewById(R.id.id_video_view).setOnClickListener(this);
 	}
 
 	private void initTitleBar() {
@@ -239,11 +287,15 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 				switch (position) {
 				case 0:
 					Logger.d("WebViewActivity", "保存本地");
-					String des = saveFile();
-					if (des != null) {
-						ShowToast(String.format(getString(R.string.on_video_saveed_fmt), des));
+					if (DevUtils.hasPermission(VideoPlayActivity.this, "android.permission.WRITE_EXTERNAL_STORAGE")) {
+						String des = saveFile();
+						if (des != null) {
+							ShowToast(String.format(getString(R.string.on_video_saveed_fmt), des));
+						} else {
+							ShowToast(R.string.on_video_saveed_failed);
+						}
 					} else {
-						ShowToast(R.string.on_video_saveed_failed);
+						showAlertDialog(R.string.v5_permission_photo_deny, null);
 					}
 					break;
 				case 1:
@@ -305,11 +357,9 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 
 	private void stopPlay() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	private void resetPlayer() {
-		// TODO Auto-generated method stub
 		mVideoControlIv.setVisibility(View.VISIBLE);
 		mVideoBgIv.setVisibility(View.VISIBLE);
 		mVideoView.setVisibility(View.GONE);
@@ -323,19 +373,40 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 
 	@SuppressLint("InlinedApi") @Override
 	public void onClick(View v) {
+		Logger.d(TAG, "onClick:" + v.getId());
 		switch (v.getId()) {
+		case R.id.id_video_control_img:
+			mVideoView.setVisibility(View.VISIBLE);
+			Uri uri = Uri.parse(mFilePath);
+			if (mMediaController == null) {
+				mMediaController = new MediaController(VideoPlayActivity.this);
+				mMediaController.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Logger.d(TAG, "onClick MediaController:" + v.getId());
+					}
+				});
+			}
+			mVideoView.setMediaController(mMediaController);    
+			mVideoView.setVideoURI(uri);
+			mVideoView.start();    
+			mVideoView.requestFocus();
+			break;
+		
 		case R.id.id_video_bg:
-		case R.id.id_video_view:
+//		case R.id.id_video_view:
 		case R.id.content_layout:
 			if (mAppBarLayout.getVisibility() == View.VISIBLE) {
 				mAppBarLayout.setVisibility(View.GONE);
-//				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//					mRLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-//				} else {
-//					mRLayout.setSystemUiVisibility(View.INVISIBLE);
-//				}
-				mRLayout.setSystemUiVisibility(View.INVISIBLE);
-//				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					mRLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+				} else {
+					mRLayout.setSystemUiVisibility(View.INVISIBLE);
+				}
+				//mRLayout.setSystemUiVisibility(View.INVISIBLE);
+				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
 			} else {
 //				mRLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
 //				mRLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);

@@ -154,7 +154,7 @@ public class MediaLoader {
 				// 获得cover fram Bitmap
 				MediaMetadataRetriever mediaDataRet = new MediaMetadataRetriever();
 				mediaDataRet.setDataSource(f.getAbsolutePath());
-				Bitmap bitmap = mediaDataRet.getFrameAtTime();
+				Bitmap bitmap = mediaDataRet.getFrameAtTime(0);
 				Logger.d(TAG, UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) + "ratio ؅ճǰ˓Ƶ̵Ôͼ:" + bitmap.getWidth() +" "+ bitmap.getHeight());
 //				if (bitmap.getWidth() < UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) || bitmap.getHeight() < UITools.dip2px(mContext, VIDEO_COVER_MIN_WH)) {
 //					float scale1 = UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) / bitmap.getWidth();

@@ -2,10 +2,10 @@ package com.v5kf.mcss.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -16,7 +16,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Build;
@@ -28,6 +27,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.v5kf.client.lib.Logger;
 import com.v5kf.mcss.CustomApplication;
+import com.v5kf.mcss.config.Config;
 
 public class DevUtils {
 
@@ -588,7 +588,7 @@ public class DevUtils {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();    
         // 开始读入图片，此时把options.inJustDecodeBounds 设回true，即只读边不读内容  
         newOpts.inJustDecodeBounds = true;  
-        newOpts.inPreferredConfig = Config.RGB_565;
+        newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
         // Get bitmap info, but notice that bitmap is null now    
         Bitmap bitmap = BitmapFactory.decodeFile(imgPath, newOpts);  
             
@@ -636,14 +636,58 @@ public class DevUtils {
      * @param permission
      * @return
      */
-    public static boolean hasPermission(Context context, String permission) {
-    	return context.checkPermission(permission, android.os.Process.myPid(), context.getApplicationInfo().uid) == PackageManager.PERMISSION_GRANTED;
+    public static boolean hasPermission(Activity context, String permission) {
+    	int requestCode = 0;
+    	switch (permission) {
+    	case "android.permission.CAMERA":
+    		requestCode = Config.REQUEST_PERMISSION_CAMERA;
+    		break;
+    	case "android.permission.RECORD_AUDIO":
+    		requestCode = Config.REQUEST_PERMISSION_RECORD_AUDIO;
+    		break;
+    	case "android.permission.WRITE_EXTERNAL_STORAGE":
+    		requestCode = Config.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE;
+    		break;
+    	case "android.permission.ACCESS_FINE_LOCATION":
+    		requestCode = Config.REQUEST_PERMISSION_ACCESS_FINE_LOCATION;
+    	case "android.permission.ACCESS_COARSE_LOCATION":
+    		requestCode = Config.REQUEST_PERMISSION_ACCESS_COARSE_LOCATION;
+    		break;
+    	}
+    	return checkAndRequestPermission(context, permission, requestCode);
+//    	DevUtils.checkAndRequestPermission(this, "android.permission.CAMERA", Config.REQUEST_PERMISSION_CAMERA);
+//		DevUtils.checkAndRequestPermission(this, "android.permission.RECORD_AUDIO", Config.REQUEST_PERMISSION_RECORD_AUDIO);
+//		DevUtils.checkAndRequestPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE", Config.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+//		DevUtils.checkAndRequestPermission(this, "android.permission.ACCESS_FINE_LOCATION", Config.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+//		DevUtils.checkAndRequestPermission(this, "android.permission.ACCESS_COARSE_LOCATION", Config.REQUEST_PERMISSION_ACCESS_COARSE_LOCATION);
+//    	return context.checkPermission(permission, android.os.Process.myPid(), context.getApplicationInfo().uid) == PackageManager.PERMISSION_GRANTED;
     }
     
     public static boolean checkAndRequestPermission(Activity context, String permission, int requestCode) {
     	int checkCallPhonePermission = ContextCompat.checkSelfPermission(context, permission);
     	if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
     		ActivityCompat.requestPermissions(context, new String[]{permission}, requestCode);
+    		return false;
+    	}
+    	return true;
+    }
+
+    public static boolean checkAndRequestPermission(Activity context, String[] permissions) {
+    	ArrayList<String> noPermissions = new ArrayList<String>();
+    	for (int i = 0; i < permissions.length; i++) {
+    		String permission = permissions[i];
+    		int checkCallPhonePermission = ContextCompat.checkSelfPermission(context, permission);
+    		if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+    			Logger.d("DevUtils", permission);
+    			noPermissions.add(permission);
+    		}
+    	}
+    	if(noPermissions.size() > 0){
+    		String[] array = new String[noPermissions.size()];
+    		for(int i=0; i<noPermissions.size(); i++){  
+                array[i] = noPermissions.get(i);  
+            }
+    		ActivityCompat.requestPermissions(context, array, Config.REQUEST_PERMISSION_ALL);
     		return false;
     	}
     	return true;

@@ -67,6 +67,7 @@ import com.v5kf.mcss.ui.fragment.md2x.TabServingFragment;
 import com.v5kf.mcss.ui.fragment.md2x.TabWorkerListFragment;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.ModeSeekbarDialog;
+import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
@@ -81,6 +82,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private static final int TASK_UN_LOGIN = 2;
 	private static final int TASK_TIME_OUT = 3;
 	private static final int HDL_LOGOUT_TIMEOUT = 11;
+	private static final int HDL_CHECK_PERMISSION = 12;
 	
 	private IndicatorViewPager indicatorViewPager;
 	private DrawerLayout mDrawerLayout;
@@ -152,6 +154,8 @@ public class MainTabActivity extends BaseToolbarActivity {
 		if (!NetworkManager.isConnected(this)) {
 			mHeaderTips.setVisibility(View.VISIBLE);
 		}
+		
+		mHandler.sendEmptyMessageDelayed(HDL_CHECK_PERMISSION, 2000);
 	}
 	
 	@Override
@@ -273,8 +277,6 @@ public class MainTabActivity extends BaseToolbarActivity {
 				@Override
 				public void onClick(View v) {
 					gotoActivity(WorkerLogActivity.class);
-					//TODO
-//					gotoActivity(AAMainActivity.class);
 				}
 			});
 			
@@ -945,6 +947,20 @@ public class MainTabActivity extends BaseToolbarActivity {
 		case HDL_LOGOUT_TIMEOUT:
 				dismissAlertDialog();
 				showAlertDialog(R.string.warning_logout_failed);
+			break;
+		case HDL_CHECK_PERMISSION:
+			// 申请授权(点击时申请)
+			DevUtils.checkAndRequestPermission(this, new String[]{
+					"android.permission.CAMERA",
+					"android.permission.RECORD_AUDIO",
+					"android.permission.WRITE_EXTERNAL_STORAGE",
+					"android.permission.ACCESS_FINE_LOCATION", 
+					"android.permission.ACCESS_COARSE_LOCATION"});
+//			DevUtils.checkAndRequestPermission(this, "android.permission.CAMERA", Config.REQUEST_PERMISSION_CAMERA);
+//			DevUtils.checkAndRequestPermission(this, "android.permission.RECORD_AUDIO", Config.REQUEST_PERMISSION_RECORD_AUDIO);
+//			DevUtils.checkAndRequestPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE", Config.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+//			DevUtils.checkAndRequestPermission(this, "android.permission.ACCESS_FINE_LOCATION", Config.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+//			DevUtils.checkAndRequestPermission(this, "android.permission.ACCESS_COARSE_LOCATION", Config.REQUEST_PERMISSION_ACCESS_COARSE_LOCATION);
 			break;
 		default:
 			

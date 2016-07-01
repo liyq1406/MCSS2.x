@@ -18,20 +18,13 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.SurfaceView;
-import android.widget.ImageView;
 
 import com.v5kf.mcss.R;
-import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.Logger;
-import com.v5kf.mcss.utils.UITools;
 
 public class BubbleSurfaceView extends SurfaceView {
 
-	private float mMinWH = 48.0f; // 最小图片显示大小，单位dp
-
 	private static final int LOCATION_LEFT = 0;
-	private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
-	private static final int COLORDRAWABLE_DIMENSION = 1;
 	private ColorFilter cf;
 	private int mAngle = dp2px(10);
 	private int mArrowTop = dp2px(40);
@@ -41,12 +34,10 @@ public class BubbleSurfaceView extends SurfaceView {
 	private int mArrowLocation = LOCATION_LEFT;
 
 	private Rect mDrawableRect;
-	private Bitmap mBitmap;
-	private BitmapShader mBitmapShader;
-	private Paint mBitmapPaint;
-	private Matrix mShaderMatrix;
-	private int mBitmapWidth;
-	private int mBitmapHeight;
+	private Paint mPaint;
+	
+	private RectF mRect;
+	private Path mPath;
 
 	public BubbleSurfaceView(Context context) {
 		super(context);
@@ -64,7 +55,6 @@ public class BubbleSurfaceView extends SurfaceView {
 	}
 
 	private void initView(AttributeSet attrs) {
-		mMinWH = UITools.dip2px(getContext(), mMinWH);
 		if (attrs != null) {
 			TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.BubbleImageView);
 			mAngle = (int) a.getDimension(R.styleable.BubbleImageView_bubble_angle, mAngle);
@@ -75,6 +65,7 @@ public class BubbleSurfaceView extends SurfaceView {
 			mArrowLocation = a.getInt(R.styleable.BubbleImageView_bubble_arrowLocation, mArrowLocation);
 			a.recycle();
 		}
+		
 	}
 
 	@Override
@@ -82,17 +73,20 @@ public class BubbleSurfaceView extends SurfaceView {
 //		if (getDrawable() == null) {
 //			return;
 //		}
-		RectF rect = new RectF(getPaddingLeft(), getPaddingTop(), getRight() - getLeft() - getPaddingRight(), getBottom() - getTop() - getPaddingBottom());
-
-		Path path = new Path();
+//		if (mRect == null) {
+			mRect = new RectF(getPaddingLeft(), getPaddingTop(), getRight() - getLeft() - getPaddingRight(), getBottom() - getTop() - getPaddingBottom());
+//		}
+//		if (mPath == null) {
+			mPath = new Path();
+//		}
 
 		if (mArrowLocation == LOCATION_LEFT) {
-			leftPath(rect, path);
+			leftPath(mRect, mPath);
 		} else {
-			rightPath(rect, path);
+			rightPath(mRect, mPath);
 		}
 
-		canvas.drawPath(path, mBitmapPaint);
+		canvas.drawPath(mPath, mPaint);
 	}
 
 	public void rightPath(RectF rect, Path path) {
@@ -153,64 +147,43 @@ public class BubbleSurfaceView extends SurfaceView {
 //		mBitmap = getBitmapFromDrawable(getDrawable());
 //		setup();
 //	}
-
-	private Bitmap getBitmapFromDrawable(Drawable drawable) {
-		if (drawable == null) {
-			return null;
-		}
-
-		if (drawable instanceof BitmapDrawable) {
-			return ((BitmapDrawable) drawable).getBitmap();
-		}
-
-		try {
-			Bitmap bitmap;
-
-			if (drawable instanceof ColorDrawable) {
-				bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
-			} else {
-				bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
-			}
-
-			Canvas canvas = new Canvas(bitmap);
-			drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-			drawable.draw(canvas);
-			return bitmap;
-		} catch (OutOfMemoryError e) {
-			return null;
-		}
-	}
+//
+//	private Bitmap getBitmapFromDrawable(Drawable drawable) {
+//		if (drawable == null) {
+//			return null;
+//		}
+//
+//		if (drawable instanceof BitmapDrawable) {
+//			return ((BitmapDrawable) drawable).getBitmap();
+//		}
+//
+//		try {
+//			Bitmap bitmap;
+//
+//			if (drawable instanceof ColorDrawable) {
+//				bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
+//			} else {
+//				bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+//			}
+//
+//			Canvas canvas = new Canvas(bitmap);
+//			drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+//			drawable.draw(canvas);
+//			return bitmap;
+//		} catch (OutOfMemoryError e) {
+//			return null;
+//		}
+//	}
 
 	private void setup() {
-		if (mBitmap == null) {
-			return;
-		}
-		if (mBitmap.getWidth() < 100 || mBitmap.getHeight() < 100) {
-			float scale1 = mMinWH / mBitmap.getWidth();
-			float scale2 = mMinWH / mBitmap.getHeight();
-			mBitmap = DevUtils.ratio(mBitmap, scale1 > scale2 ? scale1 : scale2);
-//			setImageBitmap(mBitmap);
-		}
-
-		mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-
-		mBitmapPaint = new Paint();
+		mPaint = new Paint();
 		if (cf != null) {
-			mBitmapPaint.setColorFilter(cf);
+			mPaint.setColorFilter(cf);
 		}
-		mBitmapPaint.setAntiAlias(true);
-		mBitmapPaint.setShader(mBitmapShader);
-		mBitmapHeight = mBitmap.getHeight();
-		mBitmapWidth = mBitmap.getWidth();
-		Logger.w("BubbleImageView", "[setup] -> " + mBitmapWidth + "," + mBitmapHeight);
-//		LayoutParams para;  
-//        para = getLayoutParams();
-//        if (para.height < 100) {
-//        	para.width = (100 / para.height) * para.width;
-//        	para.height = 100;
-//            setLayoutParams(para);
-//        }
-		updateShaderMatrix();
+		mPaint.setAntiAlias(true);
+//		mPaint.setShader(mBitmapShader);
+		
+//		updateShaderMatrix();
 		invalidate();
 	}
 
@@ -218,29 +191,6 @@ public class BubbleSurfaceView extends SurfaceView {
 		this.cf = cf;
 	}
 
-	private void updateShaderMatrix() {
-		float scale;
-		float dx = 0;
-		float dy = 0;
-
-		mShaderMatrix = new Matrix();
-		mShaderMatrix.set(null);
-
-		mDrawableRect = new Rect(0, 0, getRight() - getLeft(), getBottom() - getTop());
-
-		if (mBitmapWidth * mDrawableRect.height() > mDrawableRect.width() * mBitmapHeight) {
-			scale = mDrawableRect.height() / (float) mBitmapHeight;
-			dx = (mDrawableRect.width() - mBitmapWidth * scale) * 0.5f;
-		} else {
-			scale = mDrawableRect.width() / (float) mBitmapWidth;
-			dy = (mDrawableRect.height() - mBitmapHeight * scale) * 0.5f;
-		}
-
-		mShaderMatrix.setScale(scale, scale);
-		mShaderMatrix.postTranslate((int) (dx + 0.5f), (int) (dy + 0.5f));
-
-		mBitmapShader.setLocalMatrix(mShaderMatrix);
-	}
 
 	private int dp2px(int dp) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getContext().getResources().getDisplayMetrics());

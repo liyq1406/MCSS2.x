@@ -60,18 +60,6 @@ public class WelcomeActivity extends BaseLoginActivity {
 		isForeground = true;
 		initView();
 		
-//		if (!mWSP.readBoolean("v5_inited")) {
-//			gotoActivityAndFinishThis(GuideActivity.class);
-//		} else {
-			// 初始化任务
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					initTask();
-				}
-			}).start();
-//		}
-		
 		/* 初始网络状态 */
 		mApplication.setNetworkState(NetworkManager.getNetworkState(this));
 		
@@ -100,6 +88,18 @@ public class WelcomeActivity extends BaseLoginActivity {
 			SystemBarTintManager tintManager = new SystemBarTintManager(this);  
 			tintManager.setStatusBarTintEnabled(true);  
 			tintManager.setStatusBarTintResource(R.color.base_status_bar_color_welcome);
+		}
+		
+		if (!mWSP.readBoolean("v5_inited")) {
+			gotoActivityAndFinishThis(GuideActivity.class);
+		} else {
+			// 初始化任务
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					initTask();
+				}
+			}).start();
 		}
 	}
 
@@ -192,15 +192,15 @@ public class WelcomeActivity extends BaseLoginActivity {
 			break;
 		case TASK_UN_LOGIN: {
 			final int resId;
+			if (!mWSP.readBoolean("v5_inited")) {
+				gotoActivityAndFinishThis(GuideActivity.class);
+				break;
+			}
 			switch (mApplication.getLoginStatus()) {
 			case LoginStatus_Unlogin:
 				stopService(new Intent(this, CoreService.class));
 				if (mWarningDialog == null || !mWarningDialog.isShowing()) {
-					if (!mWSP.readBoolean("v5_inited")) {
-						gotoActivityAndFinishThis(GuideActivity.class);
-					} else {
-						gotoActivityAndFinishThis(CustomLoginActivity.class);
-					}
+					gotoActivityAndFinishThis(CustomLoginActivity.class);
 				}
 				break;
 			case LoginStatus_LogErr:

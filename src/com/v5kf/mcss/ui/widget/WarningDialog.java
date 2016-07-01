@@ -12,12 +12,16 @@ package com.v5kf.mcss.ui.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.v5kf.mcss.R;
+import com.v5kf.mcss.utils.Logger;
 
 public class WarningDialog extends Dialog implements OnClickListener {
 
@@ -42,8 +46,20 @@ public class WarningDialog extends Dialog implements OnClickListener {
 
     public WarningDialog(Context context) {
         super(context, R.style.custom_dialog);
-        setContentView(R.layout.dialog_warning);
+        View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_warning, null);
+        setContentView(contentView);
+        
         findView();
+        
+        // 调整dialog背景大小
+        int dialogWidth = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.80);
+        int maxWidth = (int) context.getResources().getDimension(R.dimen.dialog_width);
+		Logger.w("CustomProgressDialog", "width dimen:" + dialogWidth + context.getResources().getDisplayMetrics().density);
+		if (dialogWidth > maxWidth) {
+			dialogWidth = maxWidth;
+		}
+		contentView.setLayoutParams(new FrameLayout.LayoutParams(dialogWidth, LayoutParams.WRAP_CONTENT));
+		
         setOnClickListener();
         setCancelable(false);
     }

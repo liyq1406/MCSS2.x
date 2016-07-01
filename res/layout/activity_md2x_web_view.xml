@@ -56,7 +56,7 @@
 	
 	    <android.support.v4.widget.SwipeRefreshLayout
 	        android:id="@+id/swipe_refresh_layout"
-	        android:visibility="gone"
+	        android:visibility="visible"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent" >
 		    <WebView
@@ -65,7 +65,7 @@
 		        android:layout_height="match_parent" />
 	    </android.support.v4.widget.SwipeRefreshLayout>	    
 	    
-	    <LinearLayout
+	    <!-- <LinearLayout
 	        android:id="@+id/layout_container_empty"
 	        android:visibility="visible"
 	        android:background="@color/content_empty_tips_bg_color"
@@ -90,7 +90,7 @@
 	            android:textColor="@color/content_empty_tips_text_color"
 	            android:text="@string/loading" />
 	        
-	    </LinearLayout>
+	    </LinearLayout> -->
     
     </FrameLayout>
     

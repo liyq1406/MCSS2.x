@@ -13,6 +13,7 @@ import com.chyrain.view.indicator.IndicatorViewPager;
 import com.chyrain.view.indicator.IndicatorViewPager.IndicatorPagerAdapter;
 import com.chyrain.view.indicator.IndicatorViewPager.IndicatorViewPagerAdapter;
 import com.v5kf.mcss.R;
+import com.v5kf.mcss.config.Config;
 
 public class GuideActivity extends ActivityBase {
 	
@@ -134,6 +135,7 @@ public class GuideActivity extends ActivityBase {
 				break;
 			case R.id.guide_bottom_right_iv:
 				// TODO 了解更多
+				gotoWebViewActivity(Config.V5KF_COM, 0); //R.string.app_name
 				break;
 			}
 		}
