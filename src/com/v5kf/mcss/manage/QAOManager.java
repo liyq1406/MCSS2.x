@@ -17,6 +17,7 @@ import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5MessageDefine;
 import com.v5kf.client.lib.entity.V5MusicMessage;
 import com.v5kf.client.lib.entity.V5TextMessage;
+import com.v5kf.client.lib.entity.V5VideoMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.MessageBean;
@@ -130,6 +131,11 @@ public class QAOManager {
 		
 		case V5MessageDefine.MSG_TYPE_MUSIC:
 			message = new V5MusicMessage(new JSONObject(msgBean.getJson_content()));
+			break;
+			
+		case V5MessageDefine.MSG_TYPE_SHORT_VIDEO:
+		case V5MessageDefine.MSG_TYPE_VIDEO:
+			message = new V5VideoMessage(new JSONObject(msgBean.getJson_content()));
 			break;
 			
 		default: // 不支持消息统一为V5JSONMessage

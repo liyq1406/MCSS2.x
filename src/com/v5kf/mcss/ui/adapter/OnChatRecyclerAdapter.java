@@ -1405,6 +1405,7 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 	        } catch (Exception e) {
 	        	e.printStackTrace();
 	            Logger.e(TAG, "MediaPlayer prepare() failed");
+	            mActivity.ShowToast(R.string.media_play_failed);
 	            mPlayer.release();
 	    		mPlayer = null;
 	    		updateVoiceStopPlayingState(); // UI
@@ -1440,6 +1441,7 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 			} catch (Exception e) {
 				e.printStackTrace();
 				Logger.e(TAG, "MediaPlayer prepare() failed");
+				mActivity.ShowToast(R.string.media_play_failed);
 				mPlayer.release();
 				mPlayer = null;
 				updateMusicStopPlayingState(); // UI
@@ -1512,6 +1514,7 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 			} catch (Exception e) {
 				e.printStackTrace();
 				Logger.e(TAG, "MediaPlayer prepare() failed");
+				mActivity.ShowToast(R.string.media_play_failed);
 				mPlayer.release();
 				mPlayer = null;
 				updateVideoStopPlayingState(); // UI

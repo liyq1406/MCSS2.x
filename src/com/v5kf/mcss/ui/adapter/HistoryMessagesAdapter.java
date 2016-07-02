@@ -15,10 +15,13 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +30,8 @@ import com.v5kf.client.lib.entity.V5ArticlesMessage;
 import com.v5kf.client.lib.entity.V5ImageMessage;
 import com.v5kf.client.lib.entity.V5LocationMessage;
 import com.v5kf.client.lib.entity.V5Message;
+import com.v5kf.client.lib.entity.V5MusicMessage;
+import com.v5kf.client.lib.entity.V5VideoMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
 import com.v5kf.client.ui.emojicon.EmojiconTextView;
 import com.v5kf.mcss.R;
@@ -124,6 +129,15 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
         
         case TYPE_SINGLE_NEWS:
         	itemView = mInflater.inflate(R.layout.item_history_msg_single_news, parent, false);
+        	break;
+        	
+        case QAODefine.MSG_TYPE_MUSIC:
+        	itemView = mInflater.inflate(R.layout.item_history_msg_music, parent, false);
+        	break;
+
+        case QAODefine.MSG_TYPE_SHORT_VIDEO:
+        case QAODefine.MSG_TYPE_VIDEO:
+        	itemView = mInflater.inflate(R.layout.item_history_msg_video, parent, false);
         	break;
         	
         case QAODefine.MSG_TYPE_TEXT:
@@ -242,6 +256,128 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
         	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
         	break;
         	
+        case QAODefine.MSG_TYPE_SHORT_VIDEO:
+        case QAODefine.MSG_TYPE_VIDEO: {
+			V5VideoMessage videoMessage = (V5VideoMessage)msgContent;
+			if (videoMessage.getCoverFrame() != null) {
+				loadVideo(holder, videoMessage);
+			} else {
+				holder.mVideoBgIv.setImageResource(R.drawable.img_default_video);
+			}
+			
+			// 播放状态
+        	if (chatBean.isPlaying()) {
+        		holder.updateVideoStartPlayingState();
+        	} else {
+        		holder.updateVideoStopPlayingState();
+        	}
+			if (videoMessage.getFilePath() != null && FileUtil.isFileExists(videoMessage.getFilePath())) { // 已加载则不需要loadMedia
+				Logger.d(TAG, "---Video 已加载---");
+				break;
+			} else {
+				Logger.d(TAG, "---Video 首次加载---");
+			}
+			
+			// 加载语音
+        	String url = videoMessage.getUrl();
+        	if (TextUtils.isEmpty(url)) {
+        		if (TextUtils.isEmpty(videoMessage.getMessage_id()) && videoMessage.getFilePath() != null) {
+        			url = videoMessage.getFilePath();
+        		} else {
+        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, videoMessage.getMessage_id());
+        			videoMessage.setUrl(url);
+        		}
+        	}
+        	Logger.d(TAG, "Video url:" + url + " sendState:" + videoMessage.getState());
+        	MediaLoader mediaLoader = new MediaLoader(mActivity, chatBean, new MediaLoaderListener() {
+				
+				@Override
+				public void onSuccess(V5Message msg, Object obj, MediaCache media) {
+					//((V5VideoMessage)msg).setFilePath(media.getLocalPath());
+					Logger.d(TAG, "list load Video onSuccess ----- ");
+					if (media.getCoverFrame() != null) {
+						int index = mRecycleBeans.indexOf(obj);
+						if (index >= 0 && index < mRecycleBeans.size()) {
+							notifyItemChanged(index);
+						}
+						//loadVideo((ChatItemViewHolder)obj, (V5VideoMessage)msg);
+					}
+				}
+				
+				@Override
+				public void onFailure(final MediaLoader mediaLoader, final V5Message msg, Object obj) {
+					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
+							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+						mActivity.getHandler().postDelayed(new Runnable() {
+							public void run() {
+								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
+							}
+						}, 1000); // 1s后重试
+					}
+				}
+			});
+        	mediaLoader.loadMedia(url, videoMessage, null);
+		}
+			break;
+			
+		case QAODefine.MSG_TYPE_MUSIC: {
+			V5MusicMessage musicMessage = (V5MusicMessage)msgContent;
+			if (!TextUtils.isEmpty(musicMessage.getTitle()) || !TextUtils.isEmpty(musicMessage.getTitle())) {
+				holder.mMusicContentLayout.setVisibility(View.VISIBLE);
+				holder.mMusicTitle.setText(musicMessage.getTitle());
+				holder.mMusicDescription.setText(musicMessage.getDescription());
+			} else {
+				holder.mMusicContentLayout.setVisibility(View.GONE);
+			}
+			
+			// 语音状态
+        	if (chatBean.isPlaying()) {
+        		holder.updateMusicStartPlayingState();
+        	} else {
+        		holder.updateMusicStopPlayingState();
+        	}
+			if (musicMessage.getFilePath() != null && FileUtil.isFileExists(musicMessage.getFilePath())) { // 已加载则不需要loadMedia
+				Logger.d(TAG, "---Music 已加载---");
+				break;
+			} else {
+				Logger.d(TAG, "---Music 首次加载---");
+			}
+			
+			// 加载语音
+        	String url = musicMessage.getMusic_url();
+        	if (TextUtils.isEmpty(url)) {
+        		if (TextUtils.isEmpty(musicMessage.getMessage_id()) && musicMessage.getFilePath() != null) {
+        			url = musicMessage.getFilePath();
+        		} else {
+        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, musicMessage.getMessage_id());
+        			musicMessage.setMusic_url(url);
+        		}
+        	}
+        	Logger.d(TAG, "Music url:" + url + " sendState:" + musicMessage.getState());
+        	MediaLoader mediaLoader = new MediaLoader(mActivity, holder, new MediaLoaderListener() {
+				
+				@Override
+				public void onSuccess(V5Message msg, Object obj, MediaCache media) {
+					//((V5MusicMessage)msg).setFilePath(media.getLocalPath());
+					Logger.d(TAG, "list load Music onSuccess ----- ");
+				}
+				
+				@Override
+				public void onFailure(final MediaLoader mediaLoader, final V5Message msg, Object obj) {
+					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
+							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+						mActivity.getHandler().postDelayed(new Runnable() {
+							public void run() {
+								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
+							}
+						}, 500); // 0.5s后重试
+					}
+				}
+			});
+        	mediaLoader.loadMedia(url, musicMessage, null);
+		}
+			break;
+        	
         case QAODefine.MSG_TYPE_TEXT:
         case QAODefine.MSG_TYPE_NULL:
         default: {
@@ -291,6 +427,28 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
         return mRecycleBeans.size();
     }
 
+    private void loadVideo(ViewHolder holder, V5VideoMessage videoMessage) {
+		holder.mVideoBgIv.setImageBitmap(videoMessage.getCoverFrame());
+		
+		// 设置宽高
+		int width = videoMessage.getCoverFrame().getWidth();
+		int height = videoMessage.getCoverFrame().getHeight();
+		float density = mActivity.getResources().getDisplayMetrics().density;
+		float maxWH = MediaLoader.VIDEO_COVER_MAX_WH * density + 0.5f;
+		float minWH = MediaLoader.VIDEO_COVER_MIN_WH * density + 0.5f;
+		if (width > maxWH && height > maxWH) {
+			float scale = Math.max(maxWH / width, maxWH / height);
+			width = (int)scale * width;
+			height = (int)scale * height;
+		} else if (width < minWH && height < minWH) {
+			float scale = Math.max(minWH / width, minWH / height);
+			width = (int)scale * width;
+			height = (int)scale * height;
+		}
+		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+	}
+    
     
     class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener, OnLongClickListener{
 
@@ -324,6 +482,18 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
         /* 多图文 */
 		public ListLinearLayout mNewsListLayout;
         public NewsListAdapter mNewsAdapter;
+        
+        /* 视频 */
+        public ImageView mVideoControlIv; // 播放按钮
+        public ImageView mVideoBgIv; // 视频背景
+        public SurfaceView mVideoSurface;
+        public SurfaceHolder mVideoSurfaceHolder;
+        
+        /* 音乐 */
+        public ImageView mMusicControlIv;
+        public TextView mMusicTitle;
+        public TextView mMusicDescription;
+        public ViewGroup mMusicContentLayout;
 
     	public ViewHolder(View arg0, int viewType) {
 			super(arg0);
@@ -369,6 +539,97 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
             	mNewsContent = (TextView) itemView.findViewById(R.id.id_news_desc_text);
             	itemView.findViewById(R.id.id_news_layout).setOnClickListener(this);
     			break;
+    			
+    		case QAODefine.MSG_TYPE_SHORT_VIDEO:
+    		case QAODefine.MSG_TYPE_VIDEO:
+            	mVideoBgIv = (ImageView) itemView.findViewById(R.id.id_video_bg);
+            	mVideoControlIv = (ImageView) itemView.findViewById(R.id.id_video_control_img);
+            	mVideoSurface = (SurfaceView) itemView.findViewById(R.id.id_video_surface);
+            	mVideoSurfaceHolder = mVideoSurface.getHolder();
+            	mVideoControlIv.setOnClickListener(this);
+            	mVideoBgIv.setOnClickListener(this);
+            	mVideoSurface.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						if (mVideoControlIv.getVisibility() == View.GONE) {
+							mVideoControlIv.setVisibility(View.VISIBLE);
+							mVideoControlIv.postDelayed(new Runnable() {
+								
+								@Override
+								public void run() {
+									if (mChatBean.isPlaying()) {
+										mVideoControlIv.setVisibility(View.GONE);
+									}
+								}
+							}, 1000);
+						}
+					}
+				});
+            	mVideoSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
+					
+					@Override
+					public void surfaceDestroyed(SurfaceHolder holder) {
+						Logger.d(TAG, "[SurfaceHolder.surfaceDestroyed]");
+					}
+					
+					@Override
+					public void surfaceCreated(SurfaceHolder holder) {
+						Logger.d(TAG, "[SurfaceHolder.surfaceCreated]");
+						// 必须在surface创建后才能初始化MediaPlayer,否则不会显示图像
+						mPlayer = new MediaPlayer();
+						mPlayer.setOnErrorListener(new OnErrorListener() {
+							
+							@Override
+							public boolean onError(MediaPlayer mp, int what, int extra) {
+								Logger.e(TAG, "MediaPlayer - onError");
+								return false;
+							}
+						});
+						mPlayer.setOnCompletionListener(new OnCompletionListener() {
+							
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								Logger.i(TAG, "MediaPlayer - completePlaying");
+								updateVideoStopPlayingState();
+								mp.release();
+								mp = null;
+								mPlayer = null;
+							}
+						});
+						mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+							
+							@Override
+							public void onPrepared(MediaPlayer mp) {
+								Logger.d(TAG, "[MediaPlayer.onPrepared]");
+								mPlayer.start();
+								updateVideoStartPlayingState();
+							}
+						});
+						try {
+							mPlayer.setDataSource(((V5VideoMessage)mChatBean.getMessage()).getFilePath());
+							mPlayer.setDisplay(mVideoSurfaceHolder);
+							mPlayer.prepare();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					
+					@Override
+					public void surfaceChanged(SurfaceHolder holder, int format, int width,
+							int height) {
+						Logger.d(TAG, "[SurfaceHolder.surfaceChanged]");
+					}
+				});
+            	break;
+            	
+            case QAODefine.MSG_TYPE_MUSIC:
+            	mMusicContentLayout = (ViewGroup) itemView.findViewById(R.id.id_music_content_layout);
+            	mMusicControlIv = (ImageView) itemView.findViewById(R.id.id_music_control_img);
+            	mMusicTitle = (TextView) itemView.findViewById(R.id.id_music_title);
+            	mMusicDescription = (TextView) itemView.findViewById(R.id.id_music_desc);
+            	mMusicControlIv.setOnClickListener(this);
+            	break;
     			
     		case QAODefine.MSG_TYPE_TEXT:
     		default:
@@ -435,6 +696,58 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 					}
 				}
 				
+			case R.id.id_music_control_img: // 点击音乐播放
+				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_MUSIC) {
+					if (mChatBean.isPlaying()) { // 停止播放
+						stopPlayingMusic();
+					} else { // 开始播放
+//						if (mVoiceAnimDrawable != null) {
+//							mVoiceAnimDrawable.stop();
+//						}
+						startPlaying((V5MusicMessage)mChatBean.getMessage(), new OnCompletionListener() {
+							
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								Logger.i(TAG, "MediaPlayer - completePlaying");
+								updateMusicStopPlayingState();
+								mp.release();
+								mp = null;
+								mPlayer = null;
+							}
+						});
+					}
+				}
+				break;
+			
+			case R.id.id_video_control_img: // 点击视频播放
+				if (Config.ENABLE_PLAY_VEDIO_IN_LIST) {
+					if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_VIDEO || 
+							mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_SHORT_VIDEO) {
+						if (mChatBean.isPlaying()) { // 停止播放
+							stopPlayingVideo();
+						} else { // 开始播放
+//							if (mVoiceAnimDrawable != null) {
+//								mVoiceAnimDrawable.stop();
+//							}
+							startPlaying((V5VideoMessage)mChatBean.getMessage(), new OnCompletionListener() {
+								
+								@Override
+								public void onCompletion(MediaPlayer mp) {
+									Logger.i(TAG, "MediaPlayer - completePlaying");
+									updateVideoStopPlayingState();
+									mp.release();
+									mp = null;
+									mPlayer = null;
+								}
+							});
+						}
+					}
+					break;
+				}				
+			case R.id.id_video_bg: // 点击视频背景
+				mActivity.gotoVedioPlayActivity(((V5VideoMessage)mChatBean.getMessage()).getFilePath());
+				break;
+				
 			default:
 				break;
 			}
@@ -456,6 +769,34 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 				mVoiceAnimDrawable = null;
 			}
 			mVoiceIv.setBackgroundResource(R.drawable.chat_animation_left_gray3);
+		}
+		
+		public void updateVideoStartPlayingState() {
+			Logger.i(TAG, "UI - updateVideoStartPlayingState position:" + getAdapterPosition());
+			mChatBean.setPlaying(true);
+			mVideoControlIv.setImageResource(R.drawable.img_music_stop);
+			mVideoControlIv.setVisibility(View.GONE);
+			mVideoSurface.setVisibility(View.VISIBLE);
+		}
+		
+		public void updateVideoStopPlayingState() {
+			Logger.i(TAG, "UI - updateVideoStopPlayingState position:" + getAdapterPosition());
+			mChatBean.setPlaying(false);
+			mVideoControlIv.setImageResource(R.drawable.img_music_play);
+			mVideoControlIv.setVisibility(View.VISIBLE);
+			mVideoSurface.setVisibility(View.GONE);
+		}
+		
+		public void updateMusicStartPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStartPlayingState position:" + getAdapterPosition());
+			mChatBean.setPlaying(true);
+			mMusicControlIv.setImageResource(R.drawable.img_music_stop);
+		}
+
+		public void updateMusicStopPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStopPlayingState position:" + getAdapterPosition());
+			mChatBean.setPlaying(false);
+			mMusicControlIv.setImageResource(R.drawable.img_music_play);
 		}
 		
 		private void onSingleNewsClick(String url) {
@@ -521,6 +862,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 				updateVoiceStartPlayingState();
 	        } catch (Exception e) {
 	            Logger.e(TAG, "MediaPlayer prepare() failed");
+	            mActivity.ShowToast(R.string.media_play_failed);
 	            mPlayer.release();
 	    		mPlayer = null;
 	    		updateVoiceStopPlayingState(); // UI
@@ -535,6 +877,131 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 		        mPlayer = null;
 	    	}
 	        updateVoiceStopPlayingState();
+	    }
+	    
+	    private void startPlaying(V5MusicMessage musicMessage, OnCompletionListener completionListener) {
+			Logger.i(TAG, "MediaPlayer - startPlaying " + getAdapterPosition());
+			if (mPlayer != null) {
+				if (mPlayer.isPlaying()) {
+					mPlayer.stop();
+				}
+				mPlayer.release();
+				mPlayer = null;
+				Logger.i(TAG, "MediaPlayer - stopPlaying all others");
+				resetOtherItemsExcept(mChatBean);
+			}
+			mPlayer = new MediaPlayer();
+			try {
+				mPlayer.setDataSource(musicMessage.getFilePath());
+				mPlayer.prepare();
+				mPlayer.start();
+				mPlayer.setOnErrorListener(new OnErrorListener() {
+					
+					@Override
+					public boolean onError(MediaPlayer mp, int what, int extra) {
+						Logger.e(TAG, "MediaPlayer - onError");
+						return false;
+					}
+				});
+				mPlayer.setOnCompletionListener(completionListener);
+				updateMusicStartPlayingState();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Logger.e(TAG, "MediaPlayer prepare() failed");
+				mActivity.ShowToast(R.string.media_play_failed);
+				mPlayer.release();
+				mPlayer = null;
+				updateMusicStopPlayingState(); // UI
+			}
+		}
+
+		private void startPlaying(final V5VideoMessage videoMessage, final OnCompletionListener completionListener) {
+			Logger.i(TAG, "MediaPlayer - startPlaying " + getAdapterPosition());
+			if (mPlayer != null) {
+				if (mPlayer.isPlaying()) {
+					mPlayer.stop();
+				}
+				mPlayer.release();
+				mPlayer = null;
+				Logger.i(TAG, "MediaPlayer - stopPlaying all others");
+				resetOtherItemsExcept(mChatBean);
+			}
+			try {
+				//surfaceHolder.setKeepScreenOn(true);
+//				mVideoSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
+//					
+//					@Override
+//					public void surfaceDestroyed(SurfaceHolder holder) {
+//						Logger.d(TAG, "[SurfaceHolder.surfaceDestroyed]");
+//					}
+//					
+//					@Override
+//					public void surfaceCreated(SurfaceHolder holder) {
+//						Logger.d(TAG, "[SurfaceHolder.surfaceCreated]");
+//						// 必须在surface创建后才能初始化MediaPlayer,否则不会显示图像
+//						mPlayer = new MediaPlayer();
+//						mPlayer.setOnErrorListener(new OnErrorListener() {
+//							
+//							@Override
+//							public boolean onError(MediaPlayer mp, int what, int extra) {
+//								Logger.e(TAG, "MediaPlayer - onError");
+//								return false;
+//							}
+//						});
+//						mPlayer.setOnCompletionListener(completionListener);
+//						mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//							
+//							@Override
+//							public void onPrepared(MediaPlayer mp) {
+//								Logger.d(TAG, "[MediaPlayer.onPrepared]");
+//								mPlayer.start();
+//								updateVideoStartPlayingState();
+//							}
+//						});
+//						try {
+//							mPlayer.setDataSource(videoMessage.getFilePath());
+//							mPlayer.setDisplay(mVideoSurfaceHolder);
+//							mPlayer.prepare();
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//					}
+//					
+//					@Override
+//					public void surfaceChanged(SurfaceHolder holder, int format, int width,
+//							int height) {
+//						Logger.d(TAG, "[SurfaceHolder.surfaceChanged]");
+//					}
+//				});
+				mVideoSurface.setVisibility(View.VISIBLE);
+			} catch (Exception e) {
+				e.printStackTrace();
+				Logger.e(TAG, "MediaPlayer prepare() failed");
+				mActivity.ShowToast(R.string.media_play_failed);
+				mPlayer.release();
+				mPlayer = null;
+				updateVideoStopPlayingState(); // UI
+			}
+		}
+
+	    private void stopPlayingMusic() {
+	    	Logger.i(TAG, "MediaPlayer - stopPlayingMusic " + getAdapterPosition());
+	    	if (mPlayer != null) {
+	    		mPlayer.stop();
+	    		mPlayer.release();
+	    		mPlayer = null;
+	    	}
+	    	updateMusicStopPlayingState();
+	    }
+
+	    private void stopPlayingVideo() {
+	    	Logger.i(TAG, "MediaPlayer - stopPlayingVideo " + getAdapterPosition());
+	    	if (mPlayer != null) {
+	    		mPlayer.stop();
+	    		mPlayer.release();
+	    		mPlayer = null;
+	    	}
+	    	updateVideoStopPlayingState();
 	    }
     }
     

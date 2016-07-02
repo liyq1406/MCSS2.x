@@ -395,4 +395,6 @@
     <string name="pull_up_refresh_finish">加载完成</string>
     <string name="pull_up_refresh_refreshing">正在加载</string>
     <string name="on_refresh_time_out">请求超时，检查网络后重试</string>
+    
+    <string name="media_play_failed">播放失败</string>
 </resources>
