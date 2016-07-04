@@ -160,11 +160,21 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 		}
 		
 		Map<String, CustomerBean> vMap = mAppInfo.getVisitorMap();
-		if (vMap.isEmpty() && mHasMore) { // 2015/12/12 修复BUG：加入mHasMore判断
-	    	mHasMore = true;
-			getHistoricalCustomer("0", true);
-			Logger.d(TAG, "initcstmdata [first group customer get]");
-			return;
+		if (mRecycleBeans.isEmpty() && mHasMore) { // 2015/12/12 修复BUG：加入mHasMore判断
+	    	boolean alreadyHasVisitors = false;
+	    	for (CustomerBean cstm : vMap.values()) {
+	    		if (cstm.getClosingReason() == 0) { // 没有正在进行的会话
+	    			alreadyHasVisitors = true;
+	    			break;
+	    		}
+	    	}
+	    	
+			if (!alreadyHasVisitors) {
+				mHasMore = true;
+				getHistoricalCustomer("0", true);
+				Logger.d(TAG, "initcstmdata [first group customer get]");
+				return;
+	    	}
 		}
 		Logger.i(TAG, "initData(...):" + vMap.size() + " mPages:" + mPages + " mHasMore:" + mHasMore);
 		

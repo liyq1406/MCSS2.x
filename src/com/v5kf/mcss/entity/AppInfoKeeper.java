@@ -100,8 +100,9 @@ public class AppInfoKeeper {
 		}
 		if (mVisitorMap.containsKey(v_id)) {
 			Logger.w(TAG, "Tips: VisitorMap already contains this v_id");
+			return;
 		} else {
-			
+			//
 		}
 		mVisitorMap.put(v_id, bean);
 	}

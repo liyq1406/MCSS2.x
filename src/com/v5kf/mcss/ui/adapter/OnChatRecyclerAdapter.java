@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
@@ -656,8 +657,8 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 			width = (int)scale * width;
 			height = (int)scale * height;
 		}
-		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
-		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+		holder.mVideoBgIv.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+		holder.mVideoSurface.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
 	}
     
     private void sendStateChange(ChatItemViewHolder holder, final ChatRecyclerBean chatMessage) {

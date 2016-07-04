@@ -16,25 +16,22 @@
         android:visibility="gone"
         style="@style/list_item_top_date" />
     
-		<FrameLayout
+		<RelativeLayout
 			android:id="@+id/id_left_video_layout"
-	        android:baselineAligned="false"
 	        android:background="@color/list_chat_item_bg"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 			android:padding="0dp"
+			android:gravity="center"
 	        android:layout_marginEnd="@dimen/chat_list_item_content_hr_matgin"
 		    android:layout_marginRight="@dimen/chat_list_item_content_hr_matgin" >
 	        
 	        <com.v5kf.mcss.ui.widget.BubbleImageView
 		        android:id="@+id/id_video_bg"
+		        android:layout_centerInParent="true"
 		    	android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:adjustViewBounds="true"
-		        android:maxWidth="200dp"
-		        android:maxHeight="200dp"
-		        android:minWidth="100dp"
-		        android:minHeight="100dp"
 		        android:scaleType="centerCrop"
 		        android:padding="0dp"
 		        android:src="@drawable/img_default_video"
@@ -50,6 +47,7 @@
 	            android:visibility="gone"
 	            android:layout_width="match_parent"
 	            android:layout_height="match_parent"
+	            android:layout_centerInParent="true"
 	            app:bubble_angle="@dimen/v5_bubble_image_radius"
 	           	app:bubble_arrowHeight="@dimen/v5_bubble_arrow_height"
 	           	app:bubble_arrowLocation="left"
@@ -61,10 +59,11 @@
 	            android:id="@+id/id_video_control_img"
 	            android:layout_width="40dp"
 	            android:layout_height="40dp"
+	            android:layout_centerInParent="true"
 	            android:layout_gravity="center"
 	            android:src="@drawable/img_music_play"
 	            android:contentDescription="@string/contentDescription" />
         
-    	</FrameLayout>
+    	</RelativeLayout>
 	        
 </LinearLayout>

@@ -51,20 +51,21 @@
     <color name="btn_logout_pressed">#EE6363</color>
     
     <!-- 机器人候选答案 -->
-    <color name="bottom_candidate_bg_normal">#6FBFF0</color>
-    <color name="bottom_candidate_bg_pressed">#8FBC8F</color>
-    <color name="bottom_candidate_select_normal">#258BCB</color>
-    <color name="bottom_candidate_select_pressed">#00688B</color>
-    <color name="robot_add_bg_normal">#FFFFFF</color>
-    <color name="robot_add_bg_pressed">#D5D5D6</color>
-    <color name="robot_del_bg_normal">#FFFFFF</color>
-    <color name="robot_del_bg_pressed">#D5D5D6</color>
-    <color name="robot_send_bg_normal">#FFFFFF</color>
-    <color name="robot_send_bg_pressed">#D5D5D6</color>
+    <color name="bottom_candidate_bg_normal">#FFFFFF</color><!-- #6FBFF0 -->
+    <color name="bottom_candidate_bg_pressed">#FFFFFF</color><!-- #8FBC8F -->
+    <color name="bottom_candidate_border">#D9D9D9</color><!-- #8FBC8F -->
+    <color name="bottom_candidate_select_normal">#258BCB</color><!-- #258BCB -->
+    <color name="bottom_candidate_select_pressed">#00688B</color><!-- #00688B -->
+    <color name="robot_add_bg_normal">#99000000</color><!-- #FFFFFF -->
+    <color name="robot_add_bg_pressed">#99000000</color><!-- #D5D5D6 -->
+    <color name="robot_del_bg_normal">#99000000</color>
+    <color name="robot_del_bg_pressed">#99000000</color>
+    <color name="robot_send_bg_normal">#99000000</color>
+    <color name="robot_send_bg_pressed">#99000000</color>
     <color name="common_red">#ff8247</color>
     
     
-    <!-- 主题、标题栏、状态栏背景色 -->    
+    <!-- 主题、标题栏、状态栏背景色 -->
     <color name="base_theme_color">#1881D3</color>
     <color name="base_theme_color_lighter">#1881D3</color>
     <color name="base_theme_color_darker">#1881D3</color>
@@ -193,7 +194,7 @@
     <color name="meterail_border_color">#B8B8B8</color>
     
     <!-- 对话内容列表 -->
-    <color name="list_item_date_bg">#00000000</color><!-- 会话时间背景色 -->
+    <color name="list_item_date_bg">@color/list_chat_item_bg</color><!-- 会话时间背景色#00000000 -->
     <color name="list_item_date_text">#B6B8B9</color>
     <color name="list_chat_blank_bg">#ECEDF1</color><!-- 对话界面背景 -->
     <color name="list_chat_item_bg">@color/list_chat_blank_bg</color><!-- 对话item背景色 -->

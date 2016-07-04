@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/history_messages_left_padding"
+    android:paddingStart="@dimen/history_messages_left_padding"
+    android:paddingEnd="@dimen/info_item_padding"
     android:paddingRight="@dimen/info_item_padding"
     android:paddingTop="@dimen/history_info_item_margin_v"
     android:paddingBottom="@dimen/history_info_item_margin_v"
@@ -66,7 +68,7 @@
 	            android:id="@+id/chat_item_news_img"
 	        	android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
-	            style="Single_News_Image"
+	            style="@style/Single_News_Image"
 	            android:contentDescription="@string/contentDescription" />
 	        
 	        <TextView

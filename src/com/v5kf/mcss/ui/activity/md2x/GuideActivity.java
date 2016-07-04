@@ -132,6 +132,7 @@ public class GuideActivity extends ActivityBase {
 			switch (v.getId()) {
 			case R.id.guide_bottom_left_iv:
 				gotoActivityAndFinishThis(CustomLoginActivity.class);
+				mApplication.getWorkerSp().saveBoolean("v5_inited", true);
 				break;
 			case R.id.guide_bottom_right_iv:
 				// TODO 了解更多

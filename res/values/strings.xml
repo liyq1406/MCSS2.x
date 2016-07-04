@@ -306,7 +306,7 @@
     <string name="confirm_forward_message">确认转发？</string>
     
     <!-- 机器人候选列表 -->
-    <string name="robot_msg_add">添加</string>
+    <string name="robot_msg_add">选择</string>
     <string name="robot_msg_del">撤销</string>
     <string name="robot_msg_send">发送</string>
     <string name="robot_msg_request">提问机器人</string>

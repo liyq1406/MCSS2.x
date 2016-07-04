@@ -14,7 +14,7 @@
         emojicon:emojiconAlignment="baseline"
         emojicon:emojiconSize="18sp"
         android:text="@string/chat_msg_default"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:padding="4dp"
@@ -22,7 +22,7 @@
         android:layout_marginBottom="4dp"
         android:singleLine="false"
         android:textColor="@color/black"
-        android:textSize="13sp" />
+        android:textSize="14sp" />
     
     <TextView
         android:id="@+id/id_serial_num"
@@ -40,35 +40,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/id_robot_text"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginBottom="6dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="6dp"
         android:orientation="horizontal" >
-	    
+        
         <View
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="0dp" />
+            android:layout_height="0dp" />        
         
         <View
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="0dp" />
+	    
+        <Button
+            android:id="@+id/id_robot_send_btn"
+            android:visibility="invisible"
+            android:text="@string/robot_msg_send"
+            style="@style/Robot_candidate_btn"
+            android:background="@drawable/btn_robot_send_selector" />
         
         <Button
             android:id="@+id/id_robot_add_btn"
             android:text="@string/robot_msg_add"
-            android:layout_marginRight="6dp"
-            android:layout_marginEnd="6dp"
             style="@style/Robot_candidate_btn"
             android:background="@drawable/btn_robot_add_selector" />
-        
-        <Button
-            android:id="@+id/id_robot_send_btn"
-            android:text="@string/robot_msg_send"
-            style="@style/Robot_candidate_btn"
-            android:background="@drawable/btn_robot_send_selector" />
                 
     </LinearLayout>
     

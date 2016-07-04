@@ -24,9 +24,9 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
@@ -649,8 +649,8 @@ public class ChattingListAdapter extends BaseAdapter {
 			width = (int)scale * width;
 			height = (int)scale * height;
 		}
-		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
-		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+		holder.mVideoBgIv.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+		holder.mVideoSurface.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
 	}
 
 	private void sendStateChange(ViewHolder holder, final ChatRecyclerBean chatMessage) {
