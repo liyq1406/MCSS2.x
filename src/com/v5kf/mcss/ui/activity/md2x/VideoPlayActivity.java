@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;

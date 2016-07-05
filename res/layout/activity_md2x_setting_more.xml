@@ -62,7 +62,7 @@
 			        android:visibility="gone"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        			
 			        <TextView
 			            style="@style/InfoItemText_L"
@@ -90,7 +90,7 @@
 			        android:id="@+id/rl_auto_login"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 		            <View
 				        android:layout_width="match_parent"
@@ -135,7 +135,7 @@
 			        android:id="@+id/rl_switch_notification"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 		            <View
 				        android:id="@+id/view_hd"
@@ -215,7 +215,7 @@
 			        android:id="@+id/rl_switch_voice"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 				        android:id="@+id/view1"
@@ -261,7 +261,7 @@
 			        android:id="@+id/rl_switch_vibrate"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 					
 					<View
 				        android:id="@+id/view2"
@@ -330,7 +330,7 @@
 			        android:id="@+id/layout_feedback"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        			
 			        <TextView
 			            style="@style/InfoItemText_L"
@@ -359,7 +359,7 @@
 			        android:id="@+id/layout_about"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >			
+			        android:background="@drawable/info_item_selector" >			
 			        
 			        <View
 			            android:id="@+id/divider_feedback"
@@ -396,7 +396,7 @@
 			        android:id="@+id/layout_update"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_update"
@@ -444,7 +444,7 @@
 			        android:id="@+id/layout_clear_cache"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >			
+			        android:background="@drawable/info_item_selector" >			
 			        
 			        <View
 			            android:id="@+id/divider_clear_cache"
@@ -479,7 +479,7 @@
 			        android:id="@+id/layout_refresh"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >			
+			        android:background="@drawable/info_item_selector" >			
 			        
 			        <View
 			            android:id="@+id/divider_refresh"

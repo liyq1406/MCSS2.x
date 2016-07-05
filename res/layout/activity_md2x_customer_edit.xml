@@ -47,7 +47,7 @@
 		        android:id="@+id/layout_head"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:background="@drawable/btn_selector"
+		        android:background="@drawable/info_item_selector"
 		        android:minHeight="78dp"
 		        android:paddingLeft="@dimen/info_item_margin_h"
 		        android:paddingRight="@dimen/info_item_margin_h"

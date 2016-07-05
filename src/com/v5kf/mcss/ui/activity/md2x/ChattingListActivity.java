@@ -696,9 +696,9 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	}
 	
 	private void listScrollToBottom(boolean smooth) {
-		Logger.d(TAG, "673 listScrollToBottom smooth:" + smooth);
+		Logger.d(TAG, "699 listScrollToBottom smooth:" + smooth);
 		if (mDatas.size() > 0) {
-			Logger.d(TAG, "675 listScrollToBottom:" + (mDatas.size() - 1));
+			Logger.d(TAG, "701 listScrollToBottom:" + (mDatas.size() - 1));
 			if (smooth) {
 				mChatListView.setSmoothScrollbarEnabled(true);
 				mChatListView.smoothScrollToPosition(mDatas.size() - 1);
@@ -845,9 +845,14 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
          mChatListView.setOnTouchListener(new OnTouchListener() {
  			@Override
  			public boolean onTouch(View v, MotionEvent event) {
+ 				Logger.d(TAG, "【onTouch】");
+ 				if (mKeyBar.isKeyBoardFootShow()) { // 拦截触摸列表动作，关闭底部栏
+		    		mKeyBar.hideAutoView();
+		    		return true;
+		    	}
  				switch (event.getAction()) {
  			    case MotionEvent.ACTION_DOWN:
- 			    	mKeyBar.hideAutoView();
+ 			    	
  			        break;
  			    case MotionEvent.ACTION_UP:
  			        v.performClick();
@@ -1132,7 +1137,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		robotMessage.setName(mAppInfo.getUser().getDefaultName());
 		
 		mRobotDatas.add(robotMessage);		
-		mRobotAdapter.notifyDataSetChanged();	
+		notifyRobotDataSetChange();
 	}
 	
 	/**
@@ -1165,7 +1170,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			// 显示机器人推荐
 			closeSoftKeyboardAndShowChildView(EmoticonsKeyBoardBar.FUNC_CHILLDVIEW_ROBOT);
 		}
-		mRobotAdapter.notifyDataSetChanged();	
+		notifyRobotDataSetChange();
 	}
 	
 	/**
@@ -1191,7 +1196,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			mRobotDatas.add(robotMessage);
 			Logger.i(TAG, "[updateRobotMessage] Message_type:" + robotMessage.getMessage().getMessage_type());
 		}
-		mRobotAdapter.notifyDataSetChanged();	
+		notifyRobotDataSetChange();
 	}
 	
 	/**
@@ -1202,13 +1207,13 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		Log.d(TAG, "handleMessage:" + msg.what + " size:" + mDatas.size());		
 		switch (msg.what) {
 		case HDL_WHAT_UPDATE_UI_SMOOTH: // 滚动更新消息列表
-			mChatListAdapter.notifyDataSetChanged();
+			notifyChatDataSetChange();
 			Logger.d(TAG, "1257 HDL_WHAT_UPDATE_UI scrollToBottom:" + (mDatas.size() - 1));
 			listScrollToBottom(true);
 			break;
 
 		case HDL_WHAT_UPDATE_UI: // 更新消息列表
-			mChatListAdapter.notifyDataSetChanged();
+			notifyChatDataSetChange();
 			Logger.d(TAG, "1257 HDL_WHAT_UPDATE_UI scrollToBottom:" + (mDatas.size() - 1));
 			listScrollToBottom(false);
 			break;
@@ -1678,6 +1683,17 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	    } 
 	}
 	
+	/* [修改]解决屏幕刷新黑块问题 */
+	private void notifyRobotDataSetChange() {
+		mRobotAdapter.notifyDataSetChanged();
+		mCandidateList.postInvalidateDelayed(5);
+	}
+
+	private void notifyChatDataSetChange() {
+		mChatListAdapter.notifyDataSetChanged();
+		mChatListView.postInvalidateDelayed(5);
+	}
+	
 	/***** event *****/
 
 	@Subscriber(tag = EventTag.ETAG_CSTM_OUT, mode = ThreadMode.MAIN)
@@ -1725,7 +1741,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		addRecyclerBean(msg, false);
 
 		//mRecyclerAdapter.notifyItemInserted(mDatas.size() - 1);
-		mChatListAdapter.notifyDataSetChanged();
+		notifyChatDataSetChange();
 		Logger.d(TAG, "1700 newMessage scrollToBottom:" + (mDatas.size() - 1));
 		listScrollToBottom(true);
 		isMessageAdded = true;
@@ -1779,7 +1795,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		} else {
 			sendMessage(message);
 		}
-		mChatListAdapter.notifyDataSetChanged();
+		notifyChatDataSetChange();
 	}
 
 	/***** event *****/

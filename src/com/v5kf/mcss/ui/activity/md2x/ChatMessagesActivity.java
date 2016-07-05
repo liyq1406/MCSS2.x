@@ -307,7 +307,7 @@ public class ChatMessagesActivity extends BaseChatActivity {
 		Log.d(TAG, "handleMessage:" + msg.what + " size:" + mDatas.size());		
 		switch (msg.what) {
 		case HDL_WHAT_UPDATE_UI:
-			mRecycleAdapter.notifyDataSetChanged();
+			notifyRecyclerDataSetChange();
 			listScrollToBottom(false);
 			break;
 			
@@ -327,6 +327,12 @@ public class ChatMessagesActivity extends BaseChatActivity {
 		}
 	}
 
+	/* [修改]解决屏幕刷新黑块问题 */
+	private void notifyRecyclerDataSetChange() {
+		mRecycleAdapter.notifyDataSetChanged();
+		mRecyclerView.postInvalidateDelayed(5);
+	}
+	
 	/***** event *****/
 
 	@Subscriber(tag = EventTag.ETAG_CSTM_WAIT_OUT, mode = ThreadMode.MAIN)
@@ -351,7 +357,8 @@ public class ChatMessagesActivity extends BaseChatActivity {
 			return;
 		}
 		addRecycleBean(msg_list.get(0), false);
-		mRecycleAdapter.notifyItemInserted(mDatas.size() - 1);
+//		mRecycleAdapter.notifyItemInserted(mDatas.size() - 1);
+		notifyRecyclerDataSetChange();
 		listScrollToBottom(false);
 		isMessageAdded = true;
 	}
@@ -368,7 +375,8 @@ public class ChatMessagesActivity extends BaseChatActivity {
 			return;
 		}
 		addRecycleBean(msg_list.get(0), false);
-		mRecycleAdapter.notifyItemInserted(mDatas.size() - 1);
+//		mRecycleAdapter.notifyItemInserted(mDatas.size() - 1);
+		notifyRecyclerDataSetChange();
 		listScrollToBottom(false);
 		isMessageAdded = true;
 	}

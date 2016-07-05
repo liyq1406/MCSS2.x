@@ -72,7 +72,7 @@
 			        android:id="@+id/layout_photo"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
-			        android:background="@drawable/btn_selector"
+			        android:background="@drawable/info_item_selector"
 			        android:minHeight="78dp" >
 			        
 			        <TextView
@@ -106,7 +106,7 @@
 			        android:id="@+id/layout_nickname"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_nickname"
@@ -139,7 +139,7 @@
 			        android:id="@+id/layout_status"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_status"
@@ -172,7 +172,7 @@
 			        android:id="@+id/layout_mode"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_mode"
@@ -205,7 +205,7 @@
 			        android:id="@+id/layout_site"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_site"
@@ -262,7 +262,7 @@
 			        android:id="@+id/layout_realname"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			
 			        <TextView
 			            style="@style/InfoItemText_L"
@@ -288,7 +288,7 @@
 			        android:id="@+id/layout_gender"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			
 			        <View
 			            android:id="@+id/divider_gender"
@@ -321,7 +321,7 @@
 			        android:id="@+id/layout_phone"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_phone"
@@ -354,7 +354,7 @@
 			        android:id="@+id/layout_email"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_email"
@@ -387,7 +387,7 @@
 			        android:id="@+id/layout_weixin"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_weixin"
@@ -420,7 +420,7 @@
 			        android:id="@+id/layout_qq"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_qq"

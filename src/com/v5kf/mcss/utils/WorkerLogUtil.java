@@ -18,8 +18,13 @@ import com.v5kf.mcss.entity.WorkerLogBean;
  */
 public class WorkerLogUtil {
 	private static final String TAG = "WorkerLogUtil";
+	public static boolean ENABLE_LOG = false;
 	
 	public static void insertAppBackgroundLog() {
+		if (!ENABLE_LOG) {
+			return;
+		}
+		
 		long time = DateUtil.getCurrentLongTime() / 1000;
 		String desc = DateUtil.longDateToString(time) + " [log] 退出应用，记录中断";
 		String e_id = Config.SITE_ID;
@@ -35,6 +40,10 @@ public class WorkerLogUtil {
 	}
 	
 	public static void insertAppForegroundLog() {
+		if (!ENABLE_LOG) {
+			return;
+		}
+		
 		long time = DateUtil.getCurrentLongTime() / 1000;
 		String desc = DateUtil.longDateToString(time) + " [log] 启动应用，记录开始";
 		String e_id = Config.SITE_ID;
@@ -50,6 +59,10 @@ public class WorkerLogUtil {
 	}
 	
 	public static void insertCustomerJoinInLog(CustomerBean customer, int reason) {
+		if (!ENABLE_LOG) {
+			return;
+		}
+		
 		if (null == customer) {
 			Logger.e(TAG, "insertCustomerJoinInLog -> null customer");
 			return;
@@ -68,6 +81,10 @@ public class WorkerLogUtil {
 	}
 	
 	public static void insertCustomerJoinOutLog(CustomerBean customer, int reason) {
+		if (!ENABLE_LOG) {
+			return;
+		}
+		
 		if (null == customer) {
 			Logger.e(TAG, "insertCustomerJoinOutLog -> null customer");
 			return;

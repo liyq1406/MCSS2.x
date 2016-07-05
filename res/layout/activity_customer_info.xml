@@ -26,7 +26,7 @@
 		        android:id="@+id/layout_head"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:background="@drawable/btn_selector"
+		        android:background="@drawable/info_item_selector"
 		        android:minHeight="78dp"
 		        android:paddingLeft="@dimen/info_item_padding"
 		        android:paddingRight="@dimen/info_item_padding"
@@ -136,7 +136,7 @@
 			        android:id="@+id/layout_history_msg"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			
 			        <TextView
 			            style="@style/InfoItemText_L"
@@ -187,7 +187,7 @@
 			        android:id="@+id/layout_realname"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			
 			        <TextView
 			            style="@style/InfoItemText_L"
@@ -213,7 +213,7 @@
 			        android:id="@+id/layout_phone"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_phone"
@@ -246,7 +246,7 @@
 			        android:id="@+id/layout_email"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_email"
@@ -279,7 +279,7 @@
 			        android:id="@+id/layout_weixin"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_weixin"
@@ -312,7 +312,7 @@
 			        android:id="@+id/layout_qq"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_qq"
@@ -345,7 +345,7 @@
 			        android:id="@+id/layout_country"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_country"
@@ -378,7 +378,7 @@
 			        android:id="@+id/layout_province"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_province"
@@ -411,7 +411,7 @@
 			        android:id="@+id/layout_city"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_city"
@@ -444,7 +444,7 @@
 			        android:id="@+id/layout_address"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_address"
@@ -477,7 +477,7 @@
 			        android:id="@+id/layout_company"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_company"
@@ -510,7 +510,7 @@
 			        android:id="@+id/layout_chats"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_chats"
@@ -543,7 +543,7 @@
 			        android:id="@+id/layout_visits"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			        
 			        <View
 			            android:id="@+id/divider_visits"

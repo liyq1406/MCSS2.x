@@ -170,7 +170,7 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 			@Override
 			public void onSuccess(String url, ImageView imageView) {
 				// TODO Auto-generated method stub
-				mHeadIv.requestLayout();
+				imageView.postInvalidate();
 			}
 			
 			@Override

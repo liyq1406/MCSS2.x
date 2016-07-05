@@ -56,12 +56,12 @@
     <color name="bottom_candidate_border">#D9D9D9</color><!-- #8FBC8F -->
     <color name="bottom_candidate_select_normal">#258BCB</color><!-- #258BCB -->
     <color name="bottom_candidate_select_pressed">#00688B</color><!-- #00688B -->
-    <color name="robot_add_bg_normal">#99000000</color><!-- #FFFFFF -->
-    <color name="robot_add_bg_pressed">#99000000</color><!-- #D5D5D6 -->
-    <color name="robot_del_bg_normal">#99000000</color>
-    <color name="robot_del_bg_pressed">#99000000</color>
-    <color name="robot_send_bg_normal">#99000000</color>
-    <color name="robot_send_bg_pressed">#99000000</color>
+    <color name="robot_add_bg_normal">#A8000000</color><!-- #FFFFFF -->
+    <color name="robot_add_bg_pressed">#A8000000</color><!-- #D5D5D6 -->
+    <color name="robot_del_bg_normal">#A8000000</color>
+    <color name="robot_del_bg_pressed">#A8000000</color>
+    <color name="robot_send_bg_normal">#A8000000</color>
+    <color name="robot_send_bg_pressed">#A8000000</color>
     <color name="common_red">#ff8247</color>
     
     

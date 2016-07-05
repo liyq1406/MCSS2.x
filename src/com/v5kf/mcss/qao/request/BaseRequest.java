@@ -25,6 +25,7 @@ public abstract class BaseRequest {
 	 */
 	protected void sendRequest(String request) {
 		// [eventbus]
+		Logger.d("BaseRequest", "sendRequest:" + request);
 		EventBus.getDefault().post(request, EventTag.ETAG_SEND_MSG);
 	}
 	

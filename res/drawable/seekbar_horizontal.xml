@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<layer-list
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@android:id/background" android:drawable="@drawable/v5_seek_lbg" />
+<layer-list  
+  xmlns:android="http://schemas.android.com/apk/res/android">  
+    <item android:id="@android:id/background">  
+        <shape>
+            <corners android:radius="20dp"/>
+            <solid android:color="#fff6f2f2" />  
+        </shape>  
+    </item>
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape>
-                <!-- <corners android:radius="0.0dip" />
-                <gradient android:startColor="#00000000" android:endColor="#00000000" android:angle="270.0" android:centerY="0.75" android:centerColor="#00000000" /> -->
+                <solid android:color="#ff51495e" />
 				<corners android:radius="2.0dip" />
                 <gradient android:startColor="#80ffd300" android:endColor="#a0ffcb00" android:angle="270.0" android:centerY="0.75" android:centerColor="#80ffb600" />
             </shape>
         </clip>
     </item>
-    <item android:id="@android:id/progress">
-        <clip android:drawable="@drawable/v5_seek_rbg" />
-    </item>
+    <item android:id="@android:id/progress">  
+        <clip>  
+            <shape>
+                <corners android:radius="20dp"/>
+                <solid android:color="#ff6fbeef" />  
+            </shape>  
+        </clip>  
+    </item>  
 </layer-list>

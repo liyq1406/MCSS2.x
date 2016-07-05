@@ -21,7 +21,7 @@
 	        android:id="@+id/layout_auto_mode"
 	        android:layout_width="match_parent"
 	        android:layout_height="@dimen/info_item_height_single"
-	        android:background="@drawable/btn_selector"
+	        android:background="@drawable/info_item_selector"
 	        android:paddingRight="@dimen/info_item_padding"
 	        android:paddingLeft="16dp" >
 	
@@ -55,7 +55,7 @@
 	        android:id="@+id/layout_switch_only"
 	        android:layout_width="match_parent"
 	        android:layout_height="@dimen/info_item_height_single"
-	        android:background="@drawable/btn_selector"
+	        android:background="@drawable/info_item_selector"
 	        android:paddingRight="@dimen/info_item_padding"
 	        android:paddingLeft="16dp" >
 	
@@ -107,7 +107,7 @@
 	        android:id="@+id/layout_seek_tip"
 	        android:layout_width="match_parent"
 	        android:layout_height="@dimen/info_item_height_single"
-	        android:background="@drawable/btn_selector"
+	        android:background="@drawable/info_item_selector"
 	        android:paddingRight="@dimen/info_item_padding"
 	        android:paddingLeft="16dp" >
 	

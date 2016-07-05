@@ -37,6 +37,7 @@ import com.v5kf.mcss.utils.DbUtil;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.SharePreferenceUtil;
+import com.v5kf.mcss.utils.WorkerLogUtil;
 import com.v5kf.mcss.utils.WorkerSP;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.v5kf.mcss.utils.cache.MediaLoader;
@@ -63,7 +64,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	private RelativeLayout rl_autoboot, rl_switch_voice, rl_switch_vibrate, 
 		rl_feedback, rl_about, rl_update, rl_clearcache, rl_refresh, rl_service, rl_archworker; //rl_switch_notification_wait
 	private ToggleButton  mSwitchAutoLogin, mSwitchNotification,
-		mSwitchVoice, mSwitchVibrate; // mSwitchWaitNotification
+		mSwitchVoice, mSwitchVibrate, mSwitchWorkerLog; // mSwitchWaitNotification
 	private TextView mVersionTv;
 	private TextView mCacheSizeTv;
 	private float mCacheSize;
@@ -190,6 +191,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		mSwitchNotification = (ToggleButton) findViewById(R.id.switch_notification);
 		mSwitchVoice = (ToggleButton) findViewById(R.id.switch_voice);
 		mSwitchVibrate = (ToggleButton) findViewById(R.id.switch_vibrate);
+		mSwitchWorkerLog = (ToggleButton) findViewById(R.id.switch_worker_log);
 		
 //		mSwitchAutoBoot.setOnChangeListener(this);
 //		mSwitchAutoLogin.setOnChangeListener(this);
@@ -203,6 +205,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 //		mSwitchWaitNotification.setOnToggleChanged(this);
 		mSwitchVoice.setOnToggleChanged(this);
 		mSwitchVibrate.setOnToggleChanged(this);
+		mSwitchWorkerLog.setOnToggleChanged(this);
 		
 		rl_feedback.setOnClickListener(this);
 		rl_about.setOnClickListener(this);
@@ -270,6 +273,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		boolean isAllowVibrate = mSharedUtil.isAllowVibrate();
 		mSwitchVibrate.setSmoothChecked(isAllowVibrate);
 		Logger.d(TAG, "isAllowVibrate:" + isAllowVibrate);
+		mSwitchWorkerLog.setSmoothChecked(mWsp.readBoolean(WorkerSP.SP_ENABLE_WORKER_LOG));
 	}
 	
 	private void updateCacheSize() {
@@ -445,6 +449,12 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 			
 		case R.id.switch_vibrate:
 			mSharedUtil.setAllowVibrateEnable(on);
+			break;
+
+		case R.id.switch_worker_log:
+			mWsp.saveBoolean(WorkerSP.SP_ENABLE_WORKER_LOG, on);
+			WorkerLogUtil.ENABLE_LOG = on;
+			EventBus.getDefault().post(mAppInfo.getUser(), EventTag.ETAG_UPDATE_USER_INFO);
 			break;
 			
 		case R.id.switch_auto_boot:

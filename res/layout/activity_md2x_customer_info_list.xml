@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
     	android:layout_height="0dp"
     	android:background="@color/info_activity_layout_bg"
-    	android:scrollbars="none" >    	
+    	android:scrollbars="none" >
         
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
     		    android:layout_width="match_parent"
     		    android:layout_height="wrap_content"
     		    android:orientation="vertical"
-    		    android:background="@drawable/btn_selector"
+    		    android:background="@drawable/info_item_selector"
     		    android:paddingLeft="@dimen/info_item_padding"
 		        android:paddingRight="@dimen/info_item_padding"
 		        android:paddingBottom="@dimen/info_item_padding_inner_v"
@@ -108,7 +108,7 @@
 				            <ImageView
 			                    android:id="@+id/id_sex_iv"
 			                    style="@style/IfaceImg"
-			                    android:background="@drawable/btn_selector"
+			                    android:background="@drawable/info_item_selector"
 			                    android:layout_gravity="end|center_vertical"
 			                    android:layout_marginLeft="@dimen/info_item_padding_inner_v"
 			                    android:layout_marginStart="@dimen/info_item_padding_inner_v"
@@ -192,7 +192,7 @@
 		        android:id="@+id/layout_history_msg"
 		        android:layout_width="match_parent"
 		        android:layout_height="@dimen/info_item_height_single"
-		        android:background="@drawable/btn_selector" >
+		        android:background="@drawable/info_item_selector" >
 		
 		        <TextView
 		            style="@style/InfoItemText_L"
@@ -234,7 +234,7 @@
 			        android:id="@+id/layout_kexi_plus_url"
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/btn_selector" >
+			        android:background="@drawable/info_item_selector" >
 			
 			        <TextView
 			            style="@style/InfoItemText_L"

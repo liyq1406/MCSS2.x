@@ -166,6 +166,7 @@
     <string name="set_mode_close">关闭</string>
     <string name="set_auto_boot">开机自启</string>
     <string name="set_auto_login">自动登录</string>
+    <string name="set_worker_log">日志记录</string>
     <string name="set_notify">新消息通知</string>
     <string name="set_notify_wait">排队客户消息通知</string>
     <string name="set_voice">声音</string>

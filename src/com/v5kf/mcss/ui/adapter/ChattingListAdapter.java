@@ -90,6 +90,12 @@ public class ChattingListAdapter extends BaseAdapter {
 	
 	// 语音
 	private MediaPlayer mPlayer;
+	
+	@Override
+	public void notifyDataSetChanged() {
+		// TODO Auto-generated method stub
+		super.notifyDataSetChanged();
+	}
 
 	public interface ChatMessagesListener {
 		public void resendFailureMessage(V5Message message, int position);

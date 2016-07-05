@@ -33,7 +33,6 @@ import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
 import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
-import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;

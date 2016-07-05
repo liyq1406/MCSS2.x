@@ -71,6 +71,7 @@ import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
+import com.v5kf.mcss.utils.WorkerLogUtil;
 import com.v5kf.mcss.utils.WorkerSP;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.zcw.togglebutton.ToggleButton;
@@ -98,6 +99,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	// drawer
 	private CircleImageView mAvatar;
 	private TextView mName;
+	private Button mWorkerLog;
 	private TextView mGroup;
 	private Button mMode;
 	private Spinner mStatusSpinner;
@@ -271,14 +273,19 @@ public class MainTabActivity extends BaseToolbarActivity {
 			mStatusSpinner = (Spinner) headerView.findViewById(R.id.drawer_status_spinner);
 			mStatusText = (TextView) headerView.findViewById(R.id.drawer_status_text);
 			mStatusLayout = headerView.findViewById(R.id.drawer_status_layout);
-			
-			headerView.findViewById(R.id.drawer_log).setOnClickListener(new OnClickListener() {
+			mWorkerLog = (Button) headerView.findViewById(R.id.drawer_log);
+			mWorkerLog.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					gotoActivity(WorkerLogActivity.class);
 				}
 			});
+			
+			if (mApplication.getWorkerSp().readBoolean(WorkerSP.SP_ENABLE_WORKER_LOG)) {
+				mWorkerLog.setVisibility(View.VISIBLE);
+				WorkerLogUtil.ENABLE_LOG = true;
+			}
 			
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.md2x_simple_spinner_item);
 			String level[] = getResources().getStringArray(R.array.status_spinner_arr); //资源文件
@@ -604,6 +611,12 @@ public class MainTabActivity extends BaseToolbarActivity {
 		
 		mName.setText(mAppInfo.getUser().getDefaultName());
 		initFromGroup();
+		
+		if (mApplication.getWorkerSp().readBoolean(WorkerSP.SP_ENABLE_WORKER_LOG)) {
+			mWorkerLog.setVisibility(View.VISIBLE);
+		} else {
+			mWorkerLog.setVisibility(View.GONE);
+		}
 		
 		updateModeButton(mMode, mAppInfo.getUser().getMode());
 		updateStatusSpinner(mAppInfo.getUser().getStatus());

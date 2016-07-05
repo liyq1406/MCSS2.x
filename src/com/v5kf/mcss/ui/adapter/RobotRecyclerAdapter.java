@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -220,6 +221,21 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
             	mRobotAdd = (Button) itemView.findViewById(R.id.id_robot_add_btn);
             	mRobotSend = (Button) itemView.findViewById(R.id.id_robot_send_btn);
             	mNewsListLayout.setOnClickListener(this);
+            	mNewsListLayout.setOnListLayoutClickListener(new ListLinearLayout.OnListLayoutClickListener() {
+					
+					@Override
+					public void onListLayoutClick(View v, int pos) {
+						// TODO Auto-generated method stub
+						if (null == mChatBean) {
+							Logger.e(TAG, "ViewHolder has null ChatRecycleBean");
+							return;
+						}
+						V5ArticleBean article = ((V5ArticlesMessage)mChatBean.getMessage()).getArticles().get(pos);
+						if (article != null && !TextUtils.isEmpty(article.getUrl())) {
+							onArticleClick(article.getUrl());
+						}
+					}
+				});
             	break;
             	
             case QAODefine.MSG_TYPE_TEXT:
@@ -244,6 +260,10 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
             }
         }
 
+		protected void onArticleClick(String url) {
+			mActivity.gotoWebViewActivity(url);
+		}
+
 		@Override
 		public void onClick(View v) {
 			Logger.d(TAG, "item onCLick View.id=" + v.getId());
@@ -263,6 +283,15 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 				
 			case R.id.id_robot_request_btn: // 提问机器人
 				onRobotQuestion();
+				break;
+				
+			case R.id.id_news_layout: // 
+				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_NEWS) {
+					V5ArticleBean article = ((V5ArticlesMessage)mChatBean.getMessage()).getArticles().get(0);
+					if (article != null && !TextUtils.isEmpty(article.getUrl())) {
+						onArticleClick(article.getUrl());
+					}
+				}
 				break;
 			}
 		}

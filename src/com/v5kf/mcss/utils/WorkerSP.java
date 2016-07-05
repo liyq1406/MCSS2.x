@@ -24,6 +24,7 @@ import com.v5kf.mcss.config.Config;
  */
 public class WorkerSP {
 	public static final String SP_MONITOR_STATUS = "v5_monitor_status";
+	public static final String SP_ENABLE_WORKER_LOG = "enable_worker_log";
 	
 	private static final String SP_EXIT_FLAG = "exit_flag_pref";
 	private static final String SP_AUTO_LOGIN = "auto_login_pref";

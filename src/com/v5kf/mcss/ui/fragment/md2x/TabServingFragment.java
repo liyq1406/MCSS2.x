@@ -37,7 +37,6 @@ import com.v5kf.mcss.ui.adapter.IServingAdapter;
 import com.v5kf.mcss.ui.entity.IServingBean;
 import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.ui.widget.Divider;
-import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 
@@ -202,13 +201,8 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 				
 				@Override
 				public void onClick(View v) {
-					//onRefresh();
+					onRefresh();
 					mIRecycleView.setRefreshing();
-					
-					Logger.i(TAG, "UTC:" + DateUtil.getUTCTime()
-							+ " UTSString:" + DateUtil.getLocalTimeFromUTC(DateUtil.getUTCTime()));
-					Logger.i(TAG, "Date:" + DateUtil.getCurrentLongTime()
-							+ " DateString:" + DateUtil.getCurrentTime());
 				}
 			});
 		}
@@ -218,7 +212,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	private void resetRecyclerList() {
 		mRecycleBeans.clear();
 		initData();
-		mRecycleAdapter.notifyDataSetChanged();
+		notifyRecyclerDataSetChange();
 	}
     
     private boolean hasRecycleBeans(String c_id) {
@@ -274,7 +268,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		if (null != tmpBean && goTop) {
 			mRecycleBeans.remove(tmpBean);
 			mRecycleBeans.add(0, tmpBean);
-			mRecycleAdapter.notifyDataSetChanged();
+			notifyRecyclerDataSetChange();
 			position = 0;
 		} else {
 			if (position >= mRecycleBeans.size()) {
@@ -370,6 +364,12 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		mHandler.sendEmptyMessageDelayed(HDL_TIME_OUT, Config.WS_TIME_OUT);
 	}
 
+	/* [修改]解决屏幕刷新黑块问题 */
+	private void notifyRecyclerDataSetChange() {
+		mRecycleAdapter.notifyDataSetChanged();
+		mIRecycleView.getRefreshableView().postInvalidateDelayed(5);
+	}
+	
 	/***** event *****/
 
 	@Subscriber(tag = EventTag.ETAG_SERVING_CSTM_CHANGE, mode = ThreadMode.MAIN)
@@ -377,7 +377,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
 		// 更新整个列表
 		resetRecyclerList();
-		mHandler.obtainMessage(HDL_STOP_REFRESH).sendToTarget();
+		mHandler.sendEmptyMessageDelayed(HDL_STOP_REFRESH, 200);
 		
 		switch (type) {
 		case QAODefine.O_METHOD_GET_CUSTOMER_LIST:
@@ -387,7 +387,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		case QAODefine.O_METHOD_CSTM_ACCESSABLE_CHANGE:
 		case QAODefine.O_METHOD_GET_IN_TRUST:
 		case QAODefine.O_TYPE_MESSAGE:
-			mRecycleAdapter.notifyDataSetChanged();
+			notifyRecyclerDataSetChange();
 			break;
 		
 		case QAODefine.O_METHOD_GET_CUSTOMER_MESSAGES: // customer_join_in

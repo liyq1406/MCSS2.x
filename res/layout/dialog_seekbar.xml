@@ -83,13 +83,16 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:background="@drawable/dialog_option_bottom_selector"
-	    android:padding="@dimen/info_item_padding"
+	    android:paddingLeft="0dp"
+	    android:paddingRight="0dp"
 	    android:orientation="vertical" >
 	        
 	    <com.v5kf.mcss.ui.widget.ModeSeekBar
 	        android:id="@+id/id_seek_bar"  
-		    android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:layout_height="32dp"
+		    android:layout_margin="4dp"
+		    android:gravity="center"
 		    style="@style/Widget.SeekBar.Normal" />
 	    
 	    <TextView

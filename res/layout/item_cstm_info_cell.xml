@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/info_item_height_single"
     android:clickable="false"
-    android:background="@drawable/btn_selector" >
+    android:background="@drawable/info_item_selector" >
     
     <View
         android:id="@+id/divider_cell"
