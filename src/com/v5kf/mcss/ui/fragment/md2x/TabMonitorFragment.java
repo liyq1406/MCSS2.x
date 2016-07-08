@@ -14,7 +14,6 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -100,7 +99,7 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	@Override
 	protected void onFragmentStartLazy() {
 		super.onFragmentStartLazy();
-		Log.d(TAG, TAG + " 显示 " + this);
+		Logger.d(TAG, TAG + " 显示 " + this);
 		updateMonitorStatus(mAppInfo.getUser().isMonitor());//mApplication.getWorkerSp().readBoolean(WorkerSP.SP_MONITOR_STATUS)
 //		this.mParentActivity.showToolbar();
 //		this.mParentActivity.hideFab();
@@ -112,26 +111,26 @@ public class TabMonitorFragment extends TabBaseFragment implements OnRefreshList
 	@Override
 	protected void onFragmentStopLazy() {
 		super.onFragmentStopLazy();
-		Log.d(TAG, TAG + " 掩藏 " + this);
+		Logger.d(TAG, TAG + " 掩藏 " + this);
 //		mAppInfo.stopMonitor();
 	}
 
 	@Override
 	protected void onPauseLazy() {
 		super.onPauseLazy();
-		Log.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
+		Logger.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
 	}
 
 	@Override
 	protected void onDestroyViewLazy() {
 		super.onDestroyViewLazy();
-		Log.d(TAG, TAG + " View将被销毁 " + this);
+		Logger.d(TAG, TAG + " View将被销毁 " + this);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG, TAG + " 所在的Activity onDestroy " + this);
+		Logger.d(TAG, TAG + " 所在的Activity onDestroy " + this);
 	}
     
 	

@@ -304,6 +304,10 @@ public class CustomApplication extends LitePalApplication {
 	public boolean isAppForeground() {
 		return mAppForeground > 0 ? true : false;
 	}
+
+	public int getAppForeground() {
+		return mAppForeground;
+	}
 	
 	private void onAppEnterForeground() {
 		Logger.w(TAG, "{Application on foreground}");
@@ -383,6 +387,7 @@ public class CustomApplication extends LitePalApplication {
 
 	public void setAppForeground() {
 		this.mAppForeground++;
+		Logger.d(TAG, "setAppForeground:" + mAppForeground);
 		if (this.mAppForeground == 1) { // [修改]回到前台，建立连接
 			this.onAppEnterForeground();
 		}
@@ -390,6 +395,7 @@ public class CustomApplication extends LitePalApplication {
 	
 	public void setAppBackground() {
 		this.mAppForeground--;
+		Logger.d(TAG, "setAppBackground:" + mAppForeground);
 		if (this.mAppForeground == 0) { // [修改]退出到后台，使用推送
 			this.onAppEnterBackground();
 		}

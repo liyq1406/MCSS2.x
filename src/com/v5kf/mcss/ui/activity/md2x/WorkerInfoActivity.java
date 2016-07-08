@@ -48,6 +48,7 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 	protected static final int HDL_UPLOAD_PHOTO_FAILED = 1;
 	protected static final int HDL_UPLOAD_PHOTO_OK = 2;
 	protected static final int HDL_SET_NICKNAME_OK = 3;
+	protected static final int HDL_APP_BACKGROUND = 102;
 	
 	protected String w_id;
 	protected WorkerBean mWorker;
@@ -450,6 +451,11 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 			initFirstLayout();
 //			EventBus.getDefault().post(mWorker, EventTag.ETAG_UPDATE_USER_INFO);
 			break;
+		case HDL_APP_BACKGROUND:
+			if (mApplication.getAppForeground() > 1) {
+				mApplication.setAppBackground();
+			}
+			break;
 		default:
 			break;
 		}
@@ -511,7 +517,12 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
     	if (requestCode == Config.REQUEST_CODE_CAMERA || 
 				requestCode == Config.REQUEST_CODE_PHOTO_KITKAT ||
 				requestCode == Config.REQUEST_CODE_PHOTO) {
-			mApplication.setAppBackground(); // 防止打开图库使得应用离线
+    		// 必须在this.onStart()之后调用。
+			if (mApplication.getAppForeground() > 1) {
+				mApplication.setAppBackground(); // 防止打开图库使得应用离线
+			} else {
+				mHandler.sendEmptyMessageDelayed(HDL_APP_BACKGROUND, 200);
+			}
 			
 			if (data != null) {
 				// 图库获取拍好的图片

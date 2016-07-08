@@ -15,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -113,7 +112,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	@Override
 	protected void onFragmentStartLazy() {
 		super.onFragmentStartLazy();
-		Log.d(TAG, TAG + " 显示 " + this);
+		Logger.d(TAG, TAG + " 显示 " + this);
 //		this.mParentActivity.showToolbar();
 //		this.mParentActivity.hideFab();
 //		this.mParentActivity.setBarColor(UITools.getColor(R.color.main_color));
@@ -124,25 +123,25 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	@Override
 	protected void onFragmentStopLazy() {
 		super.onFragmentStopLazy();
-		Log.d(TAG, TAG + " 掩藏 " + this);
+		Logger.d(TAG, TAG + " 掩藏 " + this);
 	}
 
 	@Override
 	protected void onPauseLazy() {
 		super.onPauseLazy();
-		Log.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
+		Logger.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
 	}
 
 	@Override
 	protected void onDestroyViewLazy() {
 		super.onDestroyViewLazy();
-		Log.d(TAG, TAG + " View将被销毁 " + this);
+		Logger.d(TAG, TAG + " View将被销毁 " + this);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG, TAG + " 所在的Activity onDestroy " + this);
+		Logger.d(TAG, TAG + " 所在的Activity onDestroy " + this);
 	}
 	
 	private void initData() {

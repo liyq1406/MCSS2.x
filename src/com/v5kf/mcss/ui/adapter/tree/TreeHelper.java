@@ -15,7 +15,6 @@ import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.entity.ArchWorkerBean;
 import com.v5kf.mcss.entity.WorkerArch;
-import com.v5kf.mcss.ui.fragment.WorkerTreeFragment;
 import com.v5kf.mcss.utils.Logger;
 
 public class TreeHelper {

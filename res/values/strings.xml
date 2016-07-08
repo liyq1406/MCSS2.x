@@ -166,7 +166,7 @@
     <string name="set_mode_close">关闭</string>
     <string name="set_auto_boot">开机自启</string>
     <string name="set_auto_login">自动登录</string>
-    <string name="set_worker_log">日志记录</string>
+    <string name="set_worker_log">坐席日志</string>
     <string name="set_notify">新消息通知</string>
     <string name="set_notify_wait">排队客户消息通知</string>
     <string name="set_voice">声音</string>
@@ -272,6 +272,8 @@
     <!-- WorkerLogActivity -->
     <string name="worker_log">坐席日志</string>
     <string name="log">日志</string>
+    <string name="help">帮助</string>
+    <string name="worker_log_help"><Data><![CDATA[坐席日志记录App中坐席接入客户的记录。\n注意：App在前台启动时才有记录，退出应用后则无记录。]]></Data></string>
     
     <!-- More set Activity -->
     <string name="app_about">关于</string>

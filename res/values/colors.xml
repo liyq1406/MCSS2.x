@@ -226,7 +226,7 @@
     <!-- main_color_accent：内容控件颜色578cc1 -->
     
     <color name="colorPrimary">#FFFFFF</color><!-- 导航栏 -->
-    <color name="colorPrimaryDark">#EAEAEA</color><!-- 状态栏 -->
+    <color name="colorPrimaryDark">#CACACA</color><!-- 状态栏#EAEAEA -->
     <color name="colorAccent">#209DE9</color>
     <color name="colorControlNormal">#1881D3</color>
     
@@ -241,6 +241,8 @@
     <color name="main_color_dark">#1BAFA4</color>
     <color name="main_color_accent">#21D2C8</color>
      -->
+	<color name="v5_status_bar_bg">@color/black</color>
+	<color name="v5_navigation_bar_bg">@color/md2x_guide_bg</color>
     <color name="material_blue_500">#1881D3</color><!-- #009688 -->
     <color name="material_blue_700">#1881D3</color><!-- #00796B -->
     <color name="material_green_A200">#25A55F</color><!-- #FD87A9 -->

@@ -18,7 +18,7 @@
         <!-- Navigation bar color -->
         
         <item name="android:navigationBarColor">@color/main_color</item>
-    	<!-- <item name="android:statusBarColor">@android:color/transparent</item> -->
+    	<item name="android:statusBarColor">@color/main_color_dark</item>
     	
     	<!-- 来自知乎 -->
     	<item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -30,4 +30,10 @@
 
     </style>
 
+    <style name="AppTheme.Normal">
+        <item name="android:windowIsTranslucent">false</item>
+	    <item name="android:windowTranslucentStatus">true</item>
+	    <item name="android:statusBarColor">@color/main_color_dark</item>
+		<!-- item name="android:windowTranslucentNavigation">true</item -->
+	</style>
 </resources>

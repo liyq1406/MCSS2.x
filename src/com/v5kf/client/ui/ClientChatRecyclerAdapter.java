@@ -40,6 +40,7 @@ import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.MessageRequest;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
+import com.v5kf.mcss.ui.widget.BubbleImageView;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.MapUtil;
@@ -237,8 +238,13 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 				V5ArticleBean article = (V5ArticleBean) articleMsg.getArticles().get(0);
 				holder.mNewsTitle.setText(article.getTitle());
 				holder.mNewsContent.setText(article.getDescription());
-				ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading, null);
-	        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
+				if (TextUtils.isEmpty(article.getPic_url())) {
+					holder.mNewsPic.setVisibility(View.GONE);
+				} else {
+					holder.mNewsPic.setVisibility(View.VISIBLE);
+					ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading, null);
+		        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
+				}
 	        	Logger.d(TAG, "单图文消息 url：" + article.getPic_url());
 			}
 			break;
@@ -476,7 +482,7 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
         public NewsListAdapter mNewsAdapter;
         
         /* 位置 */
-        public ImageView mMapIv;
+        public BubbleImageView mMapIv;
         public TextView mLbsDescTv;
         
         /* 图片 */
@@ -527,7 +533,7 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_LOCATION_R:
-            	mMapIv = (ImageView) itemView.findViewById(R.id.ic_map_img_iv);
+            	mMapIv = (BubbleImageView) itemView.findViewById(R.id.ic_map_img_iv);
             	mLbsDescTv = (TextView) itemView.findViewById(R.id.id_map_address_text);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
@@ -536,20 +542,20 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
             	break;
             	
             case TYPE_LOCATION_L:
-            	mMapIv = (ImageView) itemView.findViewById(R.id.ic_map_img_iv);
+            	mMapIv = (BubbleImageView) itemView.findViewById(R.id.ic_map_img_iv);
             	mLbsDescTv = (TextView) itemView.findViewById(R.id.id_map_address_text);
             	//mBubbleLayout = itemView.findViewById(R.id.id_left_location_layout);
             	mMapIv.setOnClickListener(this);
             	break;
             	
             case TYPE_IMG_L:
-            	mMapIv = (ImageView) itemView.findViewById(R.id.ic_type_img_iv);
+            	mMapIv = (BubbleImageView) itemView.findViewById(R.id.ic_type_img_iv);
             	//mBubbleLayout = itemView.findViewById(R.id.id_left_image_layout);
             	mMapIv.setOnClickListener(this);
             	break;
 
             case TYPE_IMG_R:
-            	mMapIv = (ImageView) itemView.findViewById(R.id.ic_type_img_iv);
+            	mMapIv = (BubbleImageView) itemView.findViewById(R.id.ic_type_img_iv);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
             	//mBubbleLayout = itemView.findViewById(R.id.id_right_image_layout);

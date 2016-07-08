@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true" >
+    
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/info_activity_layout_bg"
     android:orientation="vertical" >
 
@@ -65,10 +72,12 @@
 	        android:background="@drawable/v5_btn_chat_send_bg"
             android:textColor="@color/v5_btn_send_textcolor"
             android:textSize="12sp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/id_emoji_et"
             android:layout_marginTop="6dp"
             android:layout_marginRight="6dp"
+            android:layout_marginEnd="6dp"
             android:layout_marginBottom="6dp" />
 	    
 	</RelativeLayout>
@@ -84,3 +93,4 @@
         android:background="@color/v5_key_bar_bg"/>
 
 </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -24,9 +24,9 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
@@ -47,6 +47,7 @@ import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.ChatMessagesActivity;
 import com.v5kf.mcss.ui.activity.md2x.LocationMapActivity;
 import com.v5kf.mcss.ui.entity.ChatRecyclerBean;
+import com.v5kf.mcss.ui.widget.BubbleImageView;
 import com.v5kf.mcss.ui.widget.BubbleSurfaceView;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
@@ -315,8 +316,13 @@ public class ChattingListAdapter extends BaseAdapter {
 			V5ArticleBean article = ((V5ArticlesMessage)chatMessage.getMessage()).getArticles().get(0);
 			holder.mNewsTitle.setText(article.getTitle());
 			holder.mNewsContent.setText(article.getDescription());
-			ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
-        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
+			if (TextUtils.isEmpty(article.getPic_url())) {
+				holder.mNewsPic.setVisibility(View.GONE);
+			} else {
+				holder.mNewsPic.setVisibility(View.VISIBLE);
+				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
+        		imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
+			}
 		}
 		break;
 		
@@ -496,8 +502,8 @@ public class ChattingListAdapter extends BaseAdapter {
 					//((V5VideoMessage)msg).setFilePath(media.getLocalPath());
 					Logger.d(TAG, "list load Video onSuccess ----- ");
 					if (media.getCoverFrame() != null) {
-						notifyDataSetChanged();
 						//loadVideo((ViewHolder)obj, (V5VideoMessage)msg);
+						notifyDataSetChanged();
 					}
 				}
 				
@@ -655,8 +661,9 @@ public class ChattingListAdapter extends BaseAdapter {
 			width = (int)scale * width;
 			height = (int)scale * height;
 		}
-		holder.mVideoBgIv.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
-		holder.mVideoSurface.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+		Logger.i(TAG, "width:" + width + " height:" + height);
 	}
 
 	private void sendStateChange(ViewHolder holder, final ChatRecyclerBean chatMessage) {
@@ -700,7 +707,7 @@ public class ChattingListAdapter extends BaseAdapter {
         public NewsListAdapter mNewsAdapter;
         
         /* 位置 */
-        public ImageView mMapIv;
+        public BubbleImageView mMapIv;
         public TextView mLbsDescTv;
         
         /* 图片 */
@@ -716,6 +723,7 @@ public class ChattingListAdapter extends BaseAdapter {
         public ImageView mVideoBgIv; // 视频背景
         public BubbleSurfaceView mVideoSurface;
         public SurfaceHolder mVideoSurfaceHolder;
+        public ViewGroup mVideoLayout;
         
         /* 音乐 */
         public ImageView mMusicControlIv;
@@ -772,7 +780,7 @@ public class ChattingListAdapter extends BaseAdapter {
             	
             case TYPE_LOCATION_R:
 //            	mPic = (CircleImageView) itemView.findViewById(R.id.chat_item_right_img);
-            	mMapIv = (ImageView) itemView.findViewById(R.id.ic_map_img_iv);
+            	mMapIv = (BubbleImageView) itemView.findViewById(R.id.ic_map_img_iv);
             	mLbsDescTv = (TextView) itemView.findViewById(R.id.id_map_address_text);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
@@ -782,20 +790,20 @@ public class ChattingListAdapter extends BaseAdapter {
             	
             case TYPE_LOCATION_L:
 //            	mPic = (CircleImageView) itemView.findViewById(R.id.chat_item_left_img);
-            	mMapIv = (ImageView) itemView.findViewById(R.id.ic_map_img_iv);
+            	mMapIv = (BubbleImageView) itemView.findViewById(R.id.ic_map_img_iv);
             	mLbsDescTv = (TextView) itemView.findViewById(R.id.id_map_address_text);
             	mMapIv.setOnClickListener(this);
             	mMapIv.setOnLongClickListener(this);
             	break;
             	
             case TYPE_IMG_L:
-            	mMapIv = (ImageView) itemView.findViewById(R.id.ic_type_img_iv);
+            	mMapIv = (BubbleImageView) itemView.findViewById(R.id.ic_type_img_iv);
             	mMapIv.setOnClickListener(this);
             	mMapIv.setOnLongClickListener(this);
             	break;
 
             case TYPE_IMG_R:
-            	mMapIv = (ImageView) itemView.findViewById(R.id.ic_type_img_iv);
+            	mMapIv = (BubbleImageView) itemView.findViewById(R.id.ic_type_img_iv);
             	mSendFailedIv = (ImageView) itemView.findViewById(R.id.id_msg_fail_iv);
             	mSendingPb = (ProgressBar) itemView.findViewById(R.id.id_msg_out_pb);
             	mMapIv.setOnClickListener(this);
@@ -825,6 +833,7 @@ public class ChattingListAdapter extends BaseAdapter {
             	mVideoControlIv = (ImageView) itemView.findViewById(R.id.id_video_control_img);
             	mVideoSurface = (BubbleSurfaceView) itemView.findViewById(R.id.id_video_surface);
             	mVideoSurfaceHolder = mVideoSurface.getHolder();
+            	mVideoLayout = (ViewGroup) itemView.findViewById(R.id.id_chat_video_layout);
             	mVideoControlIv.setOnClickListener(this);
             	mVideoBgIv.setOnClickListener(this);
             	mVideoSurface.setOnClickListener(new OnClickListener() {

@@ -20,7 +20,6 @@ import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.NetworkManager;
-import com.v5kf.mcss.ui.view.SystemBarTintManager;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
@@ -69,7 +68,7 @@ public class WelcomeActivity extends BaseLoginActivity {
 		mApplication.createDB();
 		
 		// 设置虚拟按键导航栏颜色
-		setNavigationBarColor(UITools.getColor(R.color.main_color_accent));
+		//setNavigationBarColor(UITools.getColor(R.color.v5_navigation_bar_bg));
 		/* 在API19以上改变状态栏颜色 */
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //        	Window window = getWindow();
@@ -85,9 +84,9 @@ public class WelcomeActivity extends BaseLoginActivity {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			setTranslucentStatus(true);
 			
-			SystemBarTintManager tintManager = new SystemBarTintManager(this);  
-			tintManager.setStatusBarTintEnabled(true);  
-			tintManager.setStatusBarTintResource(R.color.base_status_bar_color_welcome);
+//			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//			tintManager.setStatusBarTintEnabled(true);  
+//			tintManager.setStatusBarTintResource(R.color.main_color_dark);
 		}
 		
 		if (!mWSP.readBoolean("v5_inited")) {
@@ -199,7 +198,7 @@ public class WelcomeActivity extends BaseLoginActivity {
 			switch (mApplication.getLoginStatus()) {
 			case LoginStatus_Unlogin:
 				stopService(new Intent(this, CoreService.class));
-				if (mWarningDialog == null || !mWarningDialog.isShowing()) {
+				if (mAlertDialog == null || !mAlertDialog.isShowing()) {
 					gotoActivityAndFinishThis(CustomLoginActivity.class);
 				}
 				break;

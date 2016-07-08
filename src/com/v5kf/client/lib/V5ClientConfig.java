@@ -20,10 +20,10 @@ import com.v5kf.mcss.config.Config;
 public class V5ClientConfig {
 	
 	private static int LOG_LEVEL = 1;
-	private static boolean LOG_SHOW = true;
+	private static boolean LOG_SHOW = Config.LOG_LEVEL >= 5;
 	
 	protected static boolean AUTO_WORKER_SERVICE = false;
-	protected static boolean NOTIFICATION_SHOW = Config.LOG_LEVEL >= 5;
+	protected static boolean NOTIFICATION_SHOW = false;
 //	protected static final int NOTIFICATION_ID = 23;
 	protected static final String ACTION_NOTIFICATION = "com.v5kf.android.intent.notification";
 	protected static final String ACTION_NEW_MESSAGE = "com.v5kf.android.intent.action_message";

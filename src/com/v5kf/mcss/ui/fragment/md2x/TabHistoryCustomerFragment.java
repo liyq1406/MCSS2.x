@@ -16,7 +16,6 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -107,7 +106,7 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 	@Override
 	protected void onFragmentStartLazy() {
 		super.onFragmentStartLazy();
-		Log.d(TAG, TAG + " 显示 " + this);
+		Logger.d(TAG, TAG + " 显示 " + this);
 //		if (mRecycleBeans.isEmpty()) {
 //			mParentActivity.showProgress();
 //			if (!mRefreshRecyclerView.isRefreshing()) {
@@ -127,7 +126,7 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 	@Override
 	protected void onFragmentStopLazy() {
 		super.onFragmentStopLazy();
-		Log.d(TAG, TAG + " 掩藏 " + this);
+		Logger.d(TAG, TAG + " 掩藏 " + this);
 		if (mRefreshRecyclerView.isRefreshing()) {
 			mRefreshRecyclerView.onRefreshComplete();
 		}
@@ -136,19 +135,19 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 	@Override
 	protected void onPauseLazy() {
 		super.onPauseLazy();
-		Log.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
+		Logger.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
 	}
 
 	@Override
 	protected void onDestroyViewLazy() {
 		super.onDestroyViewLazy();
-		Log.d(TAG, TAG + " View将被销毁 " + this);
+		Logger.d(TAG, TAG + " View将被销毁 " + this);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG, TAG + " 所在的Activity onDestroy " + this);
+		Logger.d(TAG, TAG + " 所在的Activity onDestroy " + this);
 	}
 	
 	private void initData(boolean addPage) {
@@ -163,6 +162,7 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 		if (mRecycleBeans.isEmpty() && mHasMore) { // 2015/12/12 修复BUG：加入mHasMore判断
 	    	boolean alreadyHasVisitors = false;
 	    	for (CustomerBean cstm : vMap.values()) {
+	    		Logger.d(TAG, "[initData] getClosingReason:" + cstm.getClosingReason());
 	    		if (cstm.getClosingReason() == 0) { // 没有正在进行的会话
 	    			alreadyHasVisitors = true;
 	    			break;

@@ -8,7 +8,6 @@ import org.litepal.crud.DataSupport;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -63,7 +62,7 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 		finish();
 	}
 	
-	@TargetApi(23) @Override
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_md2x_user_login);
@@ -103,9 +102,9 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
         }
 		
 		Logger.w(TAG, "android.os.Build.MODEL = " + android.os.Build.MODEL);
-		setNavigationBarColor(UITools.getColor(R.color.main_color_accent));
+		//setNavigationBarColor(UITools.getColor(R.color.v5_navigation_bar_bg));
 		//setStatusbarColor(UITools.getColor(R.color.transparent, this));
-		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+		if (android.os.Build.VERSION.SDK_INT >= 23){ // Build.VERSION_CODES.M
 		    //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 		} else {
 			if (android.os.Build.MODEL.contains("MIUI")) {
@@ -228,6 +227,9 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
+						
+						mApplication.setLoginStatus(LoginStatus.LoginStatus_LoginFailed);
+						mHandler.sendEmptyMessage(TASK_UN_LOGIN);
 					}
 				} else {
 					Logger.e(TAG, "User login fail, code:" + statusCode);

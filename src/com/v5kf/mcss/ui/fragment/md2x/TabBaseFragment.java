@@ -12,7 +12,6 @@ import android.os.Message;
 import com.chyrain.fragment.LazyFragment;
 import com.v5kf.client.lib.Logger;
 import com.v5kf.mcss.CustomApplication;
-import com.v5kf.mcss.R;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
@@ -53,9 +52,13 @@ public abstract class TabBaseFragment extends LazyFragment {
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
-		if (mParentActivity == null) {
-			mParentActivity = (MainTabActivity)getActivity();
+		
+		if (this.mHandler == null) {
+			this.mHandler = new FragmentHandler(this);
 		}
+		this.mApplication = CustomApplication.getInstance();
+		this.mAppInfo = mApplication.getAppInfo();
+		this.mParentActivity = (MainTabActivity)getActivity();
 		
 		// 注册event对象
         EventBus.getDefault().register(this);
@@ -81,7 +84,7 @@ public abstract class TabBaseFragment extends LazyFragment {
 	}
 	
 	protected void onRefreshTimeOut() {
-		mParentActivity.ShowToast(R.string.on_refresh_time_out);
+		mParentActivity.onRefreshTimeOut();
 	}
 	
 	/**

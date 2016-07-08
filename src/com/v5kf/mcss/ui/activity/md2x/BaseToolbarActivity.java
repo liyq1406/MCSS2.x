@@ -36,8 +36,19 @@ public abstract class BaseToolbarActivity extends ActivityBase {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setStatusbarColor(UITools.getColor(R.color.main_color_dark));
-		setNavigationBarColor(UITools.getColor(R.color.main_color_accent));
+		setStatusbarColor(UITools.getColor(R.color.v5_status_bar_bg));
+		setNavigationBarColor(UITools.getColor(R.color.v5_navigation_bar_bg));
+		
+		if (android.os.Build.VERSION.SDK_INT >= 23){ // Build.VERSION_CODES.M
+		    //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+		} else {
+			setWindowBackground(UITools.getColor(R.color.v5_status_bar_bg));
+			if (android.os.Build.MODEL.contains("MIUI")) {
+				UITools.setStatusBarDarkModeOfMIUI(true, this);
+			} else if (android.os.Build.MODEL.contains("Flyme")) {
+				UITools.setStatusBarDarkIconOfFlyme(getWindow(), true);
+			}
+		}
 	}
 	
 	@Override
@@ -107,6 +118,7 @@ public abstract class BaseToolbarActivity extends ActivityBase {
 	/**
 	 * 设置顶部状态栏和toolbar颜色
 	 * @param color
+	 * @deprecated
 	 */
 	public void setBarColor(int color) {
 		setToolbarColor(color);
@@ -143,6 +155,10 @@ public abstract class BaseToolbarActivity extends ActivityBase {
                 setToolbarColor(swatch.getRgb());
             }
         });
+	}
+	
+	public void onRefreshTimeOut() {
+		ShowToast(R.string.on_refresh_time_out);
 	}
 	
 	public void hideToolbar() {

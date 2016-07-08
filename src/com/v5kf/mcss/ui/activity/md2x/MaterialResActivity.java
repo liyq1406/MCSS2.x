@@ -1,6 +1,5 @@
-package com.v5kf.mcss.ui.activity.info;
+package com.v5kf.mcss.ui.activity.md2x;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import com.chyrain.view.indicator.ScrollIndicatorView;
 import com.chyrain.view.indicator.slidebar.ColorBar;
 import com.chyrain.view.indicator.transition.OnTransitionTextListener;
 import com.v5kf.mcss.R;
-import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.fragment.md2x.MaterialBaseFragment;
 import com.v5kf.mcss.utils.UITools;
 
@@ -106,7 +104,10 @@ public class MaterialResActivity extends BaseToolbarActivity {
 
 		@Override
 		public Fragment getFragmentForPage(int position) {
-			MaterialBaseFragment fragment = new MaterialBaseFragment(MaterialResActivity.this, position);
+			MaterialBaseFragment fragment = new MaterialBaseFragment();
+			Bundle bundle = new Bundle();
+			bundle.putInt("index", position);
+			fragment.setArguments(bundle);
 			return fragment;
 		}
 

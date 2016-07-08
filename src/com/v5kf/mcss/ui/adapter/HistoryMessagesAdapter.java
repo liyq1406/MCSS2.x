@@ -251,9 +251,13 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 			}
 			holder.mNewsTitle.setText(article.getTitle());
 			holder.mNewsContent.setText(article.getDescription());
-			
-			ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
-        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
+			if (TextUtils.isEmpty(article.getPic_url())) {
+				holder.mNewsPic.setVisibility(View.GONE);
+			} else {
+				holder.mNewsPic.setVisibility(View.VISIBLE);
+				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
+	        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
+			}
         	break;
         	
         case QAODefine.MSG_TYPE_SHORT_VIDEO:

@@ -108,7 +108,7 @@ public class UITools {
 			type = "web";
 			break;
 		case QAODefine.CSTM_IF_WEIXIN:
-			type = "wechat";
+			type = "weixin";
 			break;
 		case QAODefine.CSTM_IF_QQ:
 			type = "qq";

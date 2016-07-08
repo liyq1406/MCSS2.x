@@ -84,6 +84,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private static final int TASK_TIME_OUT = 3;
 	private static final int HDL_LOGOUT_TIMEOUT = 11;
 	private static final int HDL_CHECK_PERMISSION = 12;
+	private static final int HDL_TIME_OUT = 14;
 	
 	private IndicatorViewPager indicatorViewPager;
 	private DrawerLayout mDrawerLayout;
@@ -144,7 +145,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	        startService(localIntent);
 	        
 	        showProgress();
-	        mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, 15000);
+	        mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);
 		} else {
 			dismissProgress();
 		}
@@ -935,6 +936,10 @@ public class MainTabActivity extends BaseToolbarActivity {
 		}
 		case TASK_TIME_OUT: {
 			Logger.d(TAG, "loginStatus = " + mApplication.getLoginStatus());
+			dismissProgress();
+			if (!isForeground) {
+				return;
+			}
 			showAlertDialog(
 					R.string.tips,
 					R.string.err_login_timeout,
@@ -974,6 +979,10 @@ public class MainTabActivity extends BaseToolbarActivity {
 //			DevUtils.checkAndRequestPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE", Config.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
 //			DevUtils.checkAndRequestPermission(this, "android.permission.ACCESS_FINE_LOCATION", Config.REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
 //			DevUtils.checkAndRequestPermission(this, "android.permission.ACCESS_COARSE_LOCATION", Config.REQUEST_PERMISSION_ACCESS_COARSE_LOCATION);
+			break;
+		case HDL_TIME_OUT:
+			onRefreshTimeOut();
+			dismissProgress();
 			break;
 		default:
 			
@@ -1018,6 +1027,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		switch (error) {
 		case 0: // 登录成功，取消超时消息
 			mHandler.removeMessages(TASK_TIME_OUT);
+			mHandler.removeMessages(HDL_TIME_OUT);
 			break;
 		case 40001: // 无效参数
 			mHandler.sendEmptyMessage(TASK_UN_LOGIN);
@@ -1042,6 +1052,9 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private void gotoLogin(ReloginReason reason) {
 		Logger.e(TAG + "-eventbus", "eventbus -> ETAG_RELOGIN");
 		mApplication.terminate();
+		if (reason == ReloginReason.ReloginReason_AuthFailed) {
+			
+		}
 		
 		Intent intent = new Intent(this, CustomLoginActivity.class);
 		intent.putExtra(EventTag.ETAG_RELOGIN, reason.ordinal());
@@ -1087,6 +1100,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	@Subscriber(tag = EventTag.ETAG_WAITING_CSTM_CHANGE, mode = ThreadMode.MAIN)
 	private void waitingCustomerChange(AppInfoKeeper appinfo) {
 		Logger.d(TAG + "-eventbus", "waitingCustomerChange -> ETAG_WAITING_CSTM_CHANGE");
+		dismissProgress();
 		updateSessionBadge();
 	}
 
@@ -1100,6 +1114,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private void onConnectionStart(WebSocketClient client) {
 		Logger.d(TAG + "-eventbus", "onConnectionStart -> ETAG_CONNECTION_START");
 		showProgress();
+		mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_LOGOUT_CHANGE, mode = ThreadMode.MAIN)

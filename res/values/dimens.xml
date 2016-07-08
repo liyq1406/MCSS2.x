@@ -93,7 +93,7 @@
     <!-- Mine Fragment -->
     <dimen name="base_line_width_s">1px</dimen>
     <dimen name="base_line_width_m">1.0dip</dimen>
-    <dimen name="base_line_width_1">1dip</dimen>
+    <dimen name="base_line_width_1">1px</dimen>
     
     <!-- Segment 选择器 -->
     <dimen name="segment_corner_radius">18dip</dimen>

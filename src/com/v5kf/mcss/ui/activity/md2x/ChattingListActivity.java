@@ -70,7 +70,6 @@ import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.MessageSendHelper;
-import com.v5kf.mcss.ui.activity.info.MaterialResActivity;
 import com.v5kf.mcss.ui.adapter.ChattingListAdapter;
 import com.v5kf.mcss.ui.adapter.ChattingListAdapter.ChatMessagesListener;
 import com.v5kf.mcss.ui.adapter.RobotRecyclerAdapter;
@@ -79,7 +78,6 @@ import com.v5kf.mcss.ui.view.ActionItem;
 import com.v5kf.mcss.ui.view.TitlePopup;
 import com.v5kf.mcss.ui.view.TitlePopup.OnItemOnClickListener;
 import com.v5kf.mcss.ui.widget.CircleImageView;
-import com.v5kf.mcss.ui.widget.WarningDialog;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
@@ -110,6 +108,7 @@ import com.v5kf.mcss.utils.cache.URLCache;
 public class ChattingListActivity extends BaseChatActivity implements ChatMessagesListener, V5VoiceRecord.VoiceRecordListener {
 	private static final String TAG = "ChattingListActivity";
 	private static final int HDL_VOICE_DISMISS = 101; 
+	private static final int HDL_APP_BACKGROUND = 102; 
 	
 	/* 消息发送工具类 */
 	private MessageSendHelper mMessageHelper;
@@ -393,25 +392,19 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 					break;
 				case 2:
 					Logger.d(TAG, "点击结束会话");
-					showConfirmDialog(
-							R.string.confirm_end_session, 
-							WarningDialog.MODE_TWO_BUTTON, 
-							new WarningDialog.WarningDialogListener() {
-								
-								@Override
-								public void onClick(View view) {
-									dismissWarningDialog();
-									if (view.getId() == R.id.btn_dialog_warning_right) {
-										/* 结束会话 */
-										try {
-											CustomerRequest cReq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, ChattingListActivity.this);
-											cReq.endSession(c_id);
-										} catch (JSONException e) {
-											e.printStackTrace();
-										}
-									}
-								}
-							});
+					showAlertDialog(R.string.confirm_end_session, new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							/* 结束会话 */
+							try {
+								CustomerRequest cReq = (CustomerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WCSTM, ChattingListActivity.this);
+								cReq.endSession(c_id);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+					}, null);
 					break;
 				}
 			}
@@ -845,7 +838,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
          mChatListView.setOnTouchListener(new OnTouchListener() {
  			@Override
  			public boolean onTouch(View v, MotionEvent event) {
- 				Logger.d(TAG, "【onTouch】");
+ 				//Logger.d(TAG, "【onTouch】");
  				if (mKeyBar.isKeyBoardFootShow()) { // 拦截触摸列表动作，关闭底部栏
 		    		mKeyBar.hideAutoView();
 		    		return true;
@@ -1274,6 +1267,12 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			// 隐藏录音layout[延迟隐藏]
 			layout_record.setVisibility(View.GONE);
 			break;
+			
+		case HDL_APP_BACKGROUND:
+			if (mApplication.getAppForeground() > 1) {
+				mApplication.setAppBackground();
+			}
+			break;
 		}
 	}
 
@@ -1326,7 +1325,12 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		} else if (requestCode == Config.REQUEST_CODE_CAMERA || 
 				requestCode == Config.REQUEST_CODE_PHOTO_KITKAT ||
 				requestCode == Config.REQUEST_CODE_PHOTO) {
-			mApplication.setAppBackground(); // 防止打开图库使得应用离线
+			// 必须在this.onStart()之后调用，需延时。
+			if (mApplication.getAppForeground() > 1) {
+				mApplication.setAppBackground(); // 防止打开图库使得应用离线
+			} else {
+				mHandler.sendEmptyMessageDelayed(HDL_APP_BACKGROUND, 200);
+			}
 			
 			if (data != null) {
 				// 图库获取拍好的图片

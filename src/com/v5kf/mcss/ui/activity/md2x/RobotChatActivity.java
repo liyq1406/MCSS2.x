@@ -52,7 +52,7 @@ public class RobotChatActivity extends BaseToolbarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_robot_chat);
+		setContentView(R.layout.activity_md2x_robot_chat);
 		handleIntent();
 //		initOutMessage();
 		findView();

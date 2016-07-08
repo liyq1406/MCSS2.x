@@ -105,8 +105,7 @@
 		        android:adjustViewBounds="true"
 		        android:divider="@null"
 		        android:dividerHeight="0dp"
-		        android:scrollbars="vertical"
-	        	android:scrollbarStyle="outsideOverlay"
+		        style="@style/ScrollBarVerticalStyle"
 		        android:background="@color/list_chat_blank_bg" />
 		    
 	        <!-- android.support.v7.widget.RecyclerView

@@ -58,8 +58,6 @@
 -keep public class * extends org.litepal.**
 -keepclassmembers class * extends org.litepal.crud.DataSupport{*;}
 
--keep class com.iflytek.**{*;}
-
 -assumenosideeffects class com.v5kf.mcss.utils.Logger {
     public static void e(...);
     public static void w(...);
@@ -86,3 +84,23 @@
 
 # V5ClienSDK Necessary
 -keepattributes InnerClasses -keep class **.R$* { <fields>; }
+
+# 未生效解决方案
+#-dontusemixedcaseclassnames  
+#-dontskipnonpubliclibraryclasses  
+#-verbose  
+#-ignorewarnings
+
+# 解决android6.0混淆报错
+-keep class android.support.** { *; }
+-keep interface android.support.** { *; }
+-dontwarn android.support.**
+
+-dontwarn org.apache.http.**
+-keep class org.apache.http.** { *;}
+-dontwarn android.net.http.**
+-keep class android.net.http.** { *;}
+-dontwarn com.umeng.update.**
+-keep class com.umeng.update.** { *;}
+-dontwarn com.tencent.android.tpush.**
+-keep class com.tencent.android.tpush.** { *;}

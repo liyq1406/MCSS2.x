@@ -19,9 +19,9 @@ public class Config {
 	public static final boolean USE_DB = false; // 是否使用数据库保存坐席
 	public static final int VERSION = 3;
 	public static final boolean ENABLE_WORKER_LOG = true;
-	public static final int LOG_LEVEL = Logger.ERROR;
-	public static final boolean USE_THUMBNAIL = true;
-	public static final boolean ENABLE_PLAY_VEDIO_IN_LIST = false;
+	public static final int LOG_LEVEL = Logger.VERBOS;
+	public static final boolean USE_THUMBNAIL = true; // 使用缩略图
+	public static final boolean ENABLE_PLAY_VEDIO_IN_LIST = false; // 是否允许对话列表播放视频
 	public static final boolean SHOW_VID_OID = true; // 是否显示客户信息的v_id、o_id
 	public static final String V5KF_COM = "http://www.v5kf.com/public/website/page.html?sid=10000&id=14146&&first=1&ref=link&uid=&share=wxFriend";
 	

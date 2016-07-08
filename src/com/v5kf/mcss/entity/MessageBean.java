@@ -35,10 +35,15 @@ public class MessageBean extends BaseBean implements Serializable {
 		this.setMessage_type(json.getInt(QAODefine.MESSAGE_TYPE));
 		if (json.has(V5MessageDefine.CREATE_TIME)) {
 			try {
-				create_time = json.getLong(V5MessageDefine.CREATE_TIME);
-			} catch (JSONException e) {
-				// 时间字符串时区为北京时间，需要转换成标准时间
-				create_time = V5Util.stringDateToLong(json.getString(V5MessageDefine.CREATE_TIME)) / 1000;
+				try {
+					create_time = json.getLong(V5MessageDefine.CREATE_TIME);
+				} catch (JSONException e) {
+					// 时间字符串时区为北京时间，需要转换成标准时间
+					create_time = V5Util.stringDateToLong(json.getString(V5MessageDefine.CREATE_TIME)) / 1000;
+				}
+			} catch (Exception e) {
+				//create_time = V5Util.getCurrentLongTime() / 1000;
+				e.printStackTrace();
 			}
 		} else {
 			create_time = V5Util.getCurrentLongTime() / 1000;

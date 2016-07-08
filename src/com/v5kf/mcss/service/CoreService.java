@@ -267,6 +267,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 							Logger.e(TAG, "User login fail, token/auth is empty, code:" + statusCode + " text:"
 									+ json.optString("text"));
 //							showToast(json.optString("text"));
+							onAccountAuthFsailed();
 							return;
 						}
 						long timestamp = json.getLong("timestamp");
@@ -279,6 +280,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 					} catch (JSONException e) {
 						Logger.e(TAG, "User login fail(JSON parse exception), code:" + statusCode);
 						e.printStackTrace();
+						onAccountAuthFsailed();
 					}
 				}
 			}
@@ -286,6 +288,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 			public void onFailure(int statusCode, String responseString) {
 				Logger.e(TAG, "User login fail, code:" + statusCode);
 				showToast(R.string.on_account_fail);
+				onAccountAuthFsailed();
 			}
 		});
 		
@@ -331,6 +334,12 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 //			});
 	}
 	
+	protected void onAccountAuthFsailed() {
+		// 需要重新登录
+		mWSP.clearAuthorization();
+		EventBus.getDefault().post(ReloginReason.ReloginReason_AuthFailed, EventTag.ETAG_RELOGIN);
+	}
+
 	private void initHeartBeatAlarm() {
 		Intent intent = new Intent(Config.ACTION_ON_WS_HEARTBEAT);
 		PendingIntent pi = PendingIntent.getBroadcast(this, 0, intent, 0);

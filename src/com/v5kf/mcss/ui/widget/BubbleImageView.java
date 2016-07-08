@@ -47,8 +47,8 @@ public class BubbleImageView extends ImageView {
 	private int mBitmapWidth;
 	private int mBitmapHeight;
 	
-	private RectF mRect;
-	private Path mPath;
+//	private RectF mRect;
+//	private Path mPath;
 
 	public BubbleImageView(Context context) {
 		super(context);
@@ -84,13 +84,18 @@ public class BubbleImageView extends ImageView {
 		if (getDrawable() == null) {
 			return;
 		}
-		if (mRect == null) {
-			mRect = new RectF(getPaddingLeft(), getPaddingTop(), getRight() - getLeft() - getPaddingRight(), getBottom() - getTop() - getPaddingBottom());
-		}
+		// [修复]每次必须new否则显示异常
+//		if (mRect == null) {
+			RectF mRect = new RectF(getPaddingLeft(), getPaddingTop(), getRight() - getLeft() - getPaddingRight(), getBottom() - getTop() - getPaddingBottom());
+//		} else {
+//			mRect.setEmpty();
+//		}
 
-		if (mPath == null) {
-			mPath = new Path();
-		}
+//		if (mPath == null) {
+			Path mPath = new Path();
+//		} else {
+//			mPath.reset();
+//		}
 
 		if (mArrowLocation == LOCATION_LEFT) {
 			leftPath(mRect, mPath);
@@ -191,7 +196,7 @@ public class BubbleImageView extends ImageView {
 		if (mBitmap == null) {
 			return;
 		}
-		if (mBitmap.getWidth() < 100 || mBitmap.getHeight() < 100) {
+		if (mBitmap.getWidth() < mMinWH || mBitmap.getHeight() < mMinWH) {
 			float scale1 = mMinWH / mBitmap.getWidth();
 			float scale2 = mMinWH / mBitmap.getHeight();
 			mBitmap = DevUtils.ratio(mBitmap, scale1 > scale2 ? scale1 : scale2);

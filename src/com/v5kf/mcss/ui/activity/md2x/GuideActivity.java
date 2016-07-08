@@ -14,11 +14,14 @@ import com.chyrain.view.indicator.IndicatorViewPager.IndicatorPagerAdapter;
 import com.chyrain.view.indicator.IndicatorViewPager.IndicatorViewPagerAdapter;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
+import com.v5kf.mcss.config.Config.ExitFlag;
+import com.v5kf.mcss.utils.WorkerSP;
 
-public class GuideActivity extends ActivityBase {
+public class GuideActivity extends BaseLoginActivity {
 	
 	private IndicatorViewPager mIndicatorViewPager;
 	private LayoutInflater mInflate;
+	private WorkerSP mWSP;
 
 	@Override
 	public void onBackPressed() {
@@ -33,6 +36,7 @@ public class GuideActivity extends ActivityBase {
 		setSwipeBackEnable(false);
 		
 		initView();
+		mWSP = mApplication.getWorkerSp();
 	}
 
 	private void initView() {
@@ -131,7 +135,13 @@ public class GuideActivity extends ActivityBase {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.guide_bottom_left_iv:
-				gotoActivityAndFinishThis(CustomLoginActivity.class);
+				if (mWSP.readAuthorization() == null || !mWSP.readAutoLogin() || mWSP.readPassWord().isEmpty()
+						|| mWSP.readExitFlag() == ExitFlag.ExitFlag_NeedLogin) {
+					gotoMainTabActivity();
+					startUpdateService();
+				} else {
+					gotoActivityAndFinishThis(CustomLoginActivity.class);
+				}
 				mApplication.getWorkerSp().saveBoolean("v5_inited", true);
 				break;
 			case R.id.guide_bottom_right_iv:

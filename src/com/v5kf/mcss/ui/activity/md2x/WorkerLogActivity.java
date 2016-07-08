@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.chyrain.irecyclerview.RefreshRecyclerView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -26,7 +28,7 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 	private WorkerLogAdapter mAdapter;
 	private int mOffset = 0;
 	private boolean mFinish = false;
-	private boolean firstFinish = true;
+//	private boolean firstFinish = true;
 	private static final int NUM_PER_PAGE = 20;
 
 	@Override
@@ -43,6 +45,27 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 		initTopBarForLeftBack(R.string.worker_log);
 		initRecyclerView();
 		updateData();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuItem itemSave = menu.add(0, 1, Menu.NONE, R.string.save_vedio);
+		itemSave.setIcon(R.drawable.v5_action_bar_help);
+		itemSave.setShortcut('0', 'h');
+		itemSave.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 1:
+			Logger.d(TAG, "help");
+			showAlertDialog(R.string.help, R.string.worker_log_help, null);
+			break;
+		}
+		
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private void initRecyclerView() {
@@ -68,11 +91,13 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 				//Toast.makeText(mApplication, "Pull Up!", Toast.LENGTH_SHORT).show();
 				Logger.d(TAG, "[onMoreAsked]");
 		    	  if (mFinish) {
-		    		  if (firstFinish) {
-		    			  firstFinish = false;
-		    			  // 已加载完全部数据
-		    			  ShowShortToast("日志已全部加载完成");
-		    		  }
+//		    		  if (firstFinish) {
+//		    			  firstFinish = false;
+//		    			  // 已加载完全部数据
+//		    			  ShowShortToast("日志已全部加载完成");
+//		    		  }
+		    		  // 已加载完全部数据
+	    			  ShowShortToast("日志已全部加载完成");
 		    		  mAdapter.notifyDataSetChanged();
 		    		  mLogList.onRefreshComplete();
 		    		  return;
@@ -85,6 +110,7 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 	
 	private void updateData() {
 		// Auto-generated method stub
+//		firstFinish = true;
 		mFinish = WorkerLogUtil.queryLogs(mLogDatas, mOffset, NUM_PER_PAGE);
 		Logger.d(TAG, "[updateData] size:" + mLogDatas.size());
 		mOffset = mLogDatas.size();

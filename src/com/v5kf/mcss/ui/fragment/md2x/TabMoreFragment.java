@@ -8,7 +8,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
@@ -31,8 +30,6 @@ import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.WorkerTreeActivity;
 import com.v5kf.mcss.ui.widget.CheckboxDialog;
 import com.v5kf.mcss.ui.widget.CheckboxDialog.CheckboxDialogListener;
-import com.v5kf.mcss.ui.widget.WarningDialog;
-import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
 import com.v5kf.mcss.utils.DbUtil;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
@@ -103,7 +100,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	@Override
 	protected void onFragmentStartLazy() {
 		super.onFragmentStartLazy();
-		Log.d(TAG, TAG + " 显示 " + this);
+		Logger.d(TAG, TAG + " 显示 " + this);
 //		this.mParentActivity.showToolbar();
 //		this.mParentActivity.hideFab();
 //		this.mParentActivity.setBarColor(UITools.getColor(R.color.main_color));
@@ -114,25 +111,25 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	@Override
 	protected void onFragmentStopLazy() {
 		super.onFragmentStopLazy();
-		Log.d(TAG, TAG + " 掩藏 " + this);
+		Logger.d(TAG, TAG + " 掩藏 " + this);
 	}
 
 	@Override
 	protected void onPauseLazy() {
 		super.onPauseLazy();
-		Log.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
+		Logger.d(TAG, TAG + "所在的Activity onPause, onPauseLazy " + this);
 	}
 
 	@Override
 	protected void onDestroyViewLazy() {
 		super.onDestroyViewLazy();
-		Log.d(TAG, TAG + " View将被销毁 " + this);
+		Logger.d(TAG, TAG + " View将被销毁 " + this);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG, TAG + " 所在的Activity onDestroy " + this);
+		Logger.d(TAG, TAG + " 所在的Activity onDestroy " + this);
 	}
     
 	
@@ -394,27 +391,17 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 			break;
 			
 		case R.id.layout_refresh:
-			mParentActivity.showConfirmDialog(
-				R.string.confirm_refresh, 
-				WarningDialog.MODE_TWO_BUTTON, 
-				new WarningDialogListener() {
-					@Override
-					public void onClick(View view) {
-						switch (view.getId()) {
-						case R.id.btn_dialog_warning_left:
-							
-							break;
-						case R.id.btn_dialog_warning_right:
-							// [eventbus][强制重连]
-							mAppInfo.clearRunTimeInfo();
-							mApplication.setAppStatus(AppStatus.AppStatus_Init);
-							mParentActivity.dismissWarningDialog();
-							EventBus.getDefault().post(Boolean.valueOf(true), EventTag.ETAG_ON_LINE);
-							MobclickAgent.onEvent(mParentActivity, "APP_REFRESH");
-							break;
-						}
-					}
-				});			
+			mParentActivity.showAlertDialog(R.string.confirm_refresh, new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// [eventbus][强制重连]
+					mAppInfo.clearRunTimeInfo();
+					mApplication.setAppStatus(AppStatus.AppStatus_Init);
+					EventBus.getDefault().post(Boolean.valueOf(true), EventTag.ETAG_ON_LINE);
+					MobclickAgent.onEvent(mParentActivity, "APP_REFRESH");
+				}
+			}, null);	
 			break;
 		}
 	}

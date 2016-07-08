@@ -212,10 +212,6 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 		}
 	}
 
-	protected void onRefreshTimeOut() {
-		ShowToast(R.string.on_refresh_time_out);
-	}
-
 	@Override
 	protected void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub

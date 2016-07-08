@@ -132,7 +132,7 @@
 		            android:layout_marginLeft="@dimen/info_item_margin_h"
 		            android:layout_marginStart="@dimen/info_item_margin_h"
 		            android:layout_centerVertical="true"
-		            android:text="@string/set_auto_login" />
+		            android:text="@string/set_worker_log" />
 		        
 		        <com.zcw.togglebutton.ToggleButton
 		            android:id="@+id/switch_worker_log"

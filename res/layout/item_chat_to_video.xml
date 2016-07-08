@@ -20,8 +20,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
-		<RelativeLayout
-			android:id="@+id/id_right_video_layout"
+		<FrameLayout
+			android:id="@+id/id_chat_video_layout"
 	        android:baselineAligned="false"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -35,13 +35,12 @@
 		        android:id="@+id/id_video_bg"
 		    	android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_centerInParent="true"
 		        android:adjustViewBounds="true"
 		        android:maxWidth="200dp"
 		        android:maxHeight="200dp"
 		        android:minWidth="100dp"
 		        android:minHeight="100dp"
-		        android:scaleType="fitCenter"
+		        android:scaleType="centerCrop"
 		        android:padding="0dp"
 		        android:src="@drawable/img_default_video"
 		        app:bubble_angle="@dimen/v5_bubble_image_radius"
@@ -56,7 +55,6 @@
 	            android:visibility="gone"
 	            android:layout_width="match_parent"
 	            android:layout_height="match_parent"
-	            android:layout_centerInParent="true"
 	            app:bubble_angle="@dimen/v5_bubble_image_radius"
 	           	app:bubble_arrowHeight="@dimen/v5_bubble_arrow_height"
 	           	app:bubble_arrowLocation="right"
@@ -68,12 +66,11 @@
 	            android:id="@+id/id_video_control_img"
 	            android:layout_width="40dp"
 	            android:layout_height="40dp"
-	            android:layout_centerInParent="true"
 	            android:layout_gravity="center"
 	            android:src="@drawable/img_music_play"
 	            android:contentDescription="@string/contentDescription" />
         
-    	</RelativeLayout>
+    	</FrameLayout>
 		
 		<FrameLayout
             android:id="@+id/id_msg_send_progress"
@@ -83,8 +80,8 @@
             android:layout_marginEnd="-50dp"
             android:layout_centerVertical="true"
             android:padding="4dp"
-            android:layout_toStartOf="@id/id_right_video_layout"
-			android:layout_toLeftOf="@id/id_right_video_layout" >
+            android:layout_toStartOf="@id/id_chat_video_layout"
+			android:layout_toLeftOf="@id/id_chat_video_layout" >
             
             <ProgressBar
 			    android:id="@+id/id_msg_out_pb"

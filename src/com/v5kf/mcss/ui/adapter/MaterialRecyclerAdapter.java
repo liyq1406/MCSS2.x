@@ -2,9 +2,13 @@ package com.v5kf.mcss.ui.adapter;
 
 import java.util.List;
 
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,6 +50,9 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 	private List<V5Message> mRecyclerBeans;
 	private MaterialBaseFragment mFragment;
 	private ActivityBase mActivity;
+	
+	// 语音媒体
+	private MediaPlayer mPlayer;
 	
     public MaterialRecyclerAdapter(MaterialBaseFragment fragment, ActivityBase activity, List<V5Message> recyclerBeans) {
         super();
@@ -129,8 +136,13 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 			V5ArticleBean article = ((V5ArticlesMessage)msgContent).getArticles().get(0);
 			holder.mNewsTitle.setText(article.getTitle());
 			holder.mNewsContent.setText(article.getDescription());
-			ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
-        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsImg);			
+			if (TextUtils.isEmpty(article.getPic_url())) {
+				holder.mNewsImg.setVisibility(View.GONE);
+			} else {
+				holder.mNewsImg.setVisibility(View.VISIBLE);
+				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
+	        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsImg);
+			}
 		} else if (getItemViewType(position) == TYPE_NEWS) { // 多图文
 			holder.mNewsAdapter = new NewsListAdapter(
 					mActivity, 
@@ -264,6 +276,82 @@ public class MaterialRecyclerAdapter extends RecyclerView.Adapter<MaterialRecycl
 		public void setBean(V5Message bean) {
 			this.mBean = bean;
 		}
+		
+		public void updateMusicStartPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStartPlayingState position:" + getAdapterPosition());
+//			mChatBean.setPlaying(true);
+			mMusicController.setImageResource(R.drawable.img_music_stop);
+		}
 
+		public void updateMusicStopPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStopPlayingState position:" + getAdapterPosition());
+//			mChatBean.setPlaying(false);
+			mMusicController.setImageResource(R.drawable.img_music_play);
+		}
+		
+		private void startPlaying(V5MusicMessage musicMessage, OnCompletionListener completionListener) {
+			Logger.i(TAG, "MediaPlayer - startPlaying " + getAdapterPosition());
+			if (mPlayer != null) {
+				if (mPlayer.isPlaying()) {
+					mPlayer.stop();
+				}
+				mPlayer.release();
+				mPlayer = null;
+				Logger.i(TAG, "MediaPlayer - stopPlaying all others");
+//				resetOtherItemsExcept(mChatBean);
+			}
+			mPlayer = new MediaPlayer();
+			try {
+				mPlayer.setDataSource(musicMessage.getFilePath());
+				mPlayer.prepare();
+				mPlayer.start();
+				mPlayer.setOnErrorListener(new OnErrorListener() {
+					
+					@Override
+					public boolean onError(MediaPlayer mp, int what, int extra) {
+						Logger.e(TAG, "MediaPlayer - onError");
+						return false;
+					}
+				});
+				mPlayer.setOnCompletionListener(completionListener);
+				updateMusicStartPlayingState();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Logger.e(TAG, "MediaPlayer prepare() failed");
+				mActivity.ShowToast(R.string.media_play_failed);
+				mPlayer.release();
+				mPlayer = null;
+				updateMusicStopPlayingState(); // UI
+			}
+		}
+
+		private void stopPlayingMusic() {
+	    	Logger.i(TAG, "MediaPlayer - stopPlayingMusic " + getAdapterPosition());
+	    	if (mPlayer != null) {
+	    		mPlayer.stop();
+	    		mPlayer.release();
+	    		mPlayer = null;
+	    	}
+	    	updateMusicStopPlayingState();
+	    }
+    }
+    
+//    private void resetOtherItemsExcept(ChatRecyclerBean chatBean) {
+//    	Logger.d(TAG, "resetOtherItems");
+//		for (ChatRecyclerBean bean : this.mRecycleBeans) {
+//			bean.setPlaying(false);
+//		}
+//		chatBean.setPlaying(true);
+//		notifyDataSetChanged();
+//	}
+    
+    public void stopVoicePlaying() {
+    	if (mPlayer != null) {
+    		if (mPlayer.isPlaying()) {
+    			mPlayer.stop();
+    		}
+    		mPlayer.release();
+    		mPlayer = null;
+    	}
     }
 }

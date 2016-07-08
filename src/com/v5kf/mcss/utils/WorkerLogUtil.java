@@ -25,18 +25,19 @@ public class WorkerLogUtil {
 			return;
 		}
 		
-		long time = DateUtil.getCurrentLongTime() / 1000;
-		String desc = DateUtil.longDateToString(time) + " [log] 退出应用，记录中断";
-		String e_id = Config.SITE_ID;
-		String w_id = CustomApplication.getAppInfoInstance().getUser().getW_id();
-		WorkerLogBean wlog = new WorkerLogBean();
-		wlog.setTime(time);
-		wlog.setDescription(desc);
-		wlog.setE_id(e_id);
-		wlog.setW_id(w_id);
-		wlog.setO_type("app_log");
-		wlog.setO_method("app_background");
-		wlog.save();
+		// [修改]不记录坐席退出应用记录
+//		long time = DateUtil.getCurrentLongTime() / 1000;
+//		String desc = DateUtil.longDateToString(time) + " [log] 退出应用，记录中断";
+//		String e_id = Config.SITE_ID;
+//		String w_id = CustomApplication.getAppInfoInstance().getUser().getW_id();
+//		WorkerLogBean wlog = new WorkerLogBean();
+//		wlog.setTime(time);
+//		wlog.setDescription(desc);
+//		wlog.setE_id(e_id);
+//		wlog.setW_id(w_id);
+//		wlog.setO_type("app_log");
+//		wlog.setO_method("app_background");
+//		wlog.save();
 	}
 	
 	public static void insertAppForegroundLog() {
@@ -44,18 +45,19 @@ public class WorkerLogUtil {
 			return;
 		}
 		
-		long time = DateUtil.getCurrentLongTime() / 1000;
-		String desc = DateUtil.longDateToString(time) + " [log] 启动应用，记录开始";
-		String e_id = Config.SITE_ID;
-		String w_id = CustomApplication.getAppInfoInstance().getUser().getW_id();
-		WorkerLogBean wlog = new WorkerLogBean();
-		wlog.setTime(time);
-		wlog.setDescription(desc);
-		wlog.setE_id(e_id);
-		wlog.setW_id(w_id);
-		wlog.setO_type("app_log");
-		wlog.setO_method("app_foreground");
-		wlog.save();
+		// [修改]不记录坐席退出应用记录
+//		long time = DateUtil.getCurrentLongTime() / 1000;
+//		String desc = DateUtil.longDateToString(time) + " [log] 启动应用，记录开始";
+//		String e_id = Config.SITE_ID;
+//		String w_id = CustomApplication.getAppInfoInstance().getUser().getW_id();
+//		WorkerLogBean wlog = new WorkerLogBean();
+//		wlog.setTime(time);
+//		wlog.setDescription(desc);
+//		wlog.setE_id(e_id);
+//		wlog.setW_id(w_id);
+//		wlog.setO_type("app_log");
+//		wlog.setO_method("app_foreground");
+//		wlog.save();
 	}
 	
 	public static void insertCustomerJoinInLog(CustomerBean customer, int reason) {

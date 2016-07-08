@@ -361,4 +361,11 @@
         <item name="toggleBorderWidth">1dp</item>
     </style>
     
+    <style name="ScrollBarVerticalStyle" >
+        <item name="android:scrollbarThumbVertical">@color/md2x_blue</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:scrollbarSize">2dp</item>
+	    <!--  android:scrollbarStyle="outsideOverlay" -->
+    </style>
+    
 </resources>

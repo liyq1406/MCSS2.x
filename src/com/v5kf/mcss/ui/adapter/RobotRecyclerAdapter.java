@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.json.JSONException;
 
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.client.lib.entity.V5ArticlesMessage;
 import com.v5kf.client.lib.entity.V5Message;
+import com.v5kf.client.lib.entity.V5MusicMessage;
 import com.v5kf.client.ui.emojicon.EmojiconTextView;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.QAODefine;
@@ -52,6 +56,9 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 	private List<ChatRecyclerBean> mRecyclerBeans;
 	private ActivityBase mActivity;
 	private boolean isQuestion;
+	
+	// 语音媒体
+	private MediaPlayer mPlayer;
 	
     public RobotRecyclerAdapter(ActivityBase activity, List<ChatRecyclerBean> recyclerBeans) {
         super();
@@ -125,6 +132,11 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
         	viewHolder = new RobotViewHolder(viewType, itemView);
         	break;
         	
+        case QAODefine.MSG_TYPE_MUSIC:
+        	itemView = mInflater.inflate(R.layout.item_robot_music, parent, false) ;
+        	viewHolder = new RobotViewHolder(viewType, itemView);
+        	break;
+        	
         case QAODefine.MSG_TYPE_TEXT:
         default:
         	itemView = mInflater.inflate(R.layout.item_robot_text, parent, false) ;
@@ -145,8 +157,13 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 			V5ArticleBean article = ((V5ArticlesMessage)chatMessage.getMessage()).getArticles().get(0);
 			holder.mNewsTitle.setText(article.getTitle());
 			holder.mNewsContent.setText(article.getDescription());
-			ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
-        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsImg);			
+			if (TextUtils.isEmpty(article.getPic_url())) {
+				holder.mNewsImg.setVisibility(View.GONE);
+			} else {
+				holder.mNewsImg.setVisibility(View.VISIBLE);
+				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
+	        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsImg);
+			}
 		} else if (getItemViewType(position) == TYPE_NEWS) { // 多图文
 			holder.mNewsAdapter = new NewsListAdapter(
 					mActivity, 
@@ -156,8 +173,17 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 //		} else if (getItemViewType(position) == QAODefine.MSG_TYPE_IMAGE) { // 图片
 //			
 //		} else if (getItemViewType(position) == QAODefine.MSG_TYPE_LOCATION) { // 位置
-			
+
+		} else if (getItemViewType(position) == QAODefine.MSG_TYPE_MUSIC) { // 位置
+			holder.mMusicTitle.setText(((V5MusicMessage)chatMessage.getMessage()).getTitle());
+			holder.mMusicDesc.setText(((V5MusicMessage)chatMessage.getMessage()).getDescription());
 		} else {
+//			if (chatMessage.getMessage().getMessage_type() == QAODefine.MSG_TYPE_TEXT) {
+//				holder.mRobotSend.setVisibility(View.VISIBLE);
+//			} else {
+//				holder.mRobotSend.setVisibility(View.VISIBLE);
+//			}
+			
 			String str = chatMessage.getDefaultContent(mActivity) == null ? "" : chatMessage.getDefaultContent(mActivity);
 			Spanned text = Html.fromHtml(str.replace("\n", "<br>"));
 			holder.mMsg.setText(text);
@@ -194,6 +220,11 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
         
         /* 文本 */
         public EmojiconTextView mMsg;
+        
+        /* 音频 */
+        public ImageView mMusicController;
+        public TextView mMusicTitle;
+        public TextView mMusicDesc;
 
         public RobotViewHolder(int viewType, View itemView) {
             super(itemView);
@@ -236,6 +267,13 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 						}
 					}
 				});
+            	break;
+            	
+            case QAODefine.MSG_TYPE_MUSIC:
+            	mMusicController = (ImageView) itemView.findViewById(R.id.id_music_control_img);
+            	mMusicTitle = (TextView) itemView.findViewById(R.id.id_music_title);
+            	mMusicDesc = (TextView) itemView.findViewById(R.id.id_music_desc);
+            	mMusicController.setOnClickListener(this);
             	break;
             	
             case QAODefine.MSG_TYPE_TEXT:
@@ -290,6 +328,29 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 					V5ArticleBean article = ((V5ArticlesMessage)mChatBean.getMessage()).getArticles().get(0);
 					if (article != null && !TextUtils.isEmpty(article.getUrl())) {
 						onArticleClick(article.getUrl());
+					}
+				}
+				break;
+				
+			case R.id.id_music_control_img: // 音乐播放/停止控制
+				if (mChatBean.getMessage().getMessage_type() == QAODefine.MSG_TYPE_MUSIC) {
+					if (mChatBean.isPlaying()) { // 停止播放
+						stopPlayingMusic();
+					} else { // 开始播放
+//						if (mVoiceAnimDrawable != null) {
+//							mVoiceAnimDrawable.stop();
+//						}
+						startPlaying((V5MusicMessage)mChatBean.getMessage(), new OnCompletionListener() {
+							
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								Logger.i(TAG, "MediaPlayer - completePlaying");
+								updateMusicStopPlayingState();
+								mp.release();
+								mp = null;
+								mPlayer = null;
+							}
+						});
 					}
 				}
 				break;
@@ -357,5 +418,82 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 			this.mChatBean = mChatBean;
 		}
 
-    }	
+		public void updateMusicStartPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStartPlayingState position:" + getAdapterPosition());
+			mChatBean.setPlaying(true);
+			mMusicController.setImageResource(R.drawable.img_music_stop);
+		}
+
+		public void updateMusicStopPlayingState() {
+			Logger.i(TAG, "UI - updateMusicStopPlayingState position:" + getAdapterPosition());
+			mChatBean.setPlaying(false);
+			mMusicController.setImageResource(R.drawable.img_music_play);
+		}
+		
+		private void startPlaying(V5MusicMessage musicMessage, OnCompletionListener completionListener) {
+			Logger.i(TAG, "MediaPlayer - startPlaying " + getAdapterPosition());
+			if (mPlayer != null) {
+				if (mPlayer.isPlaying()) {
+					mPlayer.stop();
+				}
+				mPlayer.release();
+				mPlayer = null;
+				Logger.i(TAG, "MediaPlayer - stopPlaying all others");
+				resetOtherItemsExcept(mChatBean);
+			}
+			mPlayer = new MediaPlayer();
+			try {
+				mPlayer.setDataSource(musicMessage.getFilePath());
+				mPlayer.prepare();
+				mPlayer.start();
+				mPlayer.setOnErrorListener(new OnErrorListener() {
+					
+					@Override
+					public boolean onError(MediaPlayer mp, int what, int extra) {
+						Logger.e(TAG, "MediaPlayer - onError");
+						return false;
+					}
+				});
+				mPlayer.setOnCompletionListener(completionListener);
+				updateMusicStartPlayingState();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Logger.e(TAG, "MediaPlayer prepare() failed");
+				mActivity.ShowToast(R.string.media_play_failed);
+				mPlayer.release();
+				mPlayer = null;
+				updateMusicStopPlayingState(); // UI
+			}
+		}
+
+		private void stopPlayingMusic() {
+	    	Logger.i(TAG, "MediaPlayer - stopPlayingMusic " + getAdapterPosition());
+	    	if (mPlayer != null) {
+	    		mPlayer.stop();
+	    		mPlayer.release();
+	    		mPlayer = null;
+	    	}
+	    	updateMusicStopPlayingState();
+	    }
+		
+    }
+    
+    private void resetOtherItemsExcept(ChatRecyclerBean chatBean) {
+    	Logger.d(TAG, "resetOtherItems");
+		for (ChatRecyclerBean bean : mRecyclerBeans) {
+			bean.setPlaying(false);
+		}
+		chatBean.setPlaying(true);
+		notifyDataSetChanged();
+	}
+    
+    public void stopVoicePlaying() {
+    	if (mPlayer != null) {
+    		if (mPlayer.isPlaying()) {
+    			mPlayer.stop();
+    		}
+    		mPlayer.release();
+    		mPlayer = null;
+    	}
+    }
 }

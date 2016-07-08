@@ -25,7 +25,6 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -75,8 +74,6 @@ import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.LocationBean;
 import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.activity.md2x.LocationMapActivity;
-import com.v5kf.mcss.ui.widget.WarningDialog;
-import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.V5VoiceRecord;
@@ -133,7 +130,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
     private boolean isHistoricalFinish = false;
     // 连接标识
 	private boolean isConnected = false;
-	private int isForeground = 0;
+	private int foregroundCount = 0;
 	// 每页刷新数量
 	private static final int NUM_PER_PAGE = 10;
     private String mImageFileName;
@@ -148,6 +145,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
     private static final int UI_LIST_UPDATE = 2;
     private static final int UI_LIST_UPDATE_HISTORICAL = 3;
     private static final int HDL_VOICE_DISMISS = 101; 
+    private static final int HDL_APP_BACKGROUND = 102; 
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -537,7 +535,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (isForeground == 0) {
+		if (foregroundCount == 0) {
 			V5ClientAgent.getInstance().onStart();
 			
 			Bundle bundle = new Bundle();
@@ -545,15 +543,15 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 			Intent intent = new Intent(Config.ACTION_ON_MAINTAB);
 			intent.putExtras(bundle);
 			LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-			isForeground++;
+			foregroundCount++;
 		}
 	}
 	
 	@Override
 	protected void onStop() {
 		super.onStop();
-		if (isForeground == 1) {
-			isForeground--;
+		if (foregroundCount == 1) {
+			foregroundCount--;
 			V5ClientAgent.getInstance().onStop();
 			
 			Bundle bundle = new Bundle();
@@ -625,6 +623,13 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 			layout_record.setVisibility(View.GONE);
 			break;
 		}
+		
+		case HDL_APP_BACKGROUND:
+			if (mApplication.getAppForeground() > 1) {
+				foregroundCount--; // 防止触发V5ClientAgent.onStop()
+				mApplication.setAppBackground();
+			}
+			break;
 		}
 	}
 
@@ -680,7 +685,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 			case 2: // 普通消息-来自机器人
 				if (!message.getDefaultContent(this).isEmpty()) {
 					addMessage(message);
-					if (isForeground > 0) {
+					if (foregroundCount > 0) {
 						CustomApplication.getInstance().noticeMessage(message.getDefaultContent(mApplication));
 					}
 				}
@@ -719,7 +724,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 			switch (error.getStatus()) {
 			case ExceptionNoNetwork: // 无网络连接，需要检查网络
 				getToolbar().setTitle(R.string.v5_connect_closed);
-				if (isForeground > 0) {
+				if (foregroundCount > 0) {
 					showToast(R.string.v5_connect_no_network);
 				}
 				break;
@@ -727,7 +732,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 				break;
 			case ExceptionNotConnected: // 未连接（发送消息时的反馈）
 				getToolbar().setTitle(R.string.v5_connect_closed);
-				if (isForeground > 0) {
+				if (foregroundCount > 0) {
 					showToast(R.string.v5_connect_timeout);
 				}
 				break;
@@ -738,21 +743,18 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 				break;
 			case ExceptionWSAuthFailed: {
 				getToolbar().setTitle(R.string.v5_connect_closed);
-				if (isForeground > 0) {
-					final WarningDialog dialog = new WarningDialog(ClientChatActivity.this);
-					dialog.setDialogMode(WarningDialog.MODE_TWO_BUTTON);
-					dialog.setContent(R.string.v5_connect_retry);
-					dialog.setContentViewGravity(Gravity.CENTER);
-					dialog.setOnClickListener(new WarningDialogListener() {					
+				if (foregroundCount > 0) {
+					showAlertDialog(R.string.tips, 
+							R.string.v5_connect_retry, 
+							R.string.retry, 
+							R.string.cancel, 
+							new View.OnClickListener() {
+						
 						@Override
-						public void onClick(View view) {
-							dialog.dismiss();
-							if (view.getTag() != null && view.getTag().equals("right")) {
-								V5ClientAgent.getInstance().reconnect();
-							}
+						public void onClick(View v) {
+							V5ClientAgent.getInstance().reconnect();
 						}
-					});
-					dialog.show();
+					}, null);
 				}
 				break;
 			}
@@ -922,8 +924,16 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 		} else if (requestCode == Config.REQUEST_CODE_CAMERA || 
 				requestCode == Config.REQUEST_CODE_PHOTO_KITKAT ||
 				requestCode == Config.REQUEST_CODE_PHOTO) {
-			isForeground--; // 防止触发V5ClientAgent.onStop()
-			mApplication.setAppBackground(); // 防止打开图库使得应用离线
+			// 必须在this.onStart()之后调用。
+			if (mApplication.getAppForeground() > 1) {
+				foregroundCount--; // 防止触发V5ClientAgent.onStop()
+				mApplication.setAppBackground(); // 防止打开图库使得应用离线
+			} else {
+				mHandler.sendEmptyMessageDelayed(HDL_APP_BACKGROUND, 200);
+			}
+//			isForeground--; // 防止触发V5ClientAgent.onStop()
+//			mApplication.setAppBackground(); // 防止打开图库使得应用离线
+			
 			
 			if (data != null) {
 				// 图库获取拍好的图片
@@ -1070,7 +1080,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
      * 打开系统相册
      */
     private void openSystemPhoto() {
-    	isForeground++; // 防止触发V5ClientAgent.onStop()
+    	foregroundCount++; // 防止触发V5ClientAgent.onStop()
     	mApplication.setAppForeground(); // 防止打开图库使得应用离线
     	    	
         Intent intent = new Intent();
@@ -1095,7 +1105,7 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
      * 调用相机拍照
      */
     private void cameraPhoto() {
-    	isForeground++; // 防止触发V5ClientAgent.onStop()
+    	foregroundCount++; // 防止触发V5ClientAgent.onStop()
     	mApplication.setAppForeground(); // 防止打开图库使得应用离线
     	
         String sdStatus = Environment.getExternalStorageState();

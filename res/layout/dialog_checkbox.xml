@@ -40,7 +40,7 @@
         android:id="@+id/view1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_line_width_1"
-        android:background="@color/info_activity_item_divider_inner" >
+        android:background="@color/alertdialog_line" >
     </View>
     
     <RelativeLayout
@@ -79,7 +79,7 @@
         android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_line_width_1"
-        android:background="@color/info_activity_item_divider_inner" >
+        android:background="@color/alertdialog_line" >
     </View>
     
     <RelativeLayout
@@ -118,7 +118,7 @@
         android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_line_width_1"
-        android:background="@color/info_activity_item_divider_inner" >
+        android:background="@color/alertdialog_line" >
     </View>
     
     <RelativeLayout
@@ -156,7 +156,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_line_width_1"
-        android:background="@color/info_activity_item_divider_inner" >
+        android:background="@color/alertdialog_line" >
     </View>
     
 	<LinearLayout
@@ -179,7 +179,7 @@
         <View
             android:layout_width="0.5dp"
             android:layout_height="fill_parent"
-            android:background="@color/dialog_divider_v" />
+            android:background="@color/alertdialog_line" />
 
         <Button
             android:id="@+id/btn_dialog_warning_right"

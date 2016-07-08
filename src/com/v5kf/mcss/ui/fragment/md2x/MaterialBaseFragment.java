@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -53,7 +54,6 @@ public class MaterialBaseFragment extends LazyFragment {
 	protected CustomApplication mApplication;
 	protected AppInfoKeeper mAppInfo;
 	protected FragmentHandler mHandler;
-	protected int mIndex;
 	
 	/* 素材类型 */
 	public static final int TYPE_IMG = 1;
@@ -90,28 +90,44 @@ public class MaterialBaseFragment extends LazyFragment {
 	
 	public MaterialBaseFragment() {
 		// TODO Auto-generated constructor stub
-		this.mApplication = (CustomApplication) mParentActivity.getApplication();
-		this.mAppInfo = mApplication.getAppInfo();
-		this.mHandler = new FragmentHandler(this);
-	}
-	
-	public MaterialBaseFragment(ActivityBase activity, int index) {
-		this.mParentActivity = activity;
-		this.mIndex = index;
-		this.mMaterialType = index + 1;
 	}
 	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
-		
+		outState.putInt("mMaterialType", this.mMaterialType);
+	}
+	
+	@Override
+	public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewStateRestored(savedInstanceState);
+		if (savedInstanceState != null) {
+			int mType = savedInstanceState.getInt("mMaterialType");
+			if (mType != 0) {
+				this.mMaterialType = mType;
+			}
+		}
 	}
 	
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
 		setContentView(R.layout.fragment_md2x_material);
+		
+		this.mApplication = (CustomApplication) getActivity().getApplication();
+		this.mAppInfo = mApplication.getAppInfo();
+		this.mHandler = new FragmentHandler(this);
+		this.mParentActivity = (ActivityBase)getActivity();
+		this.mMaterialType = getArguments().getInt("index", 0) + 1;
+		
+		if (savedInstanceState != null) {
+			int mType = savedInstanceState.getInt("mMaterialType");
+			if (mType != 0) {
+				this.mMaterialType = mType;
+			}
+		}
 		
 		// 注册event对象
         EventBus.getDefault().register(this);

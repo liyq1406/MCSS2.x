@@ -31,8 +31,6 @@ import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.ui.adapter.CustomerInfoListAdapter;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
-import com.v5kf.mcss.ui.widget.WarningDialog;
-import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
@@ -399,64 +397,46 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 			break;
 		
 		case R.id.btn_end_chat:
-			showConfirmDialog(
-					R.string.confirm_end_session,
-					WarningDialog.MODE_TWO_BUTTON, 
-					new WarningDialogListener() {						
+			showAlertDialog(R.string.confirm_end_session, new OnClickListener() {
+				
 				@Override
-				public void onClick(View view) {
-					switch (view.getId()) {
-					case R.id.btn_dialog_warning_left:								
-						break;
-					case R.id.btn_dialog_warning_right:
-						try {
-							CustomerRequest creq = (CustomerRequest) RequestManager.getRequest(
-									QAODefine.O_TYPE_WCSTM, 
-									CustomerInfoListActivity.this);
-							creq.endSession(c_id);
-							setResult(Config.RESULT_CODE_END_SESSION);
-							dismissWarningDialog();
-							finish();
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-						break;
+				public void onClick(View v) {
+					try {
+						CustomerRequest creq = (CustomerRequest) RequestManager.getRequest(
+								QAODefine.O_TYPE_WCSTM, 
+								CustomerInfoListActivity.this);
+						creq.endSession(c_id);
+						setResult(Config.RESULT_CODE_END_SESSION);
+						finish();
+					} catch (JSONException e) {
+						e.printStackTrace();
 					}
 				}
-			});
+			}, null);
 			break;
 		
 		case R.id.btn_start_chat:
-			showConfirmDialog(
-					R.string.confirm_start_session,
-					WarningDialog.MODE_TWO_BUTTON, 
-					new WarningDialogListener() {
+			showAlertDialog(R.string.confirm_start_session, new OnClickListener() {
+				
 				@Override
-				public void onClick(View view) {
-					switch (view.getId()) {
-					case R.id.btn_dialog_warning_left:								
-						break;
-					case R.id.btn_dialog_warning_right:
-						try {
-							CustomerRequest creq = (CustomerRequest) RequestManager.getRequest(
-									QAODefine.O_TYPE_WCSTM, 
-									CustomerInfoListActivity.this);
-							if (c_id != null) {
-								creq.pickCustomer(c_id);
-							} else if (v_id != null) {
-								creq.pickCustomer(v_id, mCustomer.getF_id());
-//								creq.pickCustomer(v_id, mCustomer.getIface(), mCustomer.getChannel(), mCustomer.getService());
-							}
-							setResult(Config.RESULT_CODE_PICKUP_CSTM);
-							dismissWarningDialog();
-							finish();
-						} catch (JSONException e) {
-							e.printStackTrace();
+				public void onClick(View v) {
+					try {
+						CustomerRequest creq = (CustomerRequest) RequestManager.getRequest(
+								QAODefine.O_TYPE_WCSTM, 
+								CustomerInfoListActivity.this);
+						if (c_id != null) {
+							creq.pickCustomer(c_id);
+						} else if (v_id != null) {
+							creq.pickCustomer(v_id, mCustomer.getF_id());
+//							creq.pickCustomer(v_id, mCustomer.getIface(), mCustomer.getChannel(), mCustomer.getService());
 						}
-						break;
+						setResult(Config.RESULT_CODE_PICKUP_CSTM);
+						finish();
+					} catch (JSONException e) {
+						e.printStackTrace();
 					}
 				}
-			});
+			}, null);
 			break;
 			
 		case R.id.id_head_iv:

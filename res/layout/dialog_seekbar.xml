@@ -38,7 +38,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_line_width_1"
-        android:background="@color/info_activity_item_divider_inner" >
+        android:background="@color/alertdialog_line" >
     </View>
     
     <RelativeLayout
@@ -76,7 +76,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/base_line_width_1"
-        android:background="@color/info_activity_item_divider_inner" >
+        android:background="@color/alertdialog_line" >
     </View>
     
 	<LinearLayout 
@@ -90,7 +90,7 @@
 	    <com.v5kf.mcss.ui.widget.ModeSeekBar
 	        android:id="@+id/id_seek_bar"  
 		    android:layout_width="fill_parent"
-		    android:layout_height="32dp"
+		    android:layout_height="wrap_content"
 		    android:layout_margin="4dp"
 		    android:gravity="center"
 		    style="@style/Widget.SeekBar.Normal" />

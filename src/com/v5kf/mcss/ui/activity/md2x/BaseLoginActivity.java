@@ -8,6 +8,7 @@ import android.os.Message;
 import com.umeng.update.UmengUpdateAgent;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
+import com.v5kf.mcss.utils.UITools;
 
 public abstract class BaseLoginActivity extends ActivityBase {
 
@@ -17,6 +18,7 @@ public abstract class BaseLoginActivity extends ActivityBase {
 		setTheme(R.style.AppTheme_Normal);
 		super.onCreate(savedInstanceState);
 		
+		setNavigationBarColor(UITools.getColor(R.color.v5_navigation_bar_bg));
 	}
 	
 	@Override

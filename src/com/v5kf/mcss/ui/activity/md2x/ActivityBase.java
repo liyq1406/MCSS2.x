@@ -21,7 +21,6 @@ import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -36,12 +35,11 @@ import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.AppInfoKeeper;
+import com.v5kf.mcss.ui.view.SystemBarTintManager;
 import com.v5kf.mcss.ui.widget.AlertDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog.OptionDialogListener;
 import com.v5kf.mcss.ui.widget.CustomProgressDialog;
-import com.v5kf.mcss.ui.widget.WarningDialog;
-import com.v5kf.mcss.ui.widget.WarningDialog.WarningDialogListener;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 
@@ -52,10 +50,10 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	protected BaseHandler mHandler;
 	protected WebsocktReadReceiver mReceiver;
 	protected AlertDialog mAlertDialog;
-	protected WarningDialog mWarningDialog;
 	protected CustomOptionDialog mOptionDialog;
 	protected CustomProgressDialog mProgressDialog;
 	protected Toast mToast;
+	protected boolean isForeground = false;
 
 	/* Layout动画 */
 	protected Animation mSlideIn; // Y轴出现
@@ -118,11 +116,11 @@ public abstract class ActivityBase extends SwipeBackActivity {
 ////            window.setStatusBarColor(Color.TRANSPARENT);
 ////            window.setNavigationBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			setTranslucentStatus(true);
+//			setTranslucentStatus(true);
 			
-			//SystemBarTintManager tintManager = new SystemBarTintManager(this);  
-			//tintManager.setStatusBarTintEnabled(true);  
-			//tintManager.setStatusBarTintResource(R.color.main_color);
+//			SystemBarTintManager tintManager = new SystemBarTintManager(this);  
+//			tintManager.setStatusBarTintEnabled(true);  
+//			tintManager.setStatusBarTintResource(R.color.main_color_dark);
 		}
 		
 		// 取消滑动返回
@@ -163,6 +161,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	protected void onStart() {
 		Logger.d("LifeCycle", "onStart");
 		mApplication.setAppForeground();
+		isForeground = true;
 		super.onStart();		
 	}
 	
@@ -187,6 +186,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	protected void onStop() {
 		Logger.v("LifeCycle", "onStop");
 		mApplication.setAppBackground();
+		isForeground = false;
 		super.onStop();
 	}
 	
@@ -291,37 +291,6 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		});
 	}
 	
-	public void showWarningDialog(int contentResId, WarningDialogListener listener) {
-		if(null == mWarningDialog) {
-			mWarningDialog = new WarningDialog(this);
-		}
-		mWarningDialog.setDialogMode(WarningDialog.MODE_ONE_BUTTON);
-		mWarningDialog.setContent(contentResId);
-		mWarningDialog.setContentViewGravity(Gravity.CENTER);
-		mWarningDialog.setOnClickListener(listener);
-		
-		mWarningDialog.show();
-	}
-	
-	public void showConfirmDialog(int contentResId, int mode, WarningDialogListener listener) {
-		if(null == mWarningDialog) {
-			mWarningDialog = new WarningDialog(this);
-		}
-		mWarningDialog.setDialogMode(mode);
-		mWarningDialog.setContent(contentResId);
-		mWarningDialog.setContentViewGravity(Gravity.CENTER);
-		mWarningDialog.setOnClickListener(listener);
-		
-		mWarningDialog.show();
-	}
-	
-	
-	public void dismissWarningDialog() {
-		if(mWarningDialog != null && mWarningDialog.isShowing()) {
-			mWarningDialog.dismiss();
-		}
-	}
-	
 	
 	public void showOptionDialogInSession(boolean inTrust, OptionDialogListener listener) {
 		if(null == mOptionDialog) {
@@ -390,7 +359,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		if(mProgressDialog != null && mProgressDialog.isShowing()) {
 			return true;
 		}
-		if(mWarningDialog != null && mWarningDialog.isShowing()) {
+		if(mAlertDialog != null && mAlertDialog.isShowing()) {
 			return true;
 		}
 		
@@ -592,15 +561,15 @@ public abstract class ActivityBase extends SwipeBackActivity {
 
 	public void setWindowBackground(int color) {
 		// [修改]不设置窗口背景，改为默认状态栏遮罩
-//		if (Build.VERSION.SDK_INT >= 21) {
-//			getWindow().setBackgroundDrawable(new ColorDrawable(colorBurn(color)));
-//		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//			setTranslucentStatus(true);
-//			
-//			SystemBarTintManager tintManager = new SystemBarTintManager(this);  
-//			tintManager.setStatusBarTintEnabled(true);  
-//			tintManager.setStatusBarTintColor(color);
-//		}
+		if (Build.VERSION.SDK_INT >= 21) {
+			//getWindow().setBackgroundDrawable(new ColorDrawable(colorBurn(color)));
+		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			setTranslucentStatus(true);
+			
+			SystemBarTintManager tintManager = new SystemBarTintManager(this);  
+			tintManager.setStatusBarTintEnabled(true);  
+			tintManager.setStatusBarTintColor(color);
+		}
 	}
 	
 	/**

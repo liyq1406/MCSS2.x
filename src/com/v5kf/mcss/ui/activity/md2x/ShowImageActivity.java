@@ -40,7 +40,7 @@ public class ShowImageActivity extends BaseActivity implements ImageLoaderListen
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_show_image);
+		setContentView(R.layout.activity_md2x_show_image);
 		
 //		setSwipeBackEnable(false);
 //		/* 在API19以上改变状态栏颜色 */

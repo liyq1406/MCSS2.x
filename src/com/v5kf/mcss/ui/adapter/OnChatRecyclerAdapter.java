@@ -26,7 +26,6 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
@@ -302,8 +301,13 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 				V5ArticleBean article = ((V5ArticlesMessage)chatMessage.getMessage()).getArticles().get(0);
 				holder.mNewsTitle.setText(article.getTitle());
 				holder.mNewsContent.setText(article.getDescription());
-				ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
-	        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
+				if (TextUtils.isEmpty(article.getPic_url())) {
+					holder.mNewsPic.setVisibility(View.GONE);
+				} else {
+					holder.mNewsPic.setVisibility(View.VISIBLE);
+					ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
+		        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
+				}
 			}
 			break;
 			
@@ -641,23 +645,24 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
     private void loadVideo(ChatItemViewHolder holder, V5VideoMessage videoMessage) {
 		holder.mVideoBgIv.setImageBitmap(videoMessage.getCoverFrame());
 		
-		// 设置宽高
-		int width = videoMessage.getCoverFrame().getWidth();
-		int height = videoMessage.getCoverFrame().getHeight();
-		float density = mActivity.getResources().getDisplayMetrics().density;
-		float maxWH = MediaLoader.VIDEO_COVER_MAX_WH * density + 0.5f;
-		float minWH = MediaLoader.VIDEO_COVER_MIN_WH * density + 0.5f;
-		if (width > maxWH && height > maxWH) {
-			float scale = Math.max(maxWH / width, maxWH / height);
-			width = (int)scale * width;
-			height = (int)scale * height;
-		} else if (width < minWH && height < minWH) {
-			float scale = Math.max(minWH / width, minWH / height);
-			width = (int)scale * width;
-			height = (int)scale * height;
-		}
-		holder.mVideoBgIv.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
-		holder.mVideoSurface.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
+//		// 设置宽高
+//		int width = videoMessage.getCoverFrame().getWidth();
+//		int height = videoMessage.getCoverFrame().getHeight();
+//		float density = mActivity.getResources().getDisplayMetrics().density;
+//		float maxWH = MediaLoader.VIDEO_COVER_MAX_WH * density + 0.5f;
+//		float minWH = MediaLoader.VIDEO_COVER_MIN_WH * density + 0.5f;
+//		if (width > maxWH && height > maxWH) {
+//			float scale = Math.max(maxWH / width, maxWH / height);
+//			width = (int)scale * width;
+//			height = (int)scale * height;
+//		} else if (width < minWH && height < minWH) {
+//			float scale = Math.max(minWH / width, minWH / height);
+//			width = (int)scale * width;
+//			height = (int)scale * height;
+//		}
+//		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+//		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+//		holder.mVideoControlIv.requestLayout();
 	}
     
     private void sendStateChange(ChatItemViewHolder holder, final ChatRecyclerBean chatMessage) {
@@ -736,6 +741,7 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
         public ImageView mVideoBgIv; // 视频背景
         public BubbleSurfaceView mVideoSurface;
         public SurfaceHolder mVideoSurfaceHolder;
+        public ViewGroup mVideoLayout;
         
         /* 音乐 */
         public ImageView mMusicControlIv;
@@ -846,6 +852,7 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
             	mVideoControlIv = (ImageView) itemView.findViewById(R.id.id_video_control_img);
             	mVideoSurface = (BubbleSurfaceView) itemView.findViewById(R.id.id_video_surface);
             	mVideoSurfaceHolder = mVideoSurface.getHolder();
+            	mVideoLayout = (ViewGroup) itemView.findViewById(R.id.id_chat_video_layout);
             	mVideoControlIv.setOnClickListener(this);
             	mVideoBgIv.setOnClickListener(this);
             	mVideoSurface.setOnClickListener(new OnClickListener() {
