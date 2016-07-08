@@ -19,6 +19,8 @@ import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 
 public class CustomerBean extends BaseBean implements Serializable {
+	public static final int TAG_VISITOR_FROM_ALIVE = 11;
+	
 	private long id; /*db*/
 	public enum CustomerType {
 		CustomerType_None,

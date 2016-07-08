@@ -856,6 +856,17 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
  				return false;
  			}
  		});
+         
+        mChatListView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+ 			
+ 			@Override
+ 			public void onLayoutChange(View v, int left, int top, int right,
+ 					int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+ 				// TODO Auto-generated method stub
+ 				Logger.d(TAG, "ChatListView onLayoutChange");
+ 				mChatListView.postInvalidateDelayed(10);
+ 			}
+ 		});
     }
     
     /**
@@ -1690,12 +1701,12 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	/* [修改]解决屏幕刷新黑块问题 */
 	private void notifyRobotDataSetChange() {
 		mRobotAdapter.notifyDataSetChanged();
-		mCandidateList.postInvalidateDelayed(5);
+		mCandidateList.postInvalidateDelayed(10);
 	}
 
 	private void notifyChatDataSetChange() {
 		mChatListAdapter.notifyDataSetChanged();
-		mChatListView.postInvalidateDelayed(5);
+		mChatListView.postInvalidateDelayed(10);
 	}
 	
 	/***** event *****/

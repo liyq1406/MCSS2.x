@@ -138,6 +138,7 @@ public class AppInfoKeeper {
 		if (cstm.getCstmType() == CustomerType.CustomerType_ServingAlive) {
 			// 退出的客户变成历史客户
 			cstm.setCstmType(CustomerType.CustomerType_Visitor);
+			cstm.setTag(CustomerBean.TAG_VISITOR_FROM_ALIVE);
 			addVisitor(cstm);
 			//clearCustomerSession(cstm);
 			// [修改][通知界面]更新历史访客[eventbus]

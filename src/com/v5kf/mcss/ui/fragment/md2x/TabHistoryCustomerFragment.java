@@ -27,6 +27,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerBean;
+import com.v5kf.mcss.entity.CustomerBean.CustomerType;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.TicketRequest;
@@ -162,8 +163,8 @@ public class TabHistoryCustomerFragment extends TabBaseFragment implements OnRef
 		if (mRecycleBeans.isEmpty() && mHasMore) { // 2015/12/12 修复BUG：加入mHasMore判断
 	    	boolean alreadyHasVisitors = false;
 	    	for (CustomerBean cstm : vMap.values()) {
-	    		Logger.d(TAG, "[initData] getClosingReason:" + cstm.getClosingReason());
-	    		if (cstm.getClosingReason() == 0) { // 没有正在进行的会话
+	    		Logger.d(TAG, "[initData] getClosingReason:" + cstm.getClosingReason() + " cstmType:" + cstm.getCstmType());
+	    		if (cstm.getTag() != CustomerBean.TAG_VISITOR_FROM_ALIVE) { // 没有正在进行的会话
 	    			alreadyHasVisitors = true;
 	    			break;
 	    		}
