@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -560,9 +561,10 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 
 	public void setWindowBackground(int color) {
+		//getWindow().getDecorView().setBackgroundColor(color);
 		// [修改]不设置窗口背景，改为默认状态栏遮罩
 		if (Build.VERSION.SDK_INT >= 21) {
-			//getWindow().setBackgroundDrawable(new ColorDrawable(colorBurn(color)));
+			//getWindow().setBackgroundDrawable(new ColorDrawable(color));
 		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			setTranslucentStatus(true);
 			

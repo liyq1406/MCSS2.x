@@ -36,13 +36,22 @@ public abstract class BaseToolbarActivity extends ActivityBase {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setStatusbarColor(UITools.getColor(R.color.v5_status_bar_bg));
+		if (android.os.Build.VERSION.SDK_INT > 19) {
+			setStatusbarColor(UITools.getColor(R.color.main_color_accent));
+		} else {
+			setStatusbarColor(UITools.getColor(R.color.v5_status_bar_bg));
+		}
 		setNavigationBarColor(UITools.getColor(R.color.v5_navigation_bar_bg));
 		
 		if (android.os.Build.VERSION.SDK_INT >= 23){ // Build.VERSION_CODES.M
 		    //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 		} else {
-			setWindowBackground(UITools.getColor(R.color.v5_status_bar_bg));
+			if (android.os.Build.VERSION.SDK_INT > 19) {
+				setWindowBackground(UITools.getColor(R.color.main_color_accent));
+			} else {
+				setWindowBackground(UITools.getColor(R.color.v5_status_bar_bg));
+			}
+			
 			if (android.os.Build.MODEL.contains("MIUI")) {
 				UITools.setStatusBarDarkModeOfMIUI(true, this);
 			} else if (android.os.Build.MODEL.contains("Flyme")) {
