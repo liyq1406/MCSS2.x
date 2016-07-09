@@ -108,7 +108,7 @@ public class UITools {
 			type = "web";
 			break;
 		case QAODefine.CSTM_IF_WEIXIN:
-			type = "weixin";
+			type = "wechat";// type = "weixin";
 			break;
 		case QAODefine.CSTM_IF_QQ:
 			type = "qq";
@@ -423,7 +423,12 @@ public class UITools {
 				picUrl = picUrl + "/thumbnail";
 			} else if (Config.USE_THUMBNAIL && 
 					(picUrl.contains("mmbiz.qpic.cn/mmbiz/") || picUrl.contains("chat.v5kf.com/"))) {
-				picUrl = String.format(Config.APP_PIC_V5_THUMBNAIL_FMT, siteId, imageMessage.getMessage_id());
+				//picUrl = String.format(Config.APP_PIC_V5_THUMBNAIL_FMT, siteId, imageMessage.getMessage_id());
+				if (imageMessage.getMessage_id() != null && !imageMessage.getMessage_id().isEmpty()) {
+					picUrl = String.format(Config.APP_PIC_V5_THUMBNAIL_FMT, siteId, imageMessage.getMessage_id());
+				} else {
+					picUrl = picUrl + "/thumbnail";
+				}
 			}
 		} else if (!TextUtils.isEmpty(imageMessage.getMedia_id())) {
 			imageMessage.setPic_url(String.format(Config.APP_RESOURCE_V5_FMT, siteId, imageMessage.getMessage_id()));

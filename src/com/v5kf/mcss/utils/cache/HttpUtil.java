@@ -27,6 +27,7 @@ import javax.net.ssl.X509TrustManager;
 import com.v5kf.client.lib.Logger;
 import com.v5kf.client.lib.V5ClientConfig;
 import com.v5kf.client.lib.V5HttpUtil;
+import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.utils.FileUtil;
 
 /**
@@ -129,7 +130,9 @@ public class HttpUtil {
             } else {
             	urlConnection = (HttpURLConnection)url.openConnection();
             }
-            
+            if (Config.AUTH != null && !Config.AUTH.isEmpty()) {
+            	urlConnection.addRequestProperty("Authorization", Config.AUTH);
+            }
 			urlConnection.setConnectTimeout(V5ClientConfig.SOCKET_TIMEOUT);
 			urlConnection.setRequestMethod("GET");
 			urlConnection.setDoInput(true);// 表示从服务器获取数据

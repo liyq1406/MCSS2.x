@@ -19,7 +19,7 @@ import com.v5kf.mcss.config.Config;
 
 public class V5ClientConfig {
 	
-	private static int LOG_LEVEL = 1;
+	private static int LOG_LEVEL = Config.LOG_LEVEL;
 	private static boolean LOG_SHOW = Config.LOG_LEVEL >= 5;
 	
 	protected static boolean AUTO_WORKER_SERVICE = false;
@@ -37,6 +37,7 @@ public class V5ClientConfig {
 	public static final int LOG_LV_DEBUG = 4;
 	public static final int LOG_LV_VERBOS = 5;
 	
+	public static boolean USE_HTTPS = true; // 加密请求
 	private static final String DEBUG = Config.DEBUG ? "debug" : "public"; // 是否debug模式：debug/public
 	
 	
@@ -44,21 +45,21 @@ public class V5ClientConfig {
 	/**
 	 * 客户端连接地址格式
 	 */
-	public static final String SDK_INIT_URL = "http://www.v5kf.com/public/appsdk/init";
+	public static final String SDK_INIT_URL = (USE_HTTPS ? "https" : "http") + "://www.v5kf.com/public/appsdk/init";
 //	public static final String WS_URL_FMT = "ws://chat.v5kf.com/sitews?token=%s&site=%s&o_id=%s";
-	protected static final String WS_URL_FMT = "ws://chat.v5kf.com/" + DEBUG + "/appws/v2?auth=%s"; // ws地址
+	protected static final String WS_URL_FMT = (USE_HTTPS ? "wss" : "ws") + "://chat.v5kf.com/" + DEBUG + "/appws/v2?auth=%s"; // ws地址
 //			"site=%s&account=%s&visitor=%s&device=android&timestamp=%d&nonce=%d&expires=%d&signature=%s&
-	protected static final String CHAT_HOST = "http://chat.v5kf.com";
+	protected static final String CHAT_HOST = (USE_HTTPS ? "https" : "http") + "://chat.v5kf.com";
 //	public static final String AUTH_URL = "http://chat.v5kf.com/public/webauth/v9"; // web认证v9
-	protected static final String SDK_AUTH_URL = "http://chat.v5kf.com/" + DEBUG + "/appauth/v2"; // app认证v2
+	protected static final String SDK_AUTH_URL = (USE_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + DEBUG + "/appauth/v2"; // app认证v2
 	protected static final String ORIGIN = "http://chat.v5kf.com";
-	protected static final String SDK_PIC_AUTH_URL = "http://chat.v5kf.com/" + DEBUG + "/wxyt/app?auth=";
-	protected static final String SDK_MEDIA_AUTH_URL = "https://chat.v5kf.com/" + DEBUG + "/wxyt/app?type=voice&suffix=amr&auth=";
+	protected static final String SDK_PIC_AUTH_URL = (USE_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + DEBUG + "/wxyt/app?auth=";
+	protected static final String SDK_MEDIA_AUTH_URL =(USE_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + DEBUG + "/wxyt/app?type=voice&suffix=amr&auth=";
 	
 	/**
 	 * 获取站点配置信息地址格式
 	 */
-	protected static final String SITEINFO_URL_FMT = "http://www.v5kf.com/public/api_dkf/get_chat_siteinfo?sid=%s";
+	protected static final String SITEINFO_URL_FMT = (USE_HTTPS ? "https" : "http") + "://www.v5kf.com/public/api_dkf/get_chat_siteinfo?sid=%s";
 	protected static final String PREFS_FILE = "v5kf_client";
 	
 	/* 用户信息 */

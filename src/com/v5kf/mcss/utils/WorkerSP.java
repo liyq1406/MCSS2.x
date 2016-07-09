@@ -215,6 +215,9 @@ public class WorkerSP {
 	 * @param Authorization
 	 */
 	public void saveAuthorization(String auth) {
+		if (auth != null && !auth.isEmpty()) {
+			Config.AUTH = auth;
+		}
 		mEdit = mSharedPreferences.edit();
 		mEdit.putString(SP_AUTH, auth);
 		mEdit.commit();

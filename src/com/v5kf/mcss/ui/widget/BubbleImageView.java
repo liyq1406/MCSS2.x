@@ -213,7 +213,7 @@ public class BubbleImageView extends ImageView {
 		mBitmapPaint.setShader(mBitmapShader);
 		mBitmapHeight = mBitmap.getHeight();
 		mBitmapWidth = mBitmap.getWidth();
-		Logger.w("BubbleImageView", "[setup] -> " + mBitmapWidth + "," + mBitmapHeight);
+//		Logger.w("BubbleImageView", "[setup] -> " + mBitmapWidth + "," + mBitmapHeight);
 //		LayoutParams para;  
 //        para = getLayoutParams();
 //        if (para.height < 100) {

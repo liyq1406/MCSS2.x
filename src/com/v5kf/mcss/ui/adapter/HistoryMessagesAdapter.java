@@ -154,7 +154,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
     	// 设置数据
-        ChatRecyclerBean chatBean = mRecycleBeans.get(position);
+        final ChatRecyclerBean chatBean = mRecycleBeans.get(position);
         holder.setChatBean(chatBean);
         V5Message msgContent = chatBean.getMessage();
         
@@ -173,19 +173,14 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
         			&& FileUtil.isFileExists(voiceMessage.getFilePath())) { // 已加载则不需要loadMedia
 				Logger.d(TAG, "---已加载---");
 				break;
+			} else if (chatBean.isBadUrl()) {
+				Logger.d(TAG, "---URL异常---");
+				break;
 			} else {
 				Logger.d(TAG, "---首次加载---");
 			}
         	
-        	String url = voiceMessage.getUrl();
-        	if (TextUtils.isEmpty(url)) {
-        		if (TextUtils.isEmpty(voiceMessage.getMessage_id()) && voiceMessage.getFilePath() != null) {
-        			url = voiceMessage.getFilePath();
-        		} else {
-        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, msgContent.getMessage_id());
-        			voiceMessage.setUrl(url);
-        		}
-        	}
+        	String url = voiceMessage.getDefaultMediaUrl();
         	
         	MediaLoader mediaLoader = new MediaLoader(mActivity, holder, new MediaLoaderListener() {
 				
@@ -209,6 +204,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 //							}
 //						}, 500); // 0.5s后重试
 //					}
+					chatBean.setBadUrl(true);
 					notifyDataSetChanged();
 				}
 			});
@@ -278,20 +274,15 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 			if (videoMessage.getFilePath() != null && FileUtil.isFileExists(videoMessage.getFilePath())) { // 已加载则不需要loadMedia
 				Logger.d(TAG, "---Video 已加载---");
 				break;
+			} else if (chatBean.isBadUrl()) {
+				Logger.d(TAG, "---Video URL异常---");
+				break;
 			} else {
 				Logger.d(TAG, "---Video 首次加载---");
 			}
 			
 			// 加载语音
-        	String url = videoMessage.getUrl();
-        	if (TextUtils.isEmpty(url)) {
-        		if (TextUtils.isEmpty(videoMessage.getMessage_id()) && videoMessage.getFilePath() != null) {
-        			url = videoMessage.getFilePath();
-        		} else {
-        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, videoMessage.getMessage_id());
-        			videoMessage.setUrl(url);
-        		}
-        	}
+        	String url = videoMessage.getDefaultMediaUrl();
         	Logger.d(TAG, "Video url:" + url + " sendState:" + videoMessage.getState());
         	MediaLoader mediaLoader = new MediaLoader(mActivity, chatBean, new MediaLoaderListener() {
 				
@@ -311,12 +302,14 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 				@Override
 				public void onFailure(final MediaLoader mediaLoader, final V5Message msg, Object obj) {
 					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
-							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+							&& mediaLoader.getmTryTimes() < 3) { // 最多重试3次
 						mActivity.getHandler().postDelayed(new Runnable() {
 							public void run() {
 								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
 							}
 						}, 1000); // 1s后重试
+					} else {
+						chatBean.setBadUrl(true);
 					}
 				}
 			});
@@ -343,20 +336,15 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 			if (musicMessage.getFilePath() != null && FileUtil.isFileExists(musicMessage.getFilePath())) { // 已加载则不需要loadMedia
 				Logger.d(TAG, "---Music 已加载---");
 				break;
+			} else if (chatBean.isBadUrl()) {
+				Logger.d(TAG, "---Music URL异常---");
+				break;
 			} else {
 				Logger.d(TAG, "---Music 首次加载---");
 			}
 			
 			// 加载语音
-        	String url = musicMessage.getMusic_url();
-        	if (TextUtils.isEmpty(url)) {
-        		if (TextUtils.isEmpty(musicMessage.getMessage_id()) && musicMessage.getFilePath() != null) {
-        			url = musicMessage.getFilePath();
-        		} else {
-        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, musicMessage.getMessage_id());
-        			musicMessage.setMusic_url(url);
-        		}
-        	}
+        	String url = musicMessage.getDefaultMediaUrl();
         	Logger.d(TAG, "Music url:" + url + " sendState:" + musicMessage.getState());
         	MediaLoader mediaLoader = new MediaLoader(mActivity, holder, new MediaLoaderListener() {
 				
@@ -369,12 +357,14 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 				@Override
 				public void onFailure(final MediaLoader mediaLoader, final V5Message msg, Object obj) {
 					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
-							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+							&& mediaLoader.getmTryTimes() < 3) { // 最多重试3次
 						mActivity.getHandler().postDelayed(new Runnable() {
 							public void run() {
 								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
 							}
-						}, 500); // 0.5s后重试
+						}, 1000); // 1s后重试
+					} else {
+						chatBean.setBadUrl(true);
 					}
 				}
 			});

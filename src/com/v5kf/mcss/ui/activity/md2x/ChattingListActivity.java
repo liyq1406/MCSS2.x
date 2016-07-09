@@ -69,7 +69,7 @@ import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.service.CoreService;
-import com.v5kf.mcss.service.MessageSendHelper;
+import com.v5kf.mcss.service.MessageSendHelperMd2x;
 import com.v5kf.mcss.ui.adapter.ChattingListAdapter;
 import com.v5kf.mcss.ui.adapter.ChattingListAdapter.ChatMessagesListener;
 import com.v5kf.mcss.ui.adapter.RobotRecyclerAdapter;
@@ -111,7 +111,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	private static final int HDL_APP_BACKGROUND = 102; 
 	
 	/* 消息发送工具类 */
-	private MessageSendHelper mMessageHelper;
+	private MessageSendHelperMd2x mMessageHelper;
 
 	EmoticonsKeyBoardBar mKeyBar;
     
@@ -185,7 +185,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_md2x_chatting_list);
 
-        mMessageHelper = new MessageSendHelper(mCustomer, this, mHandler);
+        mMessageHelper = new MessageSendHelperMd2x(mCustomer, this, mHandler);
         mDatas = new ArrayList<>();
         initData();
         findView();

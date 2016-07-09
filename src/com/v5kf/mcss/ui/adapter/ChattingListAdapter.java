@@ -368,12 +368,12 @@ public class ChattingListAdapter extends BaseAdapter {
 				
 				@Override
 				public void onFailure(final ImageLoader imageLoader, final String url, final ImageView imageView) {
-					if (url.contains("chat.v5kf.com/") && imageLoader.getmTryTimes() < 5) { // 最多重试5次
+					if (url.contains("chat.v5kf.com/") && imageLoader.getmTryTimes() < 3) { // 最多重试5次
 						mActivity.getHandler().postDelayed(new Runnable() {
 							public void run() {
 								imageLoader.DisplayImage(url, imageView);
 							}
-						}, 500); // 0.5s后重试
+						}, 1000); // 1.0s后重试
 					}
 				}
 			});
@@ -409,24 +409,16 @@ public class ChattingListAdapter extends BaseAdapter {
 					&& FileUtil.isFileExists(voiceMessage.getFilePath())) { // 已加载则不需要loadMedia
 				Logger.d(TAG, "---已加载---");
 				break;
+			} else if (chatMessage.isBadUrl()) {
+				Logger.d(TAG, "---URL异常---");
+				break;
 			} else {
 				Logger.d(TAG, "---首次加载---");
 			}
 			
 			// 加载语音
-        	String url = voiceMessage.getUrl();
-        	if (TextUtils.isEmpty(url)) {
-        		if (TextUtils.isEmpty(voiceMessage.getMessage_id()) && voiceMessage.getFilePath() != null) {
-        			url = voiceMessage.getFilePath();
-        		} else {
-        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, voiceMessage.getMessage_id());
-        			voiceMessage.setUrl(url);
-        		}
-        	}
-        	if (voiceMessage.getFilePath() != null) {
-        		Logger.w(TAG, "sendVoiceMessage -> message=" + voiceMessage);
-        		Logger.w(TAG, "sendVoiceMessage -> result -> Voice url:" + voiceMessage.getFilePath() + " sendState:" + voiceMessage.getState());
-        	}
+        	String url = voiceMessage.getDefaultMediaUrl();
+
         	Logger.d(TAG, "Voice url:" + url + " sendState:" + voiceMessage.getState());
         	MediaLoader mediaLoader = new MediaLoader(mActivity, holder, new MediaLoaderListener() {
 				
@@ -449,12 +441,14 @@ public class ChattingListAdapter extends BaseAdapter {
 //						sendStateChange(holder, chatMessage);
 //					}
 					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
-							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+							&& mediaLoader.getmTryTimes() < 3) { // 最多重试3次
 						mActivity.getHandler().postDelayed(new Runnable() {
 							public void run() {
 								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
 							}
-						}, 500); // 0.5s后重试
+						}, 1000); // 1.0s后重试
+					} else {
+						chatMessage.setBadUrl(true);
 					}
 				}
 			});
@@ -480,20 +474,16 @@ public class ChattingListAdapter extends BaseAdapter {
 			if (videoMessage.getFilePath() != null && FileUtil.isFileExists(videoMessage.getFilePath())) { // 已加载则不需要loadMedia
 				Logger.d(TAG, "---Video 已加载---");
 				break;
+			} else if (chatMessage.isBadUrl()) {
+				Logger.d(TAG, "---Video URL异常---");
+				break;
 			} else {
 				Logger.d(TAG, "---Video 首次加载---");
 			}
 			
-			// 加载语音
-        	String url = videoMessage.getUrl();
-        	if (TextUtils.isEmpty(url)) {
-        		if (TextUtils.isEmpty(videoMessage.getMessage_id()) && videoMessage.getFilePath() != null) {
-        			url = videoMessage.getFilePath();
-        		} else {
-        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, videoMessage.getMessage_id());
-        			videoMessage.setUrl(url);
-        		}
-        	}
+			// 加载视频
+        	String url = videoMessage.getDefaultMediaUrl();
+        	
         	Logger.d(TAG, "Video url:" + url + " sendState:" + videoMessage.getState());
         	MediaLoader mediaLoader = new MediaLoader(mActivity, chatMessage, new MediaLoaderListener() {
 				
@@ -510,12 +500,14 @@ public class ChattingListAdapter extends BaseAdapter {
 				@Override
 				public void onFailure(final MediaLoader mediaLoader, final V5Message msg, Object obj) {
 					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
-							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+							&& mediaLoader.getmTryTimes() < 3) { // 最多重试3次
 						mActivity.getHandler().postDelayed(new Runnable() {
 							public void run() {
 								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
 							}
 						}, 1000); // 1s后重试
+					} else {
+						chatMessage.setBadUrl(true);
 					}
 				}
 			});
@@ -543,20 +535,15 @@ public class ChattingListAdapter extends BaseAdapter {
 			if (musicMessage.getFilePath() != null && FileUtil.isFileExists(musicMessage.getFilePath())) { // 已加载则不需要loadMedia
 				Logger.d(TAG, "---Music 已加载---");
 				break;
+			} else if (chatMessage.isBadUrl()) {
+				Logger.d(TAG, "---Music URL异常---");
+				break;
 			} else {
 				Logger.d(TAG, "---Music 首次加载---");
 			}
 			
-			// 加载语音
-        	String url = musicMessage.getMusic_url();
-        	if (TextUtils.isEmpty(url)) {
-        		if (TextUtils.isEmpty(musicMessage.getMessage_id()) && musicMessage.getFilePath() != null) {
-        			url = musicMessage.getFilePath();
-        		} else {
-        			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, musicMessage.getMessage_id());
-        			musicMessage.setMusic_url(url);
-        		}
-        	}
+			// 加载音乐
+        	String url = musicMessage.getDefaultMediaUrl();
         	Logger.d(TAG, "Music url:" + url + " sendState:" + musicMessage.getState());
         	MediaLoader mediaLoader = new MediaLoader(mActivity, holder, new MediaLoaderListener() {
 				
@@ -569,12 +556,14 @@ public class ChattingListAdapter extends BaseAdapter {
 				@Override
 				public void onFailure(final MediaLoader mediaLoader, final V5Message msg, Object obj) {
 					if (mediaLoader.getUrl().contains("chat.v5kf.com/") 
-							&& mediaLoader.getmTryTimes() < 5) { // 最多重试5次
+							&& mediaLoader.getmTryTimes() < 3) { // 最多重试3次
 						mActivity.getHandler().postDelayed(new Runnable() {
 							public void run() {
 								mediaLoader.loadMedia(mediaLoader.getUrl(), msg, null);
 							}
-						}, 500); // 0.5s后重试
+						}, 1000); // 1s后重试
+					} else {
+						chatMessage.setBadUrl(true);
 					}
 				}
 			});
@@ -646,7 +635,7 @@ public class ChattingListAdapter extends BaseAdapter {
 	private void loadVideo(ViewHolder holder, V5VideoMessage videoMessage) {
 		holder.mVideoBgIv.setImageBitmap(videoMessage.getCoverFrame());
 		
-		// 设置宽高
+		// 控制宽高
 		int width = videoMessage.getCoverFrame().getWidth();
 		int height = videoMessage.getCoverFrame().getHeight();
 		float density = mActivity.getResources().getDisplayMetrics().density;

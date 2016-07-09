@@ -25,14 +25,14 @@ import com.v5kf.mcss.qao.request.MessageRequest;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.MediaLoader;
 
-public class MessageSendHelper {
-	private static final String TAG = "MessageSendHelper";
+public class MessageSendHelperMd2x {
+	private static final String TAG = "MessageSendHelperMd2x";
 	private Context mContext;
 	private Handler mHandler;
 	private CustomerBean mCustomer;
 	private CustomApplication mApplication;
 	
-	public MessageSendHelper(CustomerBean cstm, Context context, Handler handler) {
+	public MessageSendHelperMd2x(CustomerBean cstm, Context context, Handler handler) {
 		this.mContext = context;
 		this.mHandler = handler;
 		this.mCustomer = cstm;
@@ -62,39 +62,10 @@ public class MessageSendHelper {
 		// 判断是否本地图片
 		if (imageMessage.getFilePath() != null) {
 			if (imageMessage.getPic_url() == null) { // 上传图片前
-				String auth = mApplication.getWorkerSp().readAuthorization();
-				if (null != auth && !auth.isEmpty()) {
-					String url = Config.APP_PIC_AUTH_URL + auth;
-					if (mCustomer.getIface() == QAODefine.CSTM_IF_WXQY) {
-						url = String.format(Config.APP_WXQY_PIC_AUTH_URL_FMT, auth, mCustomer.getVirtual().getAccount_id());
-					} else if (mCustomer.getIface() == QAODefine.CSTM_IF_WEIXIN) {
-						url = String.format(Config.APP_WECHAT_PIC_AUTH_URL_FMT, auth, mCustomer.getVirtual().getAccount_id());
-					}
-					getMediaUploadService(url, auth, imageMessage, callback);
-				} else {
-					if (callback != null) {
-						callback.onFailure(imageMessage, V5ExceptionStatus.ExceptionWSAuthFailed, "Authorization null, can't upload image");
-					}
-				}
+				postMedia(imageMessage, mCustomer.getDefaultAccountId(), mCustomer.getVisitor_id(), mCustomer.getIfaceString(), imageMessage.getFilePath(), callback);
 			} else { // 上传图片后
-				if (mCustomer.getIface() == QAODefine.CSTM_IF_WXQY ||
-						mCustomer.getIface() == QAODefine.CSTM_IF_WEIXIN) {
-					if (imageMessage.getMedia_id() == null) {
-						// 定时获取media_id
-						mHandler.postDelayed(new Runnable() {
-							@Override
-							public void run() {
-								getMediaIdOfMessage(imageMessage, callback, 0);
-							}
-						}, Config.GET_MEDIA_ID_DELAY);
-					} else {
-						// 发送消息请求
-						sendMessageRequest(imageMessage, callback);
-					}
-				} else {
-					// 发送消息请求
-					sendMessageRequest(imageMessage, callback);
-				}
+				// 发送消息请求
+				sendMessageRequest(imageMessage, callback);
 			}
 		} else if (imageMessage.getPic_url() != null) {
 			// 发送消息请求
@@ -112,43 +83,11 @@ public class MessageSendHelper {
 		// 判断是否本地语音
 		if (voiceMessage.getFilePath() != null) {
 			if (!voiceMessage.isUpload() || voiceMessage.getUrl() == null) { // 上传语音前
-				String auth = mApplication.getWorkerSp().readAuthorization();
-				if (null != auth && !auth.isEmpty()) {
-					String url = String.format(Config.APP_MEDIA_AUTH_URL_FMT, "voice", auth, "amr");
-					if (mCustomer.getIface() == QAODefine.CSTM_IF_WXQY) {
-						url = String.format(Config.APP_WXQY_MEDIA_AUTH_URL_FMT, "voice", auth, "amr", mCustomer.getVirtual().getAccount_id());
-					} else if (mCustomer.getIface() == QAODefine.CSTM_IF_WEIXIN) {
-						url = String.format(Config.APP_WECHAT_MEDIA_AUTH_URL_FMT, "voice", auth, "amr", mCustomer.getVirtual().getAccount_id());
-					}
-					Logger.i(TAG, "sendVoiceMessage -> getMediaUploadService " + voiceMessage.getState());
-					getMediaUploadService(url, auth, voiceMessage, callback);
-				} else {
-					if (callback != null) {
-						callback.onFailure(voiceMessage, V5ExceptionStatus.ExceptionWSAuthFailed, "Authorization null, can't upload voice");
-					}
-				}
+				postMedia(voiceMessage, mCustomer.getDefaultAccountId(), mCustomer.getVisitor_id(), mCustomer.getIfaceString(), voiceMessage.getFilePath(), callback);
 			} else { // 上传语音后
-				if (mCustomer.getIface() == QAODefine.CSTM_IF_WXQY ||
-						mCustomer.getIface() == QAODefine.CSTM_IF_WEIXIN) {
-					if (voiceMessage.getMedia_id() == null) {
-						// 定时获取media_id
-						mHandler.postDelayed(new Runnable() {
-							@Override
-							public void run() {
-								Logger.i(TAG, "sendVoiceMessage -> getMediaIdOfMessage " + voiceMessage.getState());
-								getMediaIdOfMessage(voiceMessage, callback, 0);
-							}
-						}, Config.GET_MEDIA_ID_DELAY);
-					} else {
-						// 发送消息请求
-						Logger.i(TAG, "sendVoiceMessage -> sendMessage " + voiceMessage.getState());
-						sendMessageRequest(voiceMessage, callback);
-					}
-				} else {
-					// 发送消息请求
-					Logger.i(TAG, "sendVoiceMessage -> sendMessage " + voiceMessage.getState());
-					sendMessageRequest(voiceMessage, callback);
-				}
+				// 发送消息请求
+				Logger.i(TAG, "sendVoiceMessage -> sendMessage " + voiceMessage.getState());
+				sendMessageRequest(voiceMessage, callback);
 			}
 		} else if (voiceMessage.getUrl() != null) {
 			// 发送消息请求
@@ -159,17 +98,6 @@ public class MessageSendHelper {
 			}
 		}
 	}
-	/**
-	 * 上传媒体资源（一步完成）
-	 * /$account_id/$visitor_id/[web|app|wechat|wxqy|yixin]/$filename
-	 * @param message
-	 * @param file
-	 */
-	private void postMediaAndGetUrlMediaId(V5Message message, String a_id, String v_id, String ifaceStr, String fileName) {
-		String url = String.format(Config.APP_MEDIA_POST_FMT, a_id, v_id, ifaceStr, fileName);
-		
-	}
-	
 
 	/**
 	 * Message消息请求发送
@@ -202,7 +130,82 @@ public class MessageSendHelper {
 		}
 	}
 	
-	// TODO start
+	/**
+	 * 上传媒体资源（一步完成）
+	 * /$account_id/$visitor_id/[web|app|wechat|wxqy|yixin]/$filename
+	 * @param message
+	 * @param file
+	 */
+	private void postMedia(final V5Message message, String a_id, String v_id, String ifaceStr, String filePath, final MessageSendCallback handler) {
+		final File file = new File(filePath);
+		String url = String.format(Config.APP_MEDIA_POST_FMT, a_id, v_id, ifaceStr, file.getName());
+		String auth = mApplication.getWorkerSp().readAuthorization();
+		Logger.d(TAG, "[postMedia] url:" + url);
+		V5HttpUtil.postMedia(message, file, url, auth, new HttpResponseHandler(mApplication) {
+			
+			@Override
+			public void onSuccess(int statusCode, String responseString) {
+				// 解析地址
+				Logger.i(TAG, "[postMedia] success responseString:" + responseString);
+				if (statusCode == 200) {
+					try {
+						JSONObject data = new JSONObject(responseString);
+						String url = data.optString("url");
+						String media_id = data.optString("media_id");
+						if (!TextUtils.isEmpty(url)) {
+							if (message.getMessage_type() == QAODefine.MSG_TYPE_IMAGE) {
+								V5ImageMessage imageMessage = (V5ImageMessage)message;
+								imageMessage.setUpload(true);
+								imageMessage.setPic_url(url); // 设置图片pic_url
+								if (!TextUtils.isEmpty(media_id)) {
+									imageMessage.setMedia_id(media_id);
+								}
+								sendImageMessage(imageMessage, handler);
+							} else {
+								if (message.getMessage_type() == QAODefine.MSG_TYPE_VOICE) {
+									V5VoiceMessage voiceMessage = (V5VoiceMessage)message;
+									if (!TextUtils.isEmpty(media_id)) {
+										voiceMessage.setMedia_id(media_id);
+									}
+									voiceMessage.setUrl(url);
+									voiceMessage.setUpload(true);
+									// 删除临时语音文件，重命名
+									MediaLoader.copyPathToFileCche(getContext(), file, url);
+									sendVoiceMessage(voiceMessage, handler);
+								} else {
+									// 其他文件类型
+									sendFailedHandle(
+											handler, 
+											message, 
+											V5ExceptionStatus.ExceptionMessageSendFailed, 
+											"Media upload error: unsupport type");
+								}
+							}
+							return;
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+				sendFailedHandle(
+						handler, 
+						message, 
+						V5ExceptionStatus.ExceptionMessageSendFailed, 
+						"Media upload error: response error");
+			}
+			
+			@Override
+			public void onFailure(int statusCode, String responseString) {
+				Logger.e(TAG, "[postMedia] failure(" + statusCode + 
+						") responseString:" + responseString);
+				sendFailedHandle(
+						handler, 
+						message, 
+						V5ExceptionStatus.ExceptionMessageSendFailed, 
+						responseString);
+			}
+		});
+	}
 	
 	/**
      * 获得图片上传地址和签名

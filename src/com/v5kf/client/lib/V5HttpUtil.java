@@ -72,6 +72,12 @@ public class V5HttpUtil {
 		}).start();
 	}
 
+	/**
+	 * @deprecated
+	 * @param url
+	 * @param auth
+	 * @param httpResponseHandler
+	 */
 	public static void getPicService(final String url, final String auth,
 			final HttpResponseHandler httpResponseHandler) {
 		new Thread(new Runnable() {
@@ -87,6 +93,14 @@ public class V5HttpUtil {
 		}).start();
 	}
 
+	/**
+	 * @deprecated
+	 * @param url
+	 * @param filePath
+	 * @param authorization
+	 * @param magicContext
+	 * @param httpResponseHandler
+	 */
 	public static void postLocalImage(final String url, final String filePath,
 			final String authorization, 
 			final String magicContext,
@@ -187,6 +201,15 @@ public class V5HttpUtil {
 		}).start();
 	}
 
+	/**
+	 * @deprecated
+	 * @param message
+	 * @param filePath
+	 * @param url
+	 * @param authorization
+	 * @param magicContext
+	 * @param httpResponseHandler
+	 */
 	public static void postLocalMedia(final V5Message message, final String filePath, final String url,
 			final String authorization, 
 			final String magicContext,
@@ -255,6 +278,113 @@ public class V5HttpUtil {
 					}
 				} else {
 					b = V5Util.compressImageToByteArray(V5Util.getCompressBitmap(filePath), MAX_PIC_SIZE);
+					Logger.d(TAG, "CompressSize>>>：" + b.length);
+				}
+				if (b != null) {
+					Logger.i(TAG, "Media content length>>>：" + b.length);
+				} else {
+					Logger.e(TAG, "Media data is null !!!");
+					return;
+				}
+				myData = byteAppend(myData, b); // image content
+				
+				// 添加
+				String sha = null;
+//				try { // 取消SHA添加
+//					md5 = V5Util.sha(b);
+//				} catch (NoSuchAlgorithmException e) {
+//					e.printStackTrace();
+//				}
+				if ((sha == null || sha.isEmpty())) {
+					myData = byteAppend(myData, lastBoundary.getBytes()); // last boundary
+				} 
+//				else {
+//					if (sha != null && !sha.isEmpty()) {
+//						myData = byteAppend(myData, commonBoundary.getBytes());// 间隔 boundary
+//						// 添加MD5
+//						StringBuffer md5Content = new StringBuffer();
+//						md5Content.append("Content-Disposition: form-data; name=\"sha\"" + LINE_END + LINE_END);
+//						md5Content.append(sha);
+//						myData = byteAppend(myData, md5Content.toString().getBytes());
+//					}
+//					myData = byteAppend(myData, lastBoundary.getBytes()); // last boundary
+//				}
+				
+//                DataInputStream in = new DataInputStream(new FileInputStream(file));  
+//                int bytes = 0;  
+//                byte[] myData = new byte[1024];  
+//                while ((bytes = in.read(bufferOut)) != -1) {  
+//                    out.write(bufferOut, 0, bytes);  
+//                }
+				
+				httpSync(url, HttpMethod.POST, myData, headers, httpResponseHandler);
+			}
+		}).start();
+	}
+
+	public static void postMedia(final V5Message message, final File file, final String url,
+			final String authorization, 
+			final HttpResponseHandler httpResponseHandler) {
+		Logger.i(TAG, "[postMedia] url:" + url + " file:" + file.getName());
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Logger.i(TAG, "[postMedia] url:" + url + " file:" + file.getName());
+				
+				String BOUNDARY = "----" + UUID.randomUUID().toString(); // 边界标识 随机生成
+				final String PREFIX = "--", LINE_END = "\r\n";
+				final String CONTENT_TYPE = "multipart/form-data";
+				
+				Map<String, String> headers = new HashMap<String, String>();
+				headers.put("Authorization", authorization);
+				headers.put("Connection", "keep-alive");
+				headers.put("Origin", "http://chat.v5kf.com");
+//				headers.put("Content-Type", "multipart/form-data");
+//				headers.put("Host", "web.file.myqcloud.com");
+				headers.put("Content-Type", CONTENT_TYPE + "; boundary="
+						+ BOUNDARY);
+				
+				String firstBoundary = PREFIX + BOUNDARY + LINE_END;
+				String commonBoundary = LINE_END + firstBoundary;
+				String lastBoundary = LINE_END + PREFIX + BOUNDARY + PREFIX + LINE_END;
+				
+				/* 添加op->upload */
+				byte[] myData = firstBoundary.getBytes(); // first boundary
+				StringBuffer fileContent = new StringBuffer();
+				String contentType = "image/jpeg";
+				if (message.getMessage_type() == QAODefine.MSG_TYPE_IMAGE) {
+					contentType = "image/jpeg";
+				} else if (message.getMessage_type() == QAODefine.MSG_TYPE_VOICE) {
+					contentType = "audio/amr";
+				} else {
+					// TODO
+				}
+				fileContent.append("Content-Disposition: form-data; name=\"FileContent\"; filename=\"" 
+						+ file.getName() + "\"" + LINE_END);
+				fileContent.append("Content-Type: " + contentType + LINE_END);
+				fileContent.append(LINE_END); 
+				myData = byteAppend(myData, fileContent.toString().getBytes()); // Content-Disposition
+				// 读取文件转为字节流
+				Logger.d(TAG, "FileSize>>>>>>>:" + V5Util.getFileSize(file) + " of:" + file.getAbsolutePath());
+				byte[] b = null;
+				if (V5Util.getFileSize(file) / 1000 < MIN_PIC_SIZE_UNCOMPRESS) {
+					try {
+						FileInputStream stream = new FileInputStream(file);
+						ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+						b = new byte[1024];
+						int n;
+						while ((n = stream.read(b)) != -1)
+							out.write(b, 0, n);
+						stream.close();
+						out.close();
+						b = out.toByteArray();
+						Logger.d(TAG, "SourceFileSize>>>:" + b.length);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					b = V5Util.compressImageToByteArray(V5Util.getCompressBitmap(file.getAbsolutePath()), MAX_PIC_SIZE);
 					Logger.d(TAG, "CompressSize>>>：" + b.length);
 				}
 				if (b != null) {

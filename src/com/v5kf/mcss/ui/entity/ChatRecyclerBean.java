@@ -22,6 +22,9 @@ public class ChatRecyclerBean {
 	
 	// 是否被选中(机器人推荐列表相关)
 	private boolean isSelected;
+	
+	// 媒体资源访问错误
+	private boolean badUrl;
 		
 	public ChatRecyclerBean(V5Message msg) {
 		mMessage = msg;
@@ -116,6 +119,14 @@ public class ChatRecyclerBean {
 
 	public void setPlaying(boolean playing) {
 		this.isPlaying = playing;
+	}
+
+	public boolean isBadUrl() {
+		return badUrl;
+	}
+
+	public void setBadUrl(boolean badUrl) {
+		this.badUrl = badUrl;
 	}
 
 }

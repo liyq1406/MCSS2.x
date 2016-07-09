@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import com.v5kf.client.lib.V5Util;
+import com.v5kf.mcss.config.Config;
 
 public class V5VideoMessage extends V5Message {
 	
@@ -113,6 +114,19 @@ public class V5VideoMessage extends V5Message {
 
 	public String getUrl() {
 		return url;
+	}
+	
+	public String getDefaultMediaUrl() {
+    	if (TextUtils.isEmpty(url)) {
+    		if (TextUtils.isEmpty(getMessage_id()) && getFilePath() != null) {
+    			return getFilePath();
+    		} else {
+    			url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, getMessage_id());
+    			return url;
+    		}
+    	} else {
+    		return url;
+    	}
 	}
 
 	public void setUrl(String url) {

@@ -18,12 +18,14 @@ public class Config {
 	public static final boolean DEBUG = false; // 开发过程DEBUG模式，连接debug服务器
 	public static final boolean USE_DB = false; // 是否使用数据库保存坐席
 	public static final int VERSION = 3;
+	public static boolean REQ_HTTPS = false; // 加密请求
+	public static boolean WEB_HTTPS = false; // 网页使用https
 	public static final boolean ENABLE_WORKER_LOG = true;
 	public static final int LOG_LEVEL = Logger.VERBOS;
 	public static final boolean USE_THUMBNAIL = true; // 使用缩略图
 	public static final boolean ENABLE_PLAY_VEDIO_IN_LIST = false; // 是否允许对话列表播放视频
 	public static final boolean SHOW_VID_OID = true; // 是否显示客户信息的v_id、o_id
-	public static final String V5KF_COM = "http://www.v5kf.com/public/website/page.html?sid=10000&id=14146&&first=1&ref=link&uid=&share=wxFriend";
+	public static final String V5KF_COM = (WEB_HTTPS ? "https" : "http") + "://www.v5kf.com/public/website/page.html?sid=10000&id=14146&&first=1&ref=link&uid=&share=wxFriend";
 	
 	/** 
 	 * App Status 应用状态
@@ -94,16 +96,16 @@ public class Config {
 	public static final int SYS_MONTH = 9;
 	public static final int SYS_DAY = 1;
 	
-	public static String WS_PROTOCOL = "wss";
+	public static String WS_PROTOCOL = REQ_HTTPS ? "wss" : "ws";
 	public static String WS_HOST = "chat.v5kf.com" + (DEBUG ? "/debug" : ""); // /debug
 	public static final String AUTH_KEY = "1357924680";	// 统一密钥串
 //	public static final String UPDATE_URL_XML = "http://chat.v5kf.com/app/download/version.xml"; // 检查更新配置文件地址
 //	public static final String UPDATE_URL = "http://chat.v5kf.com/app/download/"; // 检查更新地址
 	
 	public static final String LOGIN_URL = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wkauth?"; // 登录账号验证url(新版)
-	public static final String URL_FEED_BACK = "http://www.v5kf.com/public/vdata/collect.html?sid=10000&fid=11742&ref=android"; // 用户反馈页面地址
-	public static final String URL_ABOUT = "http://www.v5kf.com/"; // 关于页面地址
-	public static final String URL_SITEINFO_FMT = "http://www.v5kf.com/public/api_dkf/get_chat_siteinfo?sid=";
+	public static final String URL_FEED_BACK = (WEB_HTTPS ? "https" : "http") + "://www.v5kf.com/public/vdata/collect.html?sid=10000&fid=11742&ref=android"; // 用户反馈页面地址
+	public static final String URL_ABOUT = (WEB_HTTPS ? "https" : "http") + "://www.v5kf.com/"; // 关于页面地址
+	public static final String URL_SITEINFO_FMT = (REQ_HTTPS ? "https" : "http") + "://www.v5kf.com/public/api_dkf/get_chat_siteinfo?sid=";
 	public static final String UPLOAD_TXT_URL = ""; // 崩溃日志文件上传url(已由友盟替代)
 	
 	/* 每次 media_id 延迟时间和重试最大次数 */
@@ -111,33 +113,48 @@ public class Config {
 	public static final int GET_MEDIA_ID_TIMES = 10; // 10次
 	
 	/* 万象优图认证和图片上传地址 */
-	public static final String APP_PIC_AUTH_URL = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?type=image&suffix=jpeg&auth=";
-	public static final String APP_WECHAT_PIC_AUTH_URL_FMT = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?exchange=wechat&type=image&suffix=jpeg&auth=%s&account=%s"; // 获取微信图片上传url
-	public static final String APP_WXQY_PIC_AUTH_URL_FMT = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?exchange=wxqy&type=image&suffix=jpeg&auth=%s&account=%s"; // 获取微信企业号图片上传url
-	public static final String APP_GET_MEDIA_ID_URL_FMT = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/mirror/%s/%s/media_id"; // 获取media_id(参数：/site_id/fileid)
+	@Deprecated
+	public static final String APP_PIC_AUTH_URL = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?type=image&suffix=jpeg&auth=";
+	@Deprecated
+	public static final String APP_WECHAT_PIC_AUTH_URL_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?exchange=wechat&type=image&suffix=jpeg&auth=%s&account=%s"; // 获取微信图片上传url
+	@Deprecated
+	public static final String APP_WXQY_PIC_AUTH_URL_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?exchange=wxqy&type=image&suffix=jpeg&auth=%s&account=%s"; // 获取微信企业号图片上传url
+	@Deprecated
+	public static final String APP_GET_MEDIA_ID_URL_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/mirror/%s/%s/media_id"; // 获取media_id(参数：/site_id/fileid)
 	/* 图片缩略图：1.来自微信采用chat.v5kf.com的图片镜像；2.来自万象优图采用url + "/thumbnail" */
-	public static final String APP_PIC_V5_THUMBNAIL_FMT = "http://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/resource/%s/%s?w=350&h=350&q=50"; // 图片质量0-100
-	public static final String APP_RESOURCE_V5_FMT = "http://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/resource/%s/%s";
+//	public static final String APP_PIC_V5_THUMBNAIL_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/resource/%s/%s?w=350&h=350&q=50"; // 图片质量0-100
+	public static final String APP_PIC_V5_THUMBNAIL_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/resource/%s/%s/thumbnail"; // 图片质量0-100
+	
 	/* 腾讯对象服务-一般interface上传 */
-	public static final String APP_MEDIA_AUTH_URL_FMT = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?type=%s&auth=%s&suffix=%s";
+	@Deprecated
+	public static final String APP_MEDIA_AUTH_URL_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?type=%s&auth=%s&suffix=%s";
 	/* 腾讯对象服务-微信interface上传 */
-	public static final String APP_WXQY_MEDIA_AUTH_URL_FMT = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?exchange=wxqy&type=%s&auth=%s&suffix=%s&account=%s";
-	public static final String APP_WECHAT_MEDIA_AUTH_URL_FMT = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?exchange=wechat&type=%s&auth=%s&suffix=%s&account=%s";
-	public static final String APP_MEDIA_UPLOAD_CB = "https://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/object/uploadcb";
+	@Deprecated
+	public static final String APP_WXQY_MEDIA_AUTH_URL_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?exchange=wxqy&type=%s&auth=%s&suffix=%s&account=%s";
+	@Deprecated
+	public static final String APP_WECHAT_MEDIA_AUTH_URL_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/worker?exchange=wechat&type=%s&auth=%s&suffix=%s&account=%s";
+	@Deprecated
+	public static final String APP_MEDIA_UPLOAD_CB = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/wxyt/object/uploadcb";
+	
+	/* 媒体文件上传统一接口 */
+	public static final String APP_MEDIA_POST_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/upload/%s/%s/%s/%s"; // /$account_id/$visitor_id/[web|app|wechat|wxqy|yixin]/$filename
+	/* 媒体文件下载统一接口 */
+	public static final String APP_RESOURCE_V5_FMT = (REQ_HTTPS ? "https" : "http") + "://chat.v5kf.com/" + (DEBUG ? "debug" : "public") + "/resource/%s/%s"; // site_id/message_id
 	
 	/* v5kf站点相关数据获取 */
-	public static final String HOT_QUES_URL = "http://www.v5kf.com/public/api_dkf/get_hot_ques?sid="; // 常见问答url
+	public static final String HOT_QUES_URL = (REQ_HTTPS ? "https" : "http") + "://www.v5kf.com/public/api_dkf/get_hot_ques?sid="; // 常见问答url
 	/* 素材库资源 */
-	public static final String GET_IMAGE_URL = "http://www.v5kf.com/public/api_dkf/get_image_list?sid=%s&page=%d&list=%d";
-	public static final String GET_NEWS_URL = "http://www.v5kf.com/public/api_dkf/get_news_list?sid=%s&page=%d&list=%d";
-	public static final String GET_MUSIC_URL = "http://www.v5kf.com/public/api_dkf/get_music_list?sid=%s&page=%d&list=%d";
+	public static final String GET_IMAGE_URL = (REQ_HTTPS ? "https" : "http") + "://www.v5kf.com/public/api_dkf/get_image_list?sid=%s&page=%d&list=%d";
+	public static final String GET_NEWS_URL = (REQ_HTTPS ? "https" : "http") + "://www.v5kf.com/public/api_dkf/get_news_list?sid=%s&page=%d&list=%d";
+	public static final String GET_MUSIC_URL = (REQ_HTTPS ? "https" : "http") + "://www.v5kf.com/public/api_dkf/get_music_list?sid=%s&page=%d&list=%d";
 	
 	/* 腾讯地图web service API */
-	public static final String MAP_PIC_API_FORMAT = "http://apis.map.qq.com/ws/staticmap/v2/?center=%f,%f&zoom=15&size=300*200&maptype=roadmap&markers=size:small|color:0x207CC4|label:V|%f,%f&key=4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG";
-	public static final String MAP_WS_API_FORMAT = "http://apis.map.qq.com/ws/geocoder/v1/?location=%f,%f&key=4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG&get_poi=1";
+	public static final String MAP_PIC_API_FORMAT = (REQ_HTTPS ? "https" : "http") + "://apis.map.qq.com/ws/staticmap/v2/?center=%f,%f&zoom=15&size=300*200&maptype=roadmap&markers=size:small|color:0x207CC4|label:V|%f,%f&key=4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG";
+	public static final String MAP_WS_API_FORMAT = (REQ_HTTPS ? "https" : "http") + "://apis.map.qq.com/ws/geocoder/v1/?location=%f,%f&key=4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG&get_poi=1";
 	
 	public static String USER_ID = "10000_abc";
 	public static String SITE_ID = "";
+	public static String AUTH = "";
 	
 	
 	/* 连接超时时间 */

@@ -84,6 +84,7 @@ public class V5ImageMessage extends V5Message {
 	}
 	
 	public String getThumbnailPicUrl() {
+//		return String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, getMessage_id());
 		return UITools.getThumbnailUrlOfImage(this, Config.SITE_ID);
 	}
 

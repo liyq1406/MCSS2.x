@@ -651,6 +651,14 @@ public class CustomerBean extends BaseBean implements Serializable {
 	public void setLast_time(long last_time) {
 		this.last_time = last_time;
 	}
+
+	public String getDefaultAccountId() {
+		if (virtual != null) {
+			return virtual.getAccount_id();
+		} else {
+			return CustomApplication.getAppInfoInstance().getUser().getAccount_id();
+		}
+	}
 	
 //	public void parseCustomerJoinIn(JSONObject json) throws NumberFormatException, JSONException {
 //		if (json.has(QAODefine.C_ID)) {				// get_customer_info

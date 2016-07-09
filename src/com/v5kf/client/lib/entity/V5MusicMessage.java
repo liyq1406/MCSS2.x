@@ -3,7 +3,10 @@ package com.v5kf.client.lib.entity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
+
 import com.v5kf.client.lib.V5Util;
+import com.v5kf.mcss.config.Config;
 
 public class V5MusicMessage extends V5Message {
 	
@@ -65,6 +68,19 @@ public class V5MusicMessage extends V5Message {
 
 	public String getMusic_url() {
 		return music_url;
+	}
+	
+	public String getDefaultMediaUrl() {
+    	if (TextUtils.isEmpty(music_url)) {
+    		if (TextUtils.isEmpty(getMessage_id()) && getFilePath() != null) {
+    			return getFilePath();
+    		} else {
+    			music_url = String.format(Config.APP_RESOURCE_V5_FMT, Config.SITE_ID, getMessage_id());
+    			return music_url;
+    		}
+    	} else {
+    		return music_url;
+    	}
 	}
 
 	public void setMusic_url(String music_url) {

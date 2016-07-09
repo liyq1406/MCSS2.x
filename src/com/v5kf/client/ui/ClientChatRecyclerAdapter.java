@@ -326,12 +326,12 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 				}
 				
 				// 加载语音
-	        	String url = voiceMessage.getUrl();
-	        	if (TextUtils.isEmpty(url)) {
-	        		if (voiceMessage.getFilePath() != null) {
-	        			url = voiceMessage.getFilePath();
-	        		}
-	        	}
+	        	String url = voiceMessage.getDefaultMediaUrl();
+//	        	if (TextUtils.isEmpty(url)) {
+//	        		if (voiceMessage.getFilePath() != null) {
+//	        			url = voiceMessage.getFilePath();
+//	        		}
+//	        	}
 	        	Logger.d(TAG, "Voice url:" + url + " sendState:" + voiceMessage.getState());
 	        	MediaLoader mediaLoader = new MediaLoader(mContext, holder, new MediaLoaderListener() {
 					
