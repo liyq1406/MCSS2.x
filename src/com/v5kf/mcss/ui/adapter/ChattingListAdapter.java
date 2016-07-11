@@ -7,6 +7,7 @@ import org.json.JSONException;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -96,6 +97,7 @@ public class ChattingListAdapter extends BaseAdapter {
 	public void notifyDataSetChanged() {
 		// TODO Auto-generated method stub
 		super.notifyDataSetChanged();
+		Logger.i(TAG, "[notifyChatDataSetChange]");
 	}
 
 	public interface ChatMessagesListener {
@@ -361,24 +363,35 @@ public class ChattingListAdapter extends BaseAdapter {
 		
 		case TYPE_IMG_R:
 		case TYPE_IMG_L: { // 图片
+			if (chatMessage.isBadUrl()) {
+				Logger.d(TAG, "--- URL异常 ---");
+				break;
+			}
 			ImageLoader mapImgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading, new ImageLoaderListener() {
 				@Override
-				public void onSuccess(String url, ImageView imageView) {
+				public void onSuccess(String url, ImageView imageView, Bitmap bmp) {
+					Logger.d(TAG, "list load Image onSuccess");
+					loadImage(imageView, bmp);
 				}
 				
 				@Override
 				public void onFailure(final ImageLoader imageLoader, final String url, final ImageView imageView) {
-					if (url.contains("chat.v5kf.com/") && imageLoader.getmTryTimes() < 3) { // 最多重试5次
+					Logger.d(TAG, "list load Image onFailure");
+					if (url.contains("chat.v5kf.com/") && imageLoader.getmTryTimes() < 3) { // 最多重试3次
 						mActivity.getHandler().postDelayed(new Runnable() {
 							public void run() {
+								Logger.d(TAG, "list load Image retry");
 								imageLoader.DisplayImage(url, imageView);
 							}
 						}, 1000); // 1.0s后重试
+					} else {
+						chatMessage.setBadUrl(true);
 					}
 				}
 			});
 			String urlPath = ((V5ImageMessage)chatMessage.getMessage()).getThumbnailPicUrl();
         	mapImgLoader.DisplayImage(urlPath, holder.mMapIv);
+        	Logger.d(TAG, "list load Image --- " + urlPath);
 		}
 		break;
 		
@@ -639,20 +652,49 @@ public class ChattingListAdapter extends BaseAdapter {
 		int width = videoMessage.getCoverFrame().getWidth();
 		int height = videoMessage.getCoverFrame().getHeight();
 		float density = mActivity.getResources().getDisplayMetrics().density;
-		float maxWH = MediaLoader.VIDEO_COVER_MAX_WH * density + 0.5f;
-		float minWH = MediaLoader.VIDEO_COVER_MIN_WH * density + 0.5f;
+		float maxWH = MediaLoader.VIDEO_MAX_WH * density + 0.5f;
+		float minWH = MediaLoader.VIDEO_MIN_WH * density + 0.5f;
+		float scale = 1;
 		if (width > maxWH && height > maxWH) {
-			float scale = Math.max(maxWH / width, maxWH / height);
+			scale = Math.max(maxWH / width, maxWH / height);
 			width = (int)scale * width;
 			height = (int)scale * height;
 		} else if (width < minWH && height < minWH) {
-			float scale = Math.max(minWH / width, minWH / height);
+			scale = Math.max(minWH / width, minWH / height);
 			width = (int)scale * width;
 			height = (int)scale * height;
 		}
 		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
 		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
-		Logger.i(TAG, "width:" + width + " height:" + height);
+		Logger.i(TAG, scale + " ratio width:" + width + " height:" + height);
+	}
+
+	private void loadImage(ImageView iv, Bitmap bitmap) {
+		//iv.setImageBitmap(bitmap);
+		
+		// 控制宽高
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+//		float density = mActivity.getResources().getDisplayMetrics().density;
+//		float maxWH = ImageLoader.IMAGE_MAX_WH * density + 0.5f;
+//		float minWH = ImageLoader.IMAGE_MIN_WH * density + 0.5f;
+//		float scale = 1;
+//		if (width > maxWH && height > maxWH) {
+//			scale = Math.max(maxWH / width, maxWH / height);
+//			width = (int)scale * width;
+//			height = (int)scale * height;
+//		} else if (width < minWH && height < minWH) {
+//			scale = Math.max(minWH / width, minWH / height);
+//			width = (int)scale * width;
+//			height = (int)scale * height;
+//		}
+		Logger.i(TAG, "before ratio width:" + width + " height:" + height);
+		float scale = ImageLoader.getScale(mActivity, width, height);
+		ViewGroup.LayoutParams params = iv.getLayoutParams();
+		params.width = (int) (width*scale);
+		params.height = (int) (height*scale);
+		iv.setLayoutParams(params);
+		Logger.i(TAG, scale + " ratio width:" + params.width + " height:" + params.height);
 	}
 
 	private void sendStateChange(ViewHolder holder, final ChatRecyclerBean chatMessage) {

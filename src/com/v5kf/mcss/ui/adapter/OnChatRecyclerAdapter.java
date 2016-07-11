@@ -7,6 +7,7 @@ import org.json.JSONException;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -358,7 +360,8 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 				} 
 				ImageLoader mapImgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading, new ImageLoaderListener() {
 					@Override
-					public void onSuccess(String url, ImageView imageView) {
+					public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
+						loadImage(imageView, bmp);
 					}
 					
 					@Override
@@ -639,24 +642,57 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
     private void loadVideo(ChatItemViewHolder holder, V5VideoMessage videoMessage) {
 		holder.mVideoBgIv.setImageBitmap(videoMessage.getCoverFrame());
 		
-//		// 设置宽高
-//		int width = videoMessage.getCoverFrame().getWidth();
-//		int height = videoMessage.getCoverFrame().getHeight();
+		// 设置宽高
+		int width = videoMessage.getCoverFrame().getWidth();
+		int height = videoMessage.getCoverFrame().getHeight();
+		float density = mActivity.getResources().getDisplayMetrics().density;
+		float maxWH = MediaLoader.VIDEO_MAX_WH * density + 0.5f;
+		float minWH = MediaLoader.VIDEO_MIN_WH * density + 0.5f;
+		float scale = 1.0f;
+		if (width > maxWH && height > maxWH) {
+			scale = Math.max(maxWH / width, maxWH / height);
+			width = (int)scale * width;
+			height = (int)scale * height;
+		} else if (width < minWH && height < minWH) {
+			scale = Math.max(minWH / width, minWH / height);
+			width = (int)scale * width;
+			height = (int)scale * height;
+		}
+		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+//		holder.mVideoControlIv.requestLayout();
+		Logger.i(TAG, scale + " ratio width:" + width + " height:" + height);
+	}
+    
+    private void loadImage(ImageView iv, Bitmap bitmap) {
+		//iv.setImageBitmap(bitmap);
+		
+		// 控制宽高
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
 //		float density = mActivity.getResources().getDisplayMetrics().density;
-//		float maxWH = MediaLoader.VIDEO_COVER_MAX_WH * density + 0.5f;
-//		float minWH = MediaLoader.VIDEO_COVER_MIN_WH * density + 0.5f;
+//		float maxWH = ImageLoader.IMAGE_MAX_WH * density + 0.5f;
+//		float minWH = ImageLoader.IMAGE_MIN_WH * density + 0.5f;
+//		float scale = 1;
 //		if (width > maxWH && height > maxWH) {
-//			float scale = Math.max(maxWH / width, maxWH / height);
+//			scale = Math.max(maxWH / width, maxWH / height);
 //			width = (int)scale * width;
 //			height = (int)scale * height;
 //		} else if (width < minWH && height < minWH) {
-//			float scale = Math.max(minWH / width, minWH / height);
+//			scale = Math.max(minWH / width, minWH / height);
 //			width = (int)scale * width;
 //			height = (int)scale * height;
 //		}
-//		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
-//		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
-//		holder.mVideoControlIv.requestLayout();
+		Logger.i(TAG, "before ratio width:" + width + " height:" + height);
+		float scale = ImageLoader.getScale(mActivity, width, height);
+		ViewGroup.LayoutParams params = iv.getLayoutParams();
+		params.width = (int) (width*scale);
+		params.height = (int) (height*scale);
+//		ViewGroup.LayoutParams params = iv.getLayoutParams();
+//		params.width = width;
+//		params.height = height;
+		iv.setLayoutParams(params);
+		Logger.i(TAG, scale + " ratio width:" + params.width + " height:" + params.height);
 	}
     
     private void sendStateChange(ChatItemViewHolder holder, final ChatRecyclerBean chatMessage) {

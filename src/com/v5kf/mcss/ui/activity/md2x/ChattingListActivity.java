@@ -191,7 +191,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
         findView();
         initView();
         /* 更新数据 */
-        updateList(false);
+        mHandler.sendEmptyMessageDelayed(HDL_WHAT_UPDATE_UI, 50);
+//        updateScrollList(false);
 		
 //		/* 设置监听布局变化(虚拟键盘弹出) */
 //		listenerLayoutChange();
@@ -315,7 +316,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		ImageLoader imageLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm, new ImageLoader.ImageLoaderListener() {
 			
 			@Override
-			public void onSuccess(String url, ImageView imageView) {
+			public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 				Logger.d(TAG, "ImageLoaderListener.onSuccess");
 				// [新增]离开状态提示
 		    	if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
@@ -549,7 +550,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
                     	}
                     	Logger.d(TAG, "542 OnKeyBoardStateChange scrollToBottom:" + (mDatas.size() - 1));
                 		//listScrollToBottom(false);
-                    	updateList(true);
+                    	listScrollToBottom(true);
                     }
                 });
             }
@@ -680,12 +681,12 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	 * 加载列表，滑动到底部
 	 * @param smooth 是否动态滑动
 	 */
-	private void updateList(boolean smooth) {
-		if (smooth) {
-			mHandler.sendEmptyMessageDelayed(HDL_WHAT_UPDATE_UI_SMOOTH, 0);
-		} else {
-			mHandler.sendEmptyMessageDelayed(HDL_WHAT_UPDATE_UI, 0);
-		}
+	private void updateScrollList(boolean smooth) {
+//		if (smooth) {
+//			mHandler.sendEmptyMessageDelayed(HDL_WHAT_UPDATE_UI_SMOOTH, 10);
+//		} else {
+//			mHandler.sendEmptyMessageDelayed(HDL_WHAT_UPDATE_UI, 10);
+//		}
 	}
 	
 	private void listScrollToBottom(boolean smooth) {
@@ -828,6 +829,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
     	 mChatListView = (ListView) findViewById(R.id.id_list_view_msgs);
          mChatListAdapter = new ChattingListAdapter(this, mDatas, this);
          mChatListView.setAdapter(mChatListAdapter);
+         mChatListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 //         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 //         mRecyclerView.setLayoutManager(layoutManager);
 //         mRecycleView.setRefreshLoadMoreListener(this);
@@ -962,7 +964,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		toMessage.setTime(DateUtil.getCurrentTime());
 		mDatas.add(toMessage);
 		mCustomer.getSession().addMessage(msg, true);
-		updateList(true);
+		notifyChatDataSetChange();
+		updateScrollList(true);
 		
 		if (isRobot && mPid != 0) {
 			msg.setP_id(mPid);
@@ -979,14 +982,16 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			@Override
 			public void onSuccess(V5Message message) {
 				Logger.i(TAG, "sendMessage -> onSuccess");
-				updateList(false);
+				notifyChatDataSetChange();
+				//updateList(false);
 			}
 			
 			@Override
 			public void onFailure(V5Message message, V5ExceptionStatus statusCode,
 					String desc) {
 				Logger.e(TAG, "sendMessage -> onFailure");
-				updateList(false);
+				notifyChatDataSetChange();
+				//updateList(false);
 			}
 		});
 	}
@@ -1016,7 +1021,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		
 		mDatas.add(toMessage);
 		mCustomer.getSession().addMessage(imageMessage, true);
-		updateList(true);
+		notifyChatDataSetChange();
+		updateScrollList(true);
 		Logger.w(TAG, "sendImageMessage mDatas:" + mDatas.size());
 		
 		if (isRobot && mPid != 0) {
@@ -1033,14 +1039,16 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			@Override
 			public void onSuccess(V5Message message) {
 				Logger.i(TAG, "sendImageMessage -> onSuccess");
-				updateList(false);
+				notifyChatDataSetChange();
+				//updateList(false);
 			}
 			
 			@Override
 			public void onFailure(V5Message message, V5ExceptionStatus statusCode,
 					String desc) {
 				Logger.e(TAG, "sendImageMessage -> onFailure");
-				updateList(false);
+				notifyChatDataSetChange();
+				//updateList(false);
 			}
 		});
 	}
@@ -1070,7 +1078,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 		
 		mDatas.add(toMessage);
 		mCustomer.getSession().addMessage(voiceMessage, true);
-		updateList(true);
+		notifyChatDataSetChange();
+		updateScrollList(true);
 		Logger.w(TAG, "sendVoiceMessage mDatas:" + mDatas.size());
 		
 		if (isRobot && mPid != 0) {
@@ -1087,14 +1096,16 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			@Override
 			public void onSuccess(V5Message message) {
 				Logger.i(TAG, "sendVoiceMessage -> onSuccess " + message.getState());
-				updateList(false);
+				notifyChatDataSetChange();
+				//updateList(false);
 			}
 			
 			@Override
 			public void onFailure(V5Message message, V5ExceptionStatus statusCode,
 					String desc) {
 				Logger.e(TAG, "sendVoiceMessage -> onFailure " + message.getState());
-				updateList(false);
+				notifyChatDataSetChange();
+				//updateList(false);
 			}
 		});
 	}
@@ -1210,14 +1221,18 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	protected void handleMessage(Message msg) {
 		Log.d(TAG, "handleMessage:" + msg.what + " size:" + mDatas.size());		
 		switch (msg.what) {
+		case HDL_WHAT_NOTIFY:
+			mChatListAdapter.notifyDataSetChanged();
+			mChatListView.postInvalidateDelayed(10);
+			break;
 		case HDL_WHAT_UPDATE_UI_SMOOTH: // 滚动更新消息列表
-			notifyChatDataSetChange();
-			Logger.d(TAG, "1257 HDL_WHAT_UPDATE_UI scrollToBottom:" + (mDatas.size() - 1));
+			//notifyChatDataSetChange();
+			Logger.d(TAG, "1257 HDL_WHAT_UPDATE_UI_SMOOTH scrollToBottom:" + (mDatas.size() - 1));
 			listScrollToBottom(true);
 			break;
 
 		case HDL_WHAT_UPDATE_UI: // 更新消息列表
-			notifyChatDataSetChange();
+			//notifyChatDataSetChange();
 			Logger.d(TAG, "1257 HDL_WHAT_UPDATE_UI scrollToBottom:" + (mDatas.size() - 1));
 			listScrollToBottom(false);
 			break;
@@ -1705,8 +1720,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	}
 
 	private void notifyChatDataSetChange() {
-		mChatListAdapter.notifyDataSetChanged();
-		mChatListView.postInvalidateDelayed(10);
+		Logger.i(TAG, "[notifyChatDataSetChange]");
+		mHandler.obtainMessage(HDL_WHAT_NOTIFY).sendToTarget();
 	}
 	
 	/***** event *****/
@@ -1730,7 +1745,8 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			mDatas.clear();
 			initData();
 			/* 更新数据 */
-			updateList(false);
+			notifyChatDataSetChange();
+			updateScrollList(false);
 		}
 	}
 

@@ -143,13 +143,12 @@ public class MainTabActivity extends BaseToolbarActivity {
 			localIntent.setPackage("com.v5kf.mcss");
 			localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	        startService(localIntent);
-	        
-	        showProgress();
-	        mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);
 		} else {
 			dismissProgress();
 		}
-		
+		showProgress();
+        mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);
+        
 		initToolbar();
 		initSlideMenu();
 		initTabViewPager();
@@ -590,7 +589,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		ImageLoader imageLoader = new ImageLoader(this, true, R.drawable.v5_photo_default, new ImageLoader.ImageLoaderListener() {
 			
 			@Override
-			public void onSuccess(String url, ImageView imageView) {
+			public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 				Logger.i(TAG, "updateSlideMenu -> onSuccess");
 				// [新增]离线状态头像变灰
 				if (mAppInfo.getUser().getStatus() == QAODefine.STATUS_OFFLINE) {
@@ -940,26 +939,27 @@ public class MainTabActivity extends BaseToolbarActivity {
 			if (!isForeground) {
 				return;
 			}
-			showAlertDialog(
-					R.string.tips,
-					R.string.err_login_timeout,
-					R.string.retry,
-					R.string.cancel, 
-					new OnClickListener() {
-				
-						@Override
-						public void onClick(View v) {
-							// 重试
-							CoreService.reConnect(getApplicationContext());
-						}
-					}, new OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							// 取消
-							
-						}
-					});
+			onRefreshTimeOut();
+//			showAlertDialog(
+//					R.string.tips,
+//					R.string.err_login_timeout,
+//					R.string.retry,
+//					R.string.cancel, 
+//					new OnClickListener() {
+//				
+//						@Override
+//						public void onClick(View v) {
+//							// 重试
+//							CoreService.reConnect(getApplicationContext());
+//						}
+//					}, new OnClickListener() {
+//						
+//						@Override
+//						public void onClick(View v) {
+//							// 取消
+//							
+//						}
+//					});
 			break;
 		}
 		case HDL_LOGOUT_TIMEOUT:

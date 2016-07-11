@@ -169,7 +169,7 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default, new ImageLoader.ImageLoaderListener() {
 			
 			@Override
-			public void onSuccess(String url, ImageView imageView) {
+			public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 				// TODO Auto-generated method stub
 				imageView.postInvalidate();
 			}

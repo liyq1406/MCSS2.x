@@ -424,7 +424,8 @@ public class UITools {
 			} else if (Config.USE_THUMBNAIL && 
 					(picUrl.contains("mmbiz.qpic.cn/mmbiz/") || picUrl.contains("chat.v5kf.com/"))) {
 				//picUrl = String.format(Config.APP_PIC_V5_THUMBNAIL_FMT, siteId, imageMessage.getMessage_id());
-				if (imageMessage.getMessage_id() != null && !imageMessage.getMessage_id().isEmpty()) {
+				//TextUtils.isEmpty(picUrl) && 
+				if (TextUtils.isEmpty(picUrl) && imageMessage.getMessage_id() != null && !imageMessage.getMessage_id().isEmpty()) {
 					picUrl = String.format(Config.APP_PIC_V5_THUMBNAIL_FMT, siteId, imageMessage.getMessage_id());
 				} else {
 					picUrl = picUrl + "/thumbnail";

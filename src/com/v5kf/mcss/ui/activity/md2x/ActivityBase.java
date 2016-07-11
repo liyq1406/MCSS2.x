@@ -405,6 +405,10 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	public void sendHandlerMessage(Message msg) {
 		mHandler.sendMessage(msg);
 	}
+
+	public void sendHandlerMessage(int what) {
+		mHandler.obtainMessage(what).sendToTarget();
+	}
 	
 	public static class BaseHandler extends Handler {
 		

@@ -109,7 +109,7 @@ public class NewsListAdapter extends BaseAdapter {
         
         V5ArticleBean article = mDatas.get(position);    
     	holder.mTitleTv.setText(article.getTitle());
-    	ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_empty_img, null);
+    	ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_empty_img);
     	imgLoader.DisplayImage(article.getPic_url(), holder.mPicIv);
         		
 		return convertView;

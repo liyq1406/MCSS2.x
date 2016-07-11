@@ -413,7 +413,7 @@ public class LocationMapActivity extends BaseToolbarActivity implements TencentL
 
 	@Override
 	public void onMapScreenShot(Bitmap bmp) {
-		ImageLoader imgLoader = new ImageLoader(this, true, 0, null);
+		ImageLoader imgLoader = new ImageLoader(this, true, 0);
 		if (mLocation != null) {
 			try {
 				imgLoader.saveImage(bmp, MD5.encode(mLocation.getAddress()));

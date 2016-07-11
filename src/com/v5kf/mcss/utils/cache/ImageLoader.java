@@ -20,16 +20,47 @@ import android.widget.ImageView;
 
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.ui.widget.CircleImageView;
-import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 
 public class ImageLoader {
-
+	public static final int IMAGE_MIN_WH = 100; //dp
+	public static final int IMAGE_MAX_WH = 220; //dp
+	public static final int IMAGE_BASE_WH = 120; //dp
+	
+	public static float getScale(Context context, int w, int h) {
+        // 想要缩放的目标尺寸
+//        float min = UITools.dip2px(context, IMAGE_MIN_WH);
+//        float max = UITools.dip2px(context, IMAGE_MAX_WH);
+        float wh = UITools.dip2px(context, IMAGE_BASE_WH);
+        Logger.d("ImageLoader", "[getScale] ratio min:" + wh + " max:" + wh);
+        // 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可    
+        float scale = 1.0f;//scale=1表示不缩放    
+//        if (w > h) { //如果宽度大的话根据宽度固定大小缩放 [修改]按照宽度缩放
+	//        	if (w < wh) {
+	//        		scale = (wh / w); 
+	//        	} else if (w > wh) {
+	//        		scale = (wh / w);
+	//        	}
+//        } else if (w < h) { //如果高度高的话根据宽度固定大小缩放
+//        	if (h < min) {
+//        		scale = (min / h); 
+//        	} else if (h > max) {
+//        		scale = (h / max);
+//        	}
+//        }
+        scale = (float) Math.sqrt((wh*wh)/(w*h));
+        Logger.d("ImageLoader", "ratio [getScale] :" + scale);
+        if (scale <= 0) scale = 1.0f;
+        return scale;
+	}
+	
 	private ImageCache memoryCache;
 	private FileCache fileCache;
 	private static Map<ImageView, String> imageViews = Collections
+			.synchronizedMap(new WeakHashMap<ImageView, String>());
+	private static Map<ImageView, String> queueViews = Collections
 			.synchronizedMap(new WeakHashMap<ImageView, String>());
 	private ExecutorService executorService;
 	private boolean isSrc;	// src 还是 background
@@ -42,7 +73,7 @@ public class ImageLoader {
 	private ImageLoaderListener mListener;
 	
 	public interface ImageLoaderListener {
-		public void onSuccess(String url, ImageView imageView);
+		public void onSuccess(String url, ImageView imageView, Bitmap bmp);
 		public void onFailure(ImageLoader imageLoader, String url, ImageView imageView);
 	}
 
@@ -99,6 +130,9 @@ public class ImageLoader {
 //			e.printStackTrace();
 //		}
 //		url = u1 + u2;
+		if (alreadyInQueue(imageView, url)) {
+			return;
+		}
 		imageViews.put(imageView, url);
 		Bitmap bitmap = memoryCache.get(url);
 		if (bitmap != null) {
@@ -109,7 +143,7 @@ public class ImageLoader {
 				imageView.setBackgroundDrawable(new BitmapDrawable(bitmap));
 			}
 			if (mListener != null) {
-				mListener.onSuccess(url, imageView);
+				mListener.onSuccess(url, imageView, bitmap);
 			}
 		} else {
 			queuePhoto(url, imageView);
@@ -148,6 +182,7 @@ public class ImageLoader {
 	}
 
 	private void queuePhoto(String url, ImageView imageView) {
+		queueViews.put(imageView, url);
 		PhotoToLoad p = new PhotoToLoad(url, imageView);
 		executorService.submit(new PhotosLoader(p));
 	}
@@ -162,10 +197,11 @@ public class ImageLoader {
 				Logger.d("ImageLoader", "From FileCache:" + url);
 				return b;
 			} else { // 判断是否本地路径
-				Bitmap localBmp = DevUtils.ratio(
-						url, 
-						240, 
-						300); // 压缩宽高
+//				Bitmap localBmp = DevUtils.ratio(
+//						url, 
+//						UITools.dip2px(mContext, IMAGE_MIN_WH), 
+//						UITools.dip2px(mContext, IMAGE_MAX_WH)); // 压缩宽高
+				Bitmap localBmp = BitmapFactory.decodeFile(url);
 				if (localBmp != null) {
 					Logger.d("ImageLoader", "From localFile:" + url);
 					return localBmp;
@@ -259,8 +295,10 @@ public class ImageLoader {
 			Bitmap bmp = getBitmap(photoToLoad.url);
 			if (bmp != null) {
 				memoryCache.put(photoToLoad.url, bmp);
+				Logger.d("ImageLoader", "262 memoryCache put:" + photoToLoad.url);
+			} else {
+				Logger.w("ImageLoader", "264 getBitmap return null");
 			}
-			Logger.d("ImageLoader", "259 memoryCache put:" + photoToLoad.url);
 			if (imageViewReused(photoToLoad))
 				return;
 			BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
@@ -289,7 +327,16 @@ public class ImageLoader {
 	boolean imageViewReused(PhotoToLoad photoToLoad) {
 		String tag = imageViews.get(photoToLoad.imageView);
 		if (tag == null || !tag.equals(photoToLoad.url)) {
-			Logger.d("ImageLoader", "DisplayImage -> imageViewReused");
+			Logger.w("ImageLoader", "DisplayImage -> imageViewReused");
+			return true;
+		}
+		return false;
+	}
+
+	boolean alreadyInQueue(ImageView imageView, String url) {
+		String tag = queueViews.get(imageView);
+		if (tag != null && tag.equals(url)) {
+			Logger.w("ImageLoader", "DisplayImage -> alreadyInQueue");
 			return true;
 		}
 		return false;
@@ -311,10 +358,8 @@ public class ImageLoader {
 		}
 
 		public void run() {
-			Logger.d("ImageLoader", "294 ImageLoader -> BitmapDisplayer run");
 			if (imageViewReused(photoToLoad))
 				return;
-			Logger.d("ImageLoader", "296 ImageLoader -> BitmapDisplayer");
 			if (bitmap != null) {
 				if (isSrc)
 					photoToLoad.imageView.setImageBitmap(bitmap);
@@ -322,7 +367,7 @@ public class ImageLoader {
 					photoToLoad.imageView.setBackgroundDrawable(new BitmapDrawable(bitmap));
 				resetImageBorder(photoToLoad.imageView);
 				if (mListener != null) {
-					mListener.onSuccess(mUrl, mImageView);
+					mListener.onSuccess(mUrl, mImageView, bitmap);
 				}
 			}  else { // 获取图片失败
 				if (isSrc)
@@ -335,6 +380,7 @@ public class ImageLoader {
 					mListener.onFailure(ImageLoader.this, mUrl, mImageView);
 				}
 			}
+			queueViews.remove(photoToLoad.imageView);
 		}
 	}
 

@@ -331,7 +331,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 						@Override
 						public void run() {
 							if (checks[0]) {
-								ImageLoader imgLoader = new ImageLoader(mApplication, true, 0, null);
+								ImageLoader imgLoader = new ImageLoader(mApplication, true, 0);
 								imgLoader.clearCache();
 								MediaLoader mediaLoader = new MediaLoader(getApplicationContext());
 								mediaLoader.clearCache();

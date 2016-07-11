@@ -217,7 +217,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 				mOidTv.setVisibility(View.GONE);
 			}
 		}
-		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm, null);
+		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm);
     	imgLoader.DisplayImage(mCustomer.getDefaultPhoto(), mHeadCiv);
     	
     	// 设置interface信息

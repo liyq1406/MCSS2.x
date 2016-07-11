@@ -21,12 +21,12 @@ import android.widget.ImageView;
 
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.utils.DevUtils;
-import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
+import com.v5kf.mcss.utils.cache.ImageLoader;
 
 public class BubbleImageView extends ImageView {
 
-	private float mMinWH = 48.0f; // 最小图片显示大小，单位dp
+//	private float mMinWH = 48.0f; // 最小图片显示大小，单位dp
 
 	private static final int LOCATION_LEFT = 0;
 	private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
@@ -66,7 +66,7 @@ public class BubbleImageView extends ImageView {
 	}
 
 	private void initView(AttributeSet attrs) {
-		mMinWH = UITools.dip2px(getContext(), mMinWH);
+//		mMinWH = UITools.dip2px(getContext(), mMinWH);
 		if (attrs != null) {
 			TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.BubbleImageView);
 			mAngle = (int) a.getDimension(R.styleable.BubbleImageView_bubble_angle, mAngle);
@@ -196,12 +196,16 @@ public class BubbleImageView extends ImageView {
 		if (mBitmap == null) {
 			return;
 		}
-		if (mBitmap.getWidth() < mMinWH || mBitmap.getHeight() < mMinWH) {
-			float scale1 = mMinWH / mBitmap.getWidth();
-			float scale2 = mMinWH / mBitmap.getHeight();
-			mBitmap = DevUtils.ratio(mBitmap, scale1 > scale2 ? scale1 : scale2);
-			setImageBitmap(mBitmap);
-		}
+//		if (mBitmap.getWidth() < mMinWH || mBitmap.getHeight() < mMinWH) {
+//			float scale1 = mMinWH / mBitmap.getWidth();
+//			float scale2 = mMinWH / mBitmap.getHeight();
+//			mBitmap = DevUtils.ratio(mBitmap, scale1 > scale2 ? scale1 : scale2);
+//			setImageBitmap(mBitmap);
+//		}
+//		float scale = ImageLoader.getScale(getContext(), mBitmap.getWidth(), mBitmap.getHeight());
+//		if (scale != 1.0f) {
+//			mBitmap = DevUtils.ratio(mBitmap, scale);
+//		}
 
 		mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 

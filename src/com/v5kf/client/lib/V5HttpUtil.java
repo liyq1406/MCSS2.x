@@ -325,7 +325,6 @@ public class V5HttpUtil {
 	public static void postMedia(final V5Message message, final File file, final String url,
 			final String authorization, 
 			final HttpResponseHandler httpResponseHandler) {
-		Logger.i(TAG, "[postMedia] url:" + url + " file:" + file.getName());
 		new Thread(new Runnable() {
 			
 			@Override

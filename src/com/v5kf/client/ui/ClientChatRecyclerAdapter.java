@@ -242,7 +242,7 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 					holder.mNewsPic.setVisibility(View.GONE);
 				} else {
 					holder.mNewsPic.setVisibility(View.VISIBLE);
-					ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading, null);
+					ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading);
 		        	imgLoader.DisplayImage(article.getPic_url(), holder.mNewsPic);
 				}
 	        	Logger.d(TAG, "单图文消息 url：" + article.getPic_url());
@@ -261,7 +261,7 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 			
 			case TYPE_LOCATION_R: { // 位置-发出
 				V5LocationMessage locationMsg = (V5LocationMessage) messageContent;
-				ImageLoader mapImgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading, null);
+				ImageLoader mapImgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading);
 	        	double lat = locationMsg.getX();
 	        	double lng = locationMsg.getY();
 	        	String url = String.format(Locale.CHINA, Config.MAP_PIC_API_FORMAT, lat, lng, lat, lng);
@@ -275,7 +275,7 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 			
 			case TYPE_LOCATION_L: { // 位置-接收
 				V5LocationMessage locationMsg = (V5LocationMessage) messageContent;
-				ImageLoader mapImgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading, null);
+				ImageLoader mapImgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading);
 	        	double lat = locationMsg.getX();
 	        	double lng = locationMsg.getY();
 	        	String url = String.format(Locale.CHINA, Config.MAP_PIC_API_FORMAT, lat, lng, lat, lng);
@@ -291,7 +291,7 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 			case TYPE_IMG_R:
 			case TYPE_IMG_L: {
 				V5ImageMessage imageMsg = (V5ImageMessage) messageContent;
-				ImageLoader mapImgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading, null);
+				ImageLoader mapImgLoader = new ImageLoader(mContext, true, R.drawable.v5_img_src_loading);
 	        	String urlPath = imageMsg.getFilePath();
 				if (TextUtils.isEmpty(urlPath)) { // 优先判断本地图片，否则加载网络图片
 					urlPath = imageMsg.getThumbnailPicUrl();

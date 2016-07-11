@@ -41,6 +41,7 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 	public static final int HDL_WHAT_CANDIDATE_ADD = 5;
 	public static final int HDL_WHAT_CANDIDATE_DEL = 6;
 	public static final int HDL_WHAT_CANDIDATE_SEND = 7;
+	public static final int HDL_WHAT_NOTIFY = 9;
 	
 	public static final String MSG_KEY_RESPONSE_NUM = "num";
 	public static final String MSG_KEY_RESPONSE = "response";

@@ -115,7 +115,7 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
     	ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_photo_default_cstm, new ImageLoader.ImageLoaderListener() {
 			
 			@Override
-			public void onSuccess(String url, ImageView imageView) {
+			public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 				Logger.d(TAG, "ImageLoaderListener.onSuccess");
 				// [新增]离开状态提示
 		    	if (customer.getAccessable() != null && customer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {

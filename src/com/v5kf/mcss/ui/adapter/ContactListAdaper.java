@@ -97,7 +97,7 @@ public class ContactListAdaper extends BaseAdapter implements PinnedSectionListA
         	holder.mNameTv.setText(recyclerBean.getWorker().getName());
 //        	holder.mPhotoIv.setBackground(null);
 //        	holder.mDescIv.setBackground(null);
-        	ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_photo_default, null);
+        	ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_photo_default);
         	imgLoader.DisplayImage(recyclerBean.getWorker().getPhoto(), holder.mPhotoIv);
         	switch (recyclerBean.getWorker().getStatus()) {
         	case QAODefine.STATUS_ONLINE:

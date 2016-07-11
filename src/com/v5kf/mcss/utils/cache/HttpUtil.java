@@ -149,6 +149,7 @@ public class HttpUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Logger.w(TAG, "[getInputStream] return null");
 		return null;
 	}
 

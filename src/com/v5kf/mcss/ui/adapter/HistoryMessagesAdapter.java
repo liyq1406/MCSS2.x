@@ -216,6 +216,7 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
         	ImageLoader mapImgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
         	String urlPath = UITools.getThumbnailUrlOfImage((V5ImageMessage)msgContent, Config.SITE_ID);
         	mapImgLoader.DisplayImage(urlPath, holder.mImgIv);
+        	Logger.d(TAG, "list load Image ----- " + urlPath);
         }
         	break;
         	
@@ -428,8 +429,8 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 		int width = videoMessage.getCoverFrame().getWidth();
 		int height = videoMessage.getCoverFrame().getHeight();
 		float density = mActivity.getResources().getDisplayMetrics().density;
-		float maxWH = MediaLoader.VIDEO_COVER_MAX_WH * density + 0.5f;
-		float minWH = MediaLoader.VIDEO_COVER_MIN_WH * density + 0.5f;
+		float maxWH = ImageLoader.IMAGE_MAX_WH * density + 0.5f;
+		float minWH = ImageLoader.IMAGE_MIN_WH * density + 0.5f;
 		if (width > maxWH && height > maxWH) {
 			float scale = Math.max(maxWH / width, maxWH / height);
 			width = (int)scale * width;

@@ -169,7 +169,7 @@ public class CustomerEditActivity extends BaseToolbarActivity implements OnClick
 			return;
 		}
 		mNickNameTv.setText(mCustomer.getDefaultName());
-		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm, null);
+		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_photo_default_cstm);
     	imgLoader.DisplayImage(mCustomer.getDefaultPhoto(), mHeadIv);
     	
     	// 设置interface信息

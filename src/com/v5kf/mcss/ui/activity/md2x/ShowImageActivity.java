@@ -217,7 +217,7 @@ public class ShowImageActivity extends BaseActivity implements ImageLoaderListen
 	}
 
 	@Override
-	public void onSuccess(String url, ImageView imageView) {
+	public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 		mLoadingPb.setVisibility(View.GONE);
 	}
 

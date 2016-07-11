@@ -21,12 +21,11 @@ import com.v5kf.client.lib.entity.V5VideoMessage;
 import com.v5kf.client.lib.entity.V5VoiceMessage;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
-import com.v5kf.mcss.utils.UITools;
 
 public class MediaLoader {
 	private static final String TAG = "MediaLoader";
-	public static final int VIDEO_COVER_MIN_WH = 170; //dp
-	public static final int VIDEO_COVER_MAX_WH = 240; //dp
+	public static final int VIDEO_MIN_WH = 180; //dp
+	public static final int VIDEO_MAX_WH = 240; //dp
 	
 	private FileCache fileCache;
 	private ExecutorService executorService;
@@ -155,7 +154,7 @@ public class MediaLoader {
 				MediaMetadataRetriever mediaDataRet = new MediaMetadataRetriever();
 				mediaDataRet.setDataSource(f.getAbsolutePath());
 				Bitmap bitmap = mediaDataRet.getFrameAtTime(0);
-				Logger.d(TAG, UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) + "ratio ؅ճǰ˓Ƶ̵Ôͼ:" + bitmap.getWidth() +" "+ bitmap.getHeight());
+//				Logger.d(TAG, UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) + "ratio ؅ճǰ˓Ƶ̵Ôͼ:" + bitmap.getWidth() +" "+ bitmap.getHeight());
 //				if (bitmap.getWidth() < UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) || bitmap.getHeight() < UITools.dip2px(mContext, VIDEO_COVER_MIN_WH)) {
 //					float scale1 = UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) / bitmap.getWidth();
 //					float scale2 = UITools.dip2px(mContext, VIDEO_COVER_MIN_WH) / bitmap.getHeight();
