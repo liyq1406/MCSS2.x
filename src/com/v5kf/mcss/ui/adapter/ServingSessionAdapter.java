@@ -99,10 +99,12 @@ public class ServingSessionAdapter extends RecyclerView.Adapter<ServingSessionAd
     	// 最新消息未获取到
     	if (mAppInfo.getLastestMessageOfCustomer(customer) != null) {
 	    	String content = mAppInfo.getLastestMessageOfCustomer(customer).getDefaultContent(mActivity);
-//	    	content = content.replaceAll("<", "&lt;");
-//	    	content = content.replaceAll(">", "&gt;");
-	    	Spanned spanText = Html.fromHtml(content.replace("\n", "<br>"));
-	    	holder.mContent.setText(spanText);
+	    	content = content.replaceAll("/::<", "/::&lt;");
+	    	content = content.replaceAll("/:<", "/:&lt;");
+	    	content = content.replaceAll("\n", "<br>");
+	    	Logger.d(TAG, "setText 对话：" + content);
+			Spanned text = Html.fromHtml(content);
+	    	holder.mContent.setText(text);
 			holder.mContent.setMovementMethod(LinkMovementMethod.getInstance());
     	} else {
     		holder.mContent.setText("");

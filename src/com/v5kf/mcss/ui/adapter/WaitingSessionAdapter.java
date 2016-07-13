@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,9 +81,13 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
     	}
     	// 最新消息未获取到
     	if (mAppInfo.getLastestMessageOfCustomer(customer) != null) {
-	    	String content = mAppInfo.getLastestMessageOfCustomer(customer).getDefaultContent(mContext).replaceAll("<", "&lt;");
-	    	content = content.replaceAll(">", "&gt;");
-	    	holder.mContent.setText(Html.fromHtml(content));
+	    	String content = mAppInfo.getLastestMessageOfCustomer(customer).getDefaultContent(mContext);
+	    	content = content.replaceAll("/::<", "/::&lt;");
+	    	content = content.replaceAll("/:<", "/:&lt;");
+	    	content = content.replaceAll("\n", "<br>");
+	    	Logger.d(TAG, "setText 对话：" + content);
+			Spanned text = Html.fromHtml(content);
+	    	holder.mContent.setText(text);
     	} else {
     		holder.mContent.setText("");
     	}

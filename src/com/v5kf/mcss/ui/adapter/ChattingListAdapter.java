@@ -589,9 +589,14 @@ public class ChattingListAdapter extends BaseAdapter {
 		}
 		
 		default: {
-			String str = chatMessage.getDefaultContent(mActivity) == null ? "" : chatMessage.getDefaultContent(mActivity);
-//			Logger.d(TAG, "对话：" + str);
-			Spanned text = Html.fromHtml(str.replace("\n", "<br>"));
+			String content = chatMessage.getDefaultContent(mActivity) == null ? "" : chatMessage.getDefaultContent(mActivity);
+			Logger.d(TAG, "setText String：" + content);
+			content = content.replaceAll("/::<", "/::&lt;");
+	    	content = content.replaceAll("/:<", "/:&lt;");
+	    	content = content.replaceAll("\n", "<br>");
+	    	Logger.d(TAG, "setText 对话：" + content);
+			Spanned text = Html.fromHtml(content);
+			Logger.d(TAG, "setText Spanned：" + text);
 			holder.mMsg.setText(text);
 			holder.mMsg.setMovementMethod(LinkMovementMethod.getInstance());
 			

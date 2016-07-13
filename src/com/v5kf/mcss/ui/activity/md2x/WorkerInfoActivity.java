@@ -40,6 +40,7 @@ import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
+import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 
 public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickListener {
@@ -547,6 +548,15 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
     }
 
 	private void uploadPhoto(String filePath) {
+		// 图片格式验证
+		String type = UITools.getImageMimeType(filePath);
+		if (!UITools.isValidImageMimeType(type)) {
+			ShowToast(String.format(getString(R.string.unsupport_image_type_fmt), type) + getString(R.string.upload_image_tips));
+			return;
+		}
+		// 图片角度矫正
+		UITools.correctBitmapAngle(filePath);
+		
 		String auth = mApplication.getWorkerSp().readAuthorization();
 		String url = Config.APP_PIC_AUTH_URL + auth;
 		getPictureService(filePath, url, auth);

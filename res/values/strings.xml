@@ -94,6 +94,8 @@
     <string name="chat_voice_seconds_tips">还可以说%1$s秒</string>
     <string name="chat_voice_short_tips">太短</string>
     <string name="chat_voice_cancel">取消</string>
+    <string name="unsupport_image_type_fmt">不支持的图片格式[%s]，</string>
+    <string name="upload_image_tips">请上传png、jpg、bmp、gif等支持的格式</string>
         
     <string name="on_check_update_fail">检查更新失败，请检查网络</string>
     <string name="on_update_enable">有新版本可用，建议您下载！</string>

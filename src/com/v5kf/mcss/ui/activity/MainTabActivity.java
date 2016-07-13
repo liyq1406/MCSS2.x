@@ -42,6 +42,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.v5kf.client.lib.websocket.WebSocketClient;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
+import com.v5kf.mcss.config.Config.ExitFlag;
 import com.v5kf.mcss.config.Config.LoginStatus;
 import com.v5kf.mcss.config.Config.ReloginReason;
 import com.v5kf.mcss.config.QAODefine;
@@ -143,11 +144,13 @@ public class MainTabActivity extends BaseToolbarActivity {
 			localIntent.setPackage("com.v5kf.mcss");
 			localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	        startService(localIntent);
+		}
+		if (!CoreService.isConnected()) {
+			showProgress();
+	        mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);
 		} else {
 			dismissProgress();
 		}
-		showProgress();
-        mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);
         
 		initToolbar();
 		initSlideMenu();
@@ -973,6 +976,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 					"android.permission.RECORD_AUDIO",
 					"android.permission.WRITE_EXTERNAL_STORAGE",
 					"android.permission.ACCESS_FINE_LOCATION", 
+					"android.permission.READ_PHONE_STATE",
 					"android.permission.ACCESS_COARSE_LOCATION"});
 //			DevUtils.checkAndRequestPermission(this, "android.permission.CAMERA", Config.REQUEST_PERMISSION_CAMERA);
 //			DevUtils.checkAndRequestPermission(this, "android.permission.RECORD_AUDIO", Config.REQUEST_PERMISSION_RECORD_AUDIO);
@@ -1070,7 +1074,9 @@ public class MainTabActivity extends BaseToolbarActivity {
 			mHeaderTips.setVisibility(View.GONE);
 		} else {
 			dismissProgress();
-			mHeaderTips.setVisibility(View.VISIBLE);
+			if (mApplication.getWorkerSp().readExitFlag() != ExitFlag.ExitFlag_NeedLogin) {
+				mHeaderTips.setVisibility(View.VISIBLE);
+			}
 		}
 		updateSlideMenu();
 		updateSessionBadge();

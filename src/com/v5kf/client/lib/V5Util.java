@@ -21,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.media.MediaPlayer;
+import android.text.TextUtils;
 
 public class V5Util {
 	
@@ -672,5 +673,34 @@ public class V5Util {
         player.release();
         player = null;
         return duration; 
+    }
+    
+    /**
+     * 获取图片的类型
+     * @param file
+     * @return
+     */
+    public static String getImageMimeType(String file) {
+    	BitmapFactory.Options options = new BitmapFactory.Options();
+    	options.inJustDecodeBounds = true;
+    	BitmapFactory.decodeFile(file, options);
+    	String type = options.outMimeType;
+    	Logger.i("V5Util", "MimeType:" + type);
+    	if (!TextUtils.isEmpty(type)) {
+    		if (type.length() > 6) {
+    			type = type.substring(6, type.length());
+    		}
+    		return type;
+    	} else {
+    		return null;
+    	}
+    }
+    
+    public static boolean isValidImageMimeType(String type) {
+    	String types = V5ClientConfig.IMAGE_TYPE_SUPPORTED;
+    	if (type != null && types.contains(type)) {
+    		return true;
+    	}
+    	return false;
     }
 }

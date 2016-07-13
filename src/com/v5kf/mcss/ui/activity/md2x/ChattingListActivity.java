@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.v5kf.client.lib.V5HttpUtil;
+import com.v5kf.client.lib.V5Util;
 import com.v5kf.client.lib.V5KFException.V5ExceptionStatus;
 import com.v5kf.client.lib.V5MessageManager;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
@@ -1365,6 +1366,12 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 					if (uri != null) {
 						String filePath = FileUtil.getPath(getApplicationContext(), uri);
 						Logger.i(TAG, "Photo:" + filePath);
+						// 图片格式验证
+						String type = UITools.getImageMimeType(filePath);
+						if (!UITools.isValidImageMimeType(type)) {
+							ShowToast(String.format(getString(R.string.unsupport_image_type_fmt), type) + getString(R.string.upload_image_tips));
+							return;
+						}
 						// 图片角度矫正
 						UITools.correctBitmapAngle(filePath);
 						V5ImageMessage imageMessage = V5MessageManager.obtainImageMessage(filePath);
@@ -1375,6 +1382,12 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 				// 拍照返回
 				String filePath = FileUtil.getImageSavePath(this) + "/" + mImageFileName;
 				Logger.i(TAG, "Camera:" + filePath);
+				// 图片格式验证
+				String type = UITools.getImageMimeType(filePath);
+				if (!UITools.isValidImageMimeType(type)) {
+					ShowToast(String.format(getString(R.string.unsupport_image_type_fmt), type) + getString(R.string.upload_image_tips));
+					return;
+				}
 				// 图片角度矫正
 				UITools.correctBitmapAngle(filePath);
 				V5ImageMessage imageMessage = V5MessageManager.obtainImageMessage(filePath);

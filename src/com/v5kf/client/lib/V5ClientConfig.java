@@ -28,6 +28,8 @@ public class V5ClientConfig {
 	protected static final String ACTION_NOTIFICATION = "com.v5kf.android.intent.notification";
 	protected static final String ACTION_NEW_MESSAGE = "com.v5kf.android.intent.action_message";
 	
+	public static final String IMAGE_TYPE_SUPPORTED = "png|PNG|jpg|JPG|jpeg|JPEG|bmp|BMP|gif|GIF";
+	
 	/*
 	 * Log level: 1 - 5
 	 */

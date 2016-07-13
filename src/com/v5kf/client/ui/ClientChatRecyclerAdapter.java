@@ -12,6 +12,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -365,10 +366,13 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
 				break;
 			
 			default: {
-				String str = messageContent.getDefaultContent(mContext) == null ? "" : messageContent.getDefaultContent(mContext);
-//				Logger.d(TAG, "对话：" + str + " 方向:" + message.getMsg_content().getDirection());
-		    	CharSequence text = Html.fromHtml(str.replace("\n", "<br>"));
-				Logger.d(TAG, "<消息>：" + text);
+				String content = messageContent.getDefaultContent(mContext) == null ? "" : messageContent.getDefaultContent(mContext);
+//				Logger.d(TAG, "对话：" + content + " 方向:" + message.getMsg_content().getDirection());
+				content = content.replaceAll("/::<", "/::&lt;");
+		    	content = content.replaceAll("/:<", "/:&lt;");
+		    	content = content.replaceAll("\n", "<br>");
+		    	Logger.d(TAG, "setText 对话：" + content);
+				Spanned text = Html.fromHtml(content);
 				holder.mMsg.setText(text);
 				holder.mMsg.setMovementMethod(LinkMovementMethod.getInstance());
 				

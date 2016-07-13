@@ -76,6 +76,7 @@ import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.activity.md2x.LocationMapActivity;
 import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
+import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.V5VoiceRecord;
 import com.v5kf.mcss.utils.V5VoiceRecord.VoiceRecordListener;
 import com.v5kf.mcss.utils.VoiceErrorCode;
@@ -942,6 +943,15 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 					if (uri != null) {
 						String filePath = FileUtil.getPath(getApplicationContext(), uri);
 						Logger.i(TAG, "Photo:" + filePath);
+						// 图片格式验证
+						String type = UITools.getImageMimeType(filePath);
+						if (!UITools.isValidImageMimeType(type)) {
+							ShowToast(String.format(getString(R.string.unsupport_image_type_fmt), type) + getString(R.string.upload_image_tips));
+							return;
+						}
+						// 图片角度矫正
+						UITools.correctBitmapAngle(filePath);
+						
 						V5ImageMessage imageMessage = V5MessageManager.obtainImageMessage(filePath);
 						sendV5Message(imageMessage);
 					}
@@ -950,6 +960,15 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 				// 拍照返回
 				String filePath = FileUtil.getImageSavePath(this) + "/" + mImageFileName;
 				Logger.i(TAG, "Camera:" + filePath);
+				// 图片格式验证
+				String type = UITools.getImageMimeType(filePath);
+				if (!UITools.isValidImageMimeType(type)) {
+					ShowToast(String.format(getString(R.string.unsupport_image_type_fmt), type) + getString(R.string.upload_image_tips));
+					return;
+				}
+				// 图片角度矫正
+				UITools.correctBitmapAngle(filePath);
+				
 				V5ImageMessage imageMessage = V5MessageManager.obtainImageMessage(filePath);
 				sendV5Message(imageMessage);
 			}

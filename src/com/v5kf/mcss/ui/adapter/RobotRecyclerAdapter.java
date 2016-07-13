@@ -184,11 +184,15 @@ public class RobotRecyclerAdapter extends RecyclerView.Adapter<RobotRecyclerAdap
 //				holder.mRobotSend.setVisibility(View.VISIBLE);
 //			}
 			
-			String str = chatMessage.getDefaultContent(mActivity) == null ? "" : chatMessage.getDefaultContent(mActivity);
-			Spanned text = Html.fromHtml(str.replace("\n", "<br>"));
+			String content = chatMessage.getDefaultContent(mActivity) == null ? "" : chatMessage.getDefaultContent(mActivity);
+			content = content.replaceAll("/::<", "/::&lt;");
+	    	content = content.replaceAll("/:<", "/:&lt;");
+	    	content = content.replaceAll("\n", "<br>");
+	    	Logger.d(TAG, "setText 对话：" + content);
+			Spanned text = Html.fromHtml(content);
 			holder.mMsg.setText(text);
 			holder.mMsg.setMovementMethod(LinkMovementMethod.getInstance());
-			Logger.w("RobotRecyclerAdapter", "[" + str + "] SendHtmLText:" + text);
+			Logger.w("RobotRecyclerAdapter", "[" + content + "] SendHtmLText:" + text);
 		}
     }
 

@@ -376,8 +376,12 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
         case QAODefine.MSG_TYPE_TEXT:
         case QAODefine.MSG_TYPE_NULL:
         default: {
-        	String str = chatBean.getDefaultContent(mActivity) == null ? "" : chatBean.getDefaultContent(mActivity);
-//			str = str.replaceAll("&amp;", "&"); // 去除重复的HTML实体符号
+        	String content = chatBean.getDefaultContent(mActivity) == null ? "" : chatBean.getDefaultContent(mActivity);
+        	content = content.replaceAll("/::<", "/::&lt;");
+        	content = content.replaceAll("/:<", "/:&lt;");
+	    	content = content.replaceAll("\n", "<br>");
+	    	Logger.d(TAG, "setText 对话：" + content);
+			Spanned text = Html.fromHtml(content);
         	
         	/* URLCLICKSPAN */
 //        	Spannable textWithLinkText = (Spannable) Html.fromHtml(str.replace("\n", "<br>"));
@@ -392,7 +396,6 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 //            holder.mMsg.setText(style);
 //    		holder.mMsg.setMovementMethod(LinkMovementMethod.getInstance());
         	
-    		Spanned text = Html.fromHtml(str.replace("\n", "<br>"));
     		holder.mMsg.setText(text);
     		holder.mMsg.setMovementMethod(LinkMovementMethod.getInstance());
         }
