@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -415,6 +416,12 @@ public class VideoPlayActivity extends BaseToolbarActivity implements View.OnCli
 			}
 			break;
 		}
+	}
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

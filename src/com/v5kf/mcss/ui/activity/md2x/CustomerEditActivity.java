@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -323,6 +324,13 @@ public class CustomerEditActivity extends BaseToolbarActivity implements OnClick
 
 	@Override
 	protected void handleMessage(Message msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		
 	}

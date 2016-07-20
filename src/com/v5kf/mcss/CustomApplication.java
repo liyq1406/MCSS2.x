@@ -131,10 +131,11 @@ public class CustomApplication extends LitePalApplication {
 		stopService(new Intent(this, PushService.class));
 		
 		// 清空自动登录密码
-		mWorkerSp.clearAutoLogin();
+//		mWorkerSp.clearAutoLogin();
 		// 清空运行时内存
 		mAppInfo.clearHistoryVisitor();
 		mAppInfo.clearRunTimeInfo();
+		mAppInfo.getUser().setStatus(QAODefine.STATUS_OFFLINE);
 		
 //		XGPushManager.unregisterPush(getApplicationContext(), new XGIOperateCallback() {
 //			

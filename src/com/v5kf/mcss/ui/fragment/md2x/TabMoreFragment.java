@@ -4,10 +4,16 @@ import java.io.File;
 
 import org.simple.eventbus.EventBus;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
@@ -25,6 +31,7 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.AppStatus;
 import com.v5kf.mcss.eventbus.EventTag;
+import com.v5kf.mcss.service.UpdateService;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.WorkerTreeActivity;
@@ -69,6 +76,7 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	
 	private SharePreferenceUtil mSharedUtil;
 	private WorkerSP mWsp;
+	private CheckUpdateReceiver mUpdateReceiver;
 	
 	public TabMoreFragment() {
 		super();
@@ -88,7 +96,17 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		initData();
 		findView();
 		initView();
-		initUmengUpdate();
+		
+		if (Config.ENABLE_UMENG_UPDATE) {
+			initUmengUpdate();
+		} else {
+			mUpdateReceiver = new CheckUpdateReceiver();
+			/* 注册广播接收 */
+			IntentFilter filter=new IntentFilter();
+			filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+			filter.addAction(Config.ACTION_ON_UPDATE);
+			LocalBroadcastManager.getInstance(mParentActivity).registerReceiver(mUpdateReceiver, filter);
+		}
 	}
 
 	@Override
@@ -124,6 +142,10 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	protected void onDestroyViewLazy() {
 		super.onDestroyViewLazy();
 		Logger.d(TAG, TAG + " View将被销毁 " + this);
+		
+		if (!Config.ENABLE_UMENG_UPDATE) {
+			LocalBroadcastManager.getInstance(mParentActivity).unregisterReceiver(mUpdateReceiver);
+		}
 	}
 
 	@Override
@@ -311,7 +333,12 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		case R.id.layout_update: // 检查更新
 			mVersionTv.setVisibility(View.GONE);
 			mUpdateProgress.setVisibility(View.VISIBLE);
-			UmengUpdateAgent.forceUpdate(mParentActivity);
+			if (Config.ENABLE_UMENG_UPDATE) {
+				UmengUpdateAgent.forceUpdate(mParentActivity);
+			} else {
+				Intent i = new Intent(mParentActivity, UpdateService.class);
+				mParentActivity.startService(i);
+			}
 			MobclickAgent.onEvent(mParentActivity, "CHECK_UPDATE");
 			
 			break;
@@ -478,4 +505,50 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 //		}
 //	}
 	
+	/****** Update Broadcast receiver ******/
+	class CheckUpdateReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			if (null == intent) {
+				return;
+			}
+			if (intent.getAction().equals(Config.ACTION_ON_UPDATE)) {
+				Bundle bundle = intent.getExtras();
+				int intent_type = bundle.getInt(Config.EXTRA_KEY_INTENT_TYPE);
+				switch (intent_type) {
+				case Config.EXTRA_TYPE_UP_ENABLE:
+					// 显示确认更新对话框
+					String version = bundle.getString("version");				
+					String displayMessage = bundle.getString("displayMessage");
+					Logger.i(TAG, "【新版特性】：" + displayMessage);
+					
+					mVersionTv.setVisibility(View.VISIBLE);
+					mUpdateProgress.setVisibility(View.GONE);
+					mVersionTv.setText(String.format(getString(R.string.has_new), version));
+					
+					//showUpdateInfoDialog(version, displayMessage);
+					break;
+					
+				case Config.EXTRA_TYPE_UP_NO_NEWVERSION:
+					mVersionTv.setVisibility(View.VISIBLE);
+					mUpdateProgress.setVisibility(View.GONE);
+					mVersionTv.setText(R.string.already_new);
+					break;
+				
+				case Config.EXTRA_TYPE_UP_DOWNLOAD_FINISH:
+					// 显示确认安装对话框
+					//showInstallConfirmDialog();
+					break;
+					
+				case Config.EXTRA_TYPE_UP_FAILED: // 更新失败
+					mVersionTv.setVisibility(View.VISIBLE);
+					mUpdateProgress.setVisibility(View.GONE);
+					mVersionTv.setText(R.string.update_failed);
+					break;
+				}
+			}
+		}
+	}
 }

@@ -113,6 +113,8 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 				UITools.setStatusBarDarkIconOfFlyme(getWindow(), true);
 			}
 		}
+		
+		mApplication.stopOtherActivities(this);
 	}
 	
 	@Override
@@ -127,7 +129,6 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 //			showWarningDialog(R.string.on_other_dev_login_err, null);
 			showAlertDialog(R.string.on_other_dev_login_err);
 		}
-		mApplication.stopOtherActivities(this);
 	}
 
 	@Override

@@ -15,14 +15,12 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.ExitFlag;
 import com.v5kf.mcss.config.Config.LoginStatus;
-import com.v5kf.mcss.config.Config.ReloginReason;
 import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.NetworkManager;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
-import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.WorkerSP;
 
 /**
@@ -147,8 +145,9 @@ public class WelcomeActivity extends BaseLoginActivity {
 	/**
 	 * 处理自动登录
 	 * @throws InterruptedException
+	 * @deprecated
 	 */
-	protected void doAutoLogin() throws InterruptedException {
+	private void doAutoLogin() throws InterruptedException {
 		WorkerBean worker = mApplication.getAppInfo().getUser();
 		worker.setW_id(mWSP.readWorkerId());
 		worker.setE_id(mWSP.readSiteId());
@@ -286,10 +285,10 @@ public class WelcomeActivity extends BaseLoginActivity {
 		}
 	}
 	
-	@Subscriber(tag = EventTag.ETAG_RELOGIN, mode = ThreadMode.MAIN)
-	private void gotoLogin(ReloginReason reason) {
-		Logger.e(TAG + "-eventbus", "eventbus -> ETAG_RELOGIN");
-		mApplication.setLoginStatus(LoginStatus.LoginStatus_AuthFailed);
-		mHandler.sendEmptyMessage(TASK_UN_LOGIN);
-	}
+//	@Subscriber(tag = EventTag.ETAG_RELOGIN, mode = ThreadMode.MAIN)
+//	private void gotoLogin(ReloginReason reason) {
+//		Logger.e(TAG + "-eventbus", "eventbus -> ETAG_RELOGIN");
+//		mApplication.setLoginStatus(LoginStatus.LoginStatus_AuthFailed);
+//		mHandler.sendEmptyMessage(TASK_UN_LOGIN);
+//	}
 }

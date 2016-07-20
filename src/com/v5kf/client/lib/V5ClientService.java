@@ -30,11 +30,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.v5kf.client.lib.NetworkManager.NetworkListener;
 import com.v5kf.client.lib.V5ClientAgent.OnMessageRunnable;
 import com.v5kf.client.lib.V5KFException.V5ExceptionStatus;
+import com.v5kf.client.lib.V5WebSocketHelper.WebsocketListener;
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5MessageDefine;
-import com.v5kf.client.lib.websocket.WebSocketClient;
 
-public class V5ClientService extends Service implements NetworkListener, WebSocketClient.Listener {
+public class V5ClientService extends Service implements NetworkListener, WebsocketListener {
 
 	public static final String TAG = "V5ClientService";
 	private static final String ACTION_ALARM = "com.v5kf.client.alarm"; 
@@ -45,7 +45,7 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 	private NetworkManager mNetReceiver;
 	Handler mHandler;
 	private String mUrl;
-	private static WebSocketClient mClient;
+	private static V5WebSocketHelper mClient;
 	
 	private DBHelper mDBHelper;
 	private V5ConfigSP mConfigSP;
@@ -53,6 +53,7 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 	private long mSessionStart;
 	
 	private int mReAuthCount = 0;
+	private boolean _block = false;
 	
 	protected static boolean isConnected() {
 		if (mClient != null && mClient.isConnected()) {
@@ -63,12 +64,12 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 	}
 
 	protected static void reConnect(Context context) {
-		if (mClient != null) {
-			mClient.connect();
-		} else {
+//		if (mClient != null) {
+//			mClient.connect();
+//		} else {
 			Intent i = new Intent(context, V5ClientService.class);
 			context.startService(i);
-		}
+//		}
 	}
 
 	protected static void close() {
@@ -157,30 +158,44 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 	}
 	
 	private synchronized void connectWebsocket(boolean forceNew) {
+		if (_block) {
+			Logger.w(TAG, "[connectWebsocket] _block return");
+			return;
+		}
+		if (mClient != null && mClient.isConnected()) {
+			Logger.w(TAG, "[connectWebsocket] isConnected return");
+			return;
+		}
+		_block = true;
 		Logger.w(TAG, "[connectWebsocket] auth:" +  V5ClientConfig.getInstance(this).getAuthorization());
 		V5ClientConfig config = V5ClientConfig.getInstance(this);
-		if (mClient != null && mClient.isConnected()) { // 已连接
-			Logger.w(TAG, "[connectWebsocket] -> mClient != null && mClient.isConnected() = true");
-			if (forceNew) {
-				Logger.i(TAG, "disconnect and then forceNew client");
-				mClient.disconnect(1, "Stop and new client");
-			} else {
-				return;
-			}
-		} else if (mClient != null) {
-			Logger.w(TAG, "[connectWebsocket] -> mClient != null && mClient.isConnected() = false");
-			if (forceNew) {
-				Logger.i(TAG, "forceNew client");
-				mClient = null;
-				mUrl = String.format(Locale.CHINA, V5ClientConfig.WS_URL_FMT, config.getAuthorization()); 
-				mClient = new WebSocketClient(URI.create(mUrl), this, null);
-			}			
-			mClient.connect();
-			if (mUrl != null) {
-				Logger.i(TAG, "url:" + mUrl);
-			}
-		} else {
-			Logger.w(TAG, "[connectWebsocket] -> mClient == null");
+		if (mClient != null) { // 已连接
+			mClient.disconnect();
+			mClient = null;
+		}
+		
+//		if (mClient != null && mClient.isConnected()) { // 已连接
+//			Logger.w(TAG, "[connectWebsocket] -> mClient != null && mClient.isConnected() = true");
+//			if (forceNew) {
+//				Logger.i(TAG, "disconnect and then forceNew client");
+//				mClient.disconnect(1, "Stop and new client");
+//			} else {
+//				return;
+//			}
+//		} else if (mClient != null) {
+//			Logger.w(TAG, "[connectWebsocket] -> mClient != null && mClient.isConnected() = false");
+//			if (forceNew) {
+//				Logger.i(TAG, "forceNew client");
+//				mClient = null;
+//				mUrl = String.format(Locale.CHINA, V5ClientConfig.WS_URL_FMT, config.getAuthorization());
+//				mClient = new V5WebSocketHelper(URI.create(mUrl), this, null);
+//			}			
+//			mClient.connect();
+//			if (mUrl != null) {
+//				Logger.i(TAG, "url:" + mUrl);
+//			}
+//		} else {
+//			Logger.w(TAG, "[connectWebsocket] -> mClient == null");
 			if (config.getAuthorization() == null) {
 				//[修改]认证过期或者失效
 				if (mReAuthCount < 3) {
@@ -195,16 +210,17 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 					// [修改]通知界面是否重试
 					V5ClientAgent.getInstance().errorHandle(new V5KFException(V5ExceptionStatus.ExceptionWSAuthFailed, "authorization failed"));
 				}
+				_block = false;
 				return;
 			}
-			mUrl = String.format(Locale.CHINA, V5ClientConfig.WS_URL_FMT, config.getAuthorization()); 
-			mClient = new WebSocketClient(URI.create(mUrl), this, null);
+			mUrl = String.format(Locale.CHINA, V5ClientConfig.WS_URL_FMT, config.getAuthorization());
+			mClient = new V5WebSocketHelper(URI.create(mUrl), this, null);
 			Logger.i(TAG, "visitor_id:" + config.getV5VisitorId());
 			mClient.connect();
 			if (mUrl != null) {
 				Logger.i(TAG, "url:" + mUrl);
 			}
-		}
+//		}
 	}
 	
 //	private synchronized void connectWebsocket() {
@@ -377,6 +393,8 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 //			V5ClientAgent.getInstance().getSiteInfo(this);
 //			V5ClientAgent.getInstance().setSessionStart(false);
 //		}
+		
+		_block = false;
 	}
 
 	@Override
@@ -526,6 +544,8 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 			// 因网络原因重连
 			if (NetworkManager.isConnected(this)) {
 				switch (code) {
+				case -1: // 正常关闭，不重连
+					break;
 				case 1:
 					mClient = null;
 					connectWebsocket();
@@ -533,15 +553,19 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 				case 1000: // 同一uid重复登录
 					V5ClientAgent.getInstance().errorHandle(new V5KFException(V5ExceptionStatus.ExceptionConnectRepeat, "connection is cut off by same u_id"));
 					break;
+				case 1005: //
+				case 1006: // (websocket关闭前一连接abnormal)
+					break;
 				default:
-					connectWebsocket();
-					V5ClientAgent.getInstance().errorHandle(new V5KFException(V5ExceptionStatus.ExceptionConnectionError, "[" + code + "]" + reason));
+//					connectWebsocket();
+//					V5ClientAgent.getInstance().errorHandle(new V5KFException(V5ExceptionStatus.ExceptionConnectionError, "[" + code + "]" + reason));
 					break;
 				}
 			} else {
 				V5ClientAgent.getInstance().errorHandle(new V5KFException(V5ExceptionStatus.ExceptionNoNetwork, "no network"));
 			}
 		}
+		_block = false;
 	}
 
 	@Override
@@ -579,5 +603,6 @@ public class V5ClientService extends Service implements NetworkListener, WebSock
 				}
 			}
 		}
+		_block = false;
 	}
 }

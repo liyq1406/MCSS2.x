@@ -2,6 +2,8 @@ package com.v5kf.mcss.ui.activity.md2x;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -123,6 +125,12 @@ public class WorkerLogActivity extends BaseToolbarActivity {
 	protected void handleMessage(Message msg) {
 		// Auto-generated method stub
 
+	}
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

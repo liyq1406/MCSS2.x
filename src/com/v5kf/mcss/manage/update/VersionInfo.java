@@ -1,7 +1,13 @@
 package com.v5kf.mcss.manage.update;
 
-public class VersionInfo {
+import java.io.Serializable;
 
+public class VersionInfo implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2806822675010162800L;
 	// 版本描述字符串
 	private String version;
 	// 版本更新时间
@@ -14,6 +20,8 @@ public class VersionInfo {
 	private int versionCode;
 	// apk名称
 	private String apkName;
+	
+	private int level; // 更新等级：1-5，5表示有严重bug需要强制更新，1表示小修改，可选更新。
 
 	public String getVersion() {
 		return version;
@@ -61,6 +69,14 @@ public class VersionInfo {
 
 	public void setApkName(String apkName) {
 		this.apkName = apkName;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 }

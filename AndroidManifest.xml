@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.v5kf.mcss"
-    android:versionCode="31"
-    android:versionName="2.0.1" >
+    android:versionCode="32"
+    android:versionName="2.0.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -43,8 +43,12 @@
 	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
 	<uses-permission android:name="android.permission.PERSISTENT_ACTIVITY" />
 	
+	<!-- 存储访问权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 允许弹出系统级别提示框 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+	<uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+	
     <!-- Optional for location -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     
@@ -225,6 +229,16 @@
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />  
 			</intent-filter>  
 		</receiver>
+		
+		<service
+		    android:name="com.v5kf.mcss.service.UpdateService"
+		    android:enabled="true"
+            android:exported="false" >
+			<intent-filter android:priority="1000" >
+				<action android:name="com.v5kf.mcss.service.update" />
+		    </intent-filter>
+		</service>
+		
 		
 		<service
 		    android:name="com.umeng.update.net.DownloadingService"

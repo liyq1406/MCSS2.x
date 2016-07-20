@@ -75,18 +75,19 @@ public class NetworkManager extends BroadcastReceiver {
         ConnectivityManager connManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        // Wifi
-        State state = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                .getState();
-        if (state == State.CONNECTED || state == State.CONNECTING) {
-            return NETWORK_WIFI;
-        }
+        NetworkInfo netInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (netInfo != null) {
+        	// Wifi
+            State state = netInfo.getState();
+            if (state == State.CONNECTED || state == State.CONNECTING) {
+                return NETWORK_WIFI;
+            }
 
-        // 3G
-        state = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-                .getState();
-        if (state == State.CONNECTED || state == State.CONNECTING) {
-            return NETWORK_MOBILE;
+            // 3G
+            state = netInfo.getState();
+            if (state == State.CONNECTED || state == State.CONNECTING) {
+                return NETWORK_MOBILE;
+            }
         }
         
         return NETWORK_NONE;

@@ -39,9 +39,10 @@ import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.mikepenz.actionitembadge.library.utils.NumberUtils;
 import com.mikepenz.actionitembadge.library.utils.UIUtil;
 import com.umeng.analytics.MobclickAgent;
-import com.v5kf.client.lib.websocket.WebSocketClient;
+import com.v5kf.client.lib.V5WebSocketHelper;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
+import com.v5kf.mcss.config.Config.AppStatus;
 import com.v5kf.mcss.config.Config.ExitFlag;
 import com.v5kf.mcss.config.Config.LoginStatus;
 import com.v5kf.mcss.config.Config.ReloginReason;
@@ -52,6 +53,7 @@ import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
+import com.v5kf.mcss.manage.update.VersionInfo;
 import com.v5kf.mcss.qao.request.LoginRequest;
 import com.v5kf.mcss.qao.request.WorkerRequest;
 import com.v5kf.mcss.service.CoreService;
@@ -166,8 +168,12 @@ public class MainTabActivity extends BaseToolbarActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (CoreService.isConnected() && mHeaderTips.getVisibility() == View.VISIBLE) {
-			dismissViewWithAnimation(mHeaderTips, getAnimationY(false));
+		if (CoreService.isConnected()) {
+			if (mHeaderTips.getVisibility() == View.VISIBLE) {
+				dismissViewWithAnimation(mHeaderTips, getAnimationY(false));
+			}
+		} else {
+			updateStatusSpinner(QAODefine.STATUS_OFFLINE);
 		}
 	}
 	
@@ -905,6 +911,9 @@ public class MainTabActivity extends BaseToolbarActivity {
 			switch (mApplication.getLoginStatus()) {
 			case LoginStatus_Unlogin:
 				stopService(new Intent(this, CoreService.class));
+				if (Config.LOG_LEVEL > 1) {
+					ShowToast("未登录情况");
+				}
 				if (mAlertDialog == null || !mAlertDialog.isShowing()) {
 					gotoActivityAndFinishThis(CustomLoginActivity.class);
 				}
@@ -997,7 +1006,24 @@ public class MainTabActivity extends BaseToolbarActivity {
 	@Override
 	protected void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
-		
+		if (intent == null) {
+			return;
+		}
+		Logger.i(TAG, "[onReceive] " + intent.getAction());
+		if (intent.getAction().equals(Config.ACTION_ON_UPDATE)) {
+			Bundle bundle = intent.getExtras();
+			int intent_type = bundle.getInt(Config.EXTRA_KEY_INTENT_TYPE);
+			switch (intent_type) {
+			case Config.EXTRA_TYPE_UP_ENABLE:
+				// 显示确认更新对话框
+				String version = bundle.getString("version");				
+				String displayMessage = bundle.getString("displayMessage");
+				Logger.i(TAG, "【新版特性】：" + displayMessage);
+				VersionInfo versionInfo = (VersionInfo) bundle.getSerializable("versionInfo");
+				alertUpdateInfo(versionInfo);
+				break;
+			}
+		}
 	}
 	
 	@Override
@@ -1019,7 +1045,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 			
 			@Override
 			public void onClick(View v) {
-				gotoActivityAndFinishThis(CustomLoginActivity.class);
+				//gotoActivityAndFinishThis(CustomLoginActivity.class);
 			}
 		});
 	}
@@ -1056,14 +1082,66 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private void gotoLogin(ReloginReason reason) {
 		Logger.e(TAG + "-eventbus", "eventbus -> ETAG_RELOGIN");
 		mApplication.terminate();
-		if (reason == ReloginReason.ReloginReason_AuthFailed) {
-			
-		}
+		updateSlideMenu();
 		
-		Intent intent = new Intent(this, CustomLoginActivity.class);
-		intent.putExtra(EventTag.ETAG_RELOGIN, reason.ordinal());
-		startActivity(intent);
-		overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+		if (reason == ReloginReason.ReloginReason_Code1000) {
+//			// 账号异地登录，需要重新登录。
+//			Intent intent = new Intent(this, CustomLoginActivity.class);
+//			intent.putExtra(EventTag.ETAG_RELOGIN, reason.ordinal());
+//			startActivity(intent);
+//			overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+			// 账号异地登录，需要重新登录。
+			if (isDialogShow()) {
+				//
+			}
+			showAlertDialog(R.string.tips, R.string.on_other_dev_login_err, R.string.relogin, R.string.logout, new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					mApplication.setAppStatus(AppStatus.AppStatus_Loaded);
+					mApplication.getWorkerSp().saveExitFlag(ExitFlag.ExitFlag_None);
+					mApplication.getWorkerSp().clearAuthorization();
+					Intent i = new Intent(getApplicationContext(), CoreService.class);
+					getApplicationContext().startService(i);
+				}
+			}, new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					mApplication.getWorkerSp().clearAutoLogin();
+					Intent intent = new Intent(MainTabActivity.this, CustomLoginActivity.class);
+					intent.putExtra(EventTag.ETAG_RELOGIN, ReloginReason.ReloginReason_None);
+					startActivity(intent);
+					overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				}
+			});
+		} else {
+			if (isDialogShow()) {
+				//
+			}
+			// 登录认证失效，是否重新登录？
+			showAlertDialog(R.string.tips, R.string.on_other_dev_login_re_token, R.string.relogin, R.string.logout, new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					mApplication.setAppStatus(AppStatus.AppStatus_Loaded);
+					mApplication.getWorkerSp().saveExitFlag(ExitFlag.ExitFlag_None);
+					mApplication.getWorkerSp().clearAuthorization();
+					Intent i = new Intent(getApplicationContext(), CoreService.class);
+					getApplicationContext().startService(i);
+				}
+			}, new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					mApplication.getWorkerSp().clearAutoLogin();
+					Intent intent = new Intent(MainTabActivity.this, CustomLoginActivity.class);
+					intent.putExtra(EventTag.ETAG_RELOGIN, ReloginReason.ReloginReason_None);
+					startActivity(intent);
+					overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+				}
+			});
+		}
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_CHANGE, mode = ThreadMode.MAIN)
@@ -1117,7 +1195,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	}
 
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_START, mode = ThreadMode.MAIN)
-	private void onConnectionStart(WebSocketClient client) {
+	private void onConnectionStart(V5WebSocketHelper client) {
 		Logger.d(TAG + "-eventbus", "onConnectionStart -> ETAG_CONNECTION_START");
 		showProgress();
 		mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);

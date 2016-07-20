@@ -8,6 +8,7 @@ import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.v5kf.client.lib.V5HttpUtil;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
+import com.v5kf.client.lib.entity.V5ImageMessage;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
@@ -547,6 +549,73 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 		}
     }
 
+    /**
+     * @deprecated
+     * @param filePath
+     */
+    private void uploadPhotoMd2x(String filePath) {
+    	// 图片格式验证
+    	String type = UITools.getImageMimeType(filePath);
+    	if (!UITools.isValidImageMimeType(type)) {
+    		ShowToast(String.format(getString(R.string.unsupport_image_type_fmt), type) + getString(R.string.upload_image_tips));
+    		return;
+    	}
+    	// 图片角度矫正
+    	UITools.correctBitmapAngle(filePath);
+    	
+    	String auth = mApplication.getWorkerSp().readAuthorization();
+    	File file = new File(filePath);
+    	String url = String.format(Config.APP_MEDIA_POST_FMT, mWorker.getAccount_id(), "0", "app", file.getName());
+		Logger.d(TAG, "[postMedia] url:" + url);
+		V5HttpUtil.postMedia(new V5ImageMessage(), file, url, auth, new HttpResponseHandler(mApplication) {
+			
+			@Override
+			public void onSuccess(int statusCode, String responseString) {
+				// 解析地址
+				Logger.i(TAG, "[postMedia] success responseString:" + responseString);
+				if (statusCode == 200) {
+					try {
+						JSONObject data = new JSONObject(responseString);
+						String url = data.optString("url");
+						String media_id = data.optString("media_id");
+						if (!TextUtils.isEmpty(url)) {
+							myPhoto = url;
+							mWorker.setPhoto(myPhoto);
+							if (mAppInfo.getCoWorker(w_id) != null) {
+								mAppInfo.getCoWorker(w_id).setPhoto(myPhoto);
+							}
+							// 退出时发送
+//								WorkerRequest wReq = (WorkerRequest)RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, getContext());
+//								wReq.setWorkerInfo(mWorker);
+							mApplication.getWorkerSp().saveWorkerPhoto(myPhoto);
+							mHandler.obtainMessage(HDL_UPLOAD_PHOTO_OK).sendToTarget();
+							return;
+						} else {
+							mHandler.obtainMessage(HDL_UPLOAD_PHOTO_FAILED).sendToTarget();
+							return;
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+				// 失败
+				mHandler.obtainMessage(HDL_UPLOAD_PHOTO_FAILED).sendToTarget();
+			}
+			
+			@Override
+			public void onFailure(int statusCode, String responseString) {
+				Logger.e(TAG, "[postMedia] failure(" + statusCode + 
+						") responseString:" + responseString);
+				// 失败
+				mHandler.obtainMessage(HDL_UPLOAD_PHOTO_FAILED).sendToTarget();
+			}
+		});
+    }
+    
+    /**
+     * @deprecated
+     * @param filePath
+     */
 	private void uploadPhoto(String filePath) {
 		// 图片格式验证
 		String type = UITools.getImageMimeType(filePath);
@@ -558,10 +627,17 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 		UITools.correctBitmapAngle(filePath);
 		
 		String auth = mApplication.getWorkerSp().readAuthorization();
+		
 		String url = Config.APP_PIC_AUTH_URL + auth;
 		getPictureService(filePath, url, auth);
 	}
 
+	/**
+	 * @deprecated
+	 * @param filePath
+	 * @param url
+	 * @param auth
+	 */
 	private void getPictureService(final String filePath, String url, String auth) {
 		V5HttpUtil.getPicService(url, auth, new HttpResponseHandler(this) {
 			
@@ -592,6 +668,12 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 		});
 	}
 	
+	/**
+	 * @deprecated
+	 * @param filePath
+	 * @param url
+	 * @param authorization
+	 */
 	private void postImageAndSend(String filePath, String url, String authorization) {
 		if (null == url || null == authorization) {
 			mHandler.obtainMessage(HDL_UPLOAD_PHOTO_FAILED).sendToTarget();
@@ -650,6 +732,12 @@ public class WorkerInfoActivity extends BaseToolbarActivity implements OnClickLi
 		} else {
 			finishActivity();
 		}
+	}
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

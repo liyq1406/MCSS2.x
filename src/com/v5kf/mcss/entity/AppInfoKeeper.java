@@ -16,6 +16,7 @@ import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerBean.CustomerType;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.WorkerRequest;
+import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.v5kf.mcss.utils.cache.MediaLoader;
@@ -185,7 +186,7 @@ public class AppInfoKeeper {
 	}
 	
 	public WorkerBean getUser() {
-		if (mUser == null) {
+		if (mUser == null && CoreService.isConnected()) {
 			try {
 				WorkerRequest wReq = (WorkerRequest) RequestManager.getRequest(QAODefine.O_TYPE_WWRKR, mContext);
 //				List<WorkerBean> users = DataSupport.findAll(WorkerBean.class);

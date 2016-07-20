@@ -1865,4 +1865,10 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			updateCustomerTitle();
 		}
     }
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		
+	}
 }

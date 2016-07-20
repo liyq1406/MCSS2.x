@@ -137,10 +137,10 @@ public class GuideActivity extends BaseLoginActivity {
 			case R.id.guide_bottom_left_iv:
 				if (mWSP.readAuthorization() == null || !mWSP.readAutoLogin() || mWSP.readPassWord().isEmpty()
 						|| mWSP.readExitFlag() == ExitFlag.ExitFlag_NeedLogin) {
+					gotoActivityAndFinishThis(CustomLoginActivity.class);
+				} else {
 					gotoMainTabActivity();
 					startUpdateService();
-				} else {
-					gotoActivityAndFinishThis(CustomLoginActivity.class);
 				}
 				mApplication.getWorkerSp().saveBoolean("v5_inited", true);
 				break;

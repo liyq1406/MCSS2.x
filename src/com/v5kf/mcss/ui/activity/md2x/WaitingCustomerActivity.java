@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.chyrain.irecyclerview.RefreshRecyclerView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.v5kf.client.lib.websocket.WebSocketClient;
+import com.v5kf.client.lib.V5WebSocketHelper;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
@@ -274,7 +274,7 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_START, mode = ThreadMode.MAIN)
-	private void onConnectionStart(WebSocketClient client) {
+	private void onConnectionStart(V5WebSocketHelper client) {
 		Logger.d(TAG + "-eventbus", "onConnectionStart -> ETAG_CONNECTION_START");
 		showProgress();
 	}

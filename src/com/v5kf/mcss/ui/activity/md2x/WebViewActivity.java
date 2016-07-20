@@ -1,5 +1,6 @@
 package com.v5kf.mcss.ui.activity.md2x;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -210,6 +211,12 @@ public class WebViewActivity extends BaseToolbarActivity {
 
 	@Override
 	protected void handleMessage(Message msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -19,6 +19,7 @@ import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -872,6 +873,13 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		}
 		Logger.d(TAG, "[ETAG_MESSAGE_ARRAY_CHANGE]->[refreshData]");
 		refreshData(SEARCH_TYPE_NO_RANGE);
+	}
+
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

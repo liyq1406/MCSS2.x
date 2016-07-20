@@ -3,7 +3,6 @@ package com.v5kf.mcss.service;
 import java.lang.ref.WeakReference;
 import java.net.URI;
 
-import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
@@ -29,8 +28,9 @@ import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 import com.v5kf.client.lib.V5HttpUtil;
+import com.v5kf.client.lib.V5WebSocketHelper;
+import com.v5kf.client.lib.V5WebSocketHelper.WebsocketListener;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
-import com.v5kf.client.lib.websocket.WebSocketClient;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
@@ -48,7 +48,7 @@ import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.WakeUtil;
 import com.v5kf.mcss.utils.WorkerSP;
 
-public class CoreService extends Service implements WebSocketClient.Listener, NetworkListener {
+public class CoreService extends Service implements WebsocketListener, NetworkListener {
 	private static final String TAG = "CoreService";
 	public static final int WHAT_SHOW_TOAST = 1;
 	public static final int WHAT_SEND_REQUEST = 3;
@@ -68,7 +68,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 	String mUri;
 	static CustomApplication mApplication;
 	static AppInfoKeeper mAppInfo;
-	static WebSocketClient mClient;
+	static V5WebSocketHelper mClient;
 	WorkerSP mWSP;
 	Handler mHandler;
 	private boolean mReconFlag = false; // 重连标识
@@ -191,54 +191,67 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 			Logger.w(TAG, "[connectWebsocket] is already connecting");
 			return;
 		}
+		if (mClient != null && mClient.isConnected()) {
+			Logger.w(TAG, "[connectWebsocket] isConnected return");
+			return;
+		}
 		connecting = true;
 		if (mWSP.readExitFlag() == ExitFlag.ExitFlag_NeedLogin) { //|| mApplication.getAppStatus() == Config.EXIT
 			Logger.d(TAG, "[connectWebsocket] EXIT appStatus:" + mApplication.getAppStatus()
 					+ " exitflag:" + mWSP.readExitFlag());
 			stopSelf();
+			connecting = false;
 			return;
 		}
+		
+		if (mClient != null) { // 已连接
+			mClient.disconnect();
+			mClient = null;
+		}
+		
 		String id = mWSP.readWorkerId();
 		String site = mWSP.readSiteId();
 		String auth = mWSP.readAuthorization();
 		if (auth == null) {
 			Logger.i(TAG, "Auth已过期，重新请求authorization...");
 			getAccessToken();
+			connecting = false;
 		} else {
-			if (null != mClient && mClient.isConnected() && newClient) {
-//				mClient.disconnect(10, "Stop and new client");
+//			if (null != mClient && mClient.isConnected() && newClient) {
+////				mClient.disconnect(10, "Stop and new client");
+////				connecting = false;
+////				Logger.i(TAG, "[connectWebsocket] mClient isConnected and force disconnect");
+////				return;
+//				mClient.disconnect(-1, "Normal disconnect");
+//				mClient = null;
+//				mUri = Config.WS_PROTOCOL + "://" + Config.WS_HOST + Config.WS_PATH + "?id=" + id + "&site=" 
+//						+ site + "&dev=android&client=1026&device_token=" + mApplication.getDeviceToken() + "&auth=" + auth;
+//				Logger.i(TAG, "uri:" + mUri);
+//					
+//				mClient = new V5WebSocketHelper(URI.create(mUri), this, null);
+//			} else if (mClient != null && mClient.isConnected()) {
 //				connecting = false;
-//				Logger.i(TAG, "[connectWebsocket] mClient isConnected and force disconnect");
+//				Logger.i(TAG, "[connectWebsocket] mClient isConnected and return");
 //				return;
-				mClient.disconnect(-1, "Normal disconnect");
-				mClient = null;
+//			} else if (mClient != null) {
+//				if (newClient) {
+//					Logger.i(TAG, "forceNew client");
+//					mClient.disconnect(-1, "Normal disconnect");
+//					mClient = null;
+//					mUri = Config.WS_PROTOCOL + "://" + Config.WS_HOST + Config.WS_PATH + "?id=" + id + "&site=" 
+//							+ site + "&dev=android&client=1026&device_token=" + mApplication.getDeviceToken() + "&auth=" + auth;
+//					Logger.i(TAG, "uri:" + mUri);
+//						
+//					mClient = new V5WebSocketHelper(URI.create(mUri), this, null);
+//				}			
+//			} else {
 				mUri = Config.WS_PROTOCOL + "://" + Config.WS_HOST + Config.WS_PATH + "?id=" + id + "&site=" 
 						+ site + "&dev=android&client=1026&device_token=" + mApplication.getDeviceToken() + "&auth=" + auth;
 				Logger.i(TAG, "uri:" + mUri);
 					
-				mClient = new WebSocketClient(URI.create(mUri), this, null);
-			} else if (mClient != null && mClient.isConnected()) {
-				Logger.i(TAG, "[connectWebsocket] mClient isConnected and return");
-				return;
-			} else if (mClient != null) {
-				if (newClient) {
-					Logger.i(TAG, "forceNew client");
-					mClient.disconnect(-1, "Normal disconnect");
-					mClient = null;
-					mUri = Config.WS_PROTOCOL + "://" + Config.WS_HOST + Config.WS_PATH + "?id=" + id + "&site=" 
-							+ site + "&dev=android&client=1026&device_token=" + mApplication.getDeviceToken() + "&auth=" + auth;
-					Logger.i(TAG, "uri:" + mUri);
-						
-					mClient = new WebSocketClient(URI.create(mUri), this, null);
-				}			
-			} else {
-				mUri = Config.WS_PROTOCOL + "://" + Config.WS_HOST + Config.WS_PATH + "?id=" + id + "&site=" 
-						+ site + "&dev=android&client=1026&device_token=" + mApplication.getDeviceToken() + "&auth=" + auth;
-				Logger.i(TAG, "uri:" + mUri);
-					
-				mClient = new WebSocketClient(URI.create(mUri), this, null);
+				mClient = new V5WebSocketHelper(URI.create(mUri), this, null);
 				Logger.i(TAG, "[connectWebsocket] mClient.connect()");
-			}
+//			}
 			EventBus.getDefault().post(mClient, EventTag.ETAG_CONNECTION_START);
 			mClient.connect();
 		}
@@ -449,8 +462,9 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 				connectWebsocket();
 			} else if (!mClient.isConnected()) {
 				Logger.i(TAG, "[keepCoreService] -> not connect -> try mClient.connect()");
-				mClient.disconnect();
-				mClient.connect();
+//				mClient.disconnect();
+//				mClient.connect();
+				connectWebsocket();
 			} else {
 				if (ping) {
 					Logger.i(TAG, "[keepCoreService] -> connected -> ping");
@@ -564,7 +578,6 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 	@Override
 	public void onConnect() {
 		Logger.i(TAG, ">>>onConnect<<<");
-		connecting = false;
 		mTotalSend = 0;
 		
 		if (mReconFlag) {
@@ -579,6 +592,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 		EventBus.getDefault().post(Boolean.valueOf(true), EventTag.ETAG_CONNECTION_CHANGE);
 		
 		mReconFlag = true;
+		connecting = false;
 	}
 
 	@Override
@@ -605,6 +619,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 
 	@Override
 	public void onDisconnect(int code, String reason) {
+		connecting = false;
 		Logger.w(TAG, ">>>onDisconnect<<< [code:" + code + "]: " + reason);
 		offline();
 		
@@ -617,6 +632,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 		/* 判断断线原因并处理 */
 		switch (code) {
 		case -1:
+		case 4000: // 因本设备重复连接被断开
 			return;
 		
 		case 10: // 强制断开重连
@@ -624,21 +640,33 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 			connectWebsocket();
 			return;
 		
-		case 1: // off line
+		case 4001: // off line
 			mApplication.setAppStatus(AppStatus.AppStatus_Exit);
 			mWSP.saveExitFlag(ExitFlag.ExitFlag_AutoLogin);
 			stopSelf();
+			
+			// 通知连接断开
+			if (mApplication.isAppForeground()) {
+				EventBus.getDefault().post(Boolean.valueOf(false), EventTag.ETAG_CONNECTION_CHANGE);
+			}
 			return;
 		case 1000: // 重复登录
 			mApplication.setAppStatus(AppStatus.AppStatus_Exit);
 			mWSP.saveExitFlag(ExitFlag.ExitFlag_NeedLogin);
 			stopSelf();
 			// 需要重新登录
-			mApplication.getWorkerSp().clearAutoLogin();
 			mApplication.terminate(); // 被迫退出
 			MobclickAgent.onEvent(this, "APP_LOGOUT");
 			EventBus.getDefault().post(ReloginReason.ReloginReason_Code1000, EventTag.ETAG_RELOGIN);
+			
+			// 通知连接断开
+			if (mApplication.isAppForeground()) {
+				EventBus.getDefault().post(Boolean.valueOf(false), EventTag.ETAG_CONNECTION_CHANGE);
+			}
 			return;
+		case 1005: //
+		case 1006: // (websocket关闭前一连接abnormal)
+			break;
 		default:
 			break;
 		}
@@ -659,12 +687,12 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 
 	@Override
 	public void onError(Exception error) {
+		connecting = false;
 		if (mClient == null) {
 			Logger.e(TAG, ">>>onError<<< mClient == null ");
 			return;
 		}
 		Logger.e(TAG, ">>>onError<<<[" + mClient.getStatusCode() + "]: " + error.getMessage());
-		connecting = false;
 		offline();
 		/* 通知连接断开 */
 		if (mApplication.isAppForeground()) {
@@ -687,11 +715,11 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 		MobclickAgent.onEvent(this, "WEBSOCKET_ONERROR");
 
 		if (mClient.isConnected()) {
-			mClient.disconnect(-6, error.getMessage());
+			mClient.disconnect(4006, error.getMessage());
 		}
 		 
 		/* 连接建立失败处理 */
-		if (mClient.getStatusCode() != HttpStatus.SC_SWITCHING_PROTOCOLS) {
+		if (mClient.getStatusCode() != 101) {
 			switch (mClient.getStatusCode()) {
 			case 406: // authorization失效
 			case 404: // url错误
@@ -699,6 +727,7 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 				// [修改]需进入UserLoginActivity
 				mApplication.setAppStatus(AppStatus.AppStatus_Exit);
 				mWSP.saveExitFlag(ExitFlag.ExitFlag_NeedLogin);
+				mWSP.clearAuthorization();
 				stopSelf();
 				// 需要重新登录
 				EventBus.getDefault().post(ReloginReason.ReloginReason_AuthFailed, EventTag.ETAG_RELOGIN);
@@ -713,10 +742,10 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 			return;
 		}
 		
-		/* 网络原因则尝试重连 */
-		if (NetworkManager.isConnected(this) && mWSP.readExitFlag() == ExitFlag.ExitFlag_None) {
-			mHandler.sendEmptyMessage(WHAT_WS_RECONNECT);
-		}
+//		/* 网络原因则尝试重连 */
+//		if (NetworkManager.isConnected(this) && mWSP.readExitFlag() == ExitFlag.ExitFlag_None) {
+//			mHandler.sendEmptyMessage(WHAT_WS_RECONNECT);
+//		}
 	}
 	
 	private void offline() {
@@ -764,9 +793,9 @@ public class CoreService extends Service implements WebSocketClient.Listener, Ne
 		if (mClient != null) {
 			//mClient.close(1000, "Normal close");
 			if (quit) {
-				mClient.disconnect(2, "Logout close"); // [修改]退出登录，需要重新登录
+				mClient.disconnect(4002, "Logout close"); // [修改]退出登录，需要重新登录
 			} else {
-				mClient.disconnect(1, "Off line"); // [修改]退出到后台OffLine
+				mClient.disconnect(4001, "Off line"); // [修改]退出到后台OffLine
 			}
 		}
 		mApplication.setAppStatus(AppStatus.AppStatus_Exit);

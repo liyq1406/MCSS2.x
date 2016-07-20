@@ -1,5 +1,7 @@
 package com.v5kf.mcss.ui.activity.md2x;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -21,7 +23,7 @@ import com.v5kf.mcss.ui.fragment.md2x.MaterialBaseFragment;
 import com.v5kf.mcss.utils.UITools;
 
 public class MaterialResActivity extends BaseToolbarActivity {
-	private static final String TAG = "MaterialResActivity";
+//	private static final String TAG = "MaterialResActivity";
 	/* 素材类型 */
 	public static final int TYPE_IMG = 1;
 	public static final int TYPE_NEWS = 2;
@@ -116,5 +118,11 @@ public class MaterialResActivity extends BaseToolbarActivity {
 			return FragmentListPageAdapter.POSITION_NONE;
 		}
 
+	}
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		
 	};
 }

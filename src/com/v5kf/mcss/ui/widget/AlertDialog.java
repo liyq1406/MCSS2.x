@@ -2,6 +2,8 @@ package com.v5kf.mcss.ui.widget;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -75,20 +77,23 @@ public class AlertDialog {
 	
 	public AlertDialog setTitle(String title) {
 		showTitle = true;
-		if ("".equals(title)) {
+		if ("".equals(title) || title == null) {
 			txt_title.setText("标题");
 		} else {
-			txt_title.setText(title);
+			Spanned text = Html.fromHtml(title);
+			txt_title.setText(text);
 		}
 		return this;
 	}
 
 	public AlertDialog setMsg(String msg) {
 		showMsg = true;
-		if ("".equals(msg)) {
+		if ("".equals(msg) || msg == null) {
 			txt_msg.setText("内容");
 		} else {
-			txt_msg.setText(msg);
+			msg.replace("\\n", "<br>");
+			Spanned text = Html.fromHtml(msg);
+			txt_msg.setText(text);
 		}
 		return this;
 	}
@@ -108,6 +113,7 @@ public class AlertDialog {
 		if (msg == 0) {
 			txt_msg.setText("内容");
 		} else {
+			
 			txt_msg.setText(msg);
 		}
 		return this;
@@ -115,6 +121,15 @@ public class AlertDialog {
 
 	public AlertDialog setCancelable(boolean cancel) {
 		dialog.setCancelable(cancel);
+		return this;
+	}
+	
+	public Dialog getDialog() {
+		return dialog;
+	}
+	
+	public AlertDialog setWindowType(int windowType) {
+		dialog.getWindow().setType(windowType);
 		return this;
 	}
 
@@ -129,10 +144,10 @@ public class AlertDialog {
 		btn_pos.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				dialog.dismiss();
 				if (listener != null) {
 					listener.onClick(v);
 				}
-				dialog.dismiss();
 			}
 		});
 		return this;
@@ -149,10 +164,10 @@ public class AlertDialog {
 		btn_neg.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				dialog.dismiss();
 				if (listener != null) {
 					listener.onClick(v);
 				}
-				dialog.dismiss();
 			}
 		});
 		return this;
@@ -169,8 +184,10 @@ public class AlertDialog {
 		btn_pos.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				listener.onClick(v);
 				dialog.dismiss();
+				if (listener != null) {
+					listener.onClick(v);
+				}
 			}
 		});
 		return this;
@@ -187,10 +204,10 @@ public class AlertDialog {
 		btn_neg.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				dialog.dismiss();
 				if (listener != null) {
 					listener.onClick(v);
 				}
-				dialog.dismiss();
 			}
 		});
 		return this;

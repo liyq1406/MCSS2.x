@@ -6,6 +6,7 @@ import org.simple.eventbus.EventBus;
 import android.content.Context;
 
 import com.v5kf.mcss.eventbus.EventTag;
+import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.utils.Logger;
 
 public abstract class BaseRequest {
@@ -26,7 +27,11 @@ public abstract class BaseRequest {
 	protected void sendRequest(String request) {
 		// [eventbus]
 		Logger.d("BaseRequest", "sendRequest:" + request);
-		EventBus.getDefault().post(request, EventTag.ETAG_SEND_MSG);
+		if (CoreService.isConnected()) {
+			EventBus.getDefault().post(request, EventTag.ETAG_SEND_MSG);
+		} else {
+			Logger.e("BaseRequest", "(Not connect)Failed to sendRequest:" + request);
+		}
 	}
 	
 	/**

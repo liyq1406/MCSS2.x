@@ -1,6 +1,8 @@
 package com.v5kf.mcss.ui.fragment.md2x;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +26,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
+import com.v5kf.mcss.entity.ArchWorkerBean;
 import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.entity.CustomerBean.CustomerType;
 import com.v5kf.mcss.eventbus.EventTag;
@@ -34,6 +37,7 @@ import com.v5kf.mcss.ui.activity.MainTabActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.adapter.IServingAdapter;
 import com.v5kf.mcss.ui.entity.IServingBean;
+import com.v5kf.mcss.ui.fragment.md2x.TabWorkerListFragment.WorkerStatusCompartor;
 import com.v5kf.mcss.ui.view.V5RefreshLayout;
 import com.v5kf.mcss.ui.widget.Divider;
 import com.v5kf.mcss.utils.Logger;
@@ -153,6 +157,9 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 			}
         	addRecycleBean(cstm);
 		}
+		// 排序：在线最前，然后是忙碌，离开，离线
+		CustomerCompartor cc = new CustomerCompartor();
+		Collections.sort(mRecycleBeans, cc);	
 	}
 
 	/**
@@ -367,6 +374,34 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	private void notifyRecyclerDataSetChange() {
 		mRecycleAdapter.notifyDataSetChanged();
 		mIRecycleView.getRefreshableView().postInvalidateDelayed(5);
+	}
+	
+	/**
+	 * 节点坐席状态比较器
+	 * @author Chenhy	
+	 * @email chenhy@v5kf.com
+	 * @version v1.0 2015-9-28 上午9:53:14
+	 * @package com.v5kf.mcss.ui.adapter.tree of MCSS-Native
+	 * @file TreeHelper.java 
+	 *
+	 */
+	static class CustomerCompartor implements Comparator<IServingBean> {
+
+		@Override
+		public int compare(IServingBean lhs, IServingBean rhs) {
+			if (lhs.getCustomer().getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				return 1;
+			} else if (rhs.getCustomer().getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				return -1;
+			}
+			
+			if (lhs.getCustomer().getLastestActiveTime() > rhs.getCustomer().getLastestActiveTime()) {
+				return -1;
+			} else if (lhs.getCustomer().getLastestActiveTime() < rhs.getCustomer().getLastestActiveTime()) {
+				return 1;
+			}
+			return 0;
+		}
 	}
 	
 	/***** event *****/

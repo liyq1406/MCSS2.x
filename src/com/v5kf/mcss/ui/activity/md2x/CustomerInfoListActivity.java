@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -503,6 +504,12 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 		} else {
 			finishActivity();
 		}
+	}
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

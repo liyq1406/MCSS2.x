@@ -11,6 +11,7 @@ import org.litepal.crud.DataSupport;
 
 import android.text.TextUtils;
 
+import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.QAODefine;
@@ -658,6 +659,43 @@ public class CustomerBean extends BaseBean implements Serializable {
 		} else {
 			return CustomApplication.getAppInfoInstance().getUser().getAccount_id();
 		}
+	}
+
+	public long getLastestActiveTime() {
+		V5Message msg = getLastestMessage();
+		if (msg != null && msg.getCreate_time() > 0) {
+			return msg.getCreate_time();
+		}
+		if (getSession() != null && getSession().getFirst_time() > 0) {
+			return getSession().getFirst_time();
+		}
+		return 0;
+	}
+	
+	public V5Message getLastestMessage() {
+		if (null == getSession()) {
+			return null;
+		}
+		List<V5Message> msgList = getSession().getMessageArray();
+		if (msgList == null || msgList.isEmpty()) {
+			return null;
+		}
+		V5Message message = msgList.get(0);
+		if (null != message && message.getCandidate() != null && !message.getCandidate().isEmpty()) {
+			V5Message msgContent = message.getCandidate().get(0);
+			if (msgContent != null && (msgContent.getDirection() == QAODefine.MSG_DIR_FROM_ROBOT
+					|| msgContent.getDirection() == QAODefine.MSG_DIR_FROM_WAITING 
+//					|| msgContent.getDirection() == QAODefine.MSG_DIR_R2WM
+			// || msgContent.getDirection() == QAODefine.MSG_DIR_R2CW
+					)) {
+				if (msgContent.getDefaultContent(CustomApplication.getContext()) == null || msgContent.getDefaultContent(CustomApplication.getContext()).isEmpty()) {
+					// 排除机器人回答不上的空内容
+					return message;
+				}
+				message = msgContent;
+			}
+		}
+		return message;
 	}
 	
 //	public void parseCustomerJoinIn(JSONObject json) throws NumberFormatException, JSONException {

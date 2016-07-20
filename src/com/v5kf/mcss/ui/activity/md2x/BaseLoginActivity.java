@@ -7,7 +7,11 @@ import android.os.Message;
 
 import com.umeng.update.UmengUpdateAgent;
 import com.v5kf.mcss.R;
+import com.v5kf.mcss.config.Config;
+import com.v5kf.mcss.manage.update.VersionInfo;
+import com.v5kf.mcss.service.UpdateService;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
+import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 
 public abstract class BaseLoginActivity extends ActivityBase {
@@ -37,15 +41,41 @@ public abstract class BaseLoginActivity extends ActivityBase {
 	 * 开启友盟自动更新
 	 */
 	protected void startUpdateService() {
-		UmengUpdateAgent.update(this); // 改用友盟自动更新SDK
-		UmengUpdateAgent.setDeltaUpdate(false);
-		UmengUpdateAgent.setUpdateCheckConfig(true);
+		if (Config.ENABLE_UMENG_UPDATE) {
+			UmengUpdateAgent.update(this); // 改用友盟自动更新SDK
+			UmengUpdateAgent.setDeltaUpdate(false);
+			UmengUpdateAgent.setUpdateCheckConfig(true);
+		} else {
+			Intent i = new Intent(this, UpdateService.class);
+			startService(i);
+		}
 	}
 	
 	@Override
 	protected abstract void handleMessage(Message msg);
 
 	@Override
-	protected void onReceive(Context context, Intent intent) {}
+	protected void onReceive(Context context, Intent intent) {
+		if (intent == null) {
+			return;
+		}
+		Logger.i("BaseLoginActivity", "[onReceive] " + intent.getAction());
+		if (intent.getAction().equals(Config.ACTION_ON_UPDATE)) {
+			Bundle bundle = intent.getExtras();
+			int intent_type = bundle.getInt(Config.EXTRA_KEY_INTENT_TYPE);
+			switch (intent_type) {
+			case Config.EXTRA_TYPE_UP_ENABLE:
+				// 显示确认更新对话框
+//				String version = bundle.getString("version");				
+//				String displayMessage = bundle.getString("displayMessage");
+//				Logger.i(TAG, "【新版特性】：" + displayMessage);
+				VersionInfo versionInfo = (VersionInfo) bundle.getSerializable("versionInfo");
+				if (isForeground) {
+					alertUpdateInfo(versionInfo);
+				}
+				break;
+			}
+		}		
+	}
 
 }

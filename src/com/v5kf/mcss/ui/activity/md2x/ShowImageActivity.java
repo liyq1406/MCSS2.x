@@ -3,14 +3,17 @@ package com.v5kf.mcss.ui.activity.md2x;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -72,7 +75,7 @@ public class ShowImageActivity extends BaseActivity implements ImageLoaderListen
     	}
 	}
 	
-	private void initView() {
+	@SuppressLint("InlinedApi") private void initView() {
 		mPhotoIv = (PhotoView) findViewById(R.id.id_image);
 		mLoadingPb = (ProgressBar) findViewById(R.id.id_loading_progress);
 		
@@ -117,6 +120,15 @@ public class ShowImageActivity extends BaseActivity implements ImageLoaderListen
 		
 		ImageLoader imgLoader = new ImageLoader(this, true, R.drawable.v5_img_src_loading, this);
     	imgLoader.DisplayImage(mUrl, mPhotoIv);
+    	
+    	// 全屏显示
+    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+    		mPhotoIv.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+		} else {
+			mPhotoIv.setSystemUiVisibility(View.INVISIBLE);
+		}
+		//mRLayout.setSystemUiVisibility(View.INVISIBLE);
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
 	}
 
 	protected void showSaveImgOptionDialog() {

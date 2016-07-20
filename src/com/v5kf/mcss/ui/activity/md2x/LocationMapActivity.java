@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -439,6 +440,12 @@ public class LocationMapActivity extends BaseToolbarActivity implements TencentL
 
 	@Override
 	protected void handleMessage(Message msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		
 	}

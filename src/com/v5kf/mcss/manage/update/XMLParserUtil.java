@@ -38,8 +38,6 @@ public class XMLParserUtil {
 						info.setVersion(parser.nextText());
 					} else if ("updateTime".equals(parser.getName())) {
 						info.setUpdateTime(parser.nextText());
-					} else if ("updateTime".equals(parser.getName())) {
-						info.setUpdateTime(parser.nextText());
 					} else if ("downloadURL".equals(parser.getName())) {
 						info.setDownloadURL(parser.nextText());
 					} else if ("displayMessage".equals(parser.getName())) {
@@ -48,6 +46,8 @@ public class XMLParserUtil {
 						info.setApkName(parser.nextText());
 					} else if ("versionCode".equals(parser.getName())) {
 						info.setVersionCode(Integer.parseInt(parser.nextText()));
+					} else if ("level".equals(parser.getName())) {
+						info.setLevel(Integer.parseInt(parser.nextText()));
 					}
 					break;
 				case XmlPullParser.END_TAG:
@@ -95,6 +95,8 @@ public class XMLParserUtil {
 						info.setApkName(parser.nextText());
 					} else if ("versionCode".equals(parser.getName())) {
 						info.setVersionCode(Integer.parseInt(parser.nextText()));
+					} else if ("level".equals(parser.getName())) {
+						info.setLevel(Integer.parseInt(parser.nextText()));
 					}
 					break;
 				case XmlPullParser.END_TAG:

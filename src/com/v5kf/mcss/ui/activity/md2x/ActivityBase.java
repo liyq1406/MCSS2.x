@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +35,7 @@ import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.entity.AppInfoKeeper;
+import com.v5kf.mcss.manage.update.VersionInfo;
 import com.v5kf.mcss.ui.view.SystemBarTintManager;
 import com.v5kf.mcss.ui.widget.AlertDialog;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
@@ -62,7 +62,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	
 	/* [修改]抽象方法改为普通方法，子类选择性实现即可 */
 	protected abstract void handleMessage(Message msg);
-	protected void onReceive(Context context, Intent intent){};
+	protected abstract void onReceive(Context context, Intent intent);
 	
 	@Override
     public void onBackPressed() {
@@ -82,6 +82,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		/* 注册广播接收 */
 		IntentFilter filter=new IntentFilter();
 		filter.addAction(Config.ACTION_ON_MAINTAB);
+		filter.addAction(Config.ACTION_ON_UPDATE);
 		LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, filter);
 	}
 	
@@ -208,6 +209,8 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		
 		// 注销event对象
         EventBus.getDefault().unregister(this);
+        
+        dismissAlertDialog();
 	}
 	
 	
@@ -360,6 +363,22 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		if(mProgressDialog != null && mProgressDialog.isShowing()) {
 			return true;
 		}
+		if(mAlertDialog != null && mAlertDialog.isShowing()) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	protected boolean isProgressDialogShow() {
+		if(mProgressDialog != null && mProgressDialog.isShowing()) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	protected boolean isAlertDialogShow() {
 		if(mAlertDialog != null && mAlertDialog.isShowing()) {
 			return true;
 		}
@@ -622,6 +641,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	
 	public void showAlertDialog(int titleId, int contentId, int positiveBtnText, int negativeBtnText,
 			OnClickListener positiveBtnListener, OnClickListener negativeBtnListener) {
+		dismissAlertDialog();
 		mAlertDialog = 
 		new AlertDialog(this).builder()
 			.setTitle(titleId)
@@ -633,6 +653,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 	
 	public void showAlertDialog(int titleId, int contentId, OnClickListener negativeListener) {
+		dismissAlertDialog();
 		mAlertDialog = 
 		new AlertDialog(this).builder()
 		.setTitle(titleId)
@@ -643,6 +664,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 	
 	public void showAlertDialog(int titleId, int contentId, OnClickListener positiveBtnListener, OnClickListener negativeBtnListener) {
+		dismissAlertDialog();
 		mAlertDialog = 
 		new AlertDialog(this).builder()
 		.setTitle(titleId)
@@ -654,6 +676,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 
 	public void showAlertDialog(int contentId, OnClickListener positiveBtnListener, OnClickListener negativeBtnListener) {
+		dismissAlertDialog();
 		mAlertDialog = 
 				new AlertDialog(this).builder()
 				.setTitle("提示")
@@ -665,6 +688,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 	
 	public void showAlertDialog(int contentId) {
+		dismissAlertDialog();
 		mAlertDialog = 
 				new AlertDialog(this).builder()
 				.setTitle("提示")
@@ -675,6 +699,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 	
 	public void showAlertDialog(int contentId, OnClickListener negativeListener) {
+		dismissAlertDialog();
 		mAlertDialog = 
 		new AlertDialog(this).builder()
 		.setTitle("提示")
@@ -685,7 +710,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 	
 	public void dismissAlertDialog() {
-		if (mAlertDialog != null) {
+		if (mAlertDialog != null && mAlertDialog.isShowing()) {
 			mAlertDialog.dismiss();
 			mAlertDialog = null;
 		}
@@ -719,5 +744,52 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	public void gotoWebViewActivity(String url, int titleId) {
 		Intent i = IntentUtil.getStartWebViewIntent(this, WebViewActivity.class, url, titleId);
 		gotoActivity(i);
+	}
+	
+	/**
+	 * 提示更新
+	 * @param versionInfo
+	 */
+	protected void alertUpdateInfo(VersionInfo vInfo) {
+		dismissAlertDialog();
+		// [修改]显示确认更新对话框
+		mAlertDialog = new AlertDialog(this).builder()
+			.setTitle("【版本更新（" + vInfo.getVersion() + "）】")
+			.setMsg(vInfo.getDisplayMessage())
+//			.setWindowType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+			.setCancelable(false);
+		if (vInfo.getLevel() == 5) { // 第5等级的level说明更新很重要，解决前一版本的重大bug 
+			mAlertDialog.setNegativeButton("下载更新", new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// 允许下载
+					Intent i = new Intent(Config.ACTION_ON_UPDATE);
+					i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_DOWNLOAD);
+					LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+				}
+			});
+		} else {
+			mAlertDialog.setPositiveButton("下载更新", new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// 允许下载
+					Intent i = new Intent(Config.ACTION_ON_UPDATE);
+					i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_DOWNLOAD);
+					LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+				}
+			}).setNegativeButton("下次再说", new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// 不下载，下次再试
+					Intent i = new Intent(Config.ACTION_ON_UPDATE);
+					i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_CANCEL);
+					LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+				}
+			});
+		}
+		mAlertDialog.show();
 	}
 }

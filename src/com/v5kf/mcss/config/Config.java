@@ -21,7 +21,8 @@ public class Config {
 	public static boolean REQ_HTTPS = false; // 加密请求
 	public static boolean WEB_HTTPS = false; // 网页使用https
 	public static final boolean ENABLE_WORKER_LOG = true;
-	public static final int LOG_LEVEL = Logger.ERROR;
+	public static final boolean ENABLE_UMENG_UPDATE = false;
+	public static final int LOG_LEVEL = Logger.VERBOS;
 	public static final boolean USE_THUMBNAIL = true; // 使用缩略图
 	public static final boolean ENABLE_PLAY_VEDIO_IN_LIST = false; // 是否允许对话列表播放视频
 	public static final boolean SHOW_VID_OID = true; // 是否显示客户信息的v_id、o_id
@@ -171,6 +172,17 @@ public class Config {
 	/* 发送广播 */
 	public static final String ACTION_ON_WS_HEARTBEAT = "com.v5kf.mcss.service.CoreService.heartbeat";
 	public static final String ACTION_ON_PUSH = "com.v5kf.push.service";		/* PUSH进程服务 */
+	/* 更新广播 */
+	public static final String ACTION_ON_UPDATE = "com.v5kf.manage.updateservice";	
+	
+	/* Intent ACTION_ON_UPDATE 的广播消息类别 */
+	public static final int EXTRA_TYPE_UP_ENABLE = 1;			/* 有更新 */
+	public static final int EXTRA_TYPE_UP_DOWNLOAD_FINISH = 2;	/* 下载完成 */
+	public static final int EXTRA_TYPE_UP_DOWNLOAD = 3;			/* 允许下载 */
+	public static final int EXTRA_TYPE_UP_INSTALL = 4; 			/* 允许安装 */
+	public static final int EXTRA_TYPE_UP_NO_NEWVERSION = 5; 	/* 无更新 */
+	public static final int EXTRA_TYPE_UP_FAILED = 6; 			/* 获取更新失败 */
+	public static final int EXTRA_TYPE_UP_CANCEL = 7; 			/* 取消下载更新 */
 	
 	/* Notification通知ID,判断通知的类别 */
 	public static final int NOTIFY_ID_NULL = 0;
