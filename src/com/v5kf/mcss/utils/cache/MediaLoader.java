@@ -224,8 +224,21 @@ public class MediaLoader {
 			}
 			
 			MediaDisplayer md = new MediaDisplayer(media, photoToLoad);
-			Activity a = (Activity) mContext;
-			a.runOnUiThread(md);
+			if (mContext instanceof Activity) {
+				Activity a = (Activity) mContext;
+				a.runOnUiThread(md);
+			} else {
+				if (media != null) {
+					if (mListener != null) {
+						mListener.onSuccess(photoToLoad.mMessage, mObj, media);
+					}
+				} else { // 获取失败
+					FileUtil.deleteFile(fileCache.getFile(photoToLoad.url).getAbsolutePath());
+					if (mListener != null) {
+						mListener.onFailure(MediaLoader.this, photoToLoad.mMessage, mObj);
+					}
+				}
+			}
 		}
 	}
 	

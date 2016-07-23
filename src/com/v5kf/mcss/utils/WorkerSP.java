@@ -74,6 +74,15 @@ public class WorkerSP {
 		String val = mSharedPreferences.getString(key, null);
 		return val;
 	}
+	public void saveInt(String key, int val) {
+		mEdit = mSharedPreferences.edit();
+		mEdit.putInt(key, val);
+		mEdit.commit();
+	}
+	public int readInt(String key) {
+		int val = mSharedPreferences.getInt(key, 0);
+		return val;
+	}
 	
 	/**
 	 * 保存w_id

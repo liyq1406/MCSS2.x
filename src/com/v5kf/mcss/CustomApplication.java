@@ -19,6 +19,8 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.BitmapFactory;
 import android.media.Ringtone;
@@ -791,5 +793,22 @@ public class CustomApplication extends LitePalApplication {
 	public void setDeviceToken(String deviceToken) {
 		getWorkerSp().saveString("device_token", deviceToken);
 		this.mDeviceToken = deviceToken;
+	}
+	
+	public String getChannelName() {
+		ApplicationInfo appInfo = null;
+		try {
+			appInfo = getPackageManager()
+			        .getApplicationInfo(getPackageName(),
+			        PackageManager.GET_META_DATA);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		if (appInfo != null) {
+			String msg = appInfo.metaData.getString("UMENG_CHANNEL", null);
+			return msg;
+		} else {
+			return null;
+		}
 	}
 }

@@ -8,6 +8,10 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.text.TextUtils;
+
+import com.v5kf.mcss.CustomApplication;
+
 /**
  * XML文档解析工具类
  * 
@@ -42,12 +46,19 @@ public class XMLParserUtil {
 						info.setDownloadURL(parser.nextText());
 					} else if ("displayMessage".equals(parser.getName())) {
 						info.setDisplayMessage(parseTxtFormat(parser.nextText(), "##"));
-					} else if ("apkName".equals(parser.getName())) {
-						info.setApkName(parser.nextText());
+					} else if ("displayTitle".equals(parser.getName())) {
+						info.setDisplayTitle(parser.nextText());
+					} else if ("appName".equals(parser.getName())) {
+						info.setAppName(parser.nextText());
 					} else if ("versionCode".equals(parser.getName())) {
 						info.setVersionCode(Integer.parseInt(parser.nextText()));
 					} else if ("level".equals(parser.getName())) {
 						info.setLevel(Integer.parseInt(parser.nextText()));
+					} else {
+						String channelName = CustomApplication.getInstance().getChannelName();
+						if (!TextUtils.isEmpty(channelName) && channelName.equals(parser.getName())) {
+							info.setChannelURL(parser.nextText());
+						}
 					}
 					break;
 				case XmlPullParser.END_TAG:
@@ -91,12 +102,19 @@ public class XMLParserUtil {
 						info.setDownloadURL(parser.nextText());
 					} else if ("displayMessage".equals(parser.getName())) {
 						info.setDisplayMessage(parseTxtFormat(parser.nextText(), "##"));
-					} else if ("apkName".equals(parser.getName())) {
-						info.setApkName(parser.nextText());
+					} else if ("displayTitle".equals(parser.getName())) {
+						info.setDisplayTitle(parseTxtFormat(parser.nextText(), "##"));
+					} else if ("appName".equals(parser.getName())) {
+						info.setAppName(parser.nextText());
 					} else if ("versionCode".equals(parser.getName())) {
 						info.setVersionCode(Integer.parseInt(parser.nextText()));
 					} else if ("level".equals(parser.getName())) {
 						info.setLevel(Integer.parseInt(parser.nextText()));
+					} else {
+						String channelName = CustomApplication.getInstance().getChannelName();
+						if (!TextUtils.isEmpty(channelName) && channelName.equals(parser.getName())) {
+							info.setChannelURL(parser.nextText());
+						}
 					}
 					break;
 				case XmlPullParser.END_TAG:

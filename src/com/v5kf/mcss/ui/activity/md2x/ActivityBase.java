@@ -753,8 +753,9 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	protected void alertUpdateInfo(VersionInfo vInfo) {
 		dismissAlertDialog();
 		// [修改]显示确认更新对话框
+		String title = TextUtils.isEmpty(vInfo.getDisplayTitle()) ? "【版本更新（" + vInfo.getVersion() + "）】" : vInfo.getDisplayTitle();
 		mAlertDialog = new AlertDialog(this).builder()
-			.setTitle("【版本更新（" + vInfo.getVersion() + "）】")
+			.setTitle(title)
 			.setMsg(vInfo.getDisplayMessage())
 //			.setWindowType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
 			.setCancelable(false);

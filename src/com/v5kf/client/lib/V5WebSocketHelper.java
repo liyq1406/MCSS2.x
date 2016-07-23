@@ -5,12 +5,13 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.java_websocket.WebSocketImpl;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft_17;
-import org.java_websocket.framing.Framedata.Opcode;
-import org.java_websocket.framing.FramedataImpl1;
-import org.java_websocket.handshake.ServerHandshake;
+
+import com.v5kf.java.websocket.WebSocketImpl;
+import com.v5kf.java.websocket.client.WebSocketClient;
+import com.v5kf.java.websocket.drafts.Draft_17;
+import com.v5kf.java.websocket.framing.FramedataImpl1;
+import com.v5kf.java.websocket.framing.Framedata.Opcode;
+import com.v5kf.java.websocket.handshake.ServerHandshake;
 
 import android.util.Log;
 
@@ -80,6 +81,7 @@ public class V5WebSocketHelper {
 			@Override
 			public void onOpen(ServerHandshake handshakedata) {
 				// TODO Auto-generated method stub
+				connected = true;
 				if (mListener != null) {
 					mListener.onConnect();
 				}
@@ -114,7 +116,7 @@ public class V5WebSocketHelper {
 				}
 			}
 		};
-		WebSocketImpl.DEBUG = false;
+		WebSocketImpl.DEBUG = true;
 	}
 	
 	public void connect() {
@@ -122,7 +124,6 @@ public class V5WebSocketHelper {
 			Logger.w(TAG, "[connect] _block return");
 			return;
 		}
-		connected = true;
 		if (mWSClient != null) {
 			mWSClient.connect();
 		} else {
@@ -131,6 +132,10 @@ public class V5WebSocketHelper {
 	}
 
 	public void connectBlocking() {
+		if (connected) {
+			Logger.w(TAG, "[connectBlocking] _block return");
+			return;
+		}
 		if (mWSClient != null) {
 			try {
 				mWSClient.connectBlocking();
@@ -143,23 +148,25 @@ public class V5WebSocketHelper {
 	}
 	
 	public void disconnect() {
+		Logger.w(TAG, "[disconnect]");
 		if (mWSClient != null) {
-			mWSClient.close();
+			mWSClient.closeConnection(1000, "Normal close");
 		}
 		mListener = null;
-//		connected = false;
+		connected = false;
 	}
 
 	public void disconnect(int code, String message) {
+		Logger.w(TAG, "[disconnect:]");
 		if (mWSClient != null) {
-			mWSClient.close(code, message);
+			mWSClient.closeConnection(code, message);
 		}
 		mListener = null;
-//		connected = false;
+		connected = false;
 	}
 	
 	public boolean isConnected() {
-		if (mWSClient != null) {
+		if (mWSClient != null && connected) {
 			return mWSClient.isOpen();
 		}
 		return false;
@@ -191,11 +198,16 @@ public class V5WebSocketHelper {
 	}
 	
 	public void close(int code, String message) {
+//		if (mWSClient != null) {
+//			mWSClient.close(code, message);
+//		} else {
+//			Logger.e(TAG, "[close] websocket client null");
+//		}
 		if (mWSClient != null) {
-			mWSClient.close(code, message);
-		} else {
-			Logger.e(TAG, "[close] websocket client null");
+			mWSClient.closeConnection(code, message);
 		}
+		mListener = null;
+		connected = false;
 	}
 	
 	public WebSocketClient getClient() {

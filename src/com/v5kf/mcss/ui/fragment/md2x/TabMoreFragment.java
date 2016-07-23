@@ -99,14 +99,13 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		
 		if (Config.ENABLE_UMENG_UPDATE) {
 			initUmengUpdate();
-		} else {
-			mUpdateReceiver = new CheckUpdateReceiver();
-			/* 注册广播接收 */
-			IntentFilter filter=new IntentFilter();
-			filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-			filter.addAction(Config.ACTION_ON_UPDATE);
-			LocalBroadcastManager.getInstance(mParentActivity).registerReceiver(mUpdateReceiver, filter);
 		}
+		mUpdateReceiver = new CheckUpdateReceiver();
+		/* 注册广播接收 */
+		IntentFilter filter=new IntentFilter();
+		filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+		filter.addAction(Config.ACTION_ON_UPDATE);
+		LocalBroadcastManager.getInstance(mParentActivity).registerReceiver(mUpdateReceiver, filter);
 	}
 
 	@Override
@@ -333,12 +332,30 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		case R.id.layout_update: // 检查更新
 			mVersionTv.setVisibility(View.GONE);
 			mUpdateProgress.setVisibility(View.VISIBLE);
-			if (Config.ENABLE_UMENG_UPDATE) {
-				UmengUpdateAgent.forceUpdate(mParentActivity);
-			} else {
+			int level = mApplication.getWorkerSp().readInt("update_level");
+			if (level == 0) { // 查询获取使用哪家更新服务
+				if (Config.ENABLE_UMENG_UPDATE) {
+					UmengUpdateAgent.forceUpdate(mParentActivity);
+				}
+				Intent i = new Intent(mParentActivity, UpdateService.class);
+				mParentActivity.startService(i);
+			} else if (level < 3) { // 采用友盟自动更新
+				if (Config.ENABLE_UMENG_UPDATE) {
+					UmengUpdateAgent.forceUpdate(mParentActivity);
+				} else { // 友盟更新关闭则只能采用自家更新
+					Intent i = new Intent(mParentActivity, UpdateService.class);
+					mParentActivity.startService(i);
+				}
+			} else if (level > 3) { // 采用自家更新服务
 				Intent i = new Intent(mParentActivity, UpdateService.class);
 				mParentActivity.startService(i);
 			}
+//			if (Config.ENABLE_UMENG_UPDATE) {
+//				UmengUpdateAgent.forceUpdate(mParentActivity);
+//			} else {
+//				Intent i = new Intent(mParentActivity, UpdateService.class);
+//				mParentActivity.startService(i);
+//			}
 			MobclickAgent.onEvent(mParentActivity, "CHECK_UPDATE");
 			
 			break;

@@ -41,11 +41,26 @@ public abstract class BaseLoginActivity extends ActivityBase {
 	 * 开启友盟自动更新
 	 */
 	protected void startUpdateService() {
-		if (Config.ENABLE_UMENG_UPDATE) {
-			UmengUpdateAgent.update(this); // 改用友盟自动更新SDK
-			UmengUpdateAgent.setDeltaUpdate(false);
-			UmengUpdateAgent.setUpdateCheckConfig(true);
-		} else {
+		int level = mApplication.getWorkerSp().readInt("update_level");
+		Logger.i("BaseLoginActivity", "level:" + level);
+		if (level == 0) { // 查询获取使用哪家更新服务 默认0，3则不更新
+			if (Config.ENABLE_UMENG_UPDATE) {
+				UmengUpdateAgent.update(this); // 改用友盟自动更新SDK
+				UmengUpdateAgent.setDeltaUpdate(false);
+				UmengUpdateAgent.setUpdateCheckConfig(true);
+			}
+			Intent i = new Intent(this, UpdateService.class);
+			startService(i);
+		} else if (level < 3) { // 采用友盟自动更新
+			if (Config.ENABLE_UMENG_UPDATE) {
+				UmengUpdateAgent.update(this); // 改用友盟自动更新SDK
+				UmengUpdateAgent.setDeltaUpdate(false);
+				UmengUpdateAgent.setUpdateCheckConfig(true);
+			} else { // 友盟更新关闭则只能采用自家更新
+				Intent i = new Intent(this, UpdateService.class);
+				startService(i);
+			}
+		} else if (level > 3) { // 采用自家更新服务
 			Intent i = new Intent(this, UpdateService.class);
 			startService(i);
 		}

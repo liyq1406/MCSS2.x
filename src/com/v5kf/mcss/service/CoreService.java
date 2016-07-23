@@ -91,14 +91,19 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 	}
 
 	public static void reConnect(Context context) {
-		if (mClient != null) {
+		if (mClient != null && !mClient.isConnected()) {
 			/* 注册Alarm广播接收 */
 			Intent intent = new Intent(Config.ACTION_ON_WS_HEARTBEAT);
 			context.sendBroadcast(intent);
-		} else {
-			Intent i = new Intent(context, CoreService.class);
-			context.startService(i);
 		}
+//		if (mClient != null) {
+//			/* 注册Alarm广播接收 */
+//			Intent intent = new Intent(Config.ACTION_ON_WS_HEARTBEAT);
+//			context.sendBroadcast(intent);
+//		} else {
+//			Intent i = new Intent(context, CoreService.class);
+//			context.startService(i);
+//		}
 	}
 
 	@Override
@@ -111,7 +116,7 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 			Logger.i(TAG, "CoreService onCreate...");
 			Toast.makeText(CoreService.this, "CoreService onCreate...", Toast.LENGTH_SHORT).show();
 		}
-		init();
+		initServic();
 		
 		// 注册对象
         EventBus.getDefault().register(this);
@@ -119,7 +124,7 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
         startService(new Intent(this, PushService.class));
 	}
 	
-	private void init() {
+	private void initServic() {
 		mHandler = new ServiceHandler(this);
 		mWSP = new WorkerSP(this);
 		mApplication = (CustomApplication)getApplication();
@@ -160,8 +165,9 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 		clearHeartBeatAlarm();
 		
 		mApplication.setAppStatus(AppStatus.AppStatus_Init);
-		if (mClient!= null && mClient.isConnected()) {
+		if (mClient != null && mClient.isConnected()) {
 			mClient.disconnect();
+			mClient = null;
 		}
 		
 		if (mWSP.readExitFlag() == ExitFlag.ExitFlag_None) {
@@ -187,12 +193,12 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 	 */
 	private synchronized void connectWebsocket(boolean newClient) {
 		Logger.i(TAG, "[connectWebsocket] isNew:" + newClient + " connecting:" + connecting);
-		if (connecting) {
-			Logger.w(TAG, "[connectWebsocket] is already connecting");
-			return;
-		}
 		if (mClient != null && mClient.isConnected()) {
 			Logger.w(TAG, "[connectWebsocket] isConnected return");
+			return;
+		}
+		if (connecting) {
+			Logger.w(TAG, "[connectWebsocket] is already connecting");
 			return;
 		}
 		connecting = true;
@@ -456,20 +462,12 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 		}
 		
 		if (NetworkManager.isConnected(this)) { // 判断是否连接
-			if (mClient == null) {
-				Logger.i(TAG, "[keepCoreService] -> mClient is null -> new client");
-				Logger.d(TAG, "keepCoreService -> [connectWebsocket]");
-				connectWebsocket();
-			} else if (!mClient.isConnected()) {
-				Logger.i(TAG, "[keepCoreService] -> not connect -> try mClient.connect()");
-//				mClient.disconnect();
-//				mClient.connect();
-				connectWebsocket();
+			if (isConnected()) {
+				Logger.i(TAG, "[keepCoreService] -> connected -> ping");
+				mClient.ping();
 			} else {
-				if (ping) {
-					Logger.i(TAG, "[keepCoreService] -> connected -> ping");
-					mClient.ping();
-				}
+				Logger.i(TAG, "[keepCoreService] -> not connect -> try mClient.connect()");
+				connectWebsocket();
 			}
 		} else {
 			Logger.i(TAG, "[keepCoreService] -> Network not connect");
@@ -506,6 +504,7 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 		public void handleMessage(Message msg) {
 			if (null == mService.get()) {
 				Logger.w(TAG, "ServiceHandler对象已被回收");
+				return;
 			}
 			switch (msg.what) {
 			case WHAT_SHOW_TOAST:
@@ -526,7 +525,7 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 					mService.get().connectWebsocket(true);
 				}
 				break;
-			case WHAT_WS_RECONNECT:
+			case WHAT_WS_RECONNECT: /* use */
 				Logger.d(TAG, "WHAT_WS_RECONNECT >>> mService.get()=" + mService.get());
 				if (mService.get() != null) {
 					Logger.d(TAG, "WHAT_WS_RECONNECT >>> NetworkManager.isConnected(mService.get())=" + NetworkManager.isConnected(mService.get()) + " mService.get().mWSP.readExitFlag()=" + mService.get().mWSP.readExitFlag());
@@ -552,26 +551,15 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 	
 
 	public void sendMessage(String data) {
-		if (mClient == null) {
-			Logger.i(TAG, "[sendMessage] -> mClient is null return");
-			if (Config.DEBUG_TOAST) {
-				showToast("[sendMessage] websocket client null!");
-			}
-			mHandler.sendEmptyMessage(WHAT_WS_RECONNECT);
-			return;
-		} else if (!mClient.isConnected()) {
-			Logger.i(TAG, "[sendMessage] -> not connect -> try connect");
-			if (Config.DEBUG_TOAST) {
-				showToast("[sendMessage] websocket not connected!");
-			}
-			mHandler.sendEmptyMessage(WHAT_WS_RECONNECT);
-			return;
+		if (isConnected()) {
+			MobclickAgent.onEvent(this, "ALL_SEND_MESSAGE");
+			Logger.i(TAG, "sendMessage(" + mTotalSend + ")>>>:" + data);
+			mClient.send(data);
+			mTotalSend++;
+		} else {
+			Logger.e(TAG, "[sendMessage] -> not connected");
+			connectWebsocket();
 		}
-		
-		MobclickAgent.onEvent(this, "ALL_SEND_MESSAGE");
-		Logger.i(TAG, "sendMessage(" + mTotalSend + ")>>>:" + data);
-		mClient.send(data);
-		mTotalSend++;
 	}
 
 
@@ -579,6 +567,7 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 	public void onConnect() {
 		Logger.i(TAG, ">>>onConnect<<<");
 		mTotalSend = 0;
+		connecting = false;
 		
 		if (mReconFlag) {
 			Logger.i(TAG, "^^^onConnect^^^ mReconFlag");
@@ -592,7 +581,6 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 		EventBus.getDefault().post(Boolean.valueOf(true), EventTag.ETAG_CONNECTION_CHANGE);
 		
 		mReconFlag = true;
-		connecting = false;
 	}
 
 	@Override
@@ -640,7 +628,7 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 			connectWebsocket();
 			return;
 		
-		case 4001: // off line
+		case 4001: // off line 主动下线
 			mApplication.setAppStatus(AppStatus.AppStatus_Exit);
 			mWSP.saveExitFlag(ExitFlag.ExitFlag_AutoLogin);
 			stopSelf();
@@ -650,7 +638,8 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 				EventBus.getDefault().post(Boolean.valueOf(false), EventTag.ETAG_CONNECTION_CHANGE);
 			}
 			return;
-		case 1000: // 重复登录
+		case 4999:
+		case 1000: // 重复登录 被动下线
 			mApplication.setAppStatus(AppStatus.AppStatus_Exit);
 			mWSP.saveExitFlag(ExitFlag.ExitFlag_NeedLogin);
 			stopSelf();
@@ -767,6 +756,9 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 			break;
 			
 		case NetworkManager.NETWORK_NONE:
+			if (mClient != null) {
+				mClient.disconnect();
+			}
 			
 			break;
 		}

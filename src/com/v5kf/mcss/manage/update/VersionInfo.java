@@ -2,6 +2,8 @@ package com.v5kf.mcss.manage.update;
 
 import java.io.Serializable;
 
+import android.text.TextUtils;
+
 public class VersionInfo implements Serializable {
 
 	/**
@@ -12,14 +14,18 @@ public class VersionInfo implements Serializable {
 	private String version;
 	// 版本更新时间
 	private String updateTime;
-	// 新版本更新下载地址
+	// 新版本更新下载地址(通用渠道)
 	private String downloadURL;
+	// 本应用所处渠道的下载地址
+	private String channelURL;
 	// 更新描述信息
 	private String displayMessage;
+	// 更新描述标题
+	private String displayTitle;
 	// 版本号
 	private int versionCode;
-	// apk名称
-	private String apkName;
+	// app名称
+	private String appName;
 	
 	private int level; // 更新等级：1-5，5表示有严重bug需要强制更新，1表示小修改，可选更新。
 
@@ -39,7 +45,14 @@ public class VersionInfo implements Serializable {
 		this.updateTime = updateTime;
 	}
 
+	/**
+	 * 优先获取本渠道的更新地址
+	 * @return
+	 */
 	public String getDownloadURL() {
+		if (!TextUtils.isEmpty(channelURL)) {
+			return channelURL;
+		}
 		return downloadURL;
 	}
 
@@ -64,11 +77,14 @@ public class VersionInfo implements Serializable {
 	}
 
 	public String getApkName() {
-		return apkName;
-	}
-
-	public void setApkName(String apkName) {
-		this.apkName = apkName;
+		String url = getDownloadURL();
+		if (!TextUtils.isEmpty(url)) {
+			int index = url.lastIndexOf("/");
+			if (index != -1 && url.length() > (index + 1)) {
+				return url.substring(index + 1);
+			}
+		}
+		return null;
 	}
 
 	public int getLevel() {
@@ -77,6 +93,30 @@ public class VersionInfo implements Serializable {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	public String getChannelURL() {
+		return channelURL;
+	}
+
+	public void setChannelURL(String channelURL) {
+		this.channelURL = channelURL;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+	public String getDisplayTitle() {
+		return displayTitle;
+	}
+
+	public void setDisplayTitle(String displayTitle) {
+		this.displayTitle = displayTitle;
 	}
 
 }

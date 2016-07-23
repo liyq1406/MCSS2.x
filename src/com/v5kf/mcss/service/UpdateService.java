@@ -19,11 +19,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.v5kf.client.lib.V5HttpUtil;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
+import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.manage.update.VersionInfo;
@@ -34,7 +36,7 @@ import com.v5kf.mcss.utils.Logger;
 public class UpdateService extends Service {
 
 	private static final String TAG = "UpdateService";
-	private static final String SERVER_VERSION_URL = "https://chat.v5kf.com/app/download/version.xml";
+	private static final String SERVER_VERSION_URL = "https://chat.v5kf.com/app/download/" + (Config.DEBUG ? "version_debug.xml" : "version.xml");
 	private VersionInfo mVInfo;
 	private long mReference;
 	private UpdateServiceReceiver mReceiver;
@@ -65,6 +67,7 @@ public class UpdateService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mReceiver);
+		unregisterReceiver(mReceiver);
 		Logger.i(TAG, "[onDestroy]");
 	}
 
@@ -72,11 +75,14 @@ public class UpdateService extends Service {
 		mReceiver = new UpdateServiceReceiver();
 		
 		/* 注册广播接收 */
-		IntentFilter filter=new IntentFilter();
-		filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-		filter.addAction(DownloadManager.ACTION_NOTIFICATION_CLICKED);
+		IntentFilter filter = new IntentFilter();
 		filter.addAction(Config.ACTION_ON_UPDATE);
 		LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mReceiver, filter);
+		
+		IntentFilter downloadFilter =new IntentFilter();
+		downloadFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+		downloadFilter.addAction(DownloadManager.ACTION_NOTIFICATION_CLICKED);
+		registerReceiver(mReceiver, downloadFilter);
 	}
 
 	private void addDownloadTask(boolean onlyWifi) {
@@ -103,6 +109,7 @@ public class UpdateService extends Service {
 		
 		Uri uri = Uri.parse(mVInfo.getDownloadURL());
 		DownloadManager.Request request = new Request(uri);
+		request.setMimeType("application/vnd.android.package-archive");
 		request.setVisibleInDownloadsUi(true);
 		// 设置在什么网络情况下进行下载
 		if (onlyWifi) {
@@ -111,7 +118,7 @@ public class UpdateService extends Service {
 		// 设置通知栏
 		request.setNotificationVisibility(Request.VISIBILITY_VISIBLE);
 		request.setTitle(getString(R.string.app_name));
-		request.setDescription(mVInfo.getApkName() + getString(R.string.on_download_description));
+		request.setDescription(getString(R.string.app_name) + getString(R.string.on_download_description));
 		request.setAllowedOverRoaming(false);
 		// 设置文件存放目录
 //		request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, mVInfo.getApkName());
@@ -134,31 +141,35 @@ public class UpdateService extends Service {
 				Logger.i(TAG, "responseString:" +  responseString);
 				mVInfo = XMLParserUtil.getUpdateInfo(responseString);;
 				if (mVInfo != null) {
-					if (checkVersionInfo(mVInfo)) {
-						Intent i = new Intent(Config.ACTION_ON_UPDATE);
-						Bundle bundle = new Bundle();
-						bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_ENABLE);
-						bundle.putSerializable("versionInfo", mVInfo);
-						i.putExtras(bundle);
-//						i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_ENABLE);
-						i.putExtra("version", mVInfo.getVersion());
-						i.putExtra("displayMessage", mVInfo.getDisplayMessage());
-						LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
-						
-//						// 必须在UI线程执行
-//						mHandler.post(new Runnable() {
-//							
-//							@Override
-//							public void run() {
-//								alertUpdateInfo(mVInfo);
-//							}
-//						});
-					} else {
-						// 没有新版本，仅手动点击更新处理此广播返回
-						Intent i = new Intent(Config.ACTION_ON_UPDATE);
-						i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_NO_NEWVERSION);
-						LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
-						stopSelf();
+					Logger.d(TAG, "ApkName:" + mVInfo.getApkName());
+					CustomApplication.getInstance().getWorkerSp().saveInt("update_level", mVInfo.getLevel());
+					if (mVInfo.getLevel() > 0) { // level > 3使用自家服务器更新，level < 3使用友盟更新， =3不提示更新
+						if (checkVersionInfo(mVInfo)) {
+							Intent i = new Intent(Config.ACTION_ON_UPDATE);
+							Bundle bundle = new Bundle();
+							bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_ENABLE);
+							bundle.putSerializable("versionInfo", mVInfo);
+							i.putExtras(bundle);
+//							i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_ENABLE);
+							i.putExtra("version", mVInfo.getVersion());
+							i.putExtra("displayMessage", mVInfo.getDisplayMessage());
+							LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+							
+//							// 必须在UI线程执行
+//							mHandler.post(new Runnable() {
+//								
+//								@Override
+//								public void run() {
+//									alertUpdateInfo(mVInfo);
+//								}
+//							});
+						} else {
+							// 没有新版本，仅手动点击更新处理此广播返回
+							Intent i = new Intent(Config.ACTION_ON_UPDATE);
+							i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_NO_NEWVERSION);
+							LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+							stopSelf();
+						}
 					}
 				}
 			}
@@ -178,8 +189,9 @@ public class UpdateService extends Service {
 	
 	protected void alertUpdateInfo(VersionInfo vInfo) {
 		// [修改]显示确认更新对话框
+		String title = TextUtils.isEmpty(vInfo.getDisplayTitle()) ? "【版本更新（" + vInfo.getVersion() + "）】" : vInfo.getDisplayTitle();
 		AlertDialog alertDialog = new AlertDialog(this).builder()
-			.setTitle("【版本更新（" + vInfo.getVersion() + "）】")
+			.setTitle(title)
 			.setMsg(vInfo.getDisplayMessage())
 			.setCancelable(false)
 			.setWindowType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
@@ -268,7 +280,6 @@ public class UpdateService extends Service {
 		// TODO判断安装是否完成，安装完成关闭更新服务
 		stopSelf();
 	}
-	
 	
 	class UpdateServiceReceiver extends BroadcastReceiver {
 

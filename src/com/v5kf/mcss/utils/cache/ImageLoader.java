@@ -375,7 +375,7 @@ public class ImageLoader {
 				else
 					photoToLoad.imageView.setBackgroundResource(R.drawable.v5_img_src_error);
 				
-				checkImageBorder(photoToLoad.imageView);
+				resetImageBorder(photoToLoad.imageView);
 				if (mListener != null) {
 					mListener.onFailure(ImageLoader.this, mUrl, mImageView);
 				}

@@ -74,7 +74,7 @@ public class V5ClientService extends Service implements NetworkListener, Websock
 
 	protected static void close() {
 		if (mClient != null) {
-			mClient.close(1000, "Normal close");
+			mClient.disconnect(1000, "Normal close");
 		}
 	}
 	
@@ -282,7 +282,7 @@ public class V5ClientService extends Service implements NetworkListener, Websock
 		Logger.i(TAG, "V5ClientService -> onDestroy");
 		if (mClient != null) {
 			// 发送断连帧
-			mClient.close(1000, "Normal close");
+			mClient.disconnect(1000, "Normal close");
 		}
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(mMsgReceiver);
 		unregisterReceiver(mAlarmReceiver);
