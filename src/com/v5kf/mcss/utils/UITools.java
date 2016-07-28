@@ -89,6 +89,8 @@ public class UITools {
 			break;
 		case "alipay":
 			iface = QAODefine.CSTM_IF_ALIPAY;
+		case "magic":
+			iface = QAODefine.CSTM_IF_MAGIC;
 			break;
 		}
 		return iface;
@@ -125,6 +127,9 @@ public class UITools {
 			type = "wxqy";
 		case QAODefine.CSTM_IF_YIXIN:
 			type = "yixin";
+			break;
+		case QAODefine.CSTM_IF_MAGIC:
+			type = "magic";
 			break;
 		default:
 			break;
@@ -253,6 +258,10 @@ public class UITools {
     	case QAODefine.CSTM_IF_APP:
     		ifaceTv.setText(R.string.iface_app);
     		ifaceIv.setImageResource(R.drawable.v5_iface_app);
+    		break;
+    	case QAODefine.CSTM_IF_MAGIC:
+    		ifaceTv.setText(R.string.iface_magic);
+    		ifaceIv.setImageResource(R.drawable.v5_iface_magic);
     		break;
     	default:
     		ifaceTv.setText(R.string.iface_open);

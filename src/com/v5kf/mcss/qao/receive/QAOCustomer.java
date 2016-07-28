@@ -148,6 +148,8 @@ public class QAOCustomer extends QAOBase {
 				mAppInfo.removeMonitorCustomer(cstm);
 				postEvent(cstm, EventTag.ETAG_MONITOR_OUT);
 			}
+		} else {
+			Logger.w(TAG, "[parseCustomerMonitorOut] null cstm");
 		}
 	}
 
@@ -470,6 +472,10 @@ public class QAOCustomer extends QAOBase {
 		}
 		String c_id = qao_data.getString(QAODefine.C_ID);
 		CustomerBean customer = mAppInfo.getCustomerBean(c_id);
+		if (customer == null) {
+			Logger.w(TAG, "[parseCstmWaitOut] null cstm");
+			return;
+		}
 		mAppInfo.removeCustomer(customer);
 		mAppInfo.clearCustomerSession(customer);
 		// [通知界面]更新[eventbus]

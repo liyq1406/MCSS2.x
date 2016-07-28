@@ -43,7 +43,7 @@ public abstract class BaseLoginActivity extends ActivityBase {
 	protected void startUpdateService() {
 		int level = mApplication.getWorkerSp().readInt("update_level");
 		Logger.i("BaseLoginActivity", "level:" + level);
-		if (level == 0) { // 查询获取使用哪家更新服务 默认0，3则不更新
+		if (level == 0) { // 查询获取使用哪家更新服务 默认0，1则不自动更新
 			if (Config.ENABLE_UMENG_UPDATE) {
 				UmengUpdateAgent.update(this); // 改用友盟自动更新SDK
 				UmengUpdateAgent.setDeltaUpdate(false);
@@ -51,7 +51,7 @@ public abstract class BaseLoginActivity extends ActivityBase {
 			}
 			Intent i = new Intent(this, UpdateService.class);
 			startService(i);
-		} else if (level < 3) { // 采用友盟自动更新
+		} else if (level == 2) { // 采用友盟自动更新
 			if (Config.ENABLE_UMENG_UPDATE) {
 				UmengUpdateAgent.update(this); // 改用友盟自动更新SDK
 				UmengUpdateAgent.setDeltaUpdate(false);
@@ -60,7 +60,7 @@ public abstract class BaseLoginActivity extends ActivityBase {
 				Intent i = new Intent(this, UpdateService.class);
 				startService(i);
 			}
-		} else if (level > 3) { // 采用自家更新服务
+		} else if (level >= 3) { // 采用自家更新服务
 			Intent i = new Intent(this, UpdateService.class);
 			startService(i);
 		}

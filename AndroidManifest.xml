@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.v5kf.mcss"
-    android:versionCode="32"
-    android:versionName="2.0.2" >
+    android:versionCode="34"
+    android:versionName="2.0.4" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -73,12 +73,13 @@
         
         <meta-data android:name="TencentMapSDK" android:value="4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG" />
         <meta-data android:value="55efad6e67e58e47fe001197" android:name="UMENG_APPKEY"/>
-		<meta-data android:value="open_download" android:name="UMENG_CHANNEL"/>
+		<meta-data android:value="360_download" android:name="UMENG_CHANNEL"/>
 		<!-- 渠道：
 			debug(测试渠道)
 			open_download(网页分发)
-			qq_donload(应用宝)
-			wandoujia(豌豆荚) -->
+			qq_download(应用宝)
+			wandoujia(豌豆荚)
+			360_download(360手机助手) -->
 		
         <activity
             android:screenOrientation="portrait"

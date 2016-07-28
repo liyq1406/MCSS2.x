@@ -40,7 +40,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.v5kf.client.lib.V5HttpUtil;
-import com.v5kf.client.lib.V5Util;
 import com.v5kf.client.lib.V5KFException.V5ExceptionStatus;
 import com.v5kf.client.lib.V5MessageManager;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
@@ -160,13 +159,6 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	
 	private MyCountDownTimer voice_timer;
 	private V5VoiceRecord mRecorder;
-	//[取消]讯飞语音SDK
-//	// 语音听写对象
-//	private SpeechRecognizer mIat;
-//	// 听写监听器
-//	private RecognizerListener mRecoListener;
-//	// 用HashMap存储听写结果
-//	private HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
 	
 	// 判断是否使用机器人答案回复
 	private boolean isRobot = false;
@@ -562,10 +554,10 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 //    				Toast.makeText(ChattingListActivity.this, R.string.send_empty_tip, Toast.LENGTH_SHORT).show();
     				return;
     			}
-    			if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-					ShowToast("客户暂时离开，无法接收消息");
-					return;
-				}
+//    			if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+//					ShowToast("客户暂时离开，无法接收消息");
+//					return;
+//				}
     			V5TextMessage textMessage = V5MessageManager.obtainTextMessage(msg);
 //    			updateOutTextMessage(msg);
     			addMessage(textMessage);    			
@@ -617,10 +609,10 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 					}
 					Logger.e(TAG, "checkCustomer failed! null!");
 				}
-				if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-					ShowToast("客户暂时离开，无法接收消息");
-					return;
-				}
+//				if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+//					ShowToast("客户暂时离开，无法接收消息");
+//					return;
+//				}
 				switch (bean.getId()) {
 				case 0: // 常见问答
 					getHotQuesAndShow();
@@ -1517,10 +1509,10 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 					showAlertDialog(R.string.v5_permission_record_deny, null);
 					return false;
 				}
-				if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-					ShowToast("客户暂时离开，无法接收消息");
-					return false;
-				}
+//				if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+//					ShowToast("客户暂时离开，无法接收消息");
+//					return false;
+//				}
 				v.setPressed(true);
 				try {
 					// 开始录音
@@ -1669,10 +1661,10 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 	public void onResultOfSpeech(String path) {
 		Logger.i(TAG, "[onResultOfSpeech] " + path);
 		dismissVoiceRecordingProgress(0);
-		if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-			ShowToast("客户暂时离开，无法接收消息");
-			return;
-		}
+//		if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+//			ShowToast("客户暂时离开，无法接收消息");
+//			return;
+//		}
 		// 发送语音
 		V5VoiceMessage voiceMessage = V5MessageManager.obtainVoiceMessage(path);
 		addVoiceMessage(voiceMessage);

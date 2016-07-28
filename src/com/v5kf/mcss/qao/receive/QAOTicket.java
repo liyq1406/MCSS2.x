@@ -240,8 +240,10 @@ public class QAOTicket extends QAOBase {
 		Logger.w(TAG, "MessageBean -> text_content:" + msgBean.getText_content() +
 				" json_content:" + msgBean.getJson_content());
 		
-		V5Message message = QAOManager.receiveMessage(msgBean);
-		session.getMessageArray().add(message);
+		if (!session.hasMessage(msgBean.getMessage_id())) { // 消息排重
+			V5Message message = QAOManager.receiveMessage(msgBean);
+			session.getMessageArray().add(message);
+		}
 	}
 
 	@Override

@@ -184,6 +184,8 @@
 			        <com.v5kf.client.ui.emojicon.EmojiconTextView
 			            android:id="@+id/id_item_content"
 			            emojicon:emojiconSize="17sp"
+			            android:clickable="false"
+			            android:focusable="false"
 			            android:layout_width="0dp"
 			            android:layout_height="wrap_content"
 			            android:layout_weight="1"

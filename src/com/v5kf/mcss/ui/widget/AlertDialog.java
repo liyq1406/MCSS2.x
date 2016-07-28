@@ -70,6 +70,9 @@ public class AlertDialog {
 	}
 
 	public AlertDialog setView(View v) {
+		if (v == null) {
+			return this;
+		}
 		mCustomLayout.setVisibility(View.VISIBLE);
 		mCustomLayout.addView(v);
 		return this;

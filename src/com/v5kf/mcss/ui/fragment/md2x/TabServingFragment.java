@@ -387,10 +387,12 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 
 		@Override
 		public int compare(IServingBean lhs, IServingBean rhs) {
-			if (lhs.getCustomer().getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-				return 1;
-			} else if (rhs.getCustomer().getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
-				return -1;
+			if (lhs.getCustomer().getAccessable() != null && rhs.getCustomer().getAccessable() != null) {
+				if (lhs.getCustomer().getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+					return 1;
+				} else if (rhs.getCustomer().getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+					return -1;
+				}
 			}
 			
 			if (lhs.getCustomer().getLastestActiveTime() > rhs.getCustomer().getLastestActiveTime()) {
@@ -406,7 +408,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 
 	@Subscriber(tag = EventTag.ETAG_SERVING_CSTM_CHANGE, mode = ThreadMode.MAIN)
 	private void servingCustomerChange(String type) {
-		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE");
+		Logger.d(TAG + "-eventbus", "servingCustomerChange -> ETAG_SERVING_CSTM_CHANGE type:" + type);
 		// 更新整个列表
 		resetRecyclerList();
 		mHandler.sendEmptyMessageDelayed(HDL_STOP_REFRESH, 200);
@@ -424,6 +426,7 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		
 		case QAODefine.O_METHOD_GET_CUSTOMER_MESSAGES: // customer_join_in
 			// 单独控制
+			resetRecyclerList();
 			break;
 			
 		case QAODefine.O_METHOD_CSTM_JOIN_OUT: // customer_jonin_out

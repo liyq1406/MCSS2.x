@@ -27,7 +27,6 @@ import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.CustomerBean;
-import com.v5kf.mcss.entity.CustomerBean.CustomerType;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
 import com.v5kf.mcss.qao.request.TicketRequest;

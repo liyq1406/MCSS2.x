@@ -15,7 +15,7 @@ import com.v5kf.mcss.utils.Logger;
  */
 public class Config {
 	public static final boolean DEBUG_TOAST = false; // 是否显示Toast
-	public static final boolean DEBUG = true;//BuildConfig.DEBUG; // 开发过程DEBUG模式，连接debug服务器
+	public static final boolean DEBUG = false;//BuildConfig.DEBUG; // 开发过程DEBUG模式，连接debug服务器
 	public static final boolean USE_DB = false; // 是否使用数据库保存坐席
 	public static final int VERSION = 3;
 	public static boolean REQ_HTTPS = false; // 加密请求
@@ -26,8 +26,7 @@ public class Config {
 	public static final boolean USE_THUMBNAIL = true; // 使用缩略图
 	public static final boolean ENABLE_PLAY_VEDIO_IN_LIST = false; // 是否允许对话列表播放视频
 	public static final boolean SHOW_VID_OID = true; // 是否显示客户信息的v_id、o_id
-	public static final String V5KF_COM = (WEB_HTTPS ? "https" : "http") + "://www.v5kf.com/public/website/page.html?sid=10000&id=14146&&first=1&ref=link&uid=&share=wxFriend";
-	
+	public static final String V5KF_COM = (WEB_HTTPS ? "https" : "http") + "://www.v5kf.com/public/website/page.html?sid=10000&id=14396&uid=[vs_user=wxkey]&first=1&ref=link&v5kf=mp.weixin.qq.com";
 	/** 
 	 * App Status 应用状态
 	 * @author Chenhy

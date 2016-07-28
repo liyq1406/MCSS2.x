@@ -446,6 +446,7 @@ public class AppInfoKeeper {
 	
 	public void clearCustomerSession(CustomerBean cstm) {
 		if (cstm == null) {
+			Logger.w(TAG, "[clearCustomerSession] null cstm");
 			return;
 		}
 		if (cstm.getSession() != null && cstm.getCstmType() != CustomerType.CustomerType_ServingAlive

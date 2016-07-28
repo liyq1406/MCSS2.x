@@ -1,5 +1,6 @@
 package com.v5kf.mcss.ui.activity.md2x;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -16,6 +17,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
@@ -28,6 +30,9 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
@@ -747,10 +752,23 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 	
 	/**
+	 * 是否忽略的版本
+	 * @param vInfo
+	 * @return
+	 */
+	protected boolean isIgnoreVersion(VersionInfo vInfo) {
+		return vInfo.getLevel() < 4 && mApplication.getWorkerSp().readBoolean(vInfo.getVersion());
+	}
+	
+	/**
 	 * 提示更新
 	 * @param versionInfo
 	 */
-	protected void alertUpdateInfo(VersionInfo vInfo) {
+	protected void alertUpdateInfo(final VersionInfo vInfo) {
+		if (!vInfo.isCheckManual() && isIgnoreVersion(vInfo)) { // 不提示自动更新
+			Logger.d("ActivityBase", "已忽略该版：" + vInfo.getVersion());
+			return;
+		}
 		dismissAlertDialog();
 		// [修改]显示确认更新对话框
 		String title = TextUtils.isEmpty(vInfo.getDisplayTitle()) ? "【版本更新（" + vInfo.getVersion() + "）】" : vInfo.getDisplayTitle();
@@ -759,8 +777,35 @@ public abstract class ActivityBase extends SwipeBackActivity {
 			.setMsg(vInfo.getDisplayMessage())
 //			.setWindowType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
 			.setCancelable(false);
+		if (vInfo.getLevel() < 4) { // 添加"忽略该版"选项
+			CheckBox ignoreCB = new CheckBox(this);
+			ignoreCB.setText(R.string.UMIgnore);
+			ignoreCB.setTextColor(0xFF000000);
+			ignoreCB.setButtonDrawable(R.drawable.umeng_update_button_check_selector);
+			ignoreCB.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					if (isChecked) {
+						mApplication.getWorkerSp().saveBoolean(vInfo.getVersion(), true);
+					} else {
+						mApplication.getWorkerSp().remove(vInfo.getVersion());
+					}
+				}
+			});
+			if (isIgnoreVersion(vInfo)) {
+				ignoreCB.setChecked(true);
+			}
+			mAlertDialog.setView(ignoreCB);
+		}
+		
+		String updateBtn = "下载更新";
+		File apkfile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + vInfo.getApkName());
+		if (apkfile.exists()) { // 已存在安装包，直接提示安装
+			updateBtn = "安装（已下载）";
+		}
 		if (vInfo.getLevel() == 5) { // 第5等级的level说明更新很重要，解决前一版本的重大bug 
-			mAlertDialog.setNegativeButton("下载更新", new View.OnClickListener() {
+			mAlertDialog.setNegativeButton(updateBtn, new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
@@ -771,7 +816,7 @@ public abstract class ActivityBase extends SwipeBackActivity {
 				}
 			});
 		} else {
-			mAlertDialog.setPositiveButton("下载更新", new View.OnClickListener() {
+			mAlertDialog.setPositiveButton(updateBtn, new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {

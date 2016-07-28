@@ -29,6 +29,8 @@ public class VersionInfo implements Serializable {
 	
 	private int level; // 更新等级：1-5，5表示有严重bug需要强制更新，1表示小修改，可选更新。
 
+	private boolean checkManual;
+	
 	public String getVersion() {
 		return version;
 	}
@@ -117,6 +119,14 @@ public class VersionInfo implements Serializable {
 
 	public void setDisplayTitle(String displayTitle) {
 		this.displayTitle = displayTitle;
+	}
+
+	public boolean isCheckManual() {
+		return checkManual;
+	}
+
+	public void setCheckManual(boolean checkManual) {
+		this.checkManual = checkManual;
 	}
 
 }

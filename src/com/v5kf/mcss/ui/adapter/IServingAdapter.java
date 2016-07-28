@@ -116,7 +116,8 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 	    	Logger.d(TAG, "setText 对话：" + content);
 			Spanned text = Html.fromHtml(content);
 	    	holder.mContent.setText(text);
-	    	holder.mContent.setMovementMethod(LinkMovementMethod.getInstance());
+	    	// ClickableSpan造成Listview的OnItemClickListener失效：http://my.oschina.net/djone/blog/145057
+//	    	holder.mContent.setMovementMethod(LinkMovementMethod.getInstance());
     	} else {
     		holder.mContent.setText("");
     	}
@@ -208,6 +209,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+            	Logger.v(TAG, "[onTouch]");
                 if(nowOpen != null) {
                     nowOpen.mSwipeLayout.close();
                     return true;
@@ -407,6 +409,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 					}
 				}
 				break;
+			
 			case R.id.layout_item: { // 点击整项
 				mRecyclerBean.getSession().clearUnreadMessageNum();
 				

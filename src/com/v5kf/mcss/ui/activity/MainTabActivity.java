@@ -88,6 +88,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private static final int HDL_LOGOUT_TIMEOUT = 11;
 	private static final int HDL_CHECK_PERMISSION = 12;
 	private static final int HDL_TIME_OUT = 14;
+	private static final int HDL_PAGE_SELECTED = 15;
 	
 	private IndicatorViewPager indicatorViewPager;
 	private DrawerLayout mDrawerLayout;
@@ -731,8 +732,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 			public void onPageSelected(int position) {
 				mCurrentPageIndex = position;
 //				Logger.d(TAG, "<drawer>onPageSelected: " + position);
-				
-				onFragmentPageSelected(position);
+				mHandler.obtainMessage(HDL_PAGE_SELECTED).sendToTarget();
 			}
 			
 			@Override
@@ -753,7 +753,7 @@ public class MainTabActivity extends BaseToolbarActivity {
 		// 禁止viewpager的滑动事件
 		viewPager.setCanScroll(false);
 		// 设置viewpager保留界面不重新加载的页面数量
-		viewPager.setOffscreenPageLimit(3);
+		viewPager.setOffscreenPageLimit(5);
 	}
 	
 	@Override
@@ -975,7 +975,6 @@ public class MainTabActivity extends BaseToolbarActivity {
 			break;
 		}
 		case HDL_LOGOUT_TIMEOUT:
-				dismissAlertDialog();
 				showAlertDialog(R.string.warning_logout_failed);
 			break;
 		case HDL_CHECK_PERMISSION:
@@ -996,6 +995,9 @@ public class MainTabActivity extends BaseToolbarActivity {
 		case HDL_TIME_OUT:
 			onRefreshTimeOut();
 			dismissProgress();
+			break;
+		case HDL_PAGE_SELECTED:
+			onFragmentPageSelected(mCurrentPageIndex);
 			break;
 		default:
 			
@@ -1148,14 +1150,13 @@ public class MainTabActivity extends BaseToolbarActivity {
 	private void connectionChange(Boolean isConnect) {
 		Logger.d(TAG + "-eventbus", "connectionChange -> ETAG_CONNECTION_CHANGE");
 		if (isConnect) {
-			dismissAlertDialog();
 			mHeaderTips.setVisibility(View.GONE);
 		} else {
-			dismissProgress();
 			if (mApplication.getWorkerSp().readExitFlag() != ExitFlag.ExitFlag_NeedLogin) {
 				mHeaderTips.setVisibility(View.VISIBLE);
 			}
 		}
+		dismissProgress();
 		updateSlideMenu();
 		updateSessionBadge();
 		updateMonitorBadge();
@@ -1197,8 +1198,10 @@ public class MainTabActivity extends BaseToolbarActivity {
 	@Subscriber(tag = EventTag.ETAG_CONNECTION_START, mode = ThreadMode.MAIN)
 	private void onConnectionStart(V5WebSocketHelper client) {
 		Logger.d(TAG + "-eventbus", "onConnectionStart -> ETAG_CONNECTION_START");
-		showProgress();
-		mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);
+		if (!client.isConnected()) {
+			showProgress();
+			mHandler.sendEmptyMessageDelayed(TASK_TIME_OUT, Config.WS_TIME_OUT);
+		}
 	}
 	
 	@Subscriber(tag = EventTag.ETAG_LOGOUT_CHANGE, mode = ThreadMode.MAIN)

@@ -53,6 +53,7 @@ public class SessionBean extends BaseBean implements Serializable {
 	private int robot_messages;
 	private int visitor_messages;
 	private int worker_messages;
+	private int finished_type; // 未结束0, 会话结束原因1-8
 	
 	// [修改]添加消息列表
 	private List<V5Message> messageArray;
@@ -153,6 +154,9 @@ public class SessionBean extends BaseBean implements Serializable {
 			}
 			if (json.has("miss_messages")) {
 				miss_messages = json.optInt("miss_messages");
+			}
+			if (json.has("finished_type")) {
+				finished_type = json.optInt("finished_type");
 			}
 		} else if(json.has(QAODefine.C_ID)) {	// customer_join_in
 			isActive = true;
@@ -357,6 +361,10 @@ public class SessionBean extends BaseBean implements Serializable {
 		this.readedNum = readedNum;
 	}
 
+	public boolean isNotFinish() {
+		return finished_type == 0;
+	}
+
 	public boolean isActive() {
 		return isActive;
 	}
@@ -428,6 +436,27 @@ public class SessionBean extends BaseBean implements Serializable {
 			return this.messageArray.get(0).getCreate_time();
 		}
 		return DateUtil.getCurrentLongTime()/1000;
+	}
+
+	public int getFinished_type() {
+		return finished_type;
+	}
+
+	public void setFinished_type(int finish_type) {
+		this.finished_type = finish_type;
+	}
+
+	public boolean hasMessage(String message_id) {
+		if (null == this.messageArray || this.messageArray.isEmpty()
+				|| null == message_id) {
+			return false;
+		}
+		for (V5Message msg : this.messageArray) {
+			if (msg.getMessage_id().equals(message_id)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

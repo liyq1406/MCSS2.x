@@ -338,16 +338,19 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 					UmengUpdateAgent.forceUpdate(mParentActivity);
 				}
 				Intent i = new Intent(mParentActivity, UpdateService.class);
+				i.putExtra("check_manual", true);
 				mParentActivity.startService(i);
-			} else if (level < 3) { // 采用友盟自动更新
+			} else if (level == 2) { // 采用友盟自动更新
 				if (Config.ENABLE_UMENG_UPDATE) {
 					UmengUpdateAgent.forceUpdate(mParentActivity);
 				} else { // 友盟更新关闭则只能采用自家更新
 					Intent i = new Intent(mParentActivity, UpdateService.class);
+					i.putExtra("check_manual", true);
 					mParentActivity.startService(i);
 				}
-			} else if (level > 3) { // 采用自家更新服务
+			} else if (level >= 3) { // 采用自家更新服务
 				Intent i = new Intent(mParentActivity, UpdateService.class);
+				i.putExtra("check_manual", true);
 				mParentActivity.startService(i);
 			}
 //			if (Config.ENABLE_UMENG_UPDATE) {

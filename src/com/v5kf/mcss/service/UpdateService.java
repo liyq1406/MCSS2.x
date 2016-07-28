@@ -42,6 +42,7 @@ public class UpdateService extends Service {
 	private UpdateServiceReceiver mReceiver;
 	private Handler mHandler;
 	private boolean isDownloading;
+	private boolean mCheckManual;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -51,7 +52,7 @@ public class UpdateService extends Service {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		
+		Logger.i(TAG, "[onCreate]");
 		mHandler = new Handler(Looper.getMainLooper());
 		initReceiver();
 	}
@@ -59,6 +60,9 @@ public class UpdateService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logger.i(TAG, "[onStartCommand]");
+		if (intent != null) {
+			mCheckManual = intent.getBooleanExtra("check_manual", false);
+		}
 		checkUpdate();
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -140,29 +144,20 @@ public class UpdateService extends Service {
 			public void onSuccess(int statusCode, String responseString) {
 				Logger.i(TAG, "responseString:" +  responseString);
 				mVInfo = XMLParserUtil.getUpdateInfo(responseString);;
+				mVInfo.setCheckManual(mCheckManual);
 				if (mVInfo != null) {
 					Logger.d(TAG, "ApkName:" + mVInfo.getApkName());
 					CustomApplication.getInstance().getWorkerSp().saveInt("update_level", mVInfo.getLevel());
-					if (mVInfo.getLevel() > 0) { // level > 3使用自家服务器更新，level < 3使用友盟更新， =3不提示更新
+					if (mVInfo.getLevel() > 0) {
 						if (checkVersionInfo(mVInfo)) {
 							Intent i = new Intent(Config.ACTION_ON_UPDATE);
 							Bundle bundle = new Bundle();
 							bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_ENABLE);
 							bundle.putSerializable("versionInfo", mVInfo);
 							i.putExtras(bundle);
-//							i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_ENABLE);
 							i.putExtra("version", mVInfo.getVersion());
 							i.putExtra("displayMessage", mVInfo.getDisplayMessage());
 							LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
-							
-//							// 必须在UI线程执行
-//							mHandler.post(new Runnable() {
-//								
-//								@Override
-//								public void run() {
-//									alertUpdateInfo(mVInfo);
-//								}
-//							});
 						} else {
 							// 没有新版本，仅手动点击更新处理此广播返回
 							Intent i = new Intent(Config.ACTION_ON_UPDATE);

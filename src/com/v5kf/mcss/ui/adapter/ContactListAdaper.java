@@ -99,25 +99,26 @@ public class ContactListAdaper extends BaseAdapter implements PinnedSectionListA
 //        	holder.mDescIv.setBackground(null);
         	ImageLoader imgLoader = new ImageLoader(mContext, true, R.drawable.v5_photo_default);
         	imgLoader.DisplayImage(recyclerBean.getWorker().getPhoto(), holder.mPhotoIv);
-        	switch (recyclerBean.getWorker().getStatus()) {
-        	case QAODefine.STATUS_ONLINE:
-        		holder.mRightTv.setText(R.string.status_online);
-        		holder.mRightTv.setTextColor(UITools.getColor(mContext, R.color.status_online_color));
-        		break;
-        	case QAODefine.STATUS_BUSY:
-        		holder.mRightTv.setText(R.string.status_busy);
-        		holder.mRightTv.setTextColor(UITools.getColor(mContext, R.color.status_busy_color));
-        		break;
-        	case QAODefine.STATUS_LEAVE:
-        		holder.mRightTv.setText(R.string.status_leave);
-        		holder.mRightTv.setTextColor(UITools.getColor(mContext, R.color.status_leave_color));
-        		break;
-        	case QAODefine.STATUS_OFFLINE:
-        		holder.mRightTv.setText(R.string.status_offline);
-        		holder.mRightTv.setTextColor(UITools.getColor(mContext, R.color.status_offline_color));
-        		break;
-        	}
-        	
+        	UITools.setStatusTextInfo(recyclerBean.getWorker().getStatus(), holder.mRightTv);
+//        	switch (recyclerBean.getWorker().getStatus()) {
+//        	case QAODefine.STATUS_ONLINE:
+//        		holder.mRightTv.setText(R.string.status_online);
+//        		holder.mRightTv.setTextColor(UITools.getColor(mContext, R.color.status_online_color));
+//        		break;
+//        	case QAODefine.STATUS_BUSY:
+//        		holder.mRightTv.setText(R.string.status_busy);
+//        		holder.mRightTv.setTextColor(UITools.getColor(mContext, R.color.status_busy_color));
+//        		break;
+//        	case QAODefine.STATUS_LEAVE:
+//        		holder.mRightTv.setText(R.string.status_leave);
+//        		holder.mRightTv.setTextColor(UITools.getColor(mContext, R.color.status_leave_color));
+//        		break;
+//        	case QAODefine.STATUS_HIDE:
+//        	case QAODefine.STATUS_OFFLINE:
+//        		holder.mRightTv.setText(R.string.status_offline);
+//        		holder.mRightTv.setTextColor(UITools.getColor(mContext, R.color.status_offline_color));
+//        		break;
+//        	}
         } else {
         	holder.mNameTv.setText(recyclerBean.getPath());
 //        	holder.mDescIv.setBackground(null);

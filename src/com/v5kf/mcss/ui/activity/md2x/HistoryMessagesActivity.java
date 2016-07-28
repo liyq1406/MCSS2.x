@@ -268,7 +268,8 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 	private void getMessagesOfDay(long currentSearchDay, int searchType) {
 		mCurrentSearchDay = currentSearchDay;
 		List<SessionBean> s_list = mAppInfo.getSessionsOnDayOfVisitor(currentSearchDay, mCustomer);
-		Logger.d(TAG, "getMessagesOfDay:" + currentSearchDay + " s_list:" + s_list + " " + DateUtil.getDayString(currentSearchDay));
+		// + " s_list:" + s_list
+		Logger.d(TAG, "getMessagesOfDay:" + currentSearchDay + " " + DateUtil.getDayString(currentSearchDay));
 		if (null == s_list || s_list.isEmpty()) { // 自动往前跳过没有消息的日期，跳过数量为本月份日期
 			if (searchType == SEARCH_TYPE_RANGE_NEXT) { // 查后一天
 				mCurrentSearchDay += 24 * 3600 * 1000;
@@ -306,8 +307,11 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 		Logger.w(TAG, "历史会话：" + s_list.size());
 		for (SessionBean session : s_list) {
 			List<V5Message> msgs = session.getMessageArray();
-			Logger.w(TAG, "历史消息：" + msgs);
-			if (null == msgs || msgs.isEmpty()) {
+			Logger.d(TAG, "历史消息：" + msgs);
+			if (session.isNotFinish() && session.getS_id() != null && !mSessionReqMap.containsKey(session.getS_id())) { // 会话中，且未请求
+				Logger.w(TAG, "会话中：" + msgs);
+				getMessagesOfSession(session.getS_id());
+			} else if (null == msgs || msgs.isEmpty()) {
 				// 启用数据库
 				List<MessageBean> msgList = DataSupport.where("session_id = ?", session.getS_id()).order("create_time asc").find(MessageBean.class);
 				Logger.w(TAG, "历史消息：" + msgList.size());
@@ -534,6 +538,7 @@ public class HistoryMessagesActivity extends BaseToolbarActivity implements OnCl
 				mMonthHasSessionMap.put(monthKey, MON_VAL_GETTING);
 				Logger.i(TAG, "[requestMessagesOfDay] -> getCustomerSession of month:" + month + " mCurrentSearchMonth:" + monthKey);
 			} else { // 直接更新
+				tReq.getCustomerSession(year, month, day, mCustomer.getVisitor_id(), mCustomer.getF_id());
 				Logger.d(TAG, "[requestMessagesOfDay]->[refreshData]");
 				refreshData(searchType);
 			}
