@@ -32,6 +32,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -107,8 +108,8 @@ import com.v5kf.mcss.utils.cache.URLCache;
  */
 public class ChattingListActivity extends BaseChatActivity implements ChatMessagesListener, V5VoiceRecord.VoiceRecordListener {
 	private static final String TAG = "ChattingListActivity";
-	private static final int HDL_VOICE_DISMISS = 101; 
-	private static final int HDL_APP_BACKGROUND = 102; 
+	private static final int HDL_VOICE_DISMISS = 101; // 延迟隐藏录音layout效果
+	private static final int HDL_APP_BACKGROUND = 102; // 延时调用防止onStop离线
 	
 	/* 消息发送工具类 */
 	private MessageSendHelperMd2x mMessageHelper;
@@ -301,7 +302,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			Logger.e(TAG, "checkCustomer failed! null!");
 		}
 		// [新增]离开状态
-		if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+		if (Config.ENABLE_CSTM_OFFLINE && !mCustomer.isOnline()) {
 			getToolbar().setTitle("[离开]" + mCustomer.getDefaultName());
 		} else {
 			getToolbar().setTitle(mCustomer.getDefaultName());
@@ -312,7 +313,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 			public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 				Logger.d(TAG, "ImageLoaderListener.onSuccess");
 				// [新增]离开状态提示
-		    	if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				if (Config.ENABLE_CSTM_OFFLINE && !mCustomer.isOnline()) {
 		    		Logger.d(TAG, "DisplayUtil.grayImageView Accessable:" + mCustomer.getAccessable());
 		    		UITools.grayImageView(imageView);
 		    	}
@@ -323,7 +324,7 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
 					ImageView imageView) {
 				Logger.d(TAG, "ImageLoaderListener.onFailure Accessable:" + mCustomer.getAccessable());
 				// [新增]离开状态提示
-		    	if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				if (Config.ENABLE_CSTM_OFFLINE && !mCustomer.isOnline()) {
 		    		Logger.d(TAG, "DisplayUtil.grayImageView begin");
 		    		UITools.grayImageView(imageView);
 		    		Logger.d(TAG, "DisplayUtil.grayImageView done");
@@ -862,6 +863,34 @@ public class ChattingListActivity extends BaseChatActivity implements ChatMessag
  				mChatListView.postInvalidateDelayed(10);
  			}
  		});
+        
+        mChatListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+					scrollFlag = true;
+				} else {
+					scrollFlag = false;
+				}
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if (scrollFlag) {
+					if (firstVisibleItem > lastVisibleItemPosition) {
+						scrollUp = true;
+					}
+					if (firstVisibleItem < lastVisibleItemPosition) {
+					}
+					if (firstVisibleItem == lastVisibleItemPosition) {
+						return;
+					}
+					lastVisibleItemPosition = firstVisibleItem;
+				}
+			}
+		});
     }
     
     /**

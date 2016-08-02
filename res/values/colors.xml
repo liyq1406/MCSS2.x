@@ -295,4 +295,6 @@
     <!-- Material tap -->
     <color name="tab_top_text_1">#aaa</color>
     <color name="tab_top_text_2">#000</color>
+    
+    <color name="vip_bg_color">#ffc90e</color>
 </resources>

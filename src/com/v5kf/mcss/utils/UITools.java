@@ -270,6 +270,29 @@ public class UITools {
     	}
 	}
 	
+	public static void setVipInfo(int vip, TextView tv) {
+		switch (vip) {
+		case 0:
+			tv.setVisibility(View.GONE);
+			break;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			tv.setVisibility(View.VISIBLE);
+			tv.setText("V" + vip);
+			break;
+		default:
+			if (vip < 0) {
+				tv.setVisibility(View.GONE);
+			} else {
+				tv.setVisibility(View.VISIBLE);
+				tv.setText("V" + vip);
+			}
+		}
+	}
+	
 	public static Drawable getDrawable(Context context, int resId) {
 		return context.getResources().getDrawable(resId);
 	}

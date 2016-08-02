@@ -95,6 +95,15 @@
 			        android:contentDescription="@string/contentDescription"
 			        android:src="@drawable/v5_photo_default" />
 		        
+		        <TextView
+	                android:id="@+id/id_item_vip"
+	                android:visibility="visible"
+	                android:text="V1"
+	                style="@style/VipTextViewStyle"
+	                android:layout_alignParentLeft="true"
+	                android:layout_alignParentStart="true"
+	                android:layout_alignParentTop="true" />
+		        
 		    </RelativeLayout>
 		
 		    <LinearLayout

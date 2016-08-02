@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
+import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
@@ -353,7 +354,11 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 	@Override
 	public void onRefresh() {
 		if (!CoreService.isConnected()) {
-			CoreService.reConnect(mParentActivity);
+			//CoreService.reConnect(mParentActivity);
+		
+			EventBus.getDefault().post(Boolean.valueOf(true), EventTag.ETAG_ON_LINE);
+			mHandler.sendEmptyMessage(HDL_TIME_OUT);
+			return;
 		}
 		
 		/* 请求等待列表数据 */
@@ -388,6 +393,13 @@ public class TabServingFragment extends TabBaseFragment implements OnRefreshList
 		@Override
 		public int compare(IServingBean lhs, IServingBean rhs) {
 			if (lhs.getCustomer().getAccessable() != null && rhs.getCustomer().getAccessable() != null) {
+				if (Config.ENABLE_CSTM_OFFLINE) {
+					if (rhs.getCustomer().isOnline() && !lhs.getCustomer().isOnline()) {
+						return 1;
+					} else if (lhs.getCustomer().isOnline() && !rhs.getCustomer().isOnline()) {
+						return -1;
+					}
+				}
 				if (lhs.getCustomer().getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
 					return 1;
 				} else if (rhs.getCustomer().getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {

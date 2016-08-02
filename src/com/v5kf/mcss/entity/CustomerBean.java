@@ -60,6 +60,7 @@ public class CustomerBean extends BaseBean implements Serializable {
 	private String nickname;	/* get_customer_list "name" */
 	private String photo;		/* get_customer_list "picurl" */
 	private int sex;			/* get_customer_list "sex" */
+	private int vip;			/* get_customer_list/customer_join/wait_in[new] */
 	private int status;			/* get_customer_list "status" */
 	private String visitor_id;	/* 外层visitor_id(default) */
 	private long queue_time;	/* 排队时间 */ 
@@ -71,10 +72,13 @@ public class CustomerBean extends BaseBean implements Serializable {
 	
 	/* from get_historical_customer */
 	private String accessable;
+	private boolean online; // 是否在线[new]
+	
 	private String f_id;
 	
 	/* 最新会话结束时间 */
 	private long last_time;
+	private int queue_no; // 排队序号[new]
 	
 	// [修改]结构优化，加入session对象
 	private SessionBean session;	// 当前会话
@@ -97,7 +101,7 @@ public class CustomerBean extends BaseBean implements Serializable {
 	/**
 	 * 待定
 	 */
-	private int joinReason; // [新增]客户会话接入原因
+	private int joinReason; // [未新增]客户会话接入原因
 
 	public CustomerBean() {
 		this.setCstmType(CustomerType.CustomerType_None);
@@ -150,14 +154,23 @@ public class CustomerBean extends BaseBean implements Serializable {
 		if (json.has(QAODefine.NICKNAME)) {
 			nickname = json.getString(QAODefine.NICKNAME);
 		}
+		if (json.has("vip")) {
+			vip = json.getInt("vip");
+		}
 		if (json.has("photo")) {
 			photo = json.getString("photo");
 		}
 		if (json.has("queue_time")) {
 			queue_time = json.getLong("queue_time");
 		}
+		if (json.has("queue_no")) {
+			queue_no = json.getInt("queue_no");
+		}
 		if (json.has("accessable")) {
 			accessable = json.getString("accessable");
+		}
+		if (json.has("online")) {
+			online = json.getBoolean("online");
 		}
 		if (json.has(QAODefine.VISITOR_ID)) {
 			visitor_id = json.getString(QAODefine.VISITOR_ID);
@@ -696,6 +709,30 @@ public class CustomerBean extends BaseBean implements Serializable {
 			}
 		}
 		return message;
+	}
+
+	public int getVip() {
+		return vip;
+	}
+
+	public void setVip(int vip) {
+		this.vip = vip;
+	}
+
+	public boolean isOnline() {
+		return online;
+	}
+
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+
+	public int getQueue_no() {
+		return queue_no;
+	}
+
+	public void setQueue_no(int queue_no) {
+		this.queue_no = queue_no;
 	}
 	
 //	public void parseCustomerJoinIn(JSONObject json) throws NumberFormatException, JSONException {

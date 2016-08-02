@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.client.lib.entity.V5ArticlesMessage;
@@ -47,6 +49,7 @@ import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.MapUtil;
 import com.v5kf.mcss.utils.UITools;
+import com.v5kf.mcss.utils.V5Size;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.v5kf.mcss.utils.cache.MediaCache;
 import com.v5kf.mcss.utils.cache.MediaLoader;
@@ -213,7 +216,21 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
         	break;
         
         case QAODefine.MSG_TYPE_IMAGE: {
-        	ImageLoader mapImgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading);
+        	ImageLoader mapImgLoader = new ImageLoader(mActivity, true, R.drawable.v5_img_src_loading, new ImageLoader.ImageLoaderListener() {
+				
+				@Override
+				public void onSuccess(String url, ImageView imageView, Bitmap bmp) {
+					// TODO Auto-generated method stub
+					loadImage(imageView, bmp);
+				}
+				
+				@Override
+				public void onFailure(ImageLoader imageLoader, String url,
+						ImageView imageView) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
         	String urlPath = UITools.getThumbnailUrlOfImage((V5ImageMessage)msgContent, Config.SITE_ID);
         	mapImgLoader.DisplayImage(urlPath, holder.mImgIv);
         	Logger.d(TAG, "list load Image ----- " + urlPath);
@@ -428,25 +445,42 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
     private void loadVideo(ViewHolder holder, V5VideoMessage videoMessage) {
 		holder.mVideoBgIv.setImageBitmap(videoMessage.getCoverFrame());
 		
-		// 设置宽高
+		// 控制宽高
 		int width = videoMessage.getCoverFrame().getWidth();
 		int height = videoMessage.getCoverFrame().getHeight();
 		float density = mActivity.getResources().getDisplayMetrics().density;
-		float maxWH = ImageLoader.IMAGE_MAX_WH * density + 0.5f;
-		float minWH = ImageLoader.IMAGE_MIN_WH * density + 0.5f;
+		float maxWH = MediaLoader.VIDEO_MAX_WH * density + 0.5f;
+		float minWH = MediaLoader.VIDEO_MIN_WH * density + 0.5f;
+		float scale = 1;
 		if (width > maxWH && height > maxWH) {
-			float scale = Math.max(maxWH / width, maxWH / height);
+			scale = Math.max(maxWH / width, maxWH / height);
 			width = (int)scale * width;
 			height = (int)scale * height;
 		} else if (width < minWH && height < minWH) {
-			float scale = Math.max(minWH / width, minWH / height);
+			scale = Math.max(minWH / width, minWH / height);
 			width = (int)scale * width;
 			height = (int)scale * height;
 		}
 		holder.mVideoBgIv.setLayoutParams(new FrameLayout.LayoutParams(width, height));
 		holder.mVideoSurface.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+		Logger.i(TAG, scale + " ratio width:" + width + " height:" + height);
 	}
     
+    private void loadImage(ImageView iv, Bitmap bitmap) {
+		//iv.setImageBitmap(bitmap);
+		
+		// 控制宽高
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+		Logger.i(TAG, "before ratio width:" + width + " height:" + height);
+		V5Size size = ImageLoader.getScaledSize(mActivity, width, height);
+		ViewGroup.LayoutParams params = iv.getLayoutParams();
+		params.width = size.getWidth();
+		params.height = size.getHeight();
+		iv.setLayoutParams(params);
+		iv.setScaleType(ScaleType.CENTER_CROP);
+		Logger.i(TAG, " ratio width:" + params.width + " height:" + params.height);
+	}
     
     class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener, OnLongClickListener{
 

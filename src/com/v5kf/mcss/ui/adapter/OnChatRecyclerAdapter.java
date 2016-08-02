@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ImageView.ScaleType;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.client.lib.entity.V5ArticlesMessage;
@@ -58,6 +59,7 @@ import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.MapUtil;
+import com.v5kf.mcss.utils.V5Size;
 import com.v5kf.mcss.utils.cache.ImageLoader;
 import com.v5kf.mcss.utils.cache.ImageLoader.ImageLoaderListener;
 import com.v5kf.mcss.utils.cache.MediaCache;
@@ -673,29 +675,14 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 		// 控制宽高
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
-//		float density = mActivity.getResources().getDisplayMetrics().density;
-//		float maxWH = ImageLoader.IMAGE_MAX_WH * density + 0.5f;
-//		float minWH = ImageLoader.IMAGE_MIN_WH * density + 0.5f;
-//		float scale = 1;
-//		if (width > maxWH && height > maxWH) {
-//			scale = Math.max(maxWH / width, maxWH / height);
-//			width = (int)scale * width;
-//			height = (int)scale * height;
-//		} else if (width < minWH && height < minWH) {
-//			scale = Math.max(minWH / width, minWH / height);
-//			width = (int)scale * width;
-//			height = (int)scale * height;
-//		}
 		Logger.i(TAG, "before ratio width:" + width + " height:" + height);
-		float scale = ImageLoader.getScale(mActivity, width, height);
+		V5Size size = ImageLoader.getScaledSize(mActivity, width, height);
 		ViewGroup.LayoutParams params = iv.getLayoutParams();
-		params.width = (int) (width*scale);
-		params.height = (int) (height*scale);
-//		ViewGroup.LayoutParams params = iv.getLayoutParams();
-//		params.width = width;
-//		params.height = height;
+		params.width = size.getWidth();
+		params.height = size.getHeight();
 		iv.setLayoutParams(params);
-		Logger.i(TAG, scale + " ratio width:" + params.width + " height:" + params.height);
+		iv.setScaleType(ScaleType.CENTER_CROP);
+		Logger.i(TAG, " ratio width:" + params.width + " height:" + params.height);
 	}
     
     private void sendStateChange(ChatItemViewHolder holder, final ChatRecyclerBean chatMessage) {

@@ -48,7 +48,7 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contact_customer, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_md2x_visitors, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
@@ -61,6 +61,8 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
     	
     	// 设置interface信息
     	UITools.setInterfaceInfo(customer.getIface(), holder.mIfaceTv, holder.mIfaceImg);
+    	// 设置VIP信息
+    	UITools.setVipInfo(customer.getVip(), holder.mVipTv);
     	
     	ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_photo_default_cstm);
     	imgLoader.DisplayImage(customer.getDefaultPhoto(), holder.mPhoto);
@@ -90,11 +92,13 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
         public TextView mIfaceTv;
         public BadgeView mBadgeView;
         public TextView mDate;
+        public TextView mVipTv;
         
         public View mPickupLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            mVipTv = (TextView) itemView.findViewById(R.id.id_item_vip);
             mPhoto = (CircleImageView) itemView.findViewById(R.id.id_item_photo);
             mTitle = (TextView) itemView.findViewById(R.id.id_item_title);
             mIfaceImg = (ImageView) itemView.findViewById(R.id.id_item_iface_img);

@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -84,7 +83,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
     	holder.setRecyclerBean(customer);
     	holder.mDate.setText(DateUtil.timeFormat(session.getDefaultTime(), true));
     	// [新增]离开状态提示
-    	if (customer.getAccessable() != null && customer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+    	if (Config.ENABLE_CSTM_OFFLINE && !customer.isOnline()) {
     		holder.mTitle.setText("[离开]" + Html.fromHtml(customer.getDefaultName()));
     	} else {
     		holder.mTitle.setText(Html.fromHtml(customer.getDefaultName()));
@@ -124,6 +123,8 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
     	
     	// 客户接口信息设置
     	UITools.setInterfaceInfo(customer.getIface(), holder.mIfaceTv, holder.mIfaceImg);
+    	// 客户VIP信息设置
+    	UITools.setVipInfo(customer.getVip(), holder.mVipTv);
     	
     	Logger.i(TAG, "ServingSessionAdapter.onBindViewHolder -> ImageLoader.displayimage Accessable:" + customer.getAccessable());
     	ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_photo_default_cstm, new ImageLoader.ImageLoaderListener() {
@@ -132,7 +133,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 			public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 				Logger.d(TAG, "ImageLoaderListener.onSuccess");
 				// [新增]离开状态提示
-		    	if (customer.getAccessable() != null && customer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				if (Config.ENABLE_CSTM_OFFLINE && !customer.isOnline()) {
 		    		Logger.d(TAG, "DisplayUtil.grayImageView Accessable:" + customer.getAccessable());
 		    		UITools.grayImageView(imageView);
 		    	}
@@ -143,7 +144,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 					ImageView imageView) {
 				Logger.d(TAG, "ImageLoaderListener.onFailure Accessable:" + customer.getAccessable());
 				// [新增]离开状态提示
-		    	if (customer.getAccessable() != null && customer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				if (Config.ENABLE_CSTM_OFFLINE && !customer.isOnline()) {
 		    		Logger.d(TAG, "DisplayUtil.grayImageView begin");
 		    		UITools.grayImageView(imageView);
 		    		Logger.d(TAG, "DisplayUtil.grayImageView done");
@@ -254,6 +255,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
         public ImageView mIfaceImg;
         public TextView mIfaceTv;
         public TextView mDate;
+        public TextView mVipTv;
         
         public View mImgLayout;
         public BadgeView mBadgeView;
@@ -267,6 +269,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
         
         public IServingViewHolder(View itemView) {
             super(itemView);
+            mVipTv = (TextView) itemView.findViewById(R.id.id_item_vip);
             mPhoto = (CircleImageView) itemView.findViewById(R.id.id_item_photo);
             mTitle = (TextView) itemView.findViewById(R.id.id_item_title);
             mContent = (EmojiconTextView) itemView.findViewById(R.id.id_item_content);

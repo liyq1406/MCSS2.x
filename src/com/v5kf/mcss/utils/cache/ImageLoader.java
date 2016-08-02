@@ -23,26 +23,90 @@ import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.utils.FileUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
+import com.v5kf.mcss.utils.V5Size;
 
 public class ImageLoader {
-	public static final int IMAGE_MIN_WH = 100; //dp
+	public static final int IMAGE_MIN_WH = 40; //dp
 	public static final int IMAGE_MAX_WH = 220; //dp
 	public static final int IMAGE_BASE_WH = 120; //dp
 	
+	/**
+	 * 限定最小最大宽高进行缩放，类似微信图片显示
+	 * @param context
+	 * @param w
+	 * @param h
+	 * @return
+	 */
+	public static V5Size getScaledSize(Context context, int w, int h) {
+		// 想要缩放的目标尺寸
+		float rW = w;
+		float rH = h;
+		float wh = UITools.dip2px(context, IMAGE_BASE_WH);
+		float max = UITools.dip2px(context, IMAGE_MAX_WH);
+		float min = UITools.dip2px(context, IMAGE_MIN_WH);
+		Logger.d("ImageLoader", "[getScale] ratio min:" + wh + " max:" + wh);
+		// 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可    
+		float scale = 1.0f;//scale=1表示不缩放    
+		scale = (float) Math.sqrt((wh*wh)/(w*h));
+		Logger.d("ImageLoader", "ratio [getScale] :" + scale);
+		if (scale <= 0) scale = 1.0f;
+				
+		rW = (int)(w * scale);
+		rH = (int)(h * scale);
+		if (rW < rH) {
+			if (rW > min && rH > max) {
+				rW = rW * (max / rH);
+				if (rW < min) {
+					rW = min;
+				}
+				rH = (int)max;
+			} else if (rW < min && rH < max) {
+				rH = rH * (min / rW);
+				if (rH > max) {
+					rH = max;
+				}
+				rW = (int)min;
+			} else if (rW < min && rH > max) {
+				rW = (int)min;
+				rH = (int)max;
+			}
+		} else if (rW > rH) {
+			if (rW < max && rH < min) {
+				rW = rW * (min / rH);
+				if (rW > max) {
+					rW = max;
+				}
+				rH = (int)min;
+			} else if (rW > max && rH > min) {
+				rH = rH * (max / rW);
+				if (rH < min) {
+					rH = min;
+				}
+				rW = (int)max;
+			} else if (rW > max && rH < min) {
+				rW = (int)max;
+				rH = (int)min;
+			}
+		}
+		// image scale type: centerCrop
+		return new V5Size((int)rW, (int)rH);
+	}
+
 	public static float getScale(Context context, int w, int h) {
         // 想要缩放的目标尺寸
 //        float min = UITools.dip2px(context, IMAGE_MIN_WH);
 //        float max = UITools.dip2px(context, IMAGE_MAX_WH);
         float wh = UITools.dip2px(context, IMAGE_BASE_WH);
+        float max = UITools.dip2px(context, IMAGE_MAX_WH);
         Logger.d("ImageLoader", "[getScale] ratio min:" + wh + " max:" + wh);
         // 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可    
         float scale = 1.0f;//scale=1表示不缩放    
 //        if (w > h) { //如果宽度大的话根据宽度固定大小缩放 [修改]按照宽度缩放
-	//        	if (w < wh) {
-	//        		scale = (wh / w); 
-	//        	} else if (w > wh) {
-	//        		scale = (wh / w);
-	//        	}
+//        	if (w < wh) {
+//        		scale = (wh / w); 
+//        	} else if (w > wh) {
+//        		scale = (wh / w);
+//        	}
 //        } else if (w < h) { //如果高度高的话根据宽度固定大小缩放
 //        	if (h < min) {
 //        		scale = (min / h); 
@@ -53,6 +117,9 @@ public class ImageLoader {
         scale = (float) Math.sqrt((wh*wh)/(w*h));
         Logger.d("ImageLoader", "ratio [getScale] :" + scale);
         if (scale <= 0) scale = 1.0f;
+        if (h * scale > max) {
+        	scale = max/h;
+        }
         return scale;
 	}
 	

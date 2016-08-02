@@ -217,6 +217,7 @@ public class MaterialBaseFragment extends LazyFragment {
     	mRefreshRecyclerView.getRefreshableView().setScrollbarFadingEnabled(true);
     	mRefreshRecyclerView.getRefreshableView().setScrollBarStyle(RecyclerView.SCROLLBAR_POSITION_RIGHT);
     	mRefreshRecyclerView.setHasPullUpFriction(false); // 没有上拉阻力
+    	mRefreshRecyclerView.setLoadingMoreWhenLastVisible(true);
     	mRefreshRecyclerView.setFooterLayout(new V5RefreshLayout(mApplication, Mode.PULL_FROM_END));
     	mRefreshRecyclerView.setOnRefreshListener(new OnRefreshListener2<RecyclerView>() {
 

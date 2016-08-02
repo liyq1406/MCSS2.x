@@ -1,6 +1,8 @@
 package com.v5kf.mcss.ui.activity.md2x;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +80,30 @@ public class WaitingCustomerActivity extends BaseToolbarActivity implements OnRe
 			if (cstm.getCstmType() == CustomerType.CustomerType_WaitingAlive) {
 				addRecycleBean(cstm);
 			}
+		}
+		// 按照queue排序
+		Collections.sort(mRecycleBeans, new QueueCompartor());
+	}
+	
+	/**
+	 * 节点坐席状态比较器
+	 * @author Chenhy	
+	 * @email chenhy@v5kf.com
+	 * @version v1.0 2015-9-28 上午9:53:14
+	 * @package com.v5kf.mcss.ui.adapter.tree of MCSS-Native
+	 * @file TreeHelper.java 
+	 *
+	 */
+	static class QueueCompartor implements Comparator<CustomerBean> {
+
+		@Override
+		public int compare(CustomerBean lhs, CustomerBean rhs) {
+			if (lhs.getQueue_no() > rhs.getQueue_no()) {
+				return 1;
+			} else if (lhs.getQueue_no() < rhs.getQueue_no()) {
+				return -1;
+			}			
+			return 0;
 		}
 	}
 

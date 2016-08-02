@@ -103,7 +103,7 @@ public class WelcomeActivity extends BaseLoginActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		MobclickAgent.updateOnlineConfig(this);
+//		MobclickAgent.updateOnlineConfig(this);
 //		MobclickAgent.openActivityDurationTrack(false);
 	}
 	

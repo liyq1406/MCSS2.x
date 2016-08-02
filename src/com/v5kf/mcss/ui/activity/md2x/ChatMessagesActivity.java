@@ -203,7 +203,7 @@ public class ChatMessagesActivity extends BaseChatActivity {
 			Logger.e(TAG, "[updateCustomerTitle]checkCustomer failed! null!");
 		}
 		// [新增]离开状态
-		if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+		if (Config.ENABLE_CSTM_OFFLINE && !mCustomer.isOnline()) {
 			getToolbar().setTitle("[离开]" + mCustomer.getDefaultName());
 		} else {
 			getToolbar().setTitle(mCustomer.getDefaultName());
@@ -214,7 +214,7 @@ public class ChatMessagesActivity extends BaseChatActivity {
 			public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 				Logger.d(TAG, "ImageLoaderListener.onSuccess");
 				// [新增]离开状态提示
-		    	if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				if (Config.ENABLE_CSTM_OFFLINE && !mCustomer.isOnline()) {
 		    		Logger.d(TAG, "DisplayUtil.grayImageView Accessable:" + mCustomer.getAccessable());
 		    		UITools.grayImageView(imageView);
 		    	}
@@ -225,7 +225,7 @@ public class ChatMessagesActivity extends BaseChatActivity {
 					ImageView imageView) {
 				Logger.d(TAG, "ImageLoaderListener.onFailure Accessable:" + mCustomer.getAccessable());
 				// [新增]离开状态提示
-		    	if (mCustomer.getAccessable() != null && mCustomer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				if (Config.ENABLE_CSTM_OFFLINE && !mCustomer.isOnline()) {
 		    		Logger.d(TAG, "DisplayUtil.grayImageView begin");
 		    		UITools.grayImageView(imageView);
 		    		Logger.d(TAG, "DisplayUtil.grayImageView done");

@@ -74,7 +74,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
     	holder.setPosition(position);
     	holder.mDate.setText(DateUtil.timeFormat(session.getDefaultTime(), true));
     	// [新增]离开状态提示
-    	if (customer.getAccessable() != null && customer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+    	if (Config.ENABLE_CSTM_OFFLINE && !customer.isOnline()) {
     		holder.mTitle.setText("[离开]" + Html.fromHtml(customer.getDefaultName()));
     	} else {
     		holder.mTitle.setText(Html.fromHtml(customer.getDefaultName()));
@@ -97,7 +97,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
 			public void onSuccess(String url, ImageView imageView, android.graphics.Bitmap bmp) {
 				Logger.d(TAG, "ImageLoaderListener.onSuccess");
 				// [新增]离开状态提示
-		    	if (customer.getAccessable() != null && customer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+		    	if (Config.ENABLE_CSTM_OFFLINE && !customer.isOnline()) {
 		    		Logger.d(TAG, "DisplayUtil.grayImageView Accessable:" + customer.getAccessable());
 		    		UITools.grayImageView(imageView);
 		    	}
@@ -108,7 +108,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
 					ImageView imageView) {
 				Logger.d(TAG, "ImageLoaderListener.onFailure Accessable:" + customer.getAccessable());
 				// [新增]离开状态提示
-		    	if (customer.getAccessable() != null && customer.getAccessable().equals(QAODefine.ACCESSABLE_AWAY)) {
+				if (Config.ENABLE_CSTM_OFFLINE && !customer.isOnline()) {
 		    		Logger.d(TAG, "DisplayUtil.grayImageView begin");
 		    		UITools.grayImageView(imageView);
 		    		Logger.d(TAG, "DisplayUtil.grayImageView done");
@@ -119,7 +119,8 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
     	
     	// 设置interface信息
     	UITools.setInterfaceInfo(customer.getIface(), holder.mIfaceTv, holder.mIfaceImg);
-    	    	
+    	// 设置VIP信息
+    	UITools.setVipInfo(customer.getVip(), holder.mVipTv);
 //    	// 接入可否
 //    	if (customer.getAccessable().equals(QAODefine.ACCESSABLE_IDLE)) {
 //    		holder.mPickupLayout.setVisibility(View.VISIBLE);
@@ -157,6 +158,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
         public EmojiconTextView mContent;
         public ImageView mIfaceImg;
         public TextView mIfaceTv;
+        public TextView mVipTv;
         public TextView mDate;        
         public BadgeView mBadgeView;
         public View mImgLayout;
@@ -164,6 +166,7 @@ public class WaitingSessionAdapter extends RecyclerView.Adapter<WaitingSessionAd
 
         public ViewHolder(View itemView) {
             super(itemView);
+            mVipTv = (TextView) itemView.findViewById(R.id.id_item_vip);
             mPhoto = (CircleImageView) itemView.findViewById(R.id.id_item_photo);
             mTitle = (TextView) itemView.findViewById(R.id.id_item_title);
             mContent = (EmojiconTextView) itemView.findViewById(R.id.id_item_content);

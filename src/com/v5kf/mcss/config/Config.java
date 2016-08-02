@@ -17,11 +17,13 @@ public class Config {
 	public static final boolean DEBUG_TOAST = false; // 是否显示Toast
 	public static final boolean DEBUG = false;//BuildConfig.DEBUG; // 开发过程DEBUG模式，连接debug服务器
 	public static final boolean USE_DB = false; // 是否使用数据库保存坐席
+	
 	public static final int VERSION = 3;
 	public static boolean REQ_HTTPS = false; // 加密请求
 	public static boolean WEB_HTTPS = false; // 网页使用https
 	public static final boolean ENABLE_WORKER_LOG = true;
 	public static final boolean ENABLE_UMENG_UPDATE = false; // 友盟自动更新
+	public static final boolean ENABLE_CSTM_OFFLINE = true; // 显示客户离线
 	public static final int LOG_LEVEL = Logger.VERBOS;
 	public static final boolean USE_THUMBNAIL = true; // 使用缩略图
 	public static final boolean ENABLE_PLAY_VEDIO_IN_LIST = false; // 是否允许对话列表播放视频

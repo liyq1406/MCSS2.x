@@ -44,7 +44,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 	
 	private View mHeadView;
 	
-	private TextView mNickNameTv, mIfaceTv, mVidTv, mOidTv;
+	private TextView mNickNameTv, mIfaceTv, mVidTv, mOidTv, mVipTv;
 	private CircleImageView mHeadCiv;
 	private ImageView mIfaceIv, mSexIv;	
 	private ViewGroup mHistoryMsgRl;
@@ -139,6 +139,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 		mHeadCiv = (CircleImageView) findViewById(R.id.id_head_iv);
 		mIfaceIv = (ImageView) findViewById(R.id.id_iface_iv);
 		mSexIv = (ImageView) findViewById(R.id.id_sex_iv);
+		mVipTv = (TextView) findViewById(R.id.id_item_vip);
 		
 		mHistoryMsgRl = (ViewGroup) findViewById(R.id.layout_history_msg);
 		mKexiPlusLayout = (ViewGroup) findViewById(R.id.id_kexi_plus_layout);
@@ -223,7 +224,8 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
     	
     	// 设置interface信息
     	UITools.setInterfaceInfo(mCustomer.getIface(), mIfaceTv, mIfaceIv);
-		
+		// 设置VIP信息
+    	UITools.setVipInfo(mCustomer.getVip(), mVipTv);
 		// 性别
 		if (mCustomer.getDefaultSex() == 1) {
 			mSexIv.setImageResource(R.drawable.ic_user_male);

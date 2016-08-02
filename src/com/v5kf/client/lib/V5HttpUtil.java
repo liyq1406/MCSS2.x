@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import com.v5kf.client.lib.callback.HttpResponseHandler;
 import com.v5kf.client.lib.entity.V5Message;
+import com.v5kf.client.lib.entity.V5MessageDefine;
 import com.v5kf.mcss.config.QAODefine;
 
 public class V5HttpUtil {
@@ -367,7 +368,35 @@ public class V5HttpUtil {
 				// 读取文件转为字节流
 				Logger.d(TAG, "FileSize>>>>>>>:" + V5Util.getFileSize(file) + " of:" + file.getAbsolutePath());
 				byte[] b = null;
-				if (V5Util.getFileSize(file) / 1000 < MIN_PIC_SIZE_UNCOMPRESS) {
+				if (message.getMessage_type() == V5MessageDefine.MSG_TYPE_IMAGE) {
+					if (V5Util.getFileSize(file) / 1000 < MIN_PIC_SIZE_UNCOMPRESS) {
+						try {
+							FileInputStream stream = new FileInputStream(file);
+							ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+							b = new byte[1024];
+							int n;
+							while ((n = stream.read(b)) != -1)
+								out.write(b, 0, n);
+							stream.close();
+							out.close();
+							b = out.toByteArray();
+							if (b != null) {
+								Logger.d(TAG, "SourceFileSize>>>:" + b.length);
+							} else {
+								Logger.d(TAG, "SourceFileSize>>>:null");
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					} else {
+						b = V5Util.compressImageToByteArray(V5Util.getCompressBitmap(file.getAbsolutePath()), MAX_PIC_SIZE);
+						if (b != null) {
+							Logger.d(TAG, "SourceFileSize>>>:" + b.length);
+						} else {
+							Logger.d(TAG, "SourceFileSize>>>:null");
+						}
+					}
+				} else {
 					try {
 						FileInputStream stream = new FileInputStream(file);
 						ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
@@ -378,13 +407,14 @@ public class V5HttpUtil {
 						stream.close();
 						out.close();
 						b = out.toByteArray();
-						Logger.d(TAG, "SourceFileSize>>>:" + b.length);
+						if (b != null) {
+							Logger.d(TAG, "SourceFileSize>>>:" + b.length);
+						} else {
+							Logger.d(TAG, "SourceFileSize>>>:null");
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				} else {
-					b = V5Util.compressImageToByteArray(V5Util.getCompressBitmap(file.getAbsolutePath()), MAX_PIC_SIZE);
-					Logger.d(TAG, "CompressSize>>>：" + b.length);
 				}
 				if (b != null) {
 					Logger.i(TAG, "Media content length>>>：" + b.length);

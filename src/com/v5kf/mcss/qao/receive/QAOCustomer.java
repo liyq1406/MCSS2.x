@@ -169,6 +169,9 @@ public class QAOCustomer extends QAOBase {
 		if (c_id != null) {
 			CustomerBean customer = this.mAppInfo.getAliveCustomer(c_id);
 			if (customer != null) {
+				if (qao_data.has("online")) {
+					customer.setOnline(qao_data.getBoolean("online"));
+				}
 				customer.setAccessable(accessable);
 				Logger.d(TAG, "parseCustomerAccessableChange -> customer:" + customer.getDefaultName());
 				if (customer.getCstmType() == CustomerType.CustomerType_ServingAlive) {
@@ -184,6 +187,9 @@ public class QAOCustomer extends QAOBase {
 		if (visitor_id != null) {
 			CustomerBean customer = this.mAppInfo.getVisitor(visitor_id);
 			if (customer != null) {
+				if (qao_data.has("online")) {
+					customer.setOnline(qao_data.getBoolean("pnline"));
+				}
 				customer.setAccessable(accessable);
 				Logger.d(TAG, "parseCustomerAccessableChange -> visitor:" + customer.getDefaultName());
 				// [eventbus]
@@ -392,6 +398,7 @@ public class QAOCustomer extends QAOBase {
 		} else {
 			cstm.initCustomerInfo(qao_data);
 		}
+		cstm.setOnline(true);
 		cstm.setCstmType(CustomerType.CustomerType_ServingAlive);
 		
 		// [新增]坐席日志记录
@@ -445,6 +452,7 @@ public class QAOCustomer extends QAOBase {
 		} else {
 			cstm.initCustomerInfo(qao_data);
 		}
+		cstm.setOnline(true);
 		cstm.setCstmType(CustomerType.CustomerType_WaitingAlive);
 		cstm.setLastType(CustomerBean.LAST_TYPE_OF_CWAIT_IN);
 		

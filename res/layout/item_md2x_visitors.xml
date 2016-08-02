@@ -30,6 +30,15 @@
 	        android:src="@drawable/v5_photo_default_cstm" />
         
         <TextView
+            android:id="@+id/id_item_vip"
+            android:visibility="visible"
+            android:text="V1"
+            style="@style/VipTextViewStyle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+        
+        <TextView
 			android:id="@+id/id_item_title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

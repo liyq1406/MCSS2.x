@@ -35,13 +35,16 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 	/* Handler处理消息类型 */
 	public static final int HDL_WHAT_UPDATE_UI = 1; // 更新列表，定位最下面内容
 	public static final int HDL_WHAT_UPDATE_UI_SMOOTH = 8; // 滚动更新列表，定位最下面内容
+	/**
+	 * @deprecated
+	 */
 	public static final int HDL_WHAT_REFRESH_HISTORY = 2;
 	public static final int HDL_WHAT_SHOW_ROBOT_MENU = 3;
 	public static final int HDL_WHAT_HIDE_BOTTOM = 4;
 	public static final int HDL_WHAT_CANDIDATE_ADD = 5;
 	public static final int HDL_WHAT_CANDIDATE_DEL = 6;
 	public static final int HDL_WHAT_CANDIDATE_SEND = 7;
-	public static final int HDL_WHAT_NOTIFY = 9;
+	public static final int HDL_WHAT_NOTIFY = 9; // 通知更新列表并invaliddate
 	
 	public static final String MSG_KEY_RESPONSE_NUM = "num";
 	public static final String MSG_KEY_RESPONSE = "response";
@@ -55,6 +58,10 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 //	protected static final int FIN_TYPE_END_SESSION = 1;
 //	protected static final int FIN_TYPE_CHG_TRUST = 2;
 	protected static final int FIN_TYPE_CHG_STICK = 3; // 改变置顶
+	
+	protected boolean scrollFlag = false;// 标记是否滑动
+	protected int lastVisibleItemPosition;// 标记上次滑动位置
+	protected boolean scrollUp = false; // 标记是否上滑
 	
 	protected void handleIntent() {
 		Intent intentNotify = getIntent();
@@ -92,6 +99,7 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 	
 	/**
 	 * 判断弹出键盘动作
+	 * @deprecated
 	 */
 	protected void listenerLayoutChange() {
 		final View activityRootView = findViewById(R.id.id_center_frame);
@@ -213,4 +221,12 @@ public abstract class BaseChatActivity extends BaseToolbarActivity {
 		}
 	}
 
+	/* 仅供adapter调用，每次调用延迟200ms更新 */
+	public void sendEmptyMessage(int what) {
+		Logger.d(TAG, "[sendEmptyMessage]");
+		if (!scrollUp) {
+			mHandler.removeMessages(what);
+			mHandler.sendEmptyMessageDelayed(what, 200);
+		}
+	}
 }

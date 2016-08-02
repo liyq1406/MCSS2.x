@@ -104,3 +104,5 @@
 -keep class com.umeng.update.** { *;}
 -dontwarn com.tencent.android.tpush.**
 -keep class com.tencent.android.tpush.** { *;}
+
+-keep class pl.tajchert.sample.** { *;}

@@ -25,6 +25,9 @@ public class ChatRecyclerBean {
 	
 	// 媒体资源访问错误
 	private boolean badUrl;
+	
+	// 是否加载过媒体资源
+	private boolean loaded;
 		
 	public ChatRecyclerBean(V5Message msg) {
 		mMessage = msg;
@@ -127,6 +130,14 @@ public class ChatRecyclerBean {
 
 	public void setBadUrl(boolean badUrl) {
 		this.badUrl = badUrl;
+	}
+
+	public boolean isLoaded() {
+		return loaded;
+	}
+
+	public void setLoaded(boolean loaded) {
+		this.loaded = loaded;
 	}
 
 }

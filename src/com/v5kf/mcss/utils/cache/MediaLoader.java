@@ -24,8 +24,8 @@ import com.v5kf.mcss.utils.Logger;
 
 public class MediaLoader {
 	private static final String TAG = "MediaLoader";
-	public static final int VIDEO_MIN_WH = 180; //dp
-	public static final int VIDEO_MAX_WH = 240; //dp
+	public static final int VIDEO_MIN_WH = 180; //dp 大边的最小边
+	public static final int VIDEO_MAX_WH = 240; //dp 大边的最大边
 	
 	private FileCache fileCache;
 	private ExecutorService executorService;
