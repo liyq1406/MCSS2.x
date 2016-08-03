@@ -146,10 +146,19 @@ public class UpdateService extends Service {
 				mVInfo = XMLParserUtil.getUpdateInfo(responseString);;
 				mVInfo.setCheckManual(mCheckManual);
 				if (mVInfo != null) {
+					// TODO xml解析错误
 					Logger.d(TAG, "ApkName:" + mVInfo.getApkName());
+					Logger.d(TAG, "Version:" + mVInfo.getVersion());
+					Logger.d(TAG, "DisplayMessage:" + mVInfo.getDisplayMessage());
+					Logger.d(TAG, "DownloadURL:" + mVInfo.getDownloadURL());
+					Logger.d(TAG, "AppName:" + mVInfo.getAppName());
+					Logger.d(TAG, "Title:" + mVInfo.getDisplayTitle());
+					Logger.d(TAG, "ChannelURL:" + mVInfo.getChannelURL());
+					Logger.d(TAG, "level:" + mVInfo.getLevel());
 					CustomApplication.getInstance().getWorkerSp().saveInt("update_level", mVInfo.getLevel());
 					if (mVInfo.getLevel() > 0) {
 						if (checkVersionInfo(mVInfo)) {
+							Logger.d(TAG, "gets update");
 							Intent i = new Intent(Config.ACTION_ON_UPDATE);
 							Bundle bundle = new Bundle();
 							bundle.putInt(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_ENABLE);
@@ -159,13 +168,29 @@ public class UpdateService extends Service {
 							i.putExtra("displayMessage", mVInfo.getDisplayMessage());
 							LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
 						} else {
+							Logger.d(TAG, "no update");
 							// 没有新版本，仅手动点击更新处理此广播返回
 							Intent i = new Intent(Config.ACTION_ON_UPDATE);
 							i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_NO_NEWVERSION);
 							LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
 							stopSelf();
 						}
+					} else if (mCheckManual) {
+						Logger.d(TAG, "mCheckManual not alert update");
+						// 没有新版本，仅手动点击更新处理此广播返回
+						Intent i = new Intent(Config.ACTION_ON_UPDATE);
+						i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_NO_NEWVERSION);
+						LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+						stopSelf();
+					} else {
+						Logger.w(TAG, "not alert update");
 					}
+				} else {
+					// 检查更新失败，仅手动点击更新处理此广播返回
+					Intent i = new Intent(Config.ACTION_ON_UPDATE);
+					i.putExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_UP_FAILED);
+					LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
+					stopSelf();
 				}
 			}
 			

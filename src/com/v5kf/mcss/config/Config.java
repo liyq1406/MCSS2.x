@@ -15,7 +15,7 @@ import com.v5kf.mcss.utils.Logger;
  */
 public class Config {
 	public static final boolean DEBUG_TOAST = false; // 是否显示Toast
-	public static final boolean DEBUG = false;//BuildConfig.DEBUG; // 开发过程DEBUG模式，连接debug服务器
+	public static final boolean DEBUG = false; //BuildConfig.DEBUG; // 开发过程DEBUG模式，连接debug服务器
 	public static final boolean USE_DB = false; // 是否使用数据库保存坐席
 	
 	public static final int VERSION = 3;
