@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical" >
+
+    <!-- <com.v5kf.mcss.ui.widget.ZoomImageView
+        android:id="@+id/id_image"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" /> -->
+    <!-- <com.easemob.chatuidemo.widget.photoview.PhotoView
+        android:id="@+id/id_image"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter" /> -->
+    <ImageView
+        android:id="@+id/id_image"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/contentDescription" />
+    
+    <ProgressBar
+        android:id="@+id/id_loading_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        style="@style/custom_progress_bar_large" />
+    
+</RelativeLayout>

@@ -754,3 +754,4 @@ public class ClientChatRecyclerAdapter extends RecyclerView.Adapter<ClientChatRe
     	}
     }
 }
+

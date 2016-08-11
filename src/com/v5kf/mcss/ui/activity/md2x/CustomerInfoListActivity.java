@@ -202,6 +202,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 	 * 初始化头部布局：头像、昵称
 	 */
 	private void initFirstLayout() {
+		Logger.d(TAG, "Name:" + mCustomer.getDefaultName());
 		mNickNameTv.setText(mCustomer.getDefaultName());
 		if (Config.SHOW_VID_OID) {
 			String v_id = mCustomer.getVisitor_id();

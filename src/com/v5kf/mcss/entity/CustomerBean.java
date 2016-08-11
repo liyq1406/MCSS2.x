@@ -381,10 +381,10 @@ public class CustomerBean extends BaseBean implements Serializable {
 	
 	
 	public String getDefaultName() {
-		if (nickname != null && !nickname.isEmpty()) {
-			return nickname;
-		} else if (real != null && !TextUtils.isEmpty(real.getRealname())) {
+		if (real != null && !TextUtils.isEmpty(real.getRealname())) {
 			return real.getRealname();
+		} else if (nickname != null && !nickname.isEmpty()) {
+			return nickname;
 		} else if (real != null && !TextUtils.isEmpty(real.getNickname())) {
 			return real.getNickname();
 		}  else if (virtual != null && virtual.getNickname() != null &&

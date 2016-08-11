@@ -1,5 +1,6 @@
 package com.v5kf.mcss.ui.activity.md2x;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.json.JSONException;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -287,8 +289,14 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 	private static String getAccountAuthUrl(String siteName, String userName, String pwd) {
 		int expires = 24 * 3600 * 30; // 有效期30天
 		String path = Config.LOGIN_URL + "sitename=" + siteName + "&username=" + userName + 
-			"&sign=" + pwd + "&expires=" + expires;
-		
+				"&sign=" + pwd + "&expires=" + expires;
+		try {
+			path = Config.LOGIN_URL + "sitename=" + java.net.URLEncoder.encode(siteName, "utf-8") + "&username=" + java.net.URLEncoder.encode(userName, "utf-8") + 
+				"&sign=" + pwd + "&expires=" + expires;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			Log.e(TAG, "", e);
+		}
 		Logger.d(TAG, "getAccountAuthUrl:" + path);
 		return path;
 	}

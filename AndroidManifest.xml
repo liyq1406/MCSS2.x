@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.v5kf.mcss"
-    android:versionCode="36"
-    android:versionName="2.0.6" >
+    android:versionCode="38"
+    android:versionName="2.0.8" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -73,7 +73,7 @@
         
         <meta-data android:name="TencentMapSDK" android:value="4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG" />
         <meta-data android:value="55efad6e67e58e47fe001197" android:name="UMENG_APPKEY"/>
-		<meta-data android:value="open_download" android:name="UMENG_CHANNEL"/>
+		<meta-data android:value="qihoo360" android:name="UMENG_CHANNEL"/>
 		<!-- 渠道：
 			debug(测试渠道)
 			open_download(网页分发)
@@ -157,6 +157,12 @@
             android:theme="@style/AppTheme.Fullscreen"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="com.v5kf.mcss.ui.activity.md2x.ShowImageActivity" >
+        </activity>
+
+        <activity
+            android:theme="@style/AppTheme.Fullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:name="com.v5kf.mcss.ui.activity.md2x.ShowImageGallaryActivity" >
         </activity>
 
         <activity

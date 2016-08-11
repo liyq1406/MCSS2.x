@@ -1,5 +1,6 @@
 package com.v5kf.mcss.ui.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,8 +25,8 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.client.lib.entity.V5ArticlesMessage;
@@ -691,7 +692,8 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 			
 			switch (v.getId()) {
 			case R.id.ic_type_img_iv: // 点击图片
-				gotoShowImageActivity(((V5ImageMessage)mChatBean.getMessage()).getDefaultPicUrl());
+				mActivity.gotoImageGallaryActivity(getMessageList(mRecycleBeans), getAdapterPosition());
+//				gotoShowImageActivity(((V5ImageMessage)mChatBean.getMessage()).getDefaultPicUrl());
 				break;
 				
 			case R.id.ic_map_img_iv: // 点击地图
@@ -1048,7 +1050,18 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 		notifyDataSetChanged();
 	}
     
-    public void stopVoicePlaying() {
+    public List<V5Message> getMessageList(List<ChatRecyclerBean> datas) {
+    	if (datas == null || datas.isEmpty()) {
+    		return null;
+    	}
+		List<V5Message> list = new ArrayList<V5Message>(datas.size());
+		for (ChatRecyclerBean bean : datas) {
+			list.add(bean.getMessage());
+		}
+		return list;
+	}
+
+	public void stopVoicePlaying() {
     	if (mPlayer != null) {
     		if (mPlayer.isPlaying()) {
     			mPlayer.stop();

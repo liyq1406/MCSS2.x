@@ -43,6 +43,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -56,6 +58,9 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 	// release builds
 	static final boolean DEBUG = Log.isLoggable(LOG_TAG, Log.DEBUG);
 
+	private Interpolator mInterpolator = new AccelerateDecelerateInterpolator();
+	int ZOOM_DURATION = 200;
+	
 	static final int EDGE_NONE = -1;
 	static final int EDGE_LEFT = 0;
 	static final int EDGE_RIGHT = 1;
@@ -287,6 +292,10 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 	public final float getScale() {
 		return getValue(mSuppMatrix, Matrix.MSCALE_X);
 	}
+//	@Override
+//    public float getScale() {
+//        return (float) Math.sqrt((float) Math.pow(getValue(mSuppMatrix, Matrix.MSCALE_X), 2) + (float) Math.pow(getValue(mSuppMatrix, Matrix.MSKEW_Y), 2));
+//    }
 
 	@Override
 	public final ScaleType getScaleType() {
@@ -859,11 +868,14 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 		static final float ANIMATION_SCALE_PER_ITERATION_OUT = 0.93f;
 
 		private final float mFocalX, mFocalY;
-		private final float mTargetZoom;
+		private final float mCurrentZoom, mTargetZoom;
 		private final float mDeltaScale;
+		private final long mStartTime;
 
 		public AnimatedZoomRunnable(final float currentZoom, final float targetZoom, final float focalX,
 				final float focalY) {
+			mStartTime = System.currentTimeMillis();
+			mCurrentZoom = currentZoom;
 			mTargetZoom = targetZoom;
 			mFocalX = focalX;
 			mFocalY = focalY;
@@ -893,12 +905,22 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener, Vers
 				} else {
 					// We've scaled past our target zoom, so calculate the
 					// necessary scale so we're back at target zoom
+//					float t = interpolate();
+//		            float scale = mCurrentZoom + t * (mTargetZoom - mCurrentZoom);
+//					final float delta = scale / currentScale;
 					final float delta = mTargetZoom / currentScale;
 					mSuppMatrix.postScale(delta, delta, mFocalX, mFocalY);
 					checkAndDisplayMatrix();
 				}
 			}
 		}
+		
+		private float interpolate() {
+            float t = 1f * (System.currentTimeMillis() - mStartTime) / ZOOM_DURATION;
+            t = Math.min(1f, t);
+            t = mInterpolator.getInterpolation(t);
+            return t;
+        }
 	}
 
 	private class FlingRunnable implements Runnable {

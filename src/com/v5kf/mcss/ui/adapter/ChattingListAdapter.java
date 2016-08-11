@@ -1,5 +1,6 @@
 package com.v5kf.mcss.ui.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -1043,7 +1044,8 @@ public class ChattingListAdapter extends BaseAdapter {
 					if (mChatBean.getMessage() == null) {
 						return;
 					}
-					gotoShowImageActivity(((V5ImageMessage)mChatBean.getMessage()).getDefaultPicUrl());
+//					gotoShowImageActivity(((V5ImageMessage)mChatBean.getMessage()).getDefaultPicUrl());
+					mActivity.gotoImageGallaryActivity(getMessageList(mRecycleBeans), mPosition);
 				}
 				break;
 			}
@@ -1578,5 +1580,16 @@ public class ChattingListAdapter extends BaseAdapter {
     		mPlayer = null;
     	}
     }
+    
+    public List<V5Message> getMessageList(List<ChatRecyclerBean> datas) {
+    	if (datas == null || datas.isEmpty()) {
+    		return null;
+    	}
+		List<V5Message> list = new ArrayList<V5Message>(datas.size());
+		for (ChatRecyclerBean bean : datas) {
+			list.add(bean.getMessage());
+		}
+		return list;
+	}
     
 }

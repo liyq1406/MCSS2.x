@@ -33,6 +33,7 @@ import com.v5kf.client.lib.V5KFException.V5ExceptionStatus;
 import com.v5kf.client.lib.V5WebSocketHelper.WebsocketListener;
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5MessageDefine;
+import com.v5kf.client.lib.websocket.WebSocketClient;
 
 public class V5ClientService extends Service implements NetworkListener, WebsocketListener {
 
@@ -45,7 +46,8 @@ public class V5ClientService extends Service implements NetworkListener, Websock
 	private NetworkManager mNetReceiver;
 	Handler mHandler;
 	private String mUrl;
-	private static V5WebSocketHelper mClient;
+//	private static V5WebSocketHelper mClient;
+	private static WebSocketClient mClient;
 	
 	private DBHelper mDBHelper;
 	private V5ConfigSP mConfigSP;
@@ -214,7 +216,7 @@ public class V5ClientService extends Service implements NetworkListener, Websock
 				return;
 			}
 			mUrl = String.format(Locale.CHINA, V5ClientConfig.WS_URL_FMT, config.getAuthorization());
-			mClient = new V5WebSocketHelper(URI.create(mUrl), this, null);
+			mClient = new WebSocketClient(URI.create(mUrl), this, null);
 			Logger.i(TAG, "visitor_id:" + config.getV5VisitorId());
 			mClient.connect();
 			if (mUrl != null) {

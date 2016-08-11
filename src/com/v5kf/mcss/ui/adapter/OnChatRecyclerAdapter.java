@@ -1,5 +1,6 @@
 package com.v5kf.mcss.ui.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,9 +28,9 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ImageView.ScaleType;
 
 import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.client.lib.entity.V5ArticlesMessage;
@@ -1039,7 +1040,8 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
 					if (mChatBean.getMessage() == null) {
 						return;
 					}
-					gotoShowImageActivity(((V5ImageMessage)mChatBean.getMessage()).getDefaultPicUrl());
+//					gotoShowImageActivity(((V5ImageMessage)mChatBean.getMessage()).getDefaultPicUrl());
+					mActivity.gotoImageGallaryActivity(getMessageList(mRecycleBeans), mPosition);
 				}
 				break;
 			}
@@ -1602,4 +1604,14 @@ public class OnChatRecyclerAdapter extends RecyclerView.Adapter<OnChatRecyclerAd
     	}
     }
     
+    public List<V5Message> getMessageList(List<ChatRecyclerBean> datas) {
+    	if (datas == null || datas.isEmpty()) {
+    		return null;
+    	}
+		List<V5Message> list = new ArrayList<V5Message>(datas.size());
+		for (ChatRecyclerBean bean : datas) {
+			list.add(bean.getMessage());
+		}
+		return list;
+	}
 }

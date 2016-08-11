@@ -292,7 +292,7 @@ public class ImageLoader {
 		}
 	}
 
-	public Bitmap onDecodeFile(File f) {
+	public static Bitmap onDecodeFile(File f) {
 		try {
 			return BitmapFactory.decodeStream(new FileInputStream(f));
 		} catch (FileNotFoundException e) {
@@ -499,4 +499,48 @@ public class ImageLoader {
 		this.mTryTimes = mTryTimes;
 	}
 
+	public static Bitmap getBitmap(Context context, String url) {
+		ImageCache memoryCache = new ImageCache();
+		Bitmap bitmapmm = memoryCache.get(url);
+		if (bitmapmm != null) {
+			return bitmapmm;
+		}
+		
+		FileCache fileCache = new FileCache(context, FileUtil.getImageCachePath(context));
+		try {
+			File f = fileCache.getFile(url);
+			
+			// 从sd卡
+			Bitmap b = onDecodeFile(f);
+			if (b != null) {
+				Logger.d("ImageLoader", "From FileCache:" + url);
+				return b;
+			} else { // 判断是否本地路径
+//				Bitmap localBmp = DevUtils.ratio(
+//						url, 
+//						UITools.dip2px(mContext, IMAGE_MIN_WH), 
+//						UITools.dip2px(mContext, IMAGE_MAX_WH)); // 压缩宽高
+				Bitmap localBmp = BitmapFactory.decodeFile(url);
+				if (localBmp != null) {
+					Logger.d("ImageLoader", "From localFile:" + url);
+					return localBmp;
+				}
+			}
+			
+			// 从网络
+			Bitmap bitmap = null;
+			Logger.d("ImageLoader", "ImageLoader-->download:" + url);
+			HttpUtil.CopyStream(url, f);
+			
+			// 图片角度矫正
+			UITools.correctBitmapAngle(f.getAbsolutePath());
+			
+			bitmap = onDecodeFile(f);
+
+			return bitmap;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
 }

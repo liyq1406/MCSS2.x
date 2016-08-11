@@ -785,7 +785,10 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 			if (ClientChatRecyclerAdapter.TYPE_IMG_L == viewType || 
 					ClientChatRecyclerAdapter.TYPE_IMG_R == viewType) {
 				V5ImageMessage imageMsg = (V5ImageMessage) message;
-				gotoShowImageActivity(imageMsg.getDefaultPicUrl());
+				
+				
+//				gotoShowImageActivity(imageMsg.getDefaultPicUrl());
+				gotoImageGallaryActivity(getMessageList(mDatas), position);
 			}
 		} else if (v.getId() == R.id.ic_map_img_iv) {
 			if (ClientChatRecyclerAdapter.TYPE_LOCATION_L == viewType || 
@@ -820,7 +823,8 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 //				if (message == null || message.getMsg_content() == null) {
 //					return;
 //				}
-//				gotoShowImageActivity(message.getMsg_content().getPic_url());
+//				//gotoShowImageActivity(message.getMsg_content().getPic_url());
+//				gotoImageGallaryActivity(message.getS_id(), position);
 //			}
 //			break;
 //		}
@@ -1021,18 +1025,20 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 	private void sendV5Message(V5Message message) {
 //		message.setMsg_id(0);
 		addMessage(message);
+		
+		if (mOpenAnswer != null) {
+			DBHelper dbh = new DBHelper(getApplicationContext());
+			dbh.insert(mOpenAnswer, true);
+			mOffset++;
+			mOpenAnswer = null;
+		}
+		
 		V5ClientAgent.getInstance().sendMessage(message, new MessageSendCallback() {
 			
 			@Override
 			public void onSuccess(V5Message message) {
 				Logger.d(TAG, "V5Message.getState:" + message.getState());
-				if (mOpenAnswer != null) {
-					DBHelper dbh = new DBHelper(getApplicationContext());
-					dbh.insert(mOpenAnswer, true);
-					mOffset++;
-					mOpenAnswer = null;
-				}
-				Logger.w(TAG, "sendMessage("+message.getDefaultContent(getApplicationContext())+") success mDatas:" + mDatas.size());
+				//Logger.w(TAG, "sendMessage("+message.getDefaultContent(getApplicationContext())+") success mDatas:" + mDatas.size());
 //				for (V5Message msg : mDatas) {
 //					Logger.w(TAG, "msg:" + msg.getDefaultContent(getApplicationContext()));
 //				}
@@ -1388,5 +1394,16 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 		// 发送语音
 		V5VoiceMessage voiceMessage = V5MessageManager.obtainVoiceMessage(path);
 		sendV5Message(voiceMessage);
+	}
+	
+	public List<V5Message> getMessageList(List<V5ChatBean> datas) {
+    	if (datas == null || datas.isEmpty()) {
+    		return null;
+    	}
+		List<V5Message> list = new ArrayList<V5Message>(datas.size());
+		for (V5ChatBean bean : datas) {
+			list.add(bean.getMessage());
+		}
+		return list;
 	}
 }

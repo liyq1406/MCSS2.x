@@ -160,9 +160,7 @@ public class ShowImageActivity extends BaseActivity implements ImageLoaderListen
 	}
 
 	protected boolean saveImage() {
-		mPhotoIv.setDrawingCacheEnabled(true);
-		Bitmap tempBmp = Bitmap.createBitmap(mPhotoIv.getDrawingCache());
-		mPhotoIv.setDrawingCacheEnabled(false);
+		Bitmap tempBmp = ImageLoader.getBitmap(getApplicationContext(), mUrl);
 		mFileName = saveBitmap2File(tempBmp);
 		if (null == mFileName) {
 			return false;

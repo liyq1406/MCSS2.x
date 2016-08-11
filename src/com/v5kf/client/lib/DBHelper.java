@@ -315,7 +315,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		// 获得SQLiteDatabase实例
     	SQLiteDatabase db = getWritableDatabase();
     	// 查询获得Cursor
-    	Cursor cur = db.rawQuery("select * from " + mTableName + " order by create_time desc," +
+    	Cursor cur = db.rawQuery("select * from " + mTableName + " order by _id desc, create_time desc," +
     			" direction desc limit " + size + " offset " + offset, null);
     	boolean finish = cur.getCount() < size ? true : false;
     	while (cur.moveToNext()) {

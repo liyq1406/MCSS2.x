@@ -620,7 +620,7 @@ public class CoreService extends Service implements WebsocketListener, NetworkLi
 		/* 判断断线原因并处理 */
 		switch (code) {
 		case -1:
-		case 4000: // 因本设备重复连接被断开
+		case 4000: // 因本设备重复连接被断开，无需处理
 			return;
 		
 		case 10: // 强制断开重连

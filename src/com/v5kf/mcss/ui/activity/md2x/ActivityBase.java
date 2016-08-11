@@ -1,7 +1,9 @@
 package com.v5kf.mcss.ui.activity.md2x;
 
 import java.io.File;
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.SwipeBackLayout.SwipeListener;
@@ -36,6 +38,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
+import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
@@ -727,6 +730,14 @@ public abstract class ActivityBase extends SwipeBackActivity {
 		startActivity(intent);
 		//overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
 		// TODO
+	}
+
+	public void gotoImageGallaryActivity(List<V5Message> list, int position) {
+		Intent intent = new Intent(this, ShowImageGallaryActivity.class);
+		intent.putExtra("message_list", (Serializable)list);
+		intent.putExtra("position", position);
+		startActivity(intent);
+		overridePendingTransition(0, 0);
 	}
 	
 	public void gotoVedioPlayActivity(String filePath) {

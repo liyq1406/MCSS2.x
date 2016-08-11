@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical" >
+
+    <com.v5kf.mcss.ui.widget.HackyViewPager
+       android:id="@+id/id_gallary_viewpager"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:background="@color/transparent" />
+    
+    <TextView
+        android:id="@+id/id_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+    
+</RelativeLayout>
