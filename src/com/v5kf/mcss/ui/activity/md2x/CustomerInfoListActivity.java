@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.QAODefine;
+import com.v5kf.mcss.entity.ArchWorkerBean;
 import com.v5kf.mcss.entity.CustomerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.manage.RequestManager;
@@ -32,6 +33,7 @@ import com.v5kf.mcss.qao.request.CustomerRequest;
 import com.v5kf.mcss.ui.adapter.CustomerInfoListAdapter;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.ui.widget.ListLinearLayout;
+import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
@@ -313,6 +315,28 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 		    item.put("公司", mCustomer.getDefaultCompany());
 		    mCstmInfoList.add(item);
 		}
+		// 系统
+		if (mCustomer.getVirtual() != null && mCustomer.getVirtual().getOs() > 0) {
+			HashMap<String, String> item = new HashMap<String, String>(1);
+			item.put("系统", UITools.stringOfCstmOs(mCustomer.getVirtual().getOs()));
+			mCstmInfoList.add(item);
+		}
+		// 最近服务坐席
+		if (mCustomer.getVirtual() != null && mCustomer.getVirtual().getLast_worker() != null
+				&& !mCustomer.getVirtual().getLast_worker().isEmpty()) {
+			HashMap<String, String> item = new HashMap<String, String>(1);
+			ArchWorkerBean worker = mAppInfo.getCoWorker(mCustomer.getVirtual().getLast_worker());
+			if (worker != null) {
+				item.put("最近服务", worker.getDefaultName());
+				mCstmInfoList.add(item);
+			}
+		}
+		// 最近访问
+		if (mCustomer.getVirtual() != null && mCustomer.getVirtual().getLast_service() > 0) {
+			HashMap<String, String> item = new HashMap<String, String>(1);
+			item.put("最近访问", DateUtil.timeFormat(mCustomer.getVirtual().getLast_service(), false));
+			mCstmInfoList.add(item);
+		}
 		// 对话次数
 		if (mCustomer.getVirtual() != null) {
 			HashMap<String, String> item = new HashMap<String, String>(1);
@@ -491,7 +515,7 @@ public class CustomerInfoListActivity extends BaseToolbarActivity implements OnC
 	@Subscriber(tag = EventTag.ETAG_UPDATE_CSTM_INFO, mode = ThreadMode.MAIN)
 	private void updateCustomerInfo(CustomerBean cstm) {
 		Logger.d(TAG + "-eventbus", "updateCustomerInfo -> ETAG_UPDATE_CSTM_INFO");
-		if (cstm.getC_id().equals(c_id)) {
+		if (c_id != null && cstm.getC_id() != null && cstm.getC_id().equals(c_id)) {
 			initFirstLayout();
 			initListLayout();
 		} else if (v_id != null && v_id.equals(cstm.getVisitor_id())) {

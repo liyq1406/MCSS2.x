@@ -40,6 +40,7 @@ public class UpdateService extends Service {
 	private VersionInfo mVInfo;
 	private long mReference;
 	private UpdateServiceReceiver mReceiver;
+	@SuppressWarnings("unused")
 	private Handler mHandler;
 	private boolean isDownloading;
 	private boolean mCheckManual;
@@ -50,16 +51,15 @@ public class UpdateService extends Service {
 	}
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
-		Logger.i(TAG, "[onCreate]");
+		Logger.v(TAG, "[onCreate]");
 		mHandler = new Handler(Looper.getMainLooper());
 		initReceiver();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Logger.i(TAG, "[onStartCommand]");
+		Logger.v(TAG, "[onStartCommand]");
 		if (intent != null) {
 			mCheckManual = intent.getBooleanExtra("check_manual", false);
 		}
@@ -72,7 +72,7 @@ public class UpdateService extends Service {
 		super.onDestroy();
 		LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mReceiver);
 		unregisterReceiver(mReceiver);
-		Logger.i(TAG, "[onDestroy]");
+		Logger.v(TAG, "[onDestroy]");
 	}
 
 	private void initReceiver() {
@@ -128,7 +128,7 @@ public class UpdateService extends Service {
 //		request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_DOWNLOADS, mVInfo.getApkName());
 		request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, mVInfo.getApkName());
 		mReference = downloadManager.enqueue(request);
-		Logger.i(TAG, "[更新] 下载中。。。" + mReference);
+		Logger.d(TAG, "[更新] 下载中。。。" + mReference);
 	}
 	
 	
@@ -142,19 +142,19 @@ public class UpdateService extends Service {
 			
 			@Override
 			public void onSuccess(int statusCode, String responseString) {
-				Logger.i(TAG, "responseString:" +  responseString);
+				Logger.d(TAG, "responseString:" +  responseString);
 				mVInfo = XMLParserUtil.getUpdateInfo(responseString);;
 				mVInfo.setCheckManual(mCheckManual);
 				if (mVInfo != null) {
-					// TODO xml解析错误
-					Logger.d(TAG, "ApkName:" + mVInfo.getApkName());
-					Logger.d(TAG, "Version:" + mVInfo.getVersion());
-					Logger.d(TAG, "DisplayMessage:" + mVInfo.getDisplayMessage());
-					Logger.d(TAG, "DownloadURL:" + mVInfo.getDownloadURL());
-					Logger.d(TAG, "AppName:" + mVInfo.getAppName());
-					Logger.d(TAG, "Title:" + mVInfo.getDisplayTitle());
-					Logger.d(TAG, "ChannelURL:" + mVInfo.getChannelURL());
-					Logger.d(TAG, "level:" + mVInfo.getLevel());
+					// xml解析
+					Logger.v(TAG, "ApkName:" + mVInfo.getApkName());
+					Logger.v(TAG, "Version:" + mVInfo.getVersion());
+					Logger.v(TAG, "DisplayMessage:" + mVInfo.getDisplayMessage());
+					Logger.v(TAG, "DownloadURL:" + mVInfo.getDownloadURL());
+					Logger.v(TAG, "AppName:" + mVInfo.getAppName());
+					Logger.v(TAG, "Title:" + mVInfo.getDisplayTitle());
+					Logger.v(TAG, "ChannelURL:" + mVInfo.getChannelURL());
+					Logger.v(TAG, "level:" + mVInfo.getLevel());
 					CustomApplication.getInstance().getWorkerSp().saveInt("update_level", mVInfo.getLevel());
 					if (mVInfo.getLevel() > 0) {
 						if (checkVersionInfo(mVInfo)) {
@@ -183,7 +183,7 @@ public class UpdateService extends Service {
 						LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
 						stopSelf();
 					} else {
-						Logger.w(TAG, "not alert update");
+						Logger.d(TAG, "not alert update");
 					}
 				} else {
 					// 检查更新失败，仅手动点击更新处理此广播返回
@@ -283,7 +283,7 @@ public class UpdateService extends Service {
 	private void installApk() {
 		isDownloading = false;
 		
-		Logger.i(TAG, "[installApk] 下载安装");
+		Logger.d(TAG, "[installApk] 下载安装");
 		// 获取当前sdcard存储路径
 //		File apkfile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + mVInfo.getApkName());
 		File apkfile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + mVInfo.getApkName());
@@ -308,7 +308,7 @@ public class UpdateService extends Service {
 			if (null == intent) {
 				return;
 			}
-			Logger.i(TAG, "[onReceive] " + intent.getAction());
+			Logger.d(TAG, "[onReceive] " + intent.getAction());
 			if (intent.getAction().equals(Config.ACTION_ON_UPDATE)) {
 				int type = intent.getIntExtra(Config.EXTRA_KEY_INTENT_TYPE, Config.EXTRA_TYPE_NULL);
 				boolean onlyWifi = intent.getBooleanExtra(Config.EXTRA_KEY_DOWN_ONLYWIFI, false);

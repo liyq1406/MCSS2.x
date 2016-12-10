@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ import com.v5kf.client.lib.entity.V5ArticleBean;
 import com.v5kf.client.lib.entity.V5ArticlesMessage;
 import com.v5kf.client.lib.entity.V5ImageMessage;
 import com.v5kf.client.lib.entity.V5Message;
+import com.v5kf.client.lib.entity.V5MessageDefine;
 import com.v5kf.client.lib.entity.V5MusicMessage;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
@@ -305,7 +307,7 @@ public class MaterialBaseFragment extends LazyFragment {
 					if (resp.getString("state").equals("ok")) {
 						mTotal = resp.getInt("total");
 						JSONArray items = resp.getJSONArray("items");
-						addDataGroup(items);						
+						addDataGroup(items);
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -369,7 +371,9 @@ public class MaterialBaseFragment extends LazyFragment {
 					((V5ImageMessage)msgContent).setMessage_type(QAODefine.MSG_TYPE_IMAGE);
 					((V5ImageMessage)msgContent).setTitle(item.getString("title"));
 					((V5ImageMessage)msgContent).setPic_url(item.getString("url"));
-					((V5ImageMessage)msgContent).setMedia_id(item.getString("media_id"));
+					if (!item.isNull("media_id")) {
+						((V5ImageMessage)msgContent).setMedia_id(item.getString("media_id"));
+					}
 					break;
 				
 				case TYPE_MUSIC:
@@ -415,6 +419,17 @@ public class MaterialBaseFragment extends LazyFragment {
 			Bundle bundle = msg.getData();
 			int pos = bundle.getInt(BaseChatActivity.MSG_KEY_POSITION);
 			V5Message msgContent = mDatas.get(pos);
+//			if (msgContent.getMessage_type() == QAODefine.MSG_TYPE_MUSIC) {
+//				// TODO
+//				mParentActivity.ShowToast(R.string.tips_unsupport_message_to_iface);
+//				break;
+//			} else 
+			if (msgContent.getMessage_type() == QAODefine.MSG_TYPE_IMAGE) {
+				if (TextUtils.isEmpty(((V5ImageMessage)msgContent).getMedia_id())) {
+					mParentActivity.ShowToast(R.string.tips_unsupport_message_to_iface);
+					break;
+				}
+			}
 			Intent data = new Intent();
 			Bundle extra = new Bundle();
 			extra.putSerializable("message_content", msgContent);

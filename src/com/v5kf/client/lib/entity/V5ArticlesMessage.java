@@ -1,5 +1,6 @@
 package com.v5kf.client.lib.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import org.json.JSONObject;
 
 import com.v5kf.client.lib.V5Util;
 
-public class V5ArticlesMessage extends V5Message {
+public class V5ArticlesMessage extends V5Message implements Serializable {
 	
 	/**
 	 * 

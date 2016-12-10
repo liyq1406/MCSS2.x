@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.v5kf.mcss"
-    android:versionCode="38"
-    android:versionName="2.0.8" >
+    android:versionCode="41"
+    android:versionName="2.1.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -61,6 +61,12 @@
     <!-- 【可选】 信鸽SDK所需权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BATTERY_STATS" />
+    
+    <permission
+        android:name="com.v5kf.mcss.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signatureOrSystem" />
+
+    <uses-permission android:name="com.v5kf.mcss.permission.MIPUSH_RECEIVE" />
 	
     <application
         android:name="com.v5kf.mcss.CustomApplication"
@@ -73,7 +79,7 @@
         
         <meta-data android:name="TencentMapSDK" android:value="4NABZ-63HAJ-GWQFM-FI2NH-3VDN2-NJFKG" />
         <meta-data android:value="55efad6e67e58e47fe001197" android:name="UMENG_APPKEY"/>
-		<meta-data android:value="qihoo360" android:name="UMENG_CHANNEL"/>
+		<meta-data android:value="open_download" android:name="UMENG_CHANNEL"/>
 		<!-- 渠道：
 			debug(测试渠道)
 			open_download(网页分发)
@@ -216,11 +222,16 @@
             android:screenOrientation="portrait"
             android:name="com.v5kf.mcss.ui.activity.md2x.WaitingCustomerActivity" >
         </activity>
+        
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.v5kf.mcss.ui.activity.md2x.AboutMeActivity" >
+        </activity>
             
         <service 
             android:exported="false"
             android:enabled="true"
-            android:process=":push"
+            android:process=":alarm"
             android:name="com.v5kf.mcss.service.PushService" >
             <intent-filter android:priority="1000">
 				<action android:name="com.v5kf.mcss.service.push" />

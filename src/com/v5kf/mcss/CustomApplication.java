@@ -13,6 +13,8 @@ import org.litepal.tablemanager.Connector;
 import org.simple.eventbus.EventBus;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,6 +22,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.BitmapFactory;
@@ -31,8 +34,10 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
 import com.tencent.android.tpush.XGIOperateCallback;
+import com.tencent.android.tpush.XGNotifaction;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
+import com.tencent.android.tpush.XGPushNotifactionCallback;
 import com.v5kf.client.lib.V5ClientAgent;
 import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.AppStatus;
@@ -78,41 +83,104 @@ public class CustomApplication extends LitePalApplication {
 	private String mOnChatCustomer = null;
 	
 	private String mDeviceToken;
-//	private int mNotificationId = 0;
-//	private Map<String, Integer> mNotificationIdMap;
 	
 	private NotificationManager mNotificationManager;
-	
-	/* get_wait_customer/get_list_customer(非join_in)是否发通知标识 */
+//	private int mNotificationId = 0;
+//	private Map<String, Integer> mNotificationIdMap;
+//	/* get_wait_customer/get_list_customer(非join_in)是否发通知标识 */
 //	private boolean mNotifyNotJoin = true;
 	
 	/* App所有Activity管理 */
 	private List<WeakReference<Activity>> mActivitiePrefs;
 	
-	/**
-	 * OnCreate中调用
-	 * @param addActivity CustomApplication 
-	 * @return void
-	 * @param activity
-	 */
-	public void addActivity(Activity activity) {
-		mActivitiePrefs.add(new WeakReference<Activity>(activity));
-	}
-	
-	/**
-	 * OnDestory中调用
-	 * @param removeActivity CustomApplication 
-	 * @return void
-	 * @param activity
-	 */
-	public void removeActivity(Activity activity) {
-		for (WeakReference<Activity> activitiPref : mActivitiePrefs) {
-			if (activitiPref.get() == activity) {
-				mActivitiePrefs.remove(activitiPref);
-			}
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Logger.w("CustomApplication", "<<<<<<App create[PID:" + Process.myPid() + "]("+Thread.currentThread().getName()+")>>>>>>");
+		
+		// 在主进程设置初始化相关的内容
+		if (isMainProcess()) {
+			Logger.w("CustomApplication", "isMainProcess application[PID:" + Process.myPid() + "]("+Thread.currentThread().getName()+")");
+			mInstance = this;
+			mAppInfo = new AppInfoKeeper(this);
+			mActivitiePrefs = new CopyOnWriteArrayList<WeakReference<Activity>>();
+//			mNotificationIdMap = new ConcurrentHashMap<String, Integer>();
+			
+			initApplication();
 		}
 	}
-	
+
+	/*
+	 * 应用初始化
+	 */
+	private void initApplication() {
+		mAppStatus =AppStatus.AppStatus_Init;
+		mLoginStatus = LoginStatus.LoginStatus_Unlogin;
+//		mNetworkState = NetworkManager.getNetworkState(this); // 延迟获取，避免权限未加载
+//		CrashHandler.getInstance().init(this);
+		
+		if (getWorkerSp().readAutoLogin()) {
+			mAppInfo.getUser().setW_id(getWorkerSp().readWorkerId());
+			mAppInfo.getUser().setE_id(getWorkerSp().readSiteId());
+		}
+		
+		V5ClientAgent.init(this, null);
+		// 开启logcat输出，方便debug，发布时请关闭
+		 XGPushConfig.enableDebug(this, Config.DEBUG);
+		// 如果需要知道注册是否成功，请使用registerPush(getApplicationContext(), XGIOperateCallback)带callback版本
+		// 如果需要绑定账号，请使用registerPush(getApplicationContext(),account)版本
+		// 具体可参考详细的开发指南
+		// 传递的参数为ApplicationContext
+		Context context = getApplicationContext();
+		Logger.d(TAG, "[XGPush] 信鸽注册状态：" + XGPushManager.getServiceStatus(getApplicationContext()));
+		String version = null;
+		try {
+			version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		String dv_token = XGPushConfig.getToken(getApplicationContext());
+		Logger.d(TAG, "version=" + version + " device_token=" + dv_token);
+		XGPushManager.registerPush(context, new XGIOperateCallback() { // version, 
+			
+			@Override
+			public void onSuccess(Object arg0, int arg1) {
+				setDeviceToken((String)arg0);
+				Logger.i(TAG, "[XGPush] 信鸽注册成功token：" + (String)arg0);
+			}
+			
+			@Override
+			public void onFail(Object arg0, int arg1, String arg2) {
+				Logger.e(TAG, "[XGPush] 信鸽注册失败");
+			}
+		});
+		// 为保证弹出通知前一定调用本方法，需要在application的onCreate注册
+		// 收到通知时，会调用本回调函数。
+		// 相当于这个回调会拦截在信鸽的弹出通知之前被截取
+		// 一般上针对需要获取通知内容、标题，设置通知点击的跳转逻辑等等
+		XGPushManager
+				.setNotifactionCallback(new XGPushNotifactionCallback() {
+
+					@Override
+					public void handleNotify(XGNotifaction xGNotifaction) {
+						Logger.i("test", "[XGPush] 处理信鸽通知：" + xGNotifaction);
+						// 获取标签、内容、自定义内容
+						String title = xGNotifaction.getTitle();
+						String content = xGNotifaction.getContent();
+						String customContent = xGNotifaction
+								.getCustomContent();
+						Logger.d("test", "[XGPush]  通知 title:" + title + " content:" + content + " customContent:" + customContent);
+						// 其它的处理
+						// 如果还要弹出通知，可直接调用以下代码或自己创建Notifaction，否则，本通知将不会弹出在通知栏中。
+						xGNotifaction.doNotify();
+					}
+				});
+		
+		if (dv_token != null && !dv_token.isEmpty() && !dv_token.equals("0")) {
+			setDeviceToken(dv_token);
+		}
+	}
+
 	/**
 	 * 退出应用(退出登录、结束服务)
 	 * @param terminate CustomApplication 
@@ -154,13 +222,65 @@ public class CustomApplication extends LitePalApplication {
 //		Logger.d(TAG, "[XGPush] 信鸽注册状态：" + XGPushManager.getServiceStatus(getApplicationContext()));
 	}
 
+	public String getVersion() {
+	    try {
+	        PackageManager manager = getPackageManager();
+	        PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+	        String version = info.versionName;
+	        return version;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "null";
+	    }
+	}
+
+	public static AppInfoKeeper getAppInfoInstance() {
+		if (null == mInstance.mAppInfo) {
+			mInstance.mAppInfo = new AppInfoKeeper(mInstance);
+		}
+		return mInstance.mAppInfo;
+	}
+
+	public AppInfoKeeper getAppInfo() {
+		if (null == mAppInfo) {
+			mAppInfo = new AppInfoKeeper(this);
+		}
+		return mAppInfo;
+	}
+
+	/**
+	 * OnCreate中调用
+	 * @param addActivity CustomApplication 
+	 * @return void
+	 * @param activity
+	 */
+	public void addActivity(Activity activity) {
+		mActivitiePrefs.add(new WeakReference<Activity>(activity));
+	}
+	
+	/**
+	 * OnDestory中调用
+	 * @param removeActivity CustomApplication 
+	 * @return void
+	 * @param activity
+	 */
+	public void removeActivity(Activity activity) {
+		for (WeakReference<Activity> activitiPref : mActivitiePrefs) {
+			if (activitiPref.get() == activity) {
+				mActivitiePrefs.remove(activitiPref);
+			}
+		}
+	}
+	
+	
+
 	/**
 	 * 结束所有Activity,退回后台
 	 * @param stopActivities CustomApplication 
 	 * @return void
 	 */
 //	public void stopActivities() {
-//		Logger.w(TAG, "[stopActivities] - 清理内存");
+//		Logger.i(TAG, "[stopActivities] - 清理内存");
 //		for (WeakReference<FragmentActivity> activitiPref : mActivitiePrefs) {
 //			if (null != activitiPref.get()) {
 //				activitiPref.get().finish();
@@ -181,7 +301,7 @@ public class CustomApplication extends LitePalApplication {
 	 * @param activity
 	 */
 	public void stopOtherActivities(Activity activity) {
-		Logger.w(TAG, "[stopActivities] - 清理内存");
+		Logger.i(TAG, "[stopOtherActivities] - 清理内存");
 		for (WeakReference<Activity> activitiPref : mActivitiePrefs) {
 			if (null != activitiPref.get() && activitiPref.get() != activity) {
 				activitiPref.get().finish();
@@ -197,59 +317,17 @@ public class CustomApplication extends LitePalApplication {
 		}
 	}
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		Logger.i("CustomApplication", "<<<<<<App create[PID:" + Process.myPid() + "]("+Thread.currentThread().getName()+")>>>>>>");
-		mInstance = this;
-		mAppInfo = new AppInfoKeeper(this);
-		mActivitiePrefs = new CopyOnWriteArrayList<WeakReference<Activity>>();
-//		mNotificationIdMap = new ConcurrentHashMap<String, Integer>();
-		initApplication();	
-	}
-
-	/*
-	 * 应用初始化
-	 */
-	private void initApplication() {
-		mAppStatus =AppStatus.AppStatus_Init;
-		mLoginStatus = LoginStatus.LoginStatus_Unlogin;
-//		mNetworkState = NetworkManager.getNetworkState(this); // 延迟获取，避免权限未加载
-//		CrashHandler.getInstance().init(this);
-		
-		if (getWorkerSp().readAutoLogin()) {
-			mAppInfo.getUser().setW_id(getWorkerSp().readWorkerId());
-			mAppInfo.getUser().setE_id(getWorkerSp().readSiteId());
-		}
-		
-		V5ClientAgent.init(this, null);
-		// 开启logcat输出，方便debug，发布时请关闭
-		 XGPushConfig.enableDebug(this, Config.DEBUG);
-		// 如果需要知道注册是否成功，请使用registerPush(getApplicationContext(), XGIOperateCallback)带callback版本
-		// 如果需要绑定账号，请使用registerPush(getApplicationContext(),account)版本
-		// 具体可参考详细的开发指南
-		// 传递的参数为ApplicationContext
-		Context context = getApplicationContext();
-		Logger.d(TAG, "[XGPush] 信鸽注册状态：" + XGPushManager.getServiceStatus(getApplicationContext()));
-		String version = null;
-		try {
-			version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-		}
-		XGPushManager.registerPush(context, version, new XGIOperateCallback() {
-			
-			@Override
-			public void onSuccess(Object arg0, int arg1) {
-				setDeviceToken((String)arg0);
-				Logger.i(TAG, "信鸽注册成功token：" + (String)arg0);
+	public boolean isMainProcess() {
+		ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+		List<RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+		String mainProcessName = getPackageName();
+		int myPid = android.os.Process.myPid();
+		for (RunningAppProcessInfo info : processInfos) {
+			if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+				return true;
 			}
-			
-			@Override
-			public void onFail(Object arg0, int arg1, String arg2) {
-				Logger.e(TAG, "信鸽注册失败");
-			}
-		});
+		}
+		return false;
 	}
 
 	public static CustomApplication getInstance() {
@@ -263,20 +341,6 @@ public class CustomApplication extends LitePalApplication {
 		Connector.getDatabase();
 	}
 	
-	public static AppInfoKeeper getAppInfoInstance() {
-		if (null == mInstance.mAppInfo) {
-			mInstance.mAppInfo = new AppInfoKeeper(mInstance);
-		}
-		return mInstance.mAppInfo;
-	}
-
-	public AppInfoKeeper getAppInfo() {
-		if (null == mAppInfo) {
-			mAppInfo = new AppInfoKeeper(this);
-		}
-		return mAppInfo;
-	}
-
 	public LoginStatus getLoginStatus() {
 		return mLoginStatus;
 	}
@@ -313,10 +377,10 @@ public class CustomApplication extends LitePalApplication {
 	}
 	
 	private void onAppEnterForeground() {
-		Logger.w(TAG, "{Application on foreground}");
+		Logger.d(TAG, "{Application on foreground}");
 		XGPushManager.cancelAllNotifaction(getContext());
 		/* 初始化登录数据 */
-        Logger.d(TAG, "初始化条件：AppStatus:" + getAppStatus() + 
+        Logger.v(TAG, "初始化条件：AppStatus:" + getAppStatus() + 
         		" ExitFlag:" + getWorkerSp().readExitFlag()
         		+ " LoginStatus:" + getLoginStatus() + " Auth:" + getWorkerSp().readAuthorization());
 		if (getWorkerSp().readAuthorization() == null) {
@@ -356,14 +420,14 @@ public class CustomApplication extends LitePalApplication {
 	}
 	
 	private void onAppEnterBackground() {
-		Logger.w(TAG, "{Application on background}");
+		Logger.d(TAG, "{Application on background}");
 		// 缓存未读消息数量
 		Map<String, Integer> readMap = new HashMap<String,Integer>();
 		for (CustomerBean cstm : mAppInfo.getCustomerMap().values()) {
 			// 全部未读消息
 			int totalNum = mAppInfo.getTotalUnreplyMessageNum(cstm);
 			int readedNum = totalNum - ((cstm.getSession() != null) ? cstm.getSession().getUnreadMessageNum() : 0);
-			Logger.d(TAG, "totalNum:" + totalNum + " readedNum:" + readedNum);
+			Logger.v(TAG, "totalNum:" + totalNum + " readedNum:" + readedNum);
 			// cache num
 			if (readedNum > 0) {
 				readMap.put(cstm.getC_id(), readedNum);
@@ -791,6 +855,7 @@ public class CustomApplication extends LitePalApplication {
 	}
 
 	public void setDeviceToken(String deviceToken) {
+		Logger.d(TAG, "setDeviceToken: " + deviceToken);
 		getWorkerSp().saveString("device_token", deviceToken);
 		this.mDeviceToken = deviceToken;
 	}

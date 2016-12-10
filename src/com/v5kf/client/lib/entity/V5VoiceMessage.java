@@ -1,5 +1,7 @@
 package com.v5kf.client.lib.entity;
 
+import java.io.Serializable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,7 +10,7 @@ import android.text.TextUtils;
 import com.v5kf.client.lib.V5Util;
 import com.v5kf.mcss.config.Config;
 
-public class V5VoiceMessage extends V5Message {
+public class V5VoiceMessage extends V5Message implements Serializable {
 	
 	/**
 	 * 

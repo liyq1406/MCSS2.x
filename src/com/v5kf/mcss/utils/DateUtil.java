@@ -228,7 +228,7 @@ public class DateUtil {
 		}
 		
 		
-		if (isSimple && !isToday) {
+		if (isSimple && !isToday) { // isSimple 不显示具体时间只有日期
 			return (new SimpleDateFormat(formatTime, LOCALE)).format(target.getTime());
 		}
 		

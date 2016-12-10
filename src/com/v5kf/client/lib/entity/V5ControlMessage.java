@@ -1,11 +1,13 @@
 package com.v5kf.client.lib.entity;
 
+import java.io.Serializable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.v5kf.client.lib.V5Util;
 
-public class V5ControlMessage extends V5Message {
+public class V5ControlMessage extends V5Message implements Serializable {
 	
 	/**
 	 * 

@@ -12,7 +12,7 @@ public class V5VoiceRecord {
      
     //采用频率
     //44100是目前的标准，但是某些设备仍然支持22050，16000，11025
-    public final static int AUDIO_SAMPLE_RATE = 44100;  //44.1KHz,普遍使用的频率
+//    public final static int AUDIO_SAMPLE_RATE = 44100;  //44.1KHz,普遍使用的频率
 
 	private static final String TAG = "V5VoiceRecord";
 	
@@ -109,7 +109,7 @@ public class V5VoiceRecord {
         */
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
          
-        /* 设置音频文件的编码：AAC/AMR_NB/AMR_MB/Default */
+        /* 设置音频文件的编码：AAC/AMR_NB/AMR_WB/Default */
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
          
         /* 设置输出文件的路径 */

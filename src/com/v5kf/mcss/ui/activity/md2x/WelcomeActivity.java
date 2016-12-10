@@ -19,6 +19,7 @@ import com.v5kf.mcss.entity.WorkerBean;
 import com.v5kf.mcss.eventbus.EventTag;
 import com.v5kf.mcss.service.CoreService;
 import com.v5kf.mcss.service.NetworkManager;
+import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.WorkerSP;
@@ -42,7 +43,6 @@ public class WelcomeActivity extends BaseLoginActivity {
 	
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		finish();
 	}
 	
@@ -103,8 +103,6 @@ public class WelcomeActivity extends BaseLoginActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-//		MobclickAgent.updateOnlineConfig(this);
-//		MobclickAgent.openActivityDurationTrack(false);
 	}
 	
 	@Override
@@ -122,6 +120,8 @@ public class WelcomeActivity extends BaseLoginActivity {
 
 	
 	private void initTask() {
+		boolean permition = DevUtils.hasPermission(this, "android.permission.READ_PHONE_STATE");
+		Logger.d(TAG, "check permission:READ_PHONE_STATE = " + permition);
 		if (mWSP.readAuthorization() == null || !mWSP.readAutoLogin() || mWSP.readPassWord().isEmpty()
 				|| mWSP.readExitFlag() == ExitFlag.ExitFlag_NeedLogin) {
 			mApplication.setLoginStatus(LoginStatus.LoginStatus_Unlogin);
@@ -131,7 +131,7 @@ public class WelcomeActivity extends BaseLoginActivity {
 		
 		/* 进行自动登录: 查询本地密码存储,进行自动登录,开启websocket服务 */
 		try {
-			Logger.i(TAG, "init-<><>doAutoLogin<><>");
+			Logger.d(TAG, "initTask -> delay 500ms doAutoLogin()");
 			// doAutoLogin(); 
 			// [修改]改为在MaintTabActivity自动登录
 			mHandler.sendEmptyMessageDelayed(TASK_LOGIN_OK, 500);
@@ -152,7 +152,7 @@ public class WelcomeActivity extends BaseLoginActivity {
 		worker.setW_id(mWSP.readWorkerId());
 		worker.setE_id(mWSP.readSiteId());
 		
-		Logger.i(TAG, "<><><><>CoreService start<><><><>");
+		Logger.d(TAG, "<><><><>CoreService start<><><><>");
 		if (!IntentUtil.isServiceWork(this, Config.SERVICE_NAME_CS)) { // 开启服务并上线
 			Intent localIntent = new Intent();
 			localIntent.setAction(Config.ACTION_CORE);

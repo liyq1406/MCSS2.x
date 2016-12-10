@@ -40,7 +40,13 @@ public class CustomerVirtualBean extends BaseBean {
 	private int visits;		// String -> int 访问总次数
 	
 	private int state;		// String -> int 状态：默认0(-1:黑名单，0:正常，1:星标，2:取消关注)
-
+	
+	/* 新增 */
+	private long last_service;
+	private String last_worker;
+	private int os;
+	private int vip;
+	
 	public CustomerVirtualBean() {
 		// Auto-generated constructor stub
 	}
@@ -99,6 +105,16 @@ public class CustomerVirtualBean extends BaseBean {
 		chats= virtual.optInt("chats");
 		visits= virtual.optInt("visits");
 		state= virtual.optInt("state");
+		setVip(virtual.optInt("vip"));
+		setOs(virtual.optInt("os"));
+		setLast_worker(virtual.optString("last_worker"));
+		if (virtual.has("last_service")) {
+			try {
+				setLast_service(virtual.getLong("last_service"));
+			} catch (JSONException e) {
+				//setLast_service(V5Util.stringDateToLong(virtual.getString("last_service")) / 1000);
+			}
+		}
 	}
 	
 	public String getAccount_id() {
@@ -267,6 +283,38 @@ public class CustomerVirtualBean extends BaseBean {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getLast_service() {
+		return last_service;
+	}
+
+	public void setLast_service(long last_service) {
+		this.last_service = last_service;
+	}
+
+	public String getLast_worker() {
+		return last_worker;
+	}
+
+	public void setLast_worker(String last_worker) {
+		this.last_worker = last_worker;
+	}
+
+	public int getOs() {
+		return os;
+	}
+
+	public void setOs(int os) {
+		this.os = os;
+	}
+
+	public int getVip() {
+		return vip;
+	}
+
+	public void setVip(int vip) {
+		this.vip = vip;
 	}
 	
 	

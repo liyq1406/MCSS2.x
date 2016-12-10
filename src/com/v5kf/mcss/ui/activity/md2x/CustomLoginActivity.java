@@ -37,6 +37,7 @@ import com.v5kf.mcss.service.NetworkManager;
 import com.v5kf.mcss.service.NetworkManager.NetworkListener;
 import com.v5kf.mcss.ui.widget.CircleImageView;
 import com.v5kf.mcss.utils.DbUtil;
+import com.v5kf.mcss.utils.DevUtils;
 import com.v5kf.mcss.utils.IntentUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.MD5;
@@ -50,6 +51,7 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 	private static final int TASK_LOGIN_OK = 1;
 	private static final int TASK_UN_LOGIN = 2;
 	private static final int TASK_TIME_OUT = 3;
+	private static final int HDL_CHECK_PERMISSION = 12;
 	private boolean login_flag = false;
 	private WorkerSP mWsp;
 	
@@ -77,6 +79,7 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 		findView();
 		initView();
 		startUpdateService();
+		mHandler.sendEmptyMessageDelayed(HDL_CHECK_PERMISSION, 1000);
 		
 		/* 添加网络监听 */
 		mNetReceiver = new NetworkManager();
@@ -456,6 +459,12 @@ public class CustomLoginActivity extends BaseLoginActivity implements NetworkLis
 			}
 //			showWarningDialog(resId, null);
 			showAlertDialog(resId);
+			break;
+			
+		case HDL_CHECK_PERMISSION:
+			// 申请授权(点击时申请)
+			DevUtils.hasPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE");
+			DevUtils.hasPermission(this, "android.permission.READ_PHONE_STATE");
 			break;
 		}
 	}

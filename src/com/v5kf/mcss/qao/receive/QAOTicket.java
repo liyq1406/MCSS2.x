@@ -95,6 +95,10 @@ public class QAOTicket extends QAOBase {
 			if (visitor.getLast_time() < qao_data.getLong("last_time")) {
 				visitor.setLast_time(qao_data.getLong("last_time"));
 			}
+		} else if (qao_data.has("last_service")) { // 最新会话结束时间
+			if (visitor.getLast_time() < qao_data.getLong("last_service")) {
+				visitor.setLast_time(qao_data.getLong("last_service"));
+			}
 		}
 	}
 

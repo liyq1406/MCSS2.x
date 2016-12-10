@@ -4,35 +4,20 @@ import java.io.File;
 
 import org.simple.eventbus.EventBus;
 
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
-import com.umeng.update.UmengUpdateListener;
-import com.umeng.update.UpdateResponse;
-import com.umeng.update.UpdateStatus;
 import com.v5kf.client.lib.DBHelper;
-import com.v5kf.client.ui.ClientChatActivity;
 import com.v5kf.mcss.R;
-import com.v5kf.mcss.config.Config;
 import com.v5kf.mcss.config.Config.AppStatus;
 import com.v5kf.mcss.eventbus.EventTag;
-import com.v5kf.mcss.service.UpdateService;
 import com.v5kf.mcss.ui.activity.MainTabActivity;
+import com.v5kf.mcss.ui.activity.md2x.AboutMeActivity;
 import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.WorkerTreeActivity;
 import com.v5kf.mcss.ui.widget.CheckboxDialog;
@@ -66,21 +51,17 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	
 	@SuppressWarnings("unused")
 	private RelativeLayout rl_autoboot, rl_switch_voice, rl_switch_vibrate, 
-		rl_feedback, rl_about, rl_update, rl_clearcache, rl_refresh, rl_service, rl_archworker; //rl_switch_notification_wait
+		rl_about, rl_clearcache, rl_refresh, rl_archworker; //rl_switch_notification_wait
 	private ToggleButton  mSwitchAutoLogin, mSwitchNotification,
 		mSwitchVoice, mSwitchVibrate, mSwitchWorkerLog; // mSwitchWaitNotification
-	private TextView mVersionTv;
 	private TextView mCacheSizeTv;
 	private float mCacheSize;
-	private ProgressBar mUpdateProgress;
 	
 	private SharePreferenceUtil mSharedUtil;
 	private WorkerSP mWsp;
-	private CheckUpdateReceiver mUpdateReceiver;
 	
 	public TabMoreFragment() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
     public TabMoreFragment(MainTabActivity activity, int index) {
@@ -97,15 +78,6 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		findView();
 		initView();
 		
-		if (Config.ENABLE_UMENG_UPDATE) {
-			initUmengUpdate();
-		}
-		mUpdateReceiver = new CheckUpdateReceiver();
-		/* 注册广播接收 */
-		IntentFilter filter=new IntentFilter();
-		filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-		filter.addAction(Config.ACTION_ON_UPDATE);
-		LocalBroadcastManager.getInstance(mParentActivity).registerReceiver(mUpdateReceiver, filter);
 	}
 
 	@Override
@@ -141,10 +113,6 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	protected void onDestroyViewLazy() {
 		super.onDestroyViewLazy();
 		Logger.d(TAG, TAG + " View将被销毁 " + this);
-		
-		if (!Config.ENABLE_UMENG_UPDATE) {
-			LocalBroadcastManager.getInstance(mParentActivity).unregisterReceiver(mUpdateReceiver);
-		}
 	}
 
 	@Override
@@ -153,36 +121,6 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		Logger.d(TAG, TAG + " 所在的Activity onDestroy " + this);
 	}
     
-	
-	private void initUmengUpdate() {
-//		UmengUpdateAgent.setUpdateAutoPopup(false);
-		UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-
-			@Override
-			public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
-				Logger.i(TAG, "onUpdateReturned:" + updateStatus);
-				switch (updateStatus) {
-		        case UpdateStatus.Yes: // has update
-					mVersionTv.setText(String.format(getString(R.string.has_new), updateInfo.version));
-//		            UmengUpdateAgent.showUpdateDialog(SettingMoreActivity.this, updateInfo);
-		            break;
-		        case UpdateStatus.No: // has no update
-		        	mVersionTv.setText(R.string.already_new);
-		            break;
-		        case UpdateStatus.NoneWifi: // none wifi
-		        	mVersionTv.setText(R.string.has_new);
-//		        	UmengUpdateAgent.showUpdateDialog(SettingMoreActivity.this, updateInfo);
-		            break;
-		        case UpdateStatus.Timeout: // time out
-					mVersionTv.setText(R.string.update_failed);
-		            break;
-		        }
-				mVersionTv.setVisibility(View.VISIBLE);
-				mUpdateProgress.setVisibility(View.GONE);
-			}
-		});
-	}
-	
 	private void initData() {
 		mSharedUtil = mApplication.getSpUtil();
 		mWsp = mApplication.getWorkerSp();
@@ -192,16 +130,11 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 //		rl_switch_notification_wait = (RelativeLayout) findViewById(R.id.rl_switch_notification_wait);
 		rl_switch_voice = (RelativeLayout) findViewById(R.id.rl_switch_voice);
 		rl_switch_vibrate = (RelativeLayout) findViewById(R.id.rl_switch_vibrate);
-		rl_feedback = (RelativeLayout) findViewById(R.id.layout_feedback);
 		rl_about = (RelativeLayout) findViewById(R.id.layout_about);
-		rl_update = (RelativeLayout) findViewById(R.id.layout_update);
 		rl_clearcache = (RelativeLayout) findViewById(R.id.layout_clear_cache);
 		rl_refresh = (RelativeLayout) findViewById(R.id.layout_refresh);
-		rl_service = (RelativeLayout) findViewById(R.id.layout_service);
 		rl_archworker = (RelativeLayout) findViewById(R.id.layout_archworker);
-		mVersionTv = (TextView) findViewById(R.id.id_update_tv);
 		mCacheSizeTv = (TextView) findViewById(R.id.id_cache_size_tv);
-		mUpdateProgress = (ProgressBar) findViewById(R.id.id_update_progress);
 
 //		mSwitchAutoBoot = (ToggleButton) findViewById(R.id.switch_auto_boot);
 		mSwitchAutoLogin = (ToggleButton) findViewById(R.id.switch_auto_login);
@@ -225,12 +158,9 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 		mSwitchVibrate.setOnToggleChanged(this);
 		mSwitchWorkerLog.setOnToggleChanged(this);
 		
-		rl_feedback.setOnClickListener(this);
 		rl_about.setOnClickListener(this);
-		rl_update.setOnClickListener(this);
 		rl_clearcache.setOnClickListener(this);
 		rl_refresh.setOnClickListener(this);
-		rl_service.setOnClickListener(this);
 		rl_archworker.setOnClickListener(this);
 		
 //		view0 = (View) findViewById(R.id.view0);
@@ -243,19 +173,10 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	 * @return 当前应用的版本号
 	 */
 	public String getVersion() {
-	    try {
-	        PackageManager manager = mParentActivity.getPackageManager();
-	        PackageInfo info = manager.getPackageInfo(mParentActivity.getPackageName(), 0);
-	        String version = info.versionName;
-	        return this.getString(R.string.app_version_name) + version;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return this.getString(R.string.can_not_find_version_name);
-	    }
+	    return this.getString(R.string.app_version_name) + mApplication.getVersion();
 	}
 
 	private void initView() {
-		mVersionTv.setText(getVersion());
 		updateCacheSize();
 		
 		// 初始化
@@ -314,53 +235,13 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.layout_service: // 在线咨询
-			mParentActivity.gotoActivity(ClientChatActivity.class);
-			break;
 		case R.id.layout_archworker: // 坐席架构
 			mParentActivity.gotoActivity(WorkerTreeActivity.class);
 			break;
-		case R.id.layout_feedback: // 用户反馈
-			mParentActivity.gotoWebViewActivity(Config.URL_FEED_BACK, R.string.app_feedback);
-			break;
 			
 		case R.id.layout_about: // 关于
-			// TODO 改为native页面
-			mParentActivity.gotoWebViewActivity(Config.URL_ABOUT, R.string.app_about);
-			break;
-			
-		case R.id.layout_update: // 检查更新
-			mVersionTv.setVisibility(View.GONE);
-			mUpdateProgress.setVisibility(View.VISIBLE);
-			int level = mApplication.getWorkerSp().readInt("update_level");
-			if (level == 0) { // 查询获取使用哪家更新服务
-				if (Config.ENABLE_UMENG_UPDATE) {
-					UmengUpdateAgent.forceUpdate(mParentActivity);
-				}
-				Intent i = new Intent(mParentActivity, UpdateService.class);
-				i.putExtra("check_manual", true);
-				mParentActivity.startService(i);
-			} else if (level == 2) { // 采用友盟自动更新
-				if (Config.ENABLE_UMENG_UPDATE) {
-					UmengUpdateAgent.forceUpdate(mParentActivity);
-				} else { // 友盟更新关闭则只能采用自家更新
-					Intent i = new Intent(mParentActivity, UpdateService.class);
-					i.putExtra("check_manual", true);
-					mParentActivity.startService(i);
-				}
-			} else if (level >= 3) { // 采用自家更新服务
-				Intent i = new Intent(mParentActivity, UpdateService.class);
-				i.putExtra("check_manual", true);
-				mParentActivity.startService(i);
-			}
-//			if (Config.ENABLE_UMENG_UPDATE) {
-//				UmengUpdateAgent.forceUpdate(mParentActivity);
-//			} else {
-//				Intent i = new Intent(mParentActivity, UpdateService.class);
-//				mParentActivity.startService(i);
-//			}
-			MobclickAgent.onEvent(mParentActivity, "CHECK_UPDATE");
-			
+			//mParentActivity.gotoWebViewActivity(Config.URL_ABOUT, R.string.app_about);
+			mParentActivity.gotoActivity(AboutMeActivity.class);
 			break;
 			
 		case R.id.layout_clear_cache: // 清空缓存
@@ -524,51 +405,4 @@ public class TabMoreFragment extends TabBaseFragment implements OnClickListener,
 ////			finishActivity();
 //		}
 //	}
-	
-	/****** Update Broadcast receiver ******/
-	class CheckUpdateReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
-			if (null == intent) {
-				return;
-			}
-			if (intent.getAction().equals(Config.ACTION_ON_UPDATE)) {
-				Bundle bundle = intent.getExtras();
-				int intent_type = bundle.getInt(Config.EXTRA_KEY_INTENT_TYPE);
-				switch (intent_type) {
-				case Config.EXTRA_TYPE_UP_ENABLE:
-					// 显示确认更新对话框
-					String version = bundle.getString("version");				
-					String displayMessage = bundle.getString("displayMessage");
-					Logger.i(TAG, "【新版特性】：" + displayMessage);
-					
-					mVersionTv.setVisibility(View.VISIBLE);
-					mUpdateProgress.setVisibility(View.GONE);
-					mVersionTv.setText(String.format(getString(R.string.has_new), version));
-					
-					//showUpdateInfoDialog(version, displayMessage);
-					break;
-					
-				case Config.EXTRA_TYPE_UP_NO_NEWVERSION:
-					mVersionTv.setVisibility(View.VISIBLE);
-					mUpdateProgress.setVisibility(View.GONE);
-					mVersionTv.setText(R.string.already_new);
-					break;
-				
-				case Config.EXTRA_TYPE_UP_DOWNLOAD_FINISH:
-					// 显示确认安装对话框
-					//showInstallConfirmDialog();
-					break;
-					
-				case Config.EXTRA_TYPE_UP_FAILED: // 更新失败
-					mVersionTv.setVisibility(View.VISIBLE);
-					mUpdateProgress.setVisibility(View.GONE);
-					mVersionTv.setText(R.string.update_failed);
-					break;
-				}
-			}
-		}
-	}
 }

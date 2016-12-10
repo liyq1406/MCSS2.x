@@ -18,7 +18,6 @@ public abstract class BaseLoginActivity extends ActivityBase {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		setTheme(R.style.AppTheme_Normal);
 		super.onCreate(savedInstanceState);
 		
@@ -27,7 +26,6 @@ public abstract class BaseLoginActivity extends ActivityBase {
 	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
 	
@@ -42,7 +40,7 @@ public abstract class BaseLoginActivity extends ActivityBase {
 	 */
 	protected void startUpdateService() {
 		int level = mApplication.getWorkerSp().readInt("update_level");
-		Logger.i("BaseLoginActivity", "level:" + level);
+		Logger.d("BaseLoginActivity", "Update level:" + level);
 		if (level == 0) { // 查询获取使用哪家更新服务 默认0，1则不自动更新
 			if (Config.ENABLE_UMENG_UPDATE) {
 				UmengUpdateAgent.update(this); // 改用友盟自动更新SDK
@@ -74,7 +72,7 @@ public abstract class BaseLoginActivity extends ActivityBase {
 		if (intent == null) {
 			return;
 		}
-		Logger.i("BaseLoginActivity", "[onReceive] " + intent.getAction());
+		Logger.d("BaseLoginActivity", "[onReceive] " + intent.getAction());
 		if (intent.getAction().equals(Config.ACTION_ON_UPDATE)) {
 			Bundle bundle = intent.getExtras();
 			int intent_type = bundle.getInt(Config.EXTRA_KEY_INTENT_TYPE);

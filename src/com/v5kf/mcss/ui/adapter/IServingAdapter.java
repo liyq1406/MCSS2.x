@@ -246,7 +246,7 @@ public class IServingAdapter extends IAdapter<IServingAdapter.IServingViewHolder
 
     class IServingViewHolder extends IViewHolder implements OnClickListener, OnLongClickListener {
 
-		private static final String TAG = "SessionRecyclerAdapter.ViewHolder";
+		private static final String TAG = "IServingViewHolder.ViewHolder";
     	private CustomerBean mRecyclerBean;
 
 		public CircleImageView mPhoto;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<string name="v5_version_info"><Data><![CDATA[  V5智能客服 \n v%s ]]></Data></string>
+	<string name="v5_copyright"><Data><![CDATA[ Copyright © 2012-2016 V5KF.COM \n All Rights Reserved.]]></Data></string>
     <string name="url_test">点击注册，表示同意<a href="http://www.ouragreement.com">服务协议</a></string>
     <string name="app_name">V5智能客服</string>
     <string name="service_online">在线咨询</string>
@@ -17,6 +18,13 @@
 	<string name="universal_error_dialog_middle_btton">确认</string>
 	<string name="cancel">取消</string>
 	<string name="confirm">确定</string>
+	
+	<!-- About -->
+	<string name="about_auth">authorization</string>
+	<string name="about_token">device_token</string>
+	<string name="about_home">官网</string>
+	<string name="about_grade">去评分</string>
+    <string name="app_feedback">用户反馈</string>
 	
 	<!-- Title -->
 	<string name="conversation">对话</string>
@@ -173,7 +181,6 @@
     <string name="set_notify_wait">排队客户消息通知</string>
     <string name="set_voice">声音</string>
     <string name="set_vibrate">震动</string>
-    <string name="set_set_more">更多</string>
     <string name="set_consult">在线咨询</string>
     <string name="logout">退出登录</string>
     <string name="relogin">重新登录</string>
@@ -220,6 +227,7 @@
     <string name="iface_alipay">支付宝</string>
     <string name="iface_app">APP</string>
     <string name="iface_magic">Magic</string>
+    <string name="iface_pwechat">个人微信</string>
     
     <!-- Segment分页段标题 -->
     <string name="seg_title_worker">座席</string>
@@ -283,7 +291,6 @@
     <!-- More set Activity -->
     <string name="app_about">关于</string>
     <string name="app_update">检查更新</string>
-    <string name="app_feedback">用户反馈</string>
     <string name="app_clear_cache">清除缓存</string>
     <string name="app_cache_size_eg">0.0MB</string>
     <string name="app_refresh">刷新</string>
@@ -405,4 +412,6 @@
     <string name="on_refresh_time_out">请求超时，检查网络后重试</string>
     
     <string name="media_play_failed">播放失败</string>
+    
+    <string name="tips_unsupport_message_to_iface">当前访客类型暂不支持此消息</string>
 </resources>

@@ -44,6 +44,7 @@ public class V5ClientConfig {
 	
 	
 	public static int SOCKET_TIMEOUT = 20000; // 超时时间10s
+	public static int UPLOAD_TIMEOUT = 30000; // 文件上传超时时间30s
 	/**
 	 * 客户端连接地址格式
 	 */
@@ -94,7 +95,7 @@ public class V5ClientConfig {
 	private static V5ClientConfig mClientConfig = null;
 	
 	private V5ClientConfig(Context context) {
-		Logger.w("V5ClientConfig", "V5ClientConfig instance");
+		Logger.i("V5ClientConfig", "V5ClientConfig instance");
 		this.mContext = context;		
 	}
 	
@@ -396,7 +397,7 @@ public class V5ClientConfig {
 //				}
 //			}
 		}
-		Logger.i("V5ClientConfig", "getDeviceToken=" + deviceToken);
+		Logger.d("V5ClientConfig", "getDeviceToken=" + deviceToken);
 		return deviceToken;
 	}
 
@@ -405,7 +406,7 @@ public class V5ClientConfig {
 	 * @param deviceToken
 	 */
 	public void setDeviceToken(String deviceToken) {
-		Logger.i("V5ClientConfig", "setDeviceToken:" + deviceToken);
+		Logger.d("V5ClientConfig", "setDeviceToken:" + deviceToken);
 		if (null == deviceToken || deviceToken.isEmpty()) {
 			Logger.e("V5ClientConfig", "DeviceToken is null or empty!");
 		} else {

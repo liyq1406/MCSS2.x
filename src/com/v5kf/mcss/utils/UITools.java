@@ -92,8 +92,24 @@ public class UITools {
 		case "magic":
 			iface = QAODefine.CSTM_IF_MAGIC;
 			break;
+		case "pwechat":
+			iface = QAODefine.CSTM_IF_PWECHAT;
+			break;
 		}
 		return iface;
+	}
+	
+	public static String stringOfCstmOs(int os) {
+		String osStr = "PC";
+		switch(os) {
+		case 1:
+			osStr = "Android";
+			break;
+		case 2:
+			osStr = "iOS";
+			break;
+		}
+		return osStr;
 	}
 	
 	public static String stringOfInterface(int iface) {
@@ -130,6 +146,9 @@ public class UITools {
 			break;
 		case QAODefine.CSTM_IF_MAGIC:
 			type = "magic";
+			break;
+		case QAODefine.CSTM_IF_PWECHAT:
+			type = "pwechat";
 			break;
 		default:
 			break;
@@ -262,6 +281,10 @@ public class UITools {
     	case QAODefine.CSTM_IF_MAGIC:
     		ifaceTv.setText(R.string.iface_magic);
     		ifaceIv.setImageResource(R.drawable.v5_iface_magic);
+    		break;
+    	case QAODefine.CSTM_IF_PWECHAT:
+    		ifaceTv.setText(R.string.iface_pwechat);
+    		ifaceIv.setImageResource(R.drawable.v5_iface_pwechat);
     		break;
     	default:
     		ifaceTv.setText(R.string.iface_open);
@@ -694,4 +717,5 @@ public class UITools {
     	}
     	return false;
     }
+
 }

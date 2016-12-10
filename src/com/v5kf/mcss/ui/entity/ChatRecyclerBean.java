@@ -1,5 +1,7 @@
 package com.v5kf.mcss.ui.entity;
 
+import java.io.Serializable;
+
 import android.content.Context;
 
 import com.v5kf.client.lib.entity.V5Message;
@@ -7,7 +9,12 @@ import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.Logger;
 
-public class ChatRecyclerBean {
+public class ChatRecyclerBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 699274878680464827L;
 
 	private V5Message mMessage;
 	

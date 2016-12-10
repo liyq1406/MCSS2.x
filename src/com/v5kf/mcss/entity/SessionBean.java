@@ -53,7 +53,7 @@ public class SessionBean extends BaseBean implements Serializable {
 	private int robot_messages;
 	private int visitor_messages;
 	private int worker_messages;
-	private int finished_type; // 未结束0, 会话结束原因1-8
+	private int finished_type; // 未结束0, 会话结束原因1-8[new]
 	
 	// [修改]添加消息列表
 	private List<V5Message> messageArray;

@@ -1,8 +1,8 @@
 package com.v5kf.mcss.ui.activity.md2x;
 
 import java.io.File;
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -38,10 +38,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
+import com.v5kf.client.lib.entity.V5ImageMessage;
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
+import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.AppInfoKeeper;
 import com.v5kf.mcss.manage.update.VersionInfo;
 import com.v5kf.mcss.ui.view.SystemBarTintManager;
@@ -733,9 +735,23 @@ public abstract class ActivityBase extends SwipeBackActivity {
 	}
 
 	public void gotoImageGallaryActivity(List<V5Message> list, int position) {
+		ArrayList<V5ImageMessage> imageList = new ArrayList<V5ImageMessage>();
+		int j = 0;
+		int curPos = 0; // 当前(消息列表)位置图片在图片列表位置
+		for (int i = 0; i < list.size(); i++) {
+			V5Message msg = list.get(i);
+			if (msg.getMessage_type() == QAODefine.MSG_TYPE_IMAGE) {
+				if (i == position) {
+					curPos = j;
+				}
+				j++;
+				imageList.add((V5ImageMessage)msg);
+			}
+		}
 		Intent intent = new Intent(this, ShowImageGallaryActivity.class);
-		intent.putExtra("message_list", (Serializable)list);
-		intent.putExtra("position", position);
+		intent.putParcelableArrayListExtra("message_list", imageList);
+//		intent.putExtra("message_list", (Serializable)imageList);
+		intent.putExtra("position", curPos);
 		startActivity(intent);
 		overridePendingTransition(0, 0);
 	}

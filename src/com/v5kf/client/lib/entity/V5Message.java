@@ -29,9 +29,9 @@ public abstract class V5Message extends DataSupport implements Serializable {
 	public static final int HIT_FAILURE = 0;
 	public static final int HIT_SUCCESS = 1;
 	
-	private long id; // 数据库存储id
-	private int state; // 发送状态 0-默认未发送 1-发送成功 2-发送失败 3-发送中
-	private long session_start; // 会话开始时间，本地记录会话所有消息	
+	protected long id; // 数据库存储id
+	protected int state; // 发送状态 0-默认未发送 1-发送成功 2-发送失败 3-发送中
+	protected long session_start; // 会话开始时间，本地记录会话所有消息	
 	
 	protected long msg_id;
 	protected String message_id;
@@ -40,12 +40,12 @@ public abstract class V5Message extends DataSupport implements Serializable {
 
 	protected long create_time;
 	protected int hit; // 问题命中与否：0-未命中 1-命中
-	private List<V5Message> candidate;
+	protected List<V5Message> candidate;
 	protected JSONObject custom_content; // 自定义magic参数，键值对数组形式[{"key":"1","val":"a"},{"key":"2","val":"b"}]
 	
-	private String c_id;
-	private String s_id;
-	private long p_id; /*add*/
+	protected String c_id;
+	protected String s_id;
+	protected long p_id; /*add*/
 	
 	public V5Message() {
 		this.create_time = V5Util.getCurrentLongTime() / 1000;
@@ -363,4 +363,74 @@ public abstract class V5Message extends DataSupport implements Serializable {
 		}
 		return msg;
 	}
+	
+//	@Override
+//	public int describeContents() {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
+//	
+//	/**
+//	 * 
+//	private long id; // 数据库存储id
+//	private int state; // 发送状态 0-默认未发送 1-发送成功 2-发送失败 3-发送中
+//	private long session_start; // 会话开始时间，本地记录会话所有消息	
+//	
+//	protected long msg_id;
+//	protected String message_id;
+//	protected int message_type;
+//	protected int direction;
+//
+//	protected long create_time;
+//	protected int hit; // 问题命中与否：0-未命中 1-命中
+//	private List<V5Message> candidate;
+//	protected JSONObject custom_content; // 自定义magic参数，键值对数组形式[{"key":"1","val":"a"},{"key":"2","val":"b"}]
+//	
+//	private String c_id;
+//	private String s_id;
+//	private long p_id;
+//	 */
+//
+//	@Override
+//	public void writeToParcel(Parcel dest, int flags) {
+//		// TODO Auto-generated method stub
+//		/*将V5ImageMessage的成员写入Parcel，
+//         * 注：Parcel中的数据是按顺序写入和读取的，即先被写入的就会先被读取出来
+//         */
+//        dest.writeLong(id);
+//        dest.writeInt(state);
+//        dest.writeLong(session_start);
+//        dest.writeLong(msg_id);
+//        dest.writeString(message_id);
+//        dest.writeInt(message_type);
+//        dest.writeInt(direction);
+//        dest.writeLong(create_time);
+//        dest.writeInt(hit);
+//        dest.writeTypedList(candidate);
+//        dest.writeValue(custom_content);
+//        dest.writeString(c_id);
+//        dest.writeString(s_id);
+//        dest.writeLong(p_id);
+//	}
+//	
+//	//该静态域是必须要有的，而且名字必须是CREATOR，否则会出错
+//    public static final Parcelable.Creator<V5Message> CREATOR =
+//            new Parcelable.Creator<V5Message>() {
+//
+//                @Override
+//                public V5Message createFromParcel(Parcel source) {
+//                    //从Parcel读取通过writeToParcel方法写入的V5Message的相关成员信息
+//                    V5Message meaasge = new V5Message();
+//                    
+//                    //更加读取到的信息，创建返回Person对象
+//                    return message;
+//                }
+//
+//                @Override
+//                public V5Message[] newArray(int size) {
+//                    // TODO Auto-generated method stub
+//                    //返回V5ImageMessage对象数组
+//                    return new V5Message[size];
+//                }
+//            };
 }

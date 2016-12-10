@@ -90,7 +90,7 @@ public class AppInfoKeeper {
 	
 	public void addVisitor(CustomerBean bean) {
 		if (null == bean) {
-			Logger.e(TAG, "Visitor CustomerBean null");
+			Logger.w(TAG, "Visitor CustomerBean null");
 			return;
 		}
 		
@@ -110,7 +110,7 @@ public class AppInfoKeeper {
 	
 	public void addCustomer(CustomerBean bean) {
 		if (null == bean) {
-			Logger.e(TAG, "CustomerBean null");
+			Logger.w(TAG, "CustomerBean null");
 			return;
 		}
 		
@@ -159,7 +159,7 @@ public class AppInfoKeeper {
 	
 	public void addSession(SessionBean session) {
 		if (null == session) {
-			Logger.e(TAG, "SessionBean null");
+			Logger.w(TAG, "SessionBean null");
 			return;
 		}
 		
@@ -426,7 +426,7 @@ public class AppInfoKeeper {
 		clearWorkerMap();
 		clearWorkerArchs();
 		ImageLoader.clearMemoryCache();
-		Logger.i(TAG, "清空运行时全部信息");
+		Logger.d(TAG, "清空运行时全部信息");
 	}
 	
 //	/**
@@ -490,7 +490,7 @@ public class AppInfoKeeper {
 		clearHistoryVisitorSession();
 		ImageLoader.clearMemoryCache();
 		MediaLoader.clearMemoryCache();
-		Logger.i(TAG, "释放部分不常用内存");
+		Logger.d(TAG, "释放部分不常用内存");
 	}
 
 	private void clearHistoryVisitorSession() {

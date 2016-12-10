@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_historical_customer"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/contact_list_item_height"
+    android:clickable="true"
+    android:background="@drawable/session_item_bg_selector">
+    
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="@dimen/chat_list_top_layout_horizontal_padding"
+	    android:paddingBottom="@dimen/chat_list_top_layout_horizontal_padding"
+	    android:paddingLeft="@dimen/contact_list_item_horizontal_padding"
+	    android:paddingRight="@dimen/contact_list_item_vertical_padding"
+	    android:paddingStart="@dimen/contact_list_item_horizontal_padding"
+	    android:paddingEnd="@dimen/contact_list_item_vertical_padding"
+		android:layout_gravity="center_vertical" >
+        
+        <com.v5kf.mcss.ui.widget.CircleImageView
+	        android:id="@+id/id_item_photo"
+	        android:layout_width="@dimen/contact_list_left_img_width"
+	        android:layout_height="@dimen/contact_list_left_img_width"
+	        android:layout_centerVertical="true"
+	        android:contentDescription="@string/contentDescription"
+	        android:src="@drawable/v5_photo_default_cstm" />
+        
+        <TextView
+            android:id="@+id/id_item_vip"
+            android:visibility="visible"
+            android:text="V1"
+            style="@style/VipTextViewStyle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+        
+        <TextView
+			android:id="@+id/id_item_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_toRightOf="@+id/id_item_photo"
+			android:layout_toEndOf="@+id/id_item_photo"
+			android:layout_marginStart="@dimen/chat_list_item_horizontal_padding"
+        	android:layout_marginLeft="@dimen/chat_list_item_horizontal_padding"
+			android:layout_marginRight="@dimen/chat_list_top_layout_horizontal_padding"
+			android:layout_marginEnd="@dimen/chat_list_top_layout_horizontal_padding"
+			android:layout_marginTop="4dp"
+			android:layout_alignTop="@+id/id_item_photo"
+			android:textColor="#000000"
+			android:textSize="16sp"	            
+			android:singleLine="true"
+			android:text="@string/chat_title_hint" />
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/id_item_title"
+            android:layout_alignStart="@+id/id_item_title"
+            android:layout_alignBottom="@+id/id_item_photo"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|start" >
+            
+            <ImageView
+	            android:id="@+id/id_item_iface_img"
+				style="@style/IfaceImg"
+				android:layout_marginRight="1dp"
+				android:layout_marginEnd="1dp"
+				android:layout_gravity="end|center_vertical"
+				android:src="@drawable/v5_iface_weixin"
+				android:contentDescription="@string/contentDescription" />
+	        
+	        <TextView
+	            android:id="@+id/id_item_iface_tv"
+	            style="@style/Smile.TextView._Gray.Iface"
+	            android:text="@string/iface_weixin" />
+	        
+        </LinearLayout>
+        
+	</RelativeLayout>
+	
+    <LinearLayout
+        android:id="@+id/layout_pickup"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
+        android:background="@drawable/md2x_session_pickup_selector"
+        android:orientation="horizontal" >
+        
+        <View
+	        android:layout_width="@dimen/base_line_width_s"
+	        android:layout_height="match_parent"
+	        android:layout_marginTop="6dp"
+	        android:layout_marginBottom="6dp"
+	        android:background="@color/pickup_divider_color" />
+        
+        <TextView
+            android:id="@+id/pickup_btn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@null"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:focusable="false"
+            android:textSize="15sp"
+            android:text="@string/option_pickup"
+            android:textColor="#40ABEB" />
+        
+    </LinearLayout>
+	
+</LinearLayout>

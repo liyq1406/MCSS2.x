@@ -1,9 +1,11 @@
 package com.v5kf.client.lib.entity;
 
+import java.io.Serializable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class V5TextMessage extends V5Message {
+public class V5TextMessage extends V5Message implements Serializable {
 	
 	/**
 	 * 

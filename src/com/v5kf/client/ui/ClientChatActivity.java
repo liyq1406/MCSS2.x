@@ -71,6 +71,7 @@ import com.v5kf.client.ui.keyboard.Utils;
 import com.v5kf.mcss.CustomApplication;
 import com.v5kf.mcss.R;
 import com.v5kf.mcss.config.Config;
+import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.entity.LocationBean;
 import com.v5kf.mcss.ui.activity.md2x.BaseToolbarActivity;
 import com.v5kf.mcss.ui.activity.md2x.LocationMapActivity;
@@ -1403,6 +1404,11 @@ public class ClientChatActivity extends BaseToolbarActivity implements V5Message
 		List<V5Message> list = new ArrayList<V5Message>(datas.size());
 		for (V5ChatBean bean : datas) {
 			list.add(bean.getMessage());
+			if (bean.getMessage().getCandidate() != null && bean.getMessage().getCandidate().size() > 0) {
+				if (bean.getMessage().getCandidate().get(0).getDirection() == QAODefine.MSG_DIR_FROM_ROBOT) {
+					list.add(bean.getMessage().getCandidate().get(0));
+				}
+			}
 		}
 		return list;
 	}

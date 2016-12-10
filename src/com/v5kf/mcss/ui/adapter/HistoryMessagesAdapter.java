@@ -1057,6 +1057,11 @@ public class HistoryMessagesAdapter extends RecyclerView.Adapter<HistoryMessages
 		List<V5Message> list = new ArrayList<V5Message>(datas.size());
 		for (ChatRecyclerBean bean : datas) {
 			list.add(bean.getMessage());
+			if (bean.getMessage().getCandidate() != null && bean.getMessage().getCandidate().size() > 0) {
+				if (bean.getMessage().getCandidate().get(0).getDirection() == QAODefine.MSG_DIR_FROM_ROBOT) {
+					list.add(bean.getMessage().getCandidate().get(0));
+				}
+			}
 		}
 		return list;
 	}

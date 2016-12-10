@@ -24,6 +24,7 @@ import com.v5kf.mcss.ui.activity.md2x.ActivityBase;
 import com.v5kf.mcss.ui.activity.md2x.CustomerInfoListActivity;
 import com.v5kf.mcss.ui.widget.BadgeView;
 import com.v5kf.mcss.ui.widget.CircleImageView;
+import com.v5kf.mcss.utils.DateUtil;
 import com.v5kf.mcss.utils.Logger;
 import com.v5kf.mcss.utils.UITools;
 import com.v5kf.mcss.utils.cache.ImageLoader;
@@ -63,6 +64,8 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
     	UITools.setInterfaceInfo(customer.getIface(), holder.mIfaceTv, holder.mIfaceImg);
     	// 设置VIP信息
     	UITools.setVipInfo(customer.getVip(), holder.mVipTv);
+    	// 设置最新会话日期
+    	holder.mDateTv.setText(DateUtil.timeFormat(customer.getLast_time(), true));
     	
     	ImageLoader imgLoader = new ImageLoader(mActivity, true, R.drawable.v5_photo_default_cstm);
     	imgLoader.DisplayImage(customer.getDefaultPhoto(), holder.mPhoto);
@@ -91,13 +94,14 @@ public class HistoryVisitorAdapter extends RecyclerView.Adapter<HistoryVisitorAd
         public ImageView mIfaceImg;
         public TextView mIfaceTv;
         public BadgeView mBadgeView;
-        public TextView mDate;
         public TextView mVipTv;
+        public TextView mDateTv;
         
         public View mPickupLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            mDateTv = (TextView) itemView.findViewById(R.id.id_item_date);
             mVipTv = (TextView) itemView.findViewById(R.id.id_item_vip);
             mPhoto = (CircleImageView) itemView.findViewById(R.id.id_item_photo);
             mTitle = (TextView) itemView.findViewById(R.id.id_item_title);

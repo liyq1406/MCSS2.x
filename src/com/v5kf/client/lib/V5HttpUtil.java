@@ -1,6 +1,7 @@
 package com.v5kf.client.lib;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,9 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import android.text.TextUtils;
+
 import com.v5kf.client.lib.callback.HttpResponseHandler;
+import com.v5kf.client.lib.entity.V5ImageMessage;
 import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.client.lib.entity.V5MessageDefine;
+import com.v5kf.client.lib.entity.V5VoiceMessage;
 import com.v5kf.mcss.config.QAODefine;
 
 public class V5HttpUtil {
@@ -323,6 +328,14 @@ public class V5HttpUtil {
 		}).start();
 	}
 
+	/**
+	 * @deprecated
+	 * @param message
+	 * @param file
+	 * @param url
+	 * @param authorization
+	 * @param httpResponseHandler
+	 */
 	public static void postMedia(final V5Message message, final File file, final String url,
 			final String authorization, 
 			final HttpResponseHandler httpResponseHandler) {
@@ -568,6 +581,213 @@ public class V5HttpUtil {
         System.arraycopy(byte_2, 0, byte_3, byte_1.length, byte_2.length);  
         return byte_3;  
     }
+	
+	public static void postFile(final V5Message message, final File file, final String urlStr,
+			final String authorization, 
+			final HttpResponseHandler httpResponseHandler) {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Logger.i(TAG, "[postFile] url:" + urlStr + " file:" + file.getName());
+				
+				String BOUNDARY = "----" + UUID.randomUUID().toString(); // 边界标识 随机生成
+				final String PREFIX = "--", LINE_END = "\r\n";
+				final String CONTENT_TYPE = "multipart/form-data";
+				
+				String firstBoundary = PREFIX + BOUNDARY + LINE_END;
+//				String commonBoundary = LINE_END + firstBoundary;
+				String lastBoundary = LINE_END + PREFIX + BOUNDARY + PREFIX + LINE_END;
+				
+				StringBuffer fileContent = new StringBuffer();
+				String contentType = "image/jpeg";
+				if (message.getMessage_type() == V5MessageDefine.MSG_TYPE_IMAGE) {
+					contentType = "image/jpeg";
+					if (!TextUtils.isEmpty(((V5ImageMessage)message).getFormat())) {
+						contentType = "image/" + ((V5ImageMessage)message).getFormat();
+					}
+				} else if (message.getMessage_type() == V5MessageDefine.MSG_TYPE_VOICE) {
+					contentType = "audio/amr";
+					if (!TextUtils.isEmpty(((V5VoiceMessage)message).getFormat())) {
+						contentType = "audio/" + ((V5VoiceMessage)message).getFormat();
+					}
+				} else {
+					// TODO
+				}
+				fileContent.append("Content-Disposition: form-data; name=\"FileContent\"; filename=\"" 
+						+ file.getName() + "\"" + LINE_END);
+				fileContent.append("Content-Type: " + contentType + LINE_END);
+				fileContent.append(LINE_END);
+				
+				URL url;
+				try {
+					String Url = urlStr;
+					if (V5ClientConfig.USE_HTTPS) {
+						if (urlStr.startsWith("http://")) {
+							// http头替换成https头
+							StringBuffer str=new StringBuffer(urlStr);
+							str.replace(0, 7, "https://"); 
+							Url = str.toString();
+							Logger.w("HttpUtil", urlStr);
+						} else if (urlStr.startsWith("https://")) {
+							// 无需改动
+						} else {
+							// 添加https头
+							Url = "https://" + urlStr;
+						}
+					}
+					
+					Logger.d("HttpUtil", "[postFile] postUrl:" + Url);
+					url = new URL(Url);
+					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+					urlConnection.setConnectTimeout(V5ClientConfig.SOCKET_TIMEOUT);
+					urlConnection.setReadTimeout(V5ClientConfig.UPLOAD_TIMEOUT);
+					urlConnection.setDoInput(true);// 表示从服务器获取数据
+					urlConnection.setRequestMethod("POST");
+					urlConnection.setDoOutput(true);// 表示向服务器写数据
+					
+					urlConnection.setRequestProperty("Authorization", authorization);
+					urlConnection.setRequestProperty("Connection", "keep-alive");
+					urlConnection.setRequestProperty("Origin", "http://chat.v5kf.com");
+					urlConnection.setRequestProperty("Content-Type", CONTENT_TYPE + "; boundary="
+							+ BOUNDARY);
+					long contentLength = firstBoundary.length() + fileContent.length() + lastBoundary.length();
+					long fileSize = V5Util.getFileSize(file);
+					byte[] imageBuffer = null;
+					if (message.getMessage_type() == V5MessageDefine.MSG_TYPE_IMAGE &&
+							fileSize / 1000 > MIN_PIC_SIZE_UNCOMPRESS) {
+						imageBuffer = V5Util.compressImageToByteArray(V5Util.getCompressBitmap(file.getAbsolutePath()), MAX_PIC_SIZE);
+						contentLength += imageBuffer.length;
+					} else {
+						contentLength += fileSize;
+					}
+					Logger.d("HttpUtil", "Content-Length:" + contentLength);
+//					urlConnection.setRequestProperty("Content-Length",  
+//							String.valueOf(contentLength));
+//					Logger.d("HttpUtil", "set Content-Length:" + contentLength);
+					
+					DataOutputStream ds = new DataOutputStream(urlConnection.getOutputStream());
+					ds.writeBytes(firstBoundary);
+					ds.writeBytes(fileContent.toString());
+					
+					// 读取文件转为字节流
+					Logger.d(TAG, "FileSize>>>>>>>:" + fileSize + " of:" + file.getAbsolutePath());
+					/* 写入文件数据 */
+					if (message.getMessage_type() == V5MessageDefine.MSG_TYPE_IMAGE) {
+						if (fileSize / 1000 <= MIN_PIC_SIZE_UNCOMPRESS) {
+							try {
+								FileInputStream fstream = new FileInputStream(file);
+								//ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+								/* 设定每次写入1024bytes */
+							    int bufferSize = 1024;
+								byte[] buffer = new byte[bufferSize];
+								int n = -1;
+								while ((n = fstream.read(buffer)) != -1) {
+									/* 将数据写入DataOutputStream中 */
+									ds.write(buffer, 0, n);
+								}
+								fstream.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						} else { // 压缩图片
+							if (imageBuffer != null) {
+								Logger.d(TAG, "CompressSize>>>:" + imageBuffer.length);
+							} else {
+								Logger.e(TAG, "CompressSize>>>: null");
+								ds.close();
+								return;
+							}
+							ds.write(imageBuffer, 0, imageBuffer.length);
+						}
+					} else {
+						try {
+							FileInputStream stream = new FileInputStream(file);
+							//ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+							int bufferSize = 1024;
+							byte[] buffer = new byte[bufferSize];
+							int n;
+							while ((n = stream.read(buffer)) != -1) {
+								/* 将数据写入DataOutputStream中 */
+								ds.write(buffer, 0, n);
+							}
+							stream.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					ds.writeBytes(lastBoundary);
+					ds.flush();
+					ds.close();
+					
+					/* 获得Response内容 */
+					int responseCode = urlConnection.getResponseCode();
+					if (responseCode == 200) {
+						InputStream is = urlConnection.getInputStream();
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						byte[] data = new byte[1024];
+						int len = 0;
+						String result = "";
+						if (is != null) {
+							try {
+								while ((len = is.read(data)) != -1) {
+									baos.write(data, 0, len);
+								}
+								// 释放资源  
+								is.close();
+								baos.close();
+								
+								result = new String(baos.toByteArray(), "UTF-8");
+								if (httpResponseHandler != null) {
+									httpResponseHandler.onSuccess(responseCode, result);
+									return;
+								}
+							} catch (IOException e) {
+								e.printStackTrace();
+								if (httpResponseHandler != null) {
+									httpResponseHandler.onFailure(responseCode, e.getMessage());
+									return;
+								}
+							}
+						}
+					}
+					if (httpResponseHandler != null) {
+						httpResponseHandler.onFailure(responseCode, "no InputStream be read");
+						return;
+					}
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+					if (httpResponseHandler != null) {
+						httpResponseHandler.onFailure(-11, e.getMessage());
+						return;
+					}
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+					if (httpResponseHandler != null) {
+						httpResponseHandler.onFailure(-12, e.getMessage());
+						return;
+					}
+				} catch (ProtocolException e) {
+					e.printStackTrace();
+					if (httpResponseHandler != null) {
+						httpResponseHandler.onFailure(-13, e.getMessage());
+						return;
+					}
+				} catch (SocketTimeoutException e) {
+					if (httpResponseHandler != null) {
+						httpResponseHandler.onFailure(-10, "<SocketTimeoutException> " + e.getMessage());
+						return;
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					if (httpResponseHandler != null) {
+						httpResponseHandler.onFailure(-14, e.getMessage());
+						return;
+					}
+				}
+			}
+		}).start();
+	}
 	
 	/**
 	 * 获取响应字符串(阻塞)

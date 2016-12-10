@@ -188,7 +188,7 @@ public class QAOCustomer extends QAOBase {
 			CustomerBean customer = this.mAppInfo.getVisitor(visitor_id);
 			if (customer != null) {
 				if (qao_data.has("online")) {
-					customer.setOnline(qao_data.getBoolean("pnline"));
+					customer.setOnline(qao_data.getBoolean("online"));
 				}
 				customer.setAccessable(accessable);
 				Logger.d(TAG, "parseCustomerAccessableChange -> visitor:" + customer.getDefaultName());

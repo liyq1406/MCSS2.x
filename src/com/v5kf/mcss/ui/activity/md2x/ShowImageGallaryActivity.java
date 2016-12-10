@@ -25,9 +25,7 @@ import android.widget.TextView;
 
 import com.v5kf.client.lib.V5ClientAgent;
 import com.v5kf.client.lib.entity.V5ImageMessage;
-import com.v5kf.client.lib.entity.V5Message;
 import com.v5kf.mcss.R;
-import com.v5kf.mcss.config.QAODefine;
 import com.v5kf.mcss.ui.fragment.md2x.ImageDetailFragment;
 import com.v5kf.mcss.ui.widget.CustomOptionDialog;
 import com.v5kf.mcss.ui.widget.HackyViewPager;
@@ -40,13 +38,12 @@ import com.v5kf.mcss.utils.cache.ImageLoader;
 public class ShowImageGallaryActivity extends ActivityBase {
 
 	private static final String TAG = "ShowImageGallaryActivity";
-	private List<V5Message> mList;
+	private List<V5ImageMessage> mList;
 	private int mCurPos; // 初始化计算当前图片位置
 	private String mFileName;
 	
 	private HackyViewPager mPager;
 	private TextView mIndicatorTv;
-	private int pagerPosition;
 	private static final String STATE_POSITION = "STATE_POSITION";
 	
 	private ArrayList<View> mViews = new ArrayList<>();;
@@ -79,9 +76,9 @@ public class ShowImageGallaryActivity extends ActivityBase {
 		initView();
 		
 		if (savedInstanceState != null) {
-			pagerPosition = savedInstanceState.getInt(STATE_POSITION);
+			mCurPos = savedInstanceState.getInt(STATE_POSITION);
 		}
-		mPager.setCurrentItem(pagerPosition);
+		mPager.setCurrentItem(mCurPos);
 	}
 	
 	@Override
@@ -90,7 +87,7 @@ public class ShowImageGallaryActivity extends ActivityBase {
 	}
 	
 	private void initData() {
-		int j = 0;
+//		int j = 0;
 		if (mList != null && mList.size() > 0) {
 //			for (int i = mList.size() - 1; i >= 0; i--) {
 //				V5Message msg = mList.get(i);
@@ -104,18 +101,11 @@ public class ShowImageGallaryActivity extends ActivityBase {
 //				}
 //			}
 			for (int i =  0; i < mList.size(); i++) {
-				V5Message msg = mList.get(i);
-				if (msg.getMessage_type() == QAODefine.MSG_TYPE_IMAGE) {
-					if (i == mCurPos) {
-						pagerPosition = j;
-					}
-					j++;
-					mImageUrls.add(((V5ImageMessage)msg).getPic_url());
-					mViews.add(new ImageView(getApplicationContext()));
-				}
+				mImageUrls.add(mList.get(i).getPic_url());
+				mViews.add(new ImageView(getApplicationContext()));
 			}
 		}
-		Logger.d(TAG, "mCurPos=" + mCurPos + " pagerPosition=" + pagerPosition + " size:" + mImageUrls.size());
+		Logger.d(TAG, "mCurPos=" + mCurPos + " size:" + mImageUrls.size());
 	}
 
 	@Override
@@ -149,7 +139,7 @@ public class ShowImageGallaryActivity extends ActivityBase {
 		//mRLayout.setSystemUiVisibility(View.INVISIBLE);
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
 		
-		CharSequence text = String.format("%d/%d", pagerPosition + 1, mPager.getAdapter().getCount());
+		CharSequence text = String.format("%d/%d", mCurPos + 1, mPager.getAdapter().getCount());
 		mIndicatorTv.setText(text);
 		// 更新下标
 		mPager.addOnPageChangeListener(new OnPageChangeListener() {
@@ -284,10 +274,10 @@ public class ShowImageGallaryActivity extends ActivityBase {
         return filepath;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void handleIntent() {
 		Intent intent = getIntent();
-		mList = (List<V5Message>)intent.getSerializableExtra("message_list");
+		mList = intent.getParcelableArrayListExtra("message_list");
+//		mList = (List<V5ImageMessage>)intent.getSerializableExtra("message_list");
 		mCurPos = intent.getIntExtra("position", 0);
 		if (null == mList || mList.isEmpty()) { // CSTM_ACTIVE
         	Logger.e(TAG, "List(null) empty");

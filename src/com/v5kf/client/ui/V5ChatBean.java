@@ -1,9 +1,15 @@
 package com.v5kf.client.ui;
 
+import java.io.Serializable;
+
 import com.v5kf.client.lib.entity.V5Message;
 
-public class V5ChatBean {
+public class V5ChatBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1674717590117061781L;
 	private V5Message message;
 	// [添加]语音相关
 	private boolean voicePlaying;

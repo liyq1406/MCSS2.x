@@ -32,8 +32,8 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		if (context == null || notifiShowedRlt == null) {
 			return;
 		}
-		// TODO Auto-generated method stub
-//		String text = "收到消息:" + notifiShowedRlt.toString();
+		String text = "收到消息:" + notifiShowedRlt.toString();
+		Logger.i(LogTag, "[XGPush]onNotifactionShowedResult:" + text);
 		// 获取自定义key-value
 		String customContent = notifiShowedRlt.getCustomContent();
 		if (customContent != null && customContent.length() != 0) {
@@ -160,7 +160,6 @@ public class MessageReceiver extends XGPushBaseReceiver {
 	@Override
 	public void onRegisterResult(Context context, int errorCode,
 			XGPushRegisterResult message) {
-		// TODO Auto-generated method stub
 		if (context == null || message == null) {
 			return;
 		}
@@ -181,7 +180,6 @@ public class MessageReceiver extends XGPushBaseReceiver {
 	// 消息透传
 	@Override
 	public void onTextMessage(Context context, XGPushTextMessage message) {
-		// TODO Auto-generated method stub
 		String text = "收到消息:" + message.toString();
 		// 获取自定义key-value
 		String customContent = message.getCustomContent();

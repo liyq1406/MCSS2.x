@@ -50,6 +50,7 @@ public class QAODefine {
 	public static final int CSTM_IF_ALIPAY = 7; // 支付宝平台
 	public static final int CSTM_IF_APP = 8; // APP接口
 	public static final int CSTM_IF_MAGIC = 11; // Magic接口（硬件接口）
+	public static final int CSTM_IF_PWECHAT = 12; // PWechat接口（个人微信接口）
 	
 	/* QAO wservice_login o_method */
 	public static final String O_METHOD_LOGIN = "login";

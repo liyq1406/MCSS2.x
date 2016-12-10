@@ -11,6 +11,7 @@ import android.text.TextUtils;
 
 import com.v5kf.client.lib.V5HttpUtil;
 import com.v5kf.client.lib.V5KFException.V5ExceptionStatus;
+import com.v5kf.client.lib.V5Util;
 import com.v5kf.client.lib.callback.HttpResponseHandler;
 import com.v5kf.client.lib.callback.MessageSendCallback;
 import com.v5kf.client.lib.entity.V5ImageMessage;
@@ -62,7 +63,18 @@ public class MessageSendHelperMd2x {
 		// 判断是否本地图片
 		if (imageMessage.getFilePath() != null) {
 			if (imageMessage.getPic_url() == null) { // 上传图片前
-				postMedia(imageMessage, mCustomer.getDefaultAccountId(), mCustomer.getVisitor_id(), mCustomer.getIfaceString(), imageMessage.getFilePath(), callback);
+				// 图片格式验证
+				String type = V5Util.getImageMimeType(imageMessage.getFilePath());
+				imageMessage.setFormat(type);
+				if (!V5Util.isValidImageMimeType(type)) {
+					sendFailedHandle(
+							callback, 
+							imageMessage, 
+							V5ExceptionStatus.ExceptionMessageSendFailed, 
+							"Unsupport image mimetype");
+				} else {
+					postMedia(imageMessage, mCustomer.getDefaultAccountId(), mCustomer.getVisitor_id(), mCustomer.getIfaceString(), imageMessage.getFilePath(), callback);
+				}
 			} else { // 上传图片后
 				// 发送消息请求
 				sendMessageRequest(imageMessage, callback);
@@ -71,9 +83,11 @@ public class MessageSendHelperMd2x {
 			// 发送消息请求
 			sendMessageRequest(imageMessage, callback);
 		} else {
-			if (callback != null) {
-				callback.onFailure(imageMessage, V5ExceptionStatus.ExceptionMessageSendFailed, "Empty voice message");
-			}
+			sendFailedHandle(
+					callback, 
+					imageMessage, 
+					V5ExceptionStatus.ExceptionMessageSendFailed, 
+					"Empty voice message");
 		}
 	}
 	
@@ -93,9 +107,11 @@ public class MessageSendHelperMd2x {
 			// 发送消息请求
 			sendMessageRequest(voiceMessage, callback);
 		} else {
-			if (callback != null) {
-				callback.onFailure(voiceMessage, V5ExceptionStatus.ExceptionMessageSendFailed, "Empty voice message");
-			}
+			sendFailedHandle(
+					callback, 
+					voiceMessage, 
+					V5ExceptionStatus.ExceptionMessageSendFailed, 
+					"Empty voice message");
 		}
 	}
 
@@ -117,16 +133,20 @@ public class MessageSendHelperMd2x {
 				}
 			} else {
 				msg.setState(V5Message.STATE_FAILURE);
-				if (callback != null) {
-					callback.onFailure(msg, V5ExceptionStatus.ExceptionMessageSendFailed, "Connection closed");
-				}
+				sendFailedHandle(
+						callback, 
+						msg, 
+						V5ExceptionStatus.ExceptionMessageSendFailed, 
+						"Connection closed");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 			msg.setState(V5Message.STATE_FAILURE);
-			if (callback != null) {
-				callback.onFailure(msg, V5ExceptionStatus.ExceptionMessageSendFailed, "JSONException");
-			}
+			sendFailedHandle(
+					callback, 
+					msg, 
+					V5ExceptionStatus.ExceptionMessageSendFailed, 
+					"JSONException:" + e.getMessage());
 		}
 	}
 	
@@ -141,7 +161,7 @@ public class MessageSendHelperMd2x {
 		String url = String.format(Config.APP_MEDIA_POST_FMT, a_id, v_id, ifaceStr, file.getName());
 		String auth = mApplication.getWorkerSp().readAuthorization();
 		Logger.d(TAG, "[postMedia] url:" + url);
-		V5HttpUtil.postMedia(message, file, url, auth, new HttpResponseHandler(mApplication) {
+		V5HttpUtil.postFile(message, file, url, auth, new HttpResponseHandler(mApplication) {
 			
 			@Override
 			public void onSuccess(int statusCode, String responseString) {

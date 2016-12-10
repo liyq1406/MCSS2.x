@@ -680,6 +680,7 @@ public class ChattingListAdapter extends BaseAdapter {
 		// 控制宽高
 		int width = videoMessage.getCoverFrame().getWidth();
 		int height = videoMessage.getCoverFrame().getHeight();
+		Logger.d(TAG, "videoMessage.getCoverFrame() w=" + width + " h=" + height);
 		float density = mActivity.getResources().getDisplayMetrics().density;
 		float maxWH = MediaLoader.VIDEO_MAX_WH * density + 0.5f;
 		float minWH = MediaLoader.VIDEO_MIN_WH * density + 0.5f;
@@ -1588,6 +1589,11 @@ public class ChattingListAdapter extends BaseAdapter {
 		List<V5Message> list = new ArrayList<V5Message>(datas.size());
 		for (ChatRecyclerBean bean : datas) {
 			list.add(bean.getMessage());
+			if (bean.getMessage().getCandidate() != null && bean.getMessage().getCandidate().size() > 0) {
+				if (bean.getMessage().getCandidate().get(0).getDirection() == QAODefine.MSG_DIR_FROM_ROBOT) {
+					list.add(bean.getMessage().getCandidate().get(0));
+				}
+			}
 		}
 		return list;
 	}
